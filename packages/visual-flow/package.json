@@ -9,6 +9,7 @@
     "check": "tsc --noEmit"
   },
   "devDependencies": {
+    "@refina/tsconfig": "link:..\\..\\..\\refina\\packages\\tsconfig",
     "typescript": "^5.0.2"
   },
   "main": "./dist/src/index.ts",
@@ -27,7 +28,6 @@
     }
   },
   "dependencies": {
-    "@refina/tsconfig": "link:..\\..\\..\\refina\\packages\\tsconfig",
     "refina": "link:..\\..\\..\\refina\\packages\\core"
   }
 }

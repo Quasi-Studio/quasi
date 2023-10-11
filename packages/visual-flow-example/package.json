@@ -12,11 +12,11 @@
   "devDependencies": {
     "typescript": "^5.1.6",
     "vite": "^4.4.8",
+    "@refina/tsconfig": "link:..\\..\\..\\refina\\packages\\tsconfig",
+    "vite-plugin-refina": "link:..\\..\\..\\refina\\packages\\plugin",
     "vite-plugin-inspect": "^0.7.35"
   },
   "dependencies": {
-    "@refina/tsconfig": "link:..\\..\\..\\refina\\packages\\tsconfig",
-    "refina": "link:..\\..\\..\\refina\\packages\\core",
-    "vite-plugin-refina": "link:..\\..\\..\\refina\\packages\\plugin"
+    "refina": "link:..\\..\\..\\refina\\packages\\core"
   }
 }
