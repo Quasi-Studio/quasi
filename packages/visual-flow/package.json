@@ -1,0 +1,33 @@
+{
+  "name": "@quasi-dev/visual-flow",
+  "version": "0.0.1",
+  "type": "module",
+  "license": "MIT",
+  "description": "A visualized functional programming framework.",
+  "repository": "https://github.com/Quasi-Studio/quasi",
+  "scripts": {
+    "check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.2"
+  },
+  "main": "./dist/src/index.ts",
+  "types": "./dist/src/index.ts",
+  "files": [
+    "src",
+    "README.md"
+  ],
+  "exports": {
+    ".": {
+      "import": {
+        "types": "./dist/src/index.ts",
+        "import": "./dist/src/index.ts",
+        "default": "./dist/src/index.ts"
+      }
+    }
+  },
+  "dependencies": {
+    "@refina/tsconfig": "link:..\\..\\..\\refina\\packages\\tsconfig",
+    "refina": "link:..\\..\\..\\refina\\packages\\core"
+  }
+}

@@ -1,0 +1,20 @@
+{
+  "name": "@quasi/monorepo",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "build": "pnpm -r run build",
+    "check": "pnpm -r --parallel run check",
+    "prettier": "prettier --write .",
+    "prepare": "husky install"
+  },
+  "devDependencies": {
+    "husky": "^8.0.3",
+    "lint-staged": "^14.0.0",
+    "prettier": "3.0.0"
+  },
+  "lint-staged": {
+    "**/*": "prettier --write --ignore-unknown"
+  }
+}

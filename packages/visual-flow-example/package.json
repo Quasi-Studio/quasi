@@ -1,0 +1,22 @@
+{
+  "name": "@visual-flow/example",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "vite --open",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.1.6",
+    "vite": "^4.4.8",
+    "vite-plugin-inspect": "^0.7.35"
+  },
+  "dependencies": {
+    "@refina/tsconfig": "link:..\\..\\..\\refina\\packages\\tsconfig",
+    "refina": "link:..\\..\\..\\refina\\packages\\core",
+    "vite-plugin-refina": "link:..\\..\\..\\refina\\packages\\plugin"
+  }
+}
