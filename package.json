@@ -1,10 +1,11 @@
 {
-  "name": "@quasi/monorepo",
+  "name": "@quasi-dev/monorepo",
   "version": "0.0.0",
   "type": "module",
   "private": true,
   "scripts": {
     "build": "pnpm -r run build",
+    "dev:vf": "pnpm -r --parallel --filter \"@quasi-dev/visual-flow-example...\" run dev",
     "check": "pnpm -r --parallel run check",
     "prettier": "prettier --write .",
     "prepare": "husky install"
