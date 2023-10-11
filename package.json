@@ -5,6 +5,8 @@
   "private": true,
   "scripts": {
     "build": "pnpm -r run build",
+    "dev": "pnpm dev:northstar",
+    "dev:northstar": "pnpm -r --parallel --filter \"@quasi-dev/northstar...\" run dev",
     "dev:vf": "pnpm -r --parallel --filter \"@quasi-dev/visual-flow-example...\" run dev",
     "check": "pnpm -r --parallel run check",
     "prettier": "prettier --write .",

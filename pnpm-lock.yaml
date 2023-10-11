@@ -18,31 +18,50 @@ importers:
         specifier: 3.0.0
         version: 3.0.0
 
-  packages/visual-flow:
+  packages/northstar:
     dependencies:
-      '@refina/tsconfig':
-        specifier: link:..\..\..\refina\packages\tsconfig
-        version: link:../../../refina/packages/tsconfig
+      '@refina/fluentui':
+        specifier: link:..\..\..\refina\packages\fluentui
+        version: link:../../../refina/packages/fluentui
       refina:
         specifier: link:..\..\..\refina\packages\core
         version: link:../../../refina/packages/core
     devDependencies:
+      '@refina/tsconfig':
+        specifier: link:..\..\..\refina\packages\tsconfig
+        version: link:../../../refina/packages/tsconfig
+      typescript:
+        specifier: ^5.1.6
+        version: 5.2.2
+      vite:
+        specifier: ^4.4.8
+        version: 4.4.11
+      vite-plugin-refina:
+        specifier: link:..\..\..\refina\packages\plugin
+        version: link:../../../refina/packages/plugin
+
+  packages/visual-flow:
+    dependencies:
+      refina:
+        specifier: link:..\..\..\refina\packages\core
+        version: link:../../../refina/packages/core
+    devDependencies:
+      '@refina/tsconfig':
+        specifier: link:..\..\..\refina\packages\tsconfig
+        version: link:../../../refina/packages/tsconfig
       typescript:
         specifier: ^5.0.2
         version: 5.2.2
 
   packages/visual-flow-example:
     dependencies:
-      '@refina/tsconfig':
-        specifier: link:..\..\..\refina\packages\tsconfig
-        version: link:../../../refina/packages/tsconfig
       refina:
         specifier: link:..\..\..\refina\packages\core
         version: link:../../../refina/packages/core
-      vite-plugin-refina:
-        specifier: link:..\..\..\refina\packages\plugin
-        version: link:../../../refina/packages/plugin
     devDependencies:
+      '@refina/tsconfig':
+        specifier: link:..\..\..\refina\packages\tsconfig
+        version: link:../../../refina/packages/tsconfig
       typescript:
         specifier: ^5.1.6
         version: 5.2.2
@@ -52,6 +71,9 @@ importers:
       vite-plugin-inspect:
         specifier: ^0.7.35
         version: 0.7.40(vite@4.4.11)
+      vite-plugin-refina:
+        specifier: link:..\..\..\refina\packages\plugin
+        version: link:../../../refina/packages/plugin
 
 packages:
 

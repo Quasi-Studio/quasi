@@ -1,0 +1,22 @@
+{
+  "name": "@quasi-dev/northstar",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "dev": "vite --open",
+    "build": "vite build",
+    "preview": "vite preview",
+    "check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@refina/tsconfig": "link:..\\..\\..\\refina\\packages\\tsconfig",
+    "typescript": "^5.1.6",
+    "vite": "^4.4.8",
+    "vite-plugin-refina": "link:..\\..\\..\\refina\\packages\\plugin"
+  },
+  "dependencies": {
+    "@refina/fluentui": "link:..\\..\\..\\refina\\packages\\fluentui",
+    "refina": "link:..\\..\\..\\refina\\packages\\core"
+  }
+}
