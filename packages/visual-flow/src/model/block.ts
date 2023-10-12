@@ -107,6 +107,11 @@ export class Block extends ModelBase<HTMLDivElement> {
     let socket: Socket | null = null;
     let distance = Infinity;
     for (const s of this.allSockets) {
+      if (s.direction === Direction.LEFT && s.offsetX < pos.x) continue;
+      if (s.direction === Direction.RIGHT && s.offsetX > pos.x) continue;
+      if (s.direction === Direction.TOP && s.offsetY < pos.y) continue;
+      if (s.direction === Direction.BOTTOM && s.offsetY > pos.y) continue;
+
       const d = (s.cy - dy) * (s.cy - dy) + (s.cx - dx) * (s.cx - dx);
       if (d < distance) {
         distance = d;

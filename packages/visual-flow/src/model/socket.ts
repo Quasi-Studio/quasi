@@ -26,6 +26,13 @@ export class Socket extends ModelBase<SVGElement> {
     return this.block.y + this.cy - this.graph.el!.offsetTop;
   }
 
+  get offsetX() {
+    return this.block.x + this.cx;
+  }
+  get offsetY() {
+    return this.block.y + this.cy;
+  }
+
   connected: Line | null = null;
 
   clone(): Socket {
