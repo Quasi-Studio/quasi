@@ -71,9 +71,12 @@ export class Graph extends ModelBase<HTMLDivElement> {
     return null;
   }
 
-  protected updateHoveredSocket(pos: Point) {
+  protected updateHoveredSocket(pos: Point, checkConnectable: Line | null) {
     const s = this.getNearestSocket(pos);
-    if (s) {
+    if (
+      s &&
+      (checkConnectable === null || s.socket.checkConnectable(checkConnectable))
+    ) {
       if (this.hoveredSocket !== s.socket) {
         if (this.hoveredSocket) this.hoveredSocket.unhover();
         s.socket.hover();
@@ -146,10 +149,10 @@ export class Graph extends ModelBase<HTMLDivElement> {
 
   onMouseMove(pos: Point) {
     if (this.state.type === StateType.IDLE) {
-      this.updateHoveredSocket(pos);
+      this.updateHoveredSocket(pos, null);
       return false;
     } else if (this.state.type === StateType.DRAGGING_LINE) {
-      this.updateHoveredSocket(pos);
+      this.updateHoveredSocket(pos, this.state.line);
       this.updateDraggingLineEnd(pos);
       return true;
     } else {

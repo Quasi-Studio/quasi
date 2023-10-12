@@ -15,6 +15,8 @@ export class Socket extends ModelBase<SVGElement> {
   cx: number;
   cy: number;
 
+  checkConnectable: (line: Line) => boolean = () => this.connected === null;
+
   get graph() {
     return this.block.graph;
   }
