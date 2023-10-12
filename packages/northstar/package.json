@@ -17,6 +17,7 @@
   },
   "dependencies": {
     "@refina/fluentui": "link:..\\..\\..\\refina\\packages\\fluentui",
+    "@refina/griffel": "link:..\\..\\..\\refina\\packages\\griffel",
     "refina": "link:..\\..\\..\\refina\\packages\\core"
   }
 }

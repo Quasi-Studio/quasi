@@ -23,6 +23,9 @@ importers:
       '@refina/fluentui':
         specifier: link:..\..\..\refina\packages\fluentui
         version: link:../../../refina/packages/fluentui
+      '@refina/griffel':
+        specifier: link:..\..\..\refina\packages\griffel
+        version: link:../../../refina/packages/griffel
       refina:
         specifier: link:..\..\..\refina\packages\core
         version: link:../../../refina/packages/core
