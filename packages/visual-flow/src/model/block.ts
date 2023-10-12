@@ -1,7 +1,10 @@
 import { Direction, Point } from "../types";
 import { ModelBase } from "./base";
 import { Socket } from "./socket";
-import { Graph } from ".";
+import { Graph } from "./graph";
+
+const MIN_INSIDE_DISTANCE = 7 * 7;
+const MIN_OUTSIDE_DISTANCE = 14 * 14;
 
 export class Block extends ModelBase<HTMLDivElement> {
   constructor(public text: string) {
@@ -107,12 +110,21 @@ export class Block extends ModelBase<HTMLDivElement> {
     let socket: Socket | null = null;
     let distance = Infinity;
     for (const s of this.allSockets) {
-      if (s.direction === Direction.LEFT && s.offsetX < pos.x) continue;
-      if (s.direction === Direction.RIGHT && s.offsetX > pos.x) continue;
-      if (s.direction === Direction.TOP && s.offsetY < pos.y) continue;
-      if (s.direction === Direction.BOTTOM && s.offsetY > pos.y) continue;
+      const inside =
+        (s.direction === Direction.LEFT && s.offsetX < pos.x) ||
+        (s.direction === Direction.RIGHT && s.offsetX > pos.x) ||
+        (s.direction === Direction.TOP && s.offsetY < pos.y) ||
+        (s.direction === Direction.BOTTOM && s.offsetY > pos.y);
 
       const d = (s.cy - dy) * (s.cy - dy) + (s.cx - dx) * (s.cx - dx);
+
+      if (
+        (inside && d > MIN_INSIDE_DISTANCE) ||
+        (!inside && d > MIN_OUTSIDE_DISTANCE)
+      ) {
+        continue;
+      }
+
       if (d < distance) {
         distance = d;
         socket = s;

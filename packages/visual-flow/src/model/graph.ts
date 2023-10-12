@@ -4,7 +4,6 @@ import { Block } from "./block";
 import { Line, createPointWithDirection } from "./line";
 import { Socket } from "./socket";
 
-const MIN_DISTANCE = 20 * 20;
 const MIN_ZINDEX = 0;
 
 export enum StateType {
@@ -61,7 +60,7 @@ export class Graph extends ModelBase<HTMLDivElement> {
         socket = s.socket;
       }
     }
-    return socket && distance < MIN_DISTANCE ? { socket, distance } : null;
+    return socket ? { socket, distance } : null;
   }
 
   protected getHoveredBlock(pos: Point): null | Block {
