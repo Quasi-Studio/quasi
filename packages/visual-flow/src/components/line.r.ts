@@ -4,12 +4,20 @@ import { Line } from "../model";
 @outputComponent("vfLine")
 export class VFLine extends OutputComponent {
   main(_: Context, model: Line) {
-    _.$cls`vf-line`
+    _.$cls`vf-line`;
     _.$ref(model.ref) &&
-      _._svgLine({
+      _._svgPath({
         d: model.path,
-        fill: "red",
+        stroke: "red",
+        fill:"none"
       });
+      // _._svgLine({
+      //   x1: model.aPosition.x,
+      //   y1: model.aPosition.y,
+      //   x2: model.bPosition.x,
+      //   y2: model.bPosition.y,
+      //   stroke: "red",
+      // });
   }
 }
 

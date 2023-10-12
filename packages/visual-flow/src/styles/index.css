@@ -6,7 +6,6 @@
 }
 
 .vf-block:hover {
-  cursor: move;
 }
 
 .vf-block-bg {
@@ -31,6 +30,13 @@
 }
 
 .vf-socket {
+  fill: green;
+}
+
+.vf-socket.hovered {
+  fill: lightgreen;
+  stroke-width: 2;
+  stroke: green;
 }
 
 .vf-line {

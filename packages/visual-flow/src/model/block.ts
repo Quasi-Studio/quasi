@@ -1,4 +1,3 @@
-import { HTMLElementComponent } from "refina";
 import { Direction, Point } from "../types";
 import { ModelBase } from "./base";
 import { Socket } from "./socket";
@@ -19,6 +18,8 @@ export class Block extends ModelBase<HTMLDivElement> {
   zIndex: number;
 
   dragging: boolean = false;
+
+  outsideGraph = true;
 
   leftSockets: Socket[] = [];
   rightSockets: Socket[] = [];
@@ -48,7 +49,10 @@ export class Block extends ModelBase<HTMLDivElement> {
   }
 
   addSocket(direction: Direction, socket: Socket) {
+    socket.block = this;
+    socket.direction = direction;
     this.getSocketsByDirection(direction).push(socket);
+    this.updateSocketPosition();
   }
 
   getSocketsByDirection(direction: Direction) {
@@ -65,9 +69,15 @@ export class Block extends ModelBase<HTMLDivElement> {
     this.y = y;
     this.el!.style.left = `${x}px`;
     this.el!.style.top = `${y}px`;
+
+    for(const socket of this.allSockets){
+      if(socket.connected){
+        socket.connected.updatePath();
+      }
+    }
   }
 
-  applySocketPosition() {
+  updateSocketPosition() {
     calcSocketPos(this.height, this.leftSockets.length).forEach((offset, i) => {
       this.leftSockets[i].cx = 0;
       this.leftSockets[i].cy = offset;
@@ -132,7 +142,7 @@ export class Block extends ModelBase<HTMLDivElement> {
 function calcSocketPos(length: number, socketNum: number) {
   const ret: number[] = [];
   const offset = (0.8 * length) / (socketNum + 1);
-  let x = 0.1 * offset;
+  let x = 0.1 * length;
   for (let i = 0; i < socketNum; i++) {
     x += offset;
     ret.push(x);

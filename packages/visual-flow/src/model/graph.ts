@@ -1,11 +1,10 @@
-import { SVGElementComponent } from "refina";
-import { Point } from "../types";
+import { Point, opposite } from "../types";
 import { ModelBase } from "./base";
 import { Block } from "./block";
-import { Line } from "./line";
+import { Line, createPointWithDirection } from "./line";
 import { Socket } from "./socket";
 
-const MIN_DISTANCE = 30 * 30;
+const MIN_DISTANCE = 20 * 20;
 const MIN_ZINDEX = 0;
 
 export enum StateType {
@@ -21,6 +20,7 @@ export type State =
   | {
       type: StateType.DRAGGING_LINE;
       line: Line;
+      socket: Socket;
     }
   | {
       type: StateType.DRAGGING_BLOCK;
@@ -37,7 +37,7 @@ export class Graph extends ModelBase<HTMLDivElement> {
 
   protected state: State = idelState;
 
-  protected hoveredSocket: Socket | null = null;
+  hoveredSocket: Socket | null = null;
 
   protected blockZIndex: Block[] = [];
 
@@ -45,6 +45,10 @@ export class Graph extends ModelBase<HTMLDivElement> {
     block.graph = this;
     this.blocks.push(block);
     this.blockZIndex.push(block);
+  }
+
+  removeLine(line: Line) {
+    this.lines.splice(this.lines.indexOf(line), 1);
   }
 
   getNearestSocket(pos: Point): null | { socket: Socket; distance: number } {
@@ -60,7 +64,7 @@ export class Graph extends ModelBase<HTMLDivElement> {
     return socket && distance < MIN_DISTANCE ? { socket, distance } : null;
   }
 
-  getHoveredBlock(pos: Point): null | Block {
+  protected getHoveredBlock(pos: Point): null | Block {
     for (const b of this.blocks) {
       if (b.isPosInside(pos)) return b;
     }
@@ -89,18 +93,25 @@ export class Graph extends ModelBase<HTMLDivElement> {
     let blockLeft = pos.x - dx;
     let blockTop = pos.y - dy;
 
-    if (blockLeft <= this.el!.offsetLeft) blockLeft = this.el!.offsetLeft + 1;
-    else {
-      const blockLeftMax =
-        this.el!.offsetLeft + this.el!.offsetWidth - block.width;
-      if (blockLeft >= blockLeftMax) blockLeft = blockLeftMax - 1;
-    }
+    const blockLeftMax =
+      this.el!.offsetLeft + this.el!.offsetWidth - block.width;
+    const blockTopMax =
+      this.el!.offsetTop + this.el!.offsetHeight - block.height;
 
-    if (blockTop <= this.el!.offsetTop) blockTop = this.el!.offsetTop + 1;
-    else {
-      const blockTopMax =
-        this.el!.offsetTop + this.el!.offsetHeight - block.height;
-      if (blockTop >= blockTopMax) blockTop = blockTopMax - 1;
+    if (block.outsideGraph) {
+      if (
+        blockLeft > this.el!.offsetLeft &&
+        blockLeft < blockLeftMax &&
+        blockTop > this.el!.offsetTop &&
+        blockTop < blockTopMax
+      )
+        block.outsideGraph = false;
+    } else {
+      if (blockLeft <= this.el!.offsetLeft) blockLeft = this.el!.offsetLeft + 1;
+      else if (blockLeft >= blockLeftMax) blockLeft = blockLeftMax - 1;
+
+      if (blockTop <= this.el!.offsetTop) blockTop = this.el!.offsetTop + 1;
+      else if (blockTop >= blockTopMax) blockTop = blockTopMax - 1;
     }
 
     block.moveTo(blockLeft, blockTop);
@@ -109,6 +120,14 @@ export class Graph extends ModelBase<HTMLDivElement> {
   protected updateDraggingLineEnd(pos: Point) {
     if (this.state.type !== StateType.DRAGGING_LINE)
       throw new Error("Not dragging line");
+    this.state.line.b = createPointWithDirection(
+      pos.x - this.el!.offsetLeft,
+      pos.y - this.el!.offsetTop,
+      this.hoveredSocket && this.hoveredSocket !== this.state.line.a
+        ? this.hoveredSocket.direction
+        : opposite(this.state.socket.direction),
+    );
+    this.state.line.updatePath();
   }
 
   protected moveBlockToTop(block: Block) {
@@ -141,10 +160,14 @@ export class Graph extends ModelBase<HTMLDivElement> {
       if (this.hoveredSocket) {
         const line = this.hoveredSocket.connected
           ? this.hoveredSocket.disconnect()
-          : this.hoveredSocket.connect();
+          : this.hoveredSocket.connect(
+              pos.x - this.el!.offsetLeft,
+              pos.y - this.el!.offsetTop,
+            );
         this.state = {
           type: StateType.DRAGGING_LINE,
           line,
+          socket: this.hoveredSocket,
         };
       } else {
         const hoveredBlock = this.getHoveredBlock(pos);
@@ -166,8 +189,13 @@ export class Graph extends ModelBase<HTMLDivElement> {
 
   onMouseUp(pos: Point) {
     if (this.state.type === StateType.DRAGGING_LINE) {
-      if (this.hoveredSocket) {
-        this.hoveredSocket.connect(this.state.line);
+      if (
+        this.hoveredSocket &&
+        this.state.line.a !== this.hoveredSocket &&
+        this.state.socket !== this.hoveredSocket &&
+        !this.hoveredSocket.connected
+      ) {
+        this.hoveredSocket.connect(pos.x, pos.y, this.state.line);
       } else {
         this.state.line.a.disconnect();
       }

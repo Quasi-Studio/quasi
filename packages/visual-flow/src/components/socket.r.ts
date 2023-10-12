@@ -5,7 +5,12 @@ import { Socket } from "../model";
 export class VfSocket extends OutputComponent {
   main(_: OutputComponentContext<this>, model: Socket): void {
     _.$cls`vf-socket`;
-    _.$ref(model.ref) && _._svgCircle({});
+    _.$ref(model.ref) &&
+      _._svgCircle({
+        cx: model.cx,
+        cy: model.cy,
+        r: 5,
+      });
   }
 }
 

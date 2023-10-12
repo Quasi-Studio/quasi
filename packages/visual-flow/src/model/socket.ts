@@ -1,23 +1,35 @@
-import type { Direction } from "../types";
+import { Block } from ".";
+import { opposite, type Direction, Point } from "../types";
 import { ModelBase } from "./base";
-import { Line } from "./line";
+import { Line, createPointWithDirection } from "./line";
 
 export class Socket extends ModelBase<SVGElement> {
-  constructor(
-    public label: string,
-    public direction: Direction,
-  ) {
+  constructor(public label: string) {
     super();
   }
+
+  block: Block;
+  direction: Direction;
 
   // position relative to the block
   cx: number;
   cy: number;
 
+  get graph() {
+    return this.block.graph;
+  }
+
+  get graphX() {
+    return this.block.x + this.cx - this.graph.el!.offsetLeft;
+  }
+  get graphY() {
+    return this.block.y + this.cy - this.graph.el!.offsetTop;
+  }
+
   connected: Line | null = null;
 
   clone(): Socket {
-    return new Socket(this.label, this.direction);
+    return new Socket(this.label);
   }
 
   hover() {
@@ -28,9 +40,19 @@ export class Socket extends ModelBase<SVGElement> {
     this.el!.classList.remove("hovered");
   }
 
-  connect(line?: Line) {
+  connect(currentX: number, currentY: number, line?: Line) {
     if (!line) {
-      line = new Line(this);
+      line = new Line(
+        this.graph,
+        this,
+        createPointWithDirection(
+          currentX,
+          currentY,
+          opposite(this.direction),
+        ),
+      );
+      this.graph.lines.push(line);
+      this.connected = line;
       return line;
     }
     if (this.connected) {
