@@ -19,10 +19,12 @@
     "README.md"
   ],
   "exports": {
-    ".": "./src/index.ts",
-    "./styles.css": "./src/styles/index.css"
+    ".": "./src/index.ts"
   },
   "dependencies": {
+    "@fluentui/tokens": "1.0.0-alpha.11",
+    "@refina/fluentui": "link:..\\..\\..\\refina\\packages\\fluentui",
+    "@refina/griffel": "link:..\\..\\..\\refina\\packages\\griffel",
     "refina": "link:..\\..\\..\\refina\\packages\\core"
   }
 }

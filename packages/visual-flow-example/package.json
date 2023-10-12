@@ -17,6 +17,8 @@
     "vite-plugin-refina": "link:..\\..\\..\\refina\\packages\\plugin"
   },
   "dependencies": {
+    "@refina/fluentui": "link:..\\..\\..\\refina\\packages\\fluentui",
+    "@refina/griffel": "link:..\\..\\..\\refina\\packages\\griffel",
     "@quasi-dev/visual-flow": "workspace:^",
     "refina": "link:..\\..\\..\\refina\\packages\\core"
   }
