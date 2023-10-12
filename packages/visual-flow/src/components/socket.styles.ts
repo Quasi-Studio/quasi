@@ -1,17 +1,15 @@
+import { tokens } from "@fluentui/tokens";
 import {
   makeResetStyles,
-  makeStyles,
-  mergeClasses,
-  shorthands,
+  mergeClasses
 } from "@refina/griffel";
-import { tokens, typographyStyles } from "@fluentui/tokens";
 
 const rootClassName = makeResetStyles({
   fill: tokens.colorBrandForegroundInverted,
 
-  "&.hovered":{
+  "&.hovered": {
     fill: tokens.colorCompoundBrandBackgroundHover,
-  }
+  },
 });
 
 export default {

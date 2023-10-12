@@ -1,22 +1,28 @@
+import { tokens, typographyStyles } from "@fluentui/tokens";
 import {
   makeResetStyles,
   makeStyles,
   mergeClasses,
   shorthands,
 } from "@refina/griffel";
-import { tokens, typographyStyles } from "@fluentui/tokens";
 
 const rootClassName = makeResetStyles({
   position: "absolute",
   width: 0,
   height: 0,
-  filter:`drop-shadow(0 4px 8px rgba(0,0,0,0.14))`,
+  filter: `drop-shadow(0 4px 8px rgba(0,0,0,0.14))`,
   ...shorthands.overflow("visible"),
+
+  "&.animated": {
+    transitionProperty: "all",
+    transitionDuration: tokens.durationNormal,
+    transitionTimingFunction: tokens.curveEasyEase,
+  },
 });
 
 const rootStyles = makeStyles({
   dragging: {
-    filter:`drop-shadow(0 14px 28px rgba(0,0,0,0.14))`,
+    filter: `drop-shadow(0 14px 28px rgba(0,0,0,0.14))`,
   },
 });
 

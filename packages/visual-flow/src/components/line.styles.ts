@@ -1,9 +1,5 @@
 import { tokens } from "@fluentui/tokens";
-import {
-  makeResetStyles,
-  makeStyles,
-  mergeClasses
-} from "@refina/griffel";
+import { makeResetStyles, makeStyles, mergeClasses } from "@refina/griffel";
 
 const rootClassName = makeResetStyles({
   stroke: tokens.colorCompoundBrandStroke,
@@ -15,7 +11,6 @@ const rootStyles = makeStyles({
   dragging: {
     stroke: tokens.colorCompoundBrandStrokePressed,
     strokeWidth: tokens.strokeWidthThickest,
-
   },
   notDragging: {
     ":hover": {

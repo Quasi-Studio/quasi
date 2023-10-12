@@ -1,7 +1,4 @@
-import {
-  makeResetStyles,
-  mergeClasses
-} from "@refina/griffel";
+import { makeResetStyles, mergeClasses } from "@refina/griffel";
 
 const rootClassName = makeResetStyles({
   width: "100%",

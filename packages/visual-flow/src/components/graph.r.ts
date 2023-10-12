@@ -1,4 +1,4 @@
-import { OutputComponent, OutputComponentContext, byIndex, byProp, outputComponent } from "refina";
+import { OutputComponent, OutputComponentContext, outputComponent } from "refina";
 import { Graph } from "../model";
 import { getPagePos } from "../utils";
 import styles from "./graph.styles";
