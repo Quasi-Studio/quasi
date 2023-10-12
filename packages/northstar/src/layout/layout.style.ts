@@ -10,6 +10,7 @@ const gridStyles = makeResetStyles({
 });
 
 const fullSize = makeResetStyles({
+  position: "fixed",
   width: "100%",
   height: "100%",
 });
