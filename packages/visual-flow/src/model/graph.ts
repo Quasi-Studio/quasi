@@ -147,11 +147,14 @@ export class Graph extends ModelBase<HTMLDivElement> {
   onMouseMove(pos: Point) {
     if (this.state.type === StateType.IDLE) {
       this.updateHoveredSocket(pos);
+      return false;
     } else if (this.state.type === StateType.DRAGGING_LINE) {
       this.updateHoveredSocket(pos);
       this.updateDraggingLineEnd(pos);
+      return true;
     } else {
       this.updateDraggingBlockPos(pos);
+      return true;
     }
   }
 
@@ -169,22 +172,23 @@ export class Graph extends ModelBase<HTMLDivElement> {
           line,
           socket: this.hoveredSocket,
         };
-      } else {
-        const hoveredBlock = this.getHoveredBlock(pos);
-        if (hoveredBlock) {
-          hoveredBlock.dragging = true;
-          this.moveBlockToTop(hoveredBlock);
-          this.state = {
-            type: StateType.DRAGGING_BLOCK,
-            block: hoveredBlock,
-            dx: pos.x - hoveredBlock.x,
-            dy: pos.y - hoveredBlock.y,
-          };
-        }
+        return true;
       }
-    } else {
-      throw new Error("Why are you here?");
+      const hoveredBlock = this.getHoveredBlock(pos);
+      if (hoveredBlock) {
+        hoveredBlock.dragging = true;
+        this.moveBlockToTop(hoveredBlock);
+        this.state = {
+          type: StateType.DRAGGING_BLOCK,
+          block: hoveredBlock,
+          dx: pos.x - hoveredBlock.x,
+          dy: pos.y - hoveredBlock.y,
+        };
+        return true;
+      }
+      return false;
     }
+    throw new Error("Why are you here?");
   }
 
   onMouseUp(pos: Point) {
@@ -200,10 +204,14 @@ export class Graph extends ModelBase<HTMLDivElement> {
         this.state.line.a.disconnect();
       }
       this.state = idelState;
-    } else if (this.state.type === StateType.DRAGGING_BLOCK) {
+      return true;
+    }
+    if (this.state.type === StateType.DRAGGING_BLOCK) {
       this.updateDraggingBlockPos(pos);
       this.state.block.dragging = false;
       this.state = idelState;
+      return true;
     }
+    return false;
   }
 }

@@ -6,15 +6,15 @@ import { getClientPos } from "../utils";
 export class VfGraph extends OutputComponent {
   main(_: OutputComponentContext<this>, model: Graph): void {
     _.$app.registerDocumentEventListener("mousemove", (e) => {
-      model.onMouseMove(getClientPos(e));
+      model.onMouseMove(getClientPos(e)) && e.preventDefault();
       // not update here, because it will cause performance issue
     });
     _.$app.registerDocumentEventListener("mousedown", (e) => {
-      model.onMouseDown(getClientPos(e));
+      model.onMouseDown(getClientPos(e)) && e.preventDefault();
       _.$update();
     });
     _.$app.registerDocumentEventListener("mouseup", (e) => {
-      model.onMouseUp(getClientPos(e));
+      model.onMouseUp(getClientPos(e)) && e.preventDefault();
       _.$update();
     });
 
