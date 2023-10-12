@@ -1,14 +1,15 @@
 import { OutputComponent, OutputComponentContext, outputComponent } from "refina";
 import { Socket } from "../model";
+import styles from "./socket.styles";
 
 @outputComponent("vfSocket")
 export class VfSocket extends OutputComponent {
   main(_: OutputComponentContext<this>, model: Socket): void {
-    _.$cls`vf-socket`;
+    styles.root(_);
     _.$ref(model.ref) &&
       _._svgCircle({
-        cx: model.cx,
-        cy: model.cy,
+        cx: model.blockX,
+        cy: model.blockY,
         r: 5,
       });
   }

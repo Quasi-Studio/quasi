@@ -1,37 +1,35 @@
 import { OutputComponent, OutputComponentContext, byIndex, byProp, outputComponent } from "refina";
 import { Graph } from "../model";
-import { getClientPos } from "../utils";
+import { getPagePos } from "../utils";
+import styles from "./graph.styles";
 
 @outputComponent("vfGraph")
 export class VfGraph extends OutputComponent {
   main(_: OutputComponentContext<this>, model: Graph): void {
     _.$app.registerDocumentEventListener("mousemove", (e) => {
-      model.onMouseMove(getClientPos(e)) && e.preventDefault();
+      model.onMouseMove(getPagePos(e)) && e.preventDefault();
       // not update here, because it will cause performance issue
     });
     _.$app.registerDocumentEventListener("mousedown", (e) => {
-      model.onMouseDown(getClientPos(e)) && e.preventDefault();
+      model.onMouseDown(getPagePos(e)) && e.preventDefault();
       _.$update();
     });
     _.$app.registerDocumentEventListener("mouseup", (e) => {
-      model.onMouseUp(getClientPos(e)) && e.preventDefault();
+      model.onMouseUp(getPagePos(e)) && e.preventDefault();
       _.$update();
     });
 
-    _.$cls`vf-graph`;
+    styles.root(_);
     _.$ref(model.ref) &&
-      _._div({}, (_) =>
-        _._svgSvg(
-          {
-            width: "100%",
-            height: "100%",
-          },
-          () => {
+      _._div(
+        {},
+        (_) =>
+          styles.svg(_) &&
+          _._svgSvg({}, () => {
             _.for(model.lines, "id", (line) => {
               _.vfLine(line);
             });
-          },
-        ),
+          }),
       );
     _.for(model.blocks, "id", (block) => {
       _.vfBlock(block);

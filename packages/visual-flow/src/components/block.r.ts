@@ -1,25 +1,24 @@
 import { OutputComponent, OutputComponentContext, byIndex, outputComponent } from "refina";
 import { Block } from "../model";
+import styles from "./block.styles";
 
 @outputComponent("vfBlock")
 export class VfBlock extends OutputComponent {
   main(_: OutputComponentContext<this>, model: Block): void {
     _.portal(() => {
-      _.$cls`vf-block ${model.dragging ? "dragging" : ""}`;
-      _.$css`position:absolute;top:${model.y}px;left:${model.x}px;width:0px;height:0px;
-             overflow:visible;z-index:${model.zIndex}`;
+      styles.root(model.dragging)(_);
+      _.$css`top:${model.pageY}px;left:${model.pageX}px;z-index:${model.zIndex}`;
       _.$ref(model.ref) &&
         _._div({}, (_) => {
-          _.$css`position:absolute;top:0;left:0;
-          width:${model.width}px;height:${model.height}px;
-          overflow:visible;`;
+          styles.svg(_);
+          _.$css`width:${model.width}px;height:${model.height}px;`;
           _._svgSvg({}, () => {
-            _.$cls`vf-block-bg`;
+            styles.bg(model.dragging)(_);
             _._svgPath({
               d: model.path,
             });
 
-            _.$cls`vf-block-text`;
+            styles.text(_);
             _._svgText({}, model.text);
 
             _.for(model.allSockets, byIndex, (socket) => {
