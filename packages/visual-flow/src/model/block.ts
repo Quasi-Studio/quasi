@@ -70,8 +70,8 @@ export class Block extends ModelBase<HTMLDivElement> {
     this.el!.style.left = `${x}px`;
     this.el!.style.top = `${y}px`;
 
-    for(const socket of this.allSockets){
-      if(socket.connected){
+    for (const socket of this.allSockets) {
+      if (socket.connected) {
         socket.connected.updatePath();
       }
     }

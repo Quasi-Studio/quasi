@@ -36,8 +36,10 @@ export function opposite(dire: Direction): Direction {
 }
 
 export function updatePoint(dire: Direction, p: Point, val: number): Point {
-  if (dire === Direction.LEFT || dire === Direction.RIGHT) return new Point(val, p.y);
-  if (dire === Direction.UP || dire === Direction.DOWN) return new Point(p.x, val);
+  if (dire === Direction.LEFT || dire === Direction.RIGHT)
+    return new Point(val, p.y);
+  if (dire === Direction.UP || dire === Direction.DOWN)
+    return new Point(p.x, val);
   return 1 as never;
 }
 
