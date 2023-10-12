@@ -1,6 +1,6 @@
 import { app } from "refina";
+import layout from "./layout/layout.r"
 
 app((_) => {
-  _._h1({}, "Hello World!");
-  _._p({}, "I am @quasi-dev/northstar");
-});
+  _.embed(layout)
+})
