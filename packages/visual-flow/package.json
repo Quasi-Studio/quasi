@@ -12,20 +12,15 @@
     "@refina/tsconfig": "link:..\\..\\..\\refina\\packages\\tsconfig",
     "typescript": "^5.0.2"
   },
-  "main": "./dist/src/index.ts",
-  "types": "./dist/src/index.ts",
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
   "files": [
     "src",
     "README.md"
   ],
   "exports": {
-    ".": {
-      "import": {
-        "types": "./dist/src/index.ts",
-        "import": "./dist/src/index.ts",
-        "default": "./dist/src/index.ts"
-      }
-    }
+    ".": "./src/index.ts",
+    "./styles.css": "./src/styles/index.css"
   },
   "dependencies": {
     "refina": "link:..\\..\\..\\refina\\packages\\core"

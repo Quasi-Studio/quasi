@@ -55,6 +55,9 @@ importers:
 
   packages/visual-flow-example:
     dependencies:
+      '@quasi-dev/visual-flow':
+        specifier: workspace:^
+        version: link:../visual-flow
       refina:
         specifier: link:..\..\..\refina\packages\core
         version: link:../../../refina/packages/core

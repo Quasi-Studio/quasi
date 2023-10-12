@@ -1,0 +1,37 @@
+.vf-graph {
+  height: 400px;
+}
+
+.vf-block {
+}
+
+.vf-block:hover {
+  cursor: move;
+}
+
+.vf-block-bg {
+  fill: aliceblue;
+  stroke-width: 1;
+  stroke: #555;
+}
+
+.vf-block:hover .vf-block-bg {
+  stroke-width: 1;
+  stroke: #000;
+}
+
+.dragging .vf-block-bg {
+  fill: #eee;
+}
+
+.vf-block-text {
+  position: absolute;
+  user-select: none;
+  background: #000;
+}
+
+.vf-socket {
+}
+
+.vf-line {
+}
