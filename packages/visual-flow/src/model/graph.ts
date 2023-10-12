@@ -1,4 +1,5 @@
 import { Point, opposite } from "../types";
+import { calcLineEndDirection } from "../utils";
 import { ModelBase } from "./base";
 import { Block } from "./block";
 import { Line, createPointWithDirection } from "./line";
@@ -118,16 +119,21 @@ export class Graph extends ModelBase<HTMLDivElement> {
     block.moveTo(blockLeft, blockTop);
   }
 
-  protected updateDraggingLineEnd(pos: Point) {
+  protected updateDraggingLineEnd(pagePos: Point) {
     if (this.state.type !== StateType.DRAGGING_LINE)
       throw new Error("Not dragging line");
     const boundingRect = this.el!.getBoundingClientRect();
+
     this.state.line.b = createPointWithDirection(
-      pos.x - boundingRect.x,
-      pos.y - boundingRect.y,
+      pagePos.x - boundingRect.x,
+      pagePos.y - boundingRect.y,
       this.hoveredSocket && this.hoveredSocket !== this.state.line.a
         ? this.hoveredSocket.direction
-        : opposite(this.state.socket.direction),
+        : calcLineEndDirection(
+            this.state.line.a.direction,
+            pagePos.x - this.state.line.a.pageX,
+            pagePos.y - this.state.line.a.pageY,
+          ),
     );
     this.state.line.updatePath();
   }
@@ -146,30 +152,34 @@ export class Graph extends ModelBase<HTMLDivElement> {
     }
   }
 
-  onMouseMove(pos: Point) {
+  onMouseMove(pagePos: Point) {
     if (this.state.type === StateType.IDLE) {
-      this.updateHoveredSocket(pos, null);
+      this.updateHoveredSocket(pagePos, null);
       return false;
     } else if (this.state.type === StateType.DRAGGING_LINE) {
-      this.updateHoveredSocket(pos, this.state.line);
-      this.updateDraggingLineEnd(pos);
+      this.updateHoveredSocket(pagePos, this.state.line);
+      this.updateDraggingLineEnd(pagePos);
       return true;
     } else {
-      this.updateDraggingBlockPos(pos);
+      this.updateDraggingBlockPos(pagePos);
       return true;
     }
   }
 
-  onMouseDown(pos: Point) {
+  onMouseDown(pagePos: Point) {
     if (this.state.type === StateType.IDLE) {
       if (this.hoveredSocket) {
         const boundingRect = this.el!.getBoundingClientRect();
+        const graphX = pagePos.x - boundingRect.x;
+        const graphY = pagePos.y - boundingRect.y;
         const line = this.hoveredSocket.connected
           ? this.hoveredSocket.disconnect()
-          : this.hoveredSocket.connect(
-              pos.x - boundingRect.x,
-              pos.y - boundingRect.y,
-            );
+          : this.hoveredSocket.connect(graphX, graphY);
+        line.b = createPointWithDirection(
+          graphX,
+          graphY,
+          opposite(this.hoveredSocket.direction),
+        );
         line.dragging = true;
         this.state = {
           type: StateType.DRAGGING_LINE,
@@ -178,15 +188,15 @@ export class Graph extends ModelBase<HTMLDivElement> {
         };
         return true;
       }
-      const hoveredBlock = this.getHoveredBlock(pos);
+      const hoveredBlock = this.getHoveredBlock(pagePos);
       if (hoveredBlock) {
         hoveredBlock.dragging = true;
         this.moveBlockToTop(hoveredBlock);
         this.state = {
           type: StateType.DRAGGING_BLOCK,
           block: hoveredBlock,
-          dx: pos.x - hoveredBlock.pageX,
-          dy: pos.y - hoveredBlock.pageY,
+          dx: pagePos.x - hoveredBlock.pageX,
+          dy: pagePos.y - hoveredBlock.pageY,
         };
         return true;
       }
@@ -195,7 +205,7 @@ export class Graph extends ModelBase<HTMLDivElement> {
     throw new Error("Why are you here?");
   }
 
-  onMouseUp(pos: Point) {
+  onMouseUp(pagePos: Point) {
     if (this.state.type === StateType.DRAGGING_LINE) {
       if (
         this.hoveredSocket &&
@@ -203,7 +213,7 @@ export class Graph extends ModelBase<HTMLDivElement> {
         this.state.socket !== this.hoveredSocket &&
         !this.hoveredSocket.connected
       ) {
-        this.hoveredSocket.connect(pos.x, pos.y, this.state.line);
+        this.hoveredSocket.connect(pagePos.x, pagePos.y, this.state.line);
       } else {
         this.state.line.a.disconnect();
       }
@@ -212,7 +222,7 @@ export class Graph extends ModelBase<HTMLDivElement> {
       return true;
     }
     if (this.state.type === StateType.DRAGGING_BLOCK) {
-      this.updateDraggingBlockPos(pos);
+      this.updateDraggingBlockPos(pagePos);
       this.state.block.dragging = false;
       this.state = idelState;
       return true;

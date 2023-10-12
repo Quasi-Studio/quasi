@@ -116,7 +116,8 @@ export class Block extends ModelBase<HTMLDivElement> {
         (s.direction === Direction.TOP && s.pageY < pos.y) ||
         (s.direction === Direction.BOTTOM && s.pageY > pos.y);
 
-      const d = (s.blockY - dy) * (s.blockY - dy) + (s.blockX - dx) * (s.blockX - dx);
+      const d =
+        (s.blockY - dy) * (s.blockY - dy) + (s.blockX - dx) * (s.blockX - dx);
 
       if (
         (inside && d > MIN_INSIDE_DISTANCE) ||

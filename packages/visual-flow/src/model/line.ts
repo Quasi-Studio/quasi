@@ -80,19 +80,10 @@ export class Line extends ModelBase<SVGElement> {
         this.graph.removeLine(this);
         return;
       }
-      const p = createPointWithDirection(
-        this.a.graphX,
-        this.a.graphY,
-        this.graph?.hoveredSocket?.direction ?? opposite(this.b.direction),
-      );
       this.a = this.b as Socket;
-      this.b = p;
+      this.b = undefined as any;
     } else if (s === this.b) {
-      this.b = createPointWithDirection(
-        this.b.graphX,
-        this.b.graphY,
-        this.graph?.hoveredSocket?.direction ?? opposite(this.a.direction),
-      );
+      this.b = undefined as any;
     } else {
       throw new Error("Socket not connected");
     }
