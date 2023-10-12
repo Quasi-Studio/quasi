@@ -13,8 +13,8 @@ export class Block extends ModelBase<HTMLDivElement> {
 
   graph: Graph;
 
-  x: number;
-  y: number;
+  pageX: number;
+  pageY: number;
   width: number;
   height: number;
 
@@ -40,8 +40,8 @@ export class Block extends ModelBase<HTMLDivElement> {
 
   clone(): Block {
     const block = new Block(this.text);
-    block.x = this.x;
-    block.y = this.y;
+    block.pageX = this.pageX;
+    block.pageY = this.pageY;
     block.width = this.width;
     block.height = this.height;
     block.leftSockets = this.leftSockets.map((s) => s.clone());
@@ -68,8 +68,8 @@ export class Block extends ModelBase<HTMLDivElement> {
   }
 
   moveTo(x: number, y: number) {
-    this.x = x;
-    this.y = y;
+    this.pageX = x;
+    this.pageY = y;
     this.el!.style.left = `${x}px`;
     this.el!.style.top = `${y}px`;
 
@@ -82,41 +82,41 @@ export class Block extends ModelBase<HTMLDivElement> {
 
   updateSocketPosition() {
     calcSocketPos(this.height, this.leftSockets.length).forEach((offset, i) => {
-      this.leftSockets[i].cx = 0;
-      this.leftSockets[i].cy = offset;
+      this.leftSockets[i].blockX = 0;
+      this.leftSockets[i].blockY = offset;
     });
     calcSocketPos(this.height, this.rightSockets.length).forEach(
       (offset, i) => {
-        this.rightSockets[i].cx = this.width;
-        this.rightSockets[i].cy = offset;
+        this.rightSockets[i].blockX = this.width;
+        this.rightSockets[i].blockY = offset;
       },
     );
     calcSocketPos(this.width, this.topSockets.length).forEach((offset, i) => {
-      this.topSockets[i].cx = offset;
-      this.topSockets[i].cy = 0;
+      this.topSockets[i].blockX = offset;
+      this.topSockets[i].blockY = 0;
     });
     calcSocketPos(this.width, this.bottomSockets.length).forEach(
       (offset, i) => {
-        this.bottomSockets[i].cx = offset;
-        this.bottomSockets[i].cy = this.height;
+        this.bottomSockets[i].blockX = offset;
+        this.bottomSockets[i].blockY = this.height;
       },
     );
   }
 
   getNearestSocket(pos: Point): null | { socket: Socket; distance: number } {
-    const dx = pos.x - this.x;
-    const dy = pos.y - this.y;
+    const dx = pos.x - this.pageX;
+    const dy = pos.y - this.pageY;
 
     let socket: Socket | null = null;
     let distance = Infinity;
     for (const s of this.allSockets) {
       const inside =
-        (s.direction === Direction.LEFT && s.offsetX < pos.x) ||
-        (s.direction === Direction.RIGHT && s.offsetX > pos.x) ||
-        (s.direction === Direction.TOP && s.offsetY < pos.y) ||
-        (s.direction === Direction.BOTTOM && s.offsetY > pos.y);
+        (s.direction === Direction.LEFT && s.pageX < pos.x) ||
+        (s.direction === Direction.RIGHT && s.pageX > pos.x) ||
+        (s.direction === Direction.TOP && s.pageY < pos.y) ||
+        (s.direction === Direction.BOTTOM && s.pageY > pos.y);
 
-      const d = (s.cy - dy) * (s.cy - dy) + (s.cx - dx) * (s.cx - dx);
+      const d = (s.blockY - dy) * (s.blockY - dy) + (s.blockX - dx) * (s.blockX - dx);
 
       if (
         (inside && d > MIN_INSIDE_DISTANCE) ||
@@ -135,10 +135,10 @@ export class Block extends ModelBase<HTMLDivElement> {
 
   isPosInside(pos: Point) {
     return (
-      pos.x >= this.x &&
-      pos.x <= this.x + this.width &&
-      pos.y >= this.y &&
-      pos.y <= this.y + this.height
+      pos.x >= this.pageX &&
+      pos.x <= this.pageX + this.width &&
+      pos.y >= this.pageY &&
+      pos.y <= this.pageY + this.height
     );
   }
 

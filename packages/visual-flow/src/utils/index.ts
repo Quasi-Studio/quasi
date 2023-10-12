@@ -1,1 +1,1 @@
-export * from "./getClientPos";
+export * from "./getPagePos";

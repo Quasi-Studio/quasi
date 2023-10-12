@@ -95,24 +95,23 @@ export class Graph extends ModelBase<HTMLDivElement> {
     let blockLeft = pos.x - dx;
     let blockTop = pos.y - dy;
 
-    const blockLeftMax =
-      this.el!.offsetLeft + this.el!.offsetWidth - block.width;
-    const blockTopMax =
-      this.el!.offsetTop + this.el!.offsetHeight - block.height;
+    const boundingRect = this.el!.getBoundingClientRect();
+    const blockLeftMax = boundingRect.right - block.width;
+    const blockTopMax = boundingRect.bottom - block.height;
 
     if (block.outsideGraph) {
       if (
-        blockLeft > this.el!.offsetLeft &&
+        blockLeft > boundingRect.x &&
         blockLeft < blockLeftMax &&
-        blockTop > this.el!.offsetTop &&
+        blockTop > boundingRect.y &&
         blockTop < blockTopMax
       )
         block.outsideGraph = false;
     } else {
-      if (blockLeft <= this.el!.offsetLeft) blockLeft = this.el!.offsetLeft + 1;
+      if (blockLeft <= boundingRect.x) blockLeft = boundingRect.x + 1;
       else if (blockLeft >= blockLeftMax) blockLeft = blockLeftMax - 1;
 
-      if (blockTop <= this.el!.offsetTop) blockTop = this.el!.offsetTop + 1;
+      if (blockTop <= boundingRect.y) blockTop = boundingRect.y + 1;
       else if (blockTop >= blockTopMax) blockTop = blockTopMax - 1;
     }
 
@@ -122,9 +121,10 @@ export class Graph extends ModelBase<HTMLDivElement> {
   protected updateDraggingLineEnd(pos: Point) {
     if (this.state.type !== StateType.DRAGGING_LINE)
       throw new Error("Not dragging line");
+    const boundingRect = this.el!.getBoundingClientRect();
     this.state.line.b = createPointWithDirection(
-      pos.x - this.el!.offsetLeft,
-      pos.y - this.el!.offsetTop,
+      pos.x - boundingRect.x,
+      pos.y - boundingRect.y,
       this.hoveredSocket && this.hoveredSocket !== this.state.line.a
         ? this.hoveredSocket.direction
         : opposite(this.state.socket.direction),
@@ -163,11 +163,12 @@ export class Graph extends ModelBase<HTMLDivElement> {
   onMouseDown(pos: Point) {
     if (this.state.type === StateType.IDLE) {
       if (this.hoveredSocket) {
+        const boundingRect = this.el!.getBoundingClientRect();
         const line = this.hoveredSocket.connected
           ? this.hoveredSocket.disconnect()
           : this.hoveredSocket.connect(
-              pos.x - this.el!.offsetLeft,
-              pos.y - this.el!.offsetTop,
+              pos.x - boundingRect.x,
+              pos.y - boundingRect.y,
             );
         line.dragging = true;
         this.state = {
@@ -184,8 +185,8 @@ export class Graph extends ModelBase<HTMLDivElement> {
         this.state = {
           type: StateType.DRAGGING_BLOCK,
           block: hoveredBlock,
-          dx: pos.x - hoveredBlock.x,
-          dy: pos.y - hoveredBlock.y,
+          dx: pos.x - hoveredBlock.pageX,
+          dy: pos.y - hoveredBlock.pageY,
         };
         return true;
       }

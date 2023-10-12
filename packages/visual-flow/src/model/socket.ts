@@ -12,8 +12,8 @@ export class Socket extends ModelBase<SVGElement> {
   direction: Direction;
 
   // position relative to the block
-  cx: number;
-  cy: number;
+  blockX: number;
+  blockY: number;
 
   checkConnectable: (line: Line) => boolean = () => this.connected === null;
 
@@ -22,17 +22,19 @@ export class Socket extends ModelBase<SVGElement> {
   }
 
   get graphX() {
-    return this.block.x + this.cx - this.graph.el!.offsetLeft;
+    const graphPageX = this.graph.el!.getBoundingClientRect().left;
+    return this.block.pageX + this.blockX - graphPageX;
   }
   get graphY() {
-    return this.block.y + this.cy - this.graph.el!.offsetTop;
+    const graphPageY = this.graph.el!.getBoundingClientRect().top;
+    return this.block.pageY + this.blockY - graphPageY;
   }
 
-  get offsetX() {
-    return this.block.x + this.cx;
+  get pageX() {
+    return this.block.pageX + this.blockX;
   }
-  get offsetY() {
-    return this.block.y + this.cy;
+  get pageY() {
+    return this.block.pageY + this.blockY;
   }
 
   connected: Line | null = null;

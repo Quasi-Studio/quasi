@@ -5,19 +5,21 @@ import { Socket } from "./socket";
 
 const pointWithDirectionSym = Symbol();
 
-export type PointWithDirection = Point & {
+export type PointWithDirection = {
+  graphX: number;
+  graphY: number;
   direction: Direction;
   [pointWithDirectionSym]: true;
 };
 
 export function createPointWithDirection(
-  x: number,
-  y: number,
+  graphX: number,
+  graphY: number,
   direction: Direction,
 ): PointWithDirection {
   return {
-    x,
-    y,
+    graphX,
+    graphY,
     direction,
     [pointWithDirectionSym]: true,
   };
@@ -42,14 +44,10 @@ export class Line extends ModelBase<SVGElement> {
   }
 
   get bPosition(): Point {
-    if (this.connected) {
-      return {
-        x: (this.b as Socket).graphX,
-        y: (this.b as Socket).graphY,
-      };
-    } else {
-      return this.b as PointWithDirection;
-    }
+    return {
+      x: (this.b as Socket).graphX,
+      y: (this.b as Socket).graphY,
+    };
   }
 
   get connected() {
