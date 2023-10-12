@@ -98,15 +98,41 @@ export class Line extends ModelBase<SVGElement> {
     }
   }
 
+  // get path() {
+  //   let controlPoint1 = Point.add(
+  //     this.aPosition,
+  //     toPoint(this.a.direction, 80),
+  //   );
+  //   // let controlPoint2 = Point.add(
+  //   //   this.bPosition,
+  //   //   toPoint(this.b.direction, 80),
+  //   // );
+  //   let controlPoint2: Point;
+  //   if (this.connected) {
+  //     controlPoint2 = Point.add(
+  //       this.bPosition,
+  //       toPoint(this.b.direction, 80),
+  //     );
+  //   } else {
+  //     controlPoint2 = this.bPosition;
+  //   }
+  //   return `M ${this.a.graphX} ${this.a.graphY} C ${controlPoint1.x} ${controlPoint1.y}, ${controlPoint2.x} ${controlPoint2.y}, ${this.bPosition.x} ${this.bPosition.y}`;
+  // }
+
   get path() {
     let controlPoint1 = Point.add(
       this.aPosition,
       toPoint(this.a.direction, 80),
     );
-    let controlPoint2 = Point.add(
-      this.bPosition,
-      toPoint(this.b.direction, 80),
-    );
-    return `M ${this.a.graphX} ${this.a.graphY} C ${controlPoint1.x} ${controlPoint1.y}, ${controlPoint2.x} ${controlPoint2.y}, ${this.bPosition.x} ${this.bPosition.y}`;
+    if (this.connected) {
+      let controlPoint2 = Point.add(
+        this.bPosition,
+        toPoint(this.b.direction, 80),
+      );
+      return `M ${this.a.graphX} ${this.a.graphY} C ${controlPoint1.x} ${controlPoint1.y}, ${controlPoint2.x} ${controlPoint2.y}, ${this.bPosition.x} ${this.bPosition.y}`;
+    } else {
+      // controlPoint2 = this.bPosition;
+      return `M ${this.a.graphX} ${this.a.graphY} S ${controlPoint1.x} ${controlPoint1.y}, ${this.b.graphX} ${this.b.graphY}`
+    }
   }
 }
