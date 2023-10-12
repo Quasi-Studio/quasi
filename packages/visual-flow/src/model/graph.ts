@@ -167,6 +167,7 @@ export class Graph extends ModelBase<HTMLDivElement> {
               pos.x - this.el!.offsetLeft,
               pos.y - this.el!.offsetTop,
             );
+        line.dragging = true;
         this.state = {
           type: StateType.DRAGGING_LINE,
           line,
@@ -203,6 +204,7 @@ export class Graph extends ModelBase<HTMLDivElement> {
       } else {
         this.state.line.a.disconnect();
       }
+      this.state.line.dragging = false;
       this.state = idelState;
       return true;
     }

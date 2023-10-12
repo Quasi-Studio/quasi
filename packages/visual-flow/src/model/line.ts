@@ -32,6 +32,8 @@ export class Line extends ModelBase<SVGElement> {
     super();
   }
 
+  dragging: boolean = false;
+
   get aPosition(): Point {
     return {
       x: this.a.graphX,
@@ -57,6 +59,14 @@ export class Line extends ModelBase<SVGElement> {
 
   updatePath() {
     this.el!.setAttribute("d", this.path);
+  }
+
+  hover() {
+    this.el!.classList.add("hovered");
+  }
+
+  unhover() {
+    this.el!.classList.remove("hovered");
   }
 
   connect(s: Socket) {

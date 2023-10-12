@@ -41,10 +41,12 @@ export class Socket extends ModelBase<SVGElement> {
 
   hover() {
     this.el!.classList.add("hovered");
+    this.connected?.hover();
   }
 
   unhover() {
     this.el!.classList.remove("hovered");
+    this.connected?.unhover();
   }
 
   connect(currentX: number, currentY: number, line?: Line) {
