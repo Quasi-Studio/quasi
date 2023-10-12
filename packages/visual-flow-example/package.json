@@ -10,13 +10,14 @@
     "check": "tsc --noEmit"
   },
   "devDependencies": {
+    "@refina/tsconfig": "link:..\\..\\..\\refina\\packages\\tsconfig",
     "typescript": "^5.1.6",
     "vite": "^4.4.8",
-    "@refina/tsconfig": "link:..\\..\\..\\refina\\packages\\tsconfig",
-    "vite-plugin-refina": "link:..\\..\\..\\refina\\packages\\plugin",
-    "vite-plugin-inspect": "^0.7.35"
+    "vite-plugin-inspect": "^0.7.35",
+    "vite-plugin-refina": "link:..\\..\\..\\refina\\packages\\plugin"
   },
   "dependencies": {
+    "@quasi-dev/visual-flow": "workspace:^",
     "refina": "link:..\\..\\..\\refina\\packages\\core"
   }
 }
