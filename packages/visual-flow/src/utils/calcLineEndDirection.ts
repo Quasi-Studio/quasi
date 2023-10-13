@@ -1,6 +1,6 @@
 import { Direction } from "../types";
 
-const SAME_DIRECTION_MAX_SLOPE = 0.1;
+const SAME_DIRECTION_MAX_SLOPE = 1;
 
 export function calcLineEndDirection(
   startDirection: Direction,

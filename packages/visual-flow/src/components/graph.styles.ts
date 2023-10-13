@@ -1,4 +1,4 @@
-import { makeResetStyles, mergeClasses } from "@refina/griffel";
+import { makeResetStyles, makeStyles, mergeClasses } from "@refina/griffel";
 
 const rootClassName = makeResetStyles({
   width: "100%",
@@ -13,7 +13,14 @@ const svgClassName = makeResetStyles({
   height: "100%",
 });
 
+const svgStyles = makeStyles({
+  fg: {
+    zIndex: 1000,
+  },
+});
+
 export default {
   root: mergeClasses(rootClassName),
-  svg: mergeClasses(svgClassName),
+  bgSvg: mergeClasses(svgClassName),
+  fgSvg: mergeClasses(svgClassName, svgStyles.fg),
 };

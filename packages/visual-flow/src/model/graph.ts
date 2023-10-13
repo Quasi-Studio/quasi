@@ -33,7 +33,25 @@ const idelState = { type: StateType.IDLE } as const;
 
 export class Graph extends ModelBase<HTMLDivElement> {
   blocks: Block[] = [];
-  lines: Line[] = [];
+  protected lines: Line[] = [];
+
+  get displayLines(): {
+    bg: Line[];
+    fg: Line[];
+  } {
+    const state = this.state;
+    if (state.type === StateType.DRAGGING_LINE) {
+      return {
+        bg: this.lines.filter((line) => line !== state.line),
+        fg: [state.line],
+      };
+    } else {
+      return {
+        bg: this.lines,
+        fg: [],
+      };
+    }
+  }
 
   protected state: State = idelState;
 
@@ -47,6 +65,9 @@ export class Graph extends ModelBase<HTMLDivElement> {
     this.blockZIndex.push(block);
   }
 
+  addLine(line: Line) {
+    this.lines.push(line);
+  }
   removeLine(line: Line) {
     this.lines.splice(this.lines.indexOf(line), 1);
   }
@@ -175,10 +196,15 @@ export class Graph extends ModelBase<HTMLDivElement> {
         const line = this.hoveredSocket.connected
           ? this.hoveredSocket.disconnect()
           : this.hoveredSocket.connect(graphX, graphY);
+        line.arrowSide = "b";
         line.b = createPointWithDirection(
           graphX,
           graphY,
-          opposite(this.hoveredSocket.direction),
+          calcLineEndDirection(
+            line.a.direction,
+            pagePos.x - line.a.pageX,
+            pagePos.y - line.a.pageY,
+          ),
         );
         line.dragging = true;
         this.state = {
@@ -228,5 +254,10 @@ export class Graph extends ModelBase<HTMLDivElement> {
       return true;
     }
     return false;
+  }
+
+  onResize() {
+    this.blocks.forEach((b) => b.updatePos());
+    this.lines.forEach((l) => l.updatePath());
   }
 }

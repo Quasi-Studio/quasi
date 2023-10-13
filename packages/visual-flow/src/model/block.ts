@@ -70,14 +70,17 @@ export class Block extends ModelBase<HTMLDivElement> {
   moveTo(x: number, y: number) {
     this.pageX = x;
     this.pageY = y;
-    this.el!.style.left = `${x}px`;
-    this.el!.style.top = `${y}px`;
-
+    this.updatePos();
     for (const socket of this.allSockets) {
       if (socket.connected) {
         socket.connected.updatePath();
       }
     }
+  }
+
+  updatePos(){
+    this.el!.style.left = `${this.pageX}px`;
+    this.el!.style.top = `${this.pageY}px`;
   }
 
   updateSocketPosition() {
