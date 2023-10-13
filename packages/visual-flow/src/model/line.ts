@@ -5,13 +5,17 @@ import { ModelBase } from "./base";
 import { Socket } from "./socket";
 
 const CTRL_POINT_OFFSET_SCALE = 0.8;
+const CTRL_POINT_OFFSET_MIN = 30;
 
 const ARROW_LENGTH = 25;
 const ARROW_WIDTH = 7;
-const LINE_OFFSET_FOR_ARROW = 3;
+const LINE_OFFSET_FOR_ARROW = 25;
 
 function getCtrlPointOffset(delta: number) {
-  return Math.abs(delta * CTRL_POINT_OFFSET_SCALE);
+  return Math.max(
+    Math.abs(delta * CTRL_POINT_OFFSET_SCALE),
+    CTRL_POINT_OFFSET_MIN,
+  );
 }
 
 const pointWithDirectionSym = Symbol();
@@ -129,16 +133,6 @@ export class Line extends ModelBase<SVGElement> {
     let point1 = this.aPosition;
     let point2 = this.bPosition;
 
-    const delta = Point.minus(point2, point1);
-
-    const delta1 = Point.getComponentByDirection(delta, this.a.direction);
-    const offset1 = getCtrlPointOffset(delta1);
-    const controlPoint1 = Point.moveFarther(point1, this.a.direction, offset1);
-
-    const delta2 = Point.getComponentByDirection(delta, this.b.direction);
-    const offset2 = getCtrlPointOffset(delta2);
-    const controlPoint2 = Point.moveFarther(point2, this.b.direction, offset2);
-
     if (this.arrowSide === "a") {
       point1 = Point.moveFarther(
         point1,
@@ -153,7 +147,17 @@ export class Line extends ModelBase<SVGElement> {
       );
     }
 
-    return `M ${this.a.graphX} ${this.a.graphY} C ${controlPoint1.x} ${controlPoint1.y}, ${controlPoint2.x} ${controlPoint2.y}, ${this.bPosition.x} ${this.bPosition.y}`;
+    const delta = Point.minus(point2, point1);
+
+    const delta1 = Point.getComponentByDirection(delta, this.a.direction);
+    const offset1 = getCtrlPointOffset(delta1);
+    const controlPoint1 = Point.moveFarther(point1, this.a.direction, offset1);
+
+    const delta2 = Point.getComponentByDirection(delta, this.b.direction);
+    const offset2 = getCtrlPointOffset(delta2);
+    const controlPoint2 = Point.moveFarther(point2, this.b.direction, offset2);
+
+    return `M${point1.x} ${point1.y} C${controlPoint1.x} ${controlPoint1.y}, ${controlPoint2.x} ${controlPoint2.y}, ${point2.x} ${point2.y}`;
   }
 
   get arrowPath() {
