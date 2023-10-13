@@ -7,7 +7,6 @@ export function calcLineEndDirection(
   dx: number,
   dy: number,
 ) {
-  console.warn(dx, dy);
   switch (startDirection) {
     case Direction.LEFT:
       if (dx < 0) {
