@@ -33,7 +33,25 @@ const idelState = { type: StateType.IDLE } as const;
 
 export class Graph extends ModelBase<HTMLDivElement> {
   blocks: Block[] = [];
-  lines: Line[] = [];
+  protected lines: Line[] = [];
+
+  get displayLines(): {
+    bg: Line[];
+    fg: Line[];
+  } {
+    const state = this.state;
+    if (state.type === StateType.DRAGGING_LINE) {
+      return {
+        bg: this.lines.filter((line) => line !== state.line),
+        fg: [state.line],
+      };
+    } else {
+      return {
+        bg: this.lines,
+        fg: [],
+      };
+    }
+  }
 
   protected state: State = idelState;
 
@@ -47,6 +65,9 @@ export class Graph extends ModelBase<HTMLDivElement> {
     this.blockZIndex.push(block);
   }
 
+  addLine(line: Line) {
+    this.lines.push(line);
+  }
   removeLine(line: Line) {
     this.lines.splice(this.lines.indexOf(line), 1);
   }

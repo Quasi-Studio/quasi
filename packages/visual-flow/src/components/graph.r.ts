@@ -21,16 +21,23 @@ export class VfGraph extends OutputComponent {
 
     styles.root(_);
     _.$ref(model.ref) &&
-      _._div(
-        {},
-        (_) =>
-          styles.svg(_) &&
-          _._svgSvg({}, () => {
-            _.for(model.lines, "id", (line) => {
-              _.vfLine(line);
-            });
-          }),
-      );
+      _._div({}, (_) => {
+        const { bg, fg } = model.displayLines;
+
+        styles.bgSvg(_);
+        _._svgSvg({}, () => {
+          _.for(bg, "id", (line) => {
+            _.vfLine(line);
+          });
+        });
+
+        styles.fgSvg(_);
+        _._svgSvg({}, () => {
+          _.for(fg, "id", (line) => {
+            _.vfLine(line);
+          });
+        });
+      });
     _.for(model.blocks, "id", (block) => {
       _.vfBlock(block);
     });

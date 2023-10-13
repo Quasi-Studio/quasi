@@ -60,7 +60,7 @@ export class Socket extends ModelBase<SVGElement> {
         this,
         createPointWithDirection(currentX, currentY, opposite(this.direction)),
       );
-      this.graph.lines.push(line);
+      this.graph.addLine(line);
       this.connected = line;
       return line;
     }
