@@ -4,8 +4,7 @@ import styles from "./layout.style";
 export default (
     toolbar: D<Content> | undefined,
     attribute: D<Content> | undefined,
-    visual_flow: D<Content> | undefined,
-    block: D<Content> | undefined
+    visual_flow: D<Content> | undefined
   ) => view((_) => {
   styles.root(_);
   _._div({}, (_) => {
@@ -18,7 +17,5 @@ export default (
     styles.visual_flow(_);
     _._div({}, visual_flow);
 
-    styles.block(_);
-    _._div({}, block);
   });
 });
