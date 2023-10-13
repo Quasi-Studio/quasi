@@ -1,7 +1,19 @@
 import { Graph } from ".";
-import { Direction, Point, opposite, toPoint } from "../types";
+import { Direction, Point } from "../types";
 import { ModelBase } from "./base";
 import { Socket } from "./socket";
+
+const CTRL_POINT_OFFSET_BACK = 30;
+const CTRL_POINT_OFFSET_SCALE = 0.8;
+const CTRL_POINT_OFFSET_MAX = Infinity;
+
+function getCtrlPointOffset(delta: number) {
+  return delta <= 0
+    ? CTRL_POINT_OFFSET_BACK
+    : delta * CTRL_POINT_OFFSET_SCALE > CTRL_POINT_OFFSET_MAX
+    ? CTRL_POINT_OFFSET_MAX
+    : delta * CTRL_POINT_OFFSET_SCALE;
+}
 
 const pointWithDirectionSym = Symbol();
 
@@ -89,41 +101,25 @@ export class Line extends ModelBase<SVGElement> {
     }
   }
 
-  // get path() {
-  //   let controlPoint1 = Point.add(
-  //     this.aPosition,
-  //     toPoint(this.a.direction, 80),
-  //   );
-  //   // let controlPoint2 = Point.add(
-  //   //   this.bPosition,
-  //   //   toPoint(this.b.direction, 80),
-  //   // );
-  //   let controlPoint2: Point;
-  //   if (this.connected) {
-  //     controlPoint2 = Point.add(
-  //       this.bPosition,
-  //       toPoint(this.b.direction, 80),
-  //     );
-  //   } else {
-  //     controlPoint2 = this.bPosition;
-  //   }
-  //   return `M ${this.a.graphX} ${this.a.graphY} C ${controlPoint1.x} ${controlPoint1.y}, ${controlPoint2.x} ${controlPoint2.y}, ${this.bPosition.x} ${this.bPosition.y}`;
-  // }
-
   get path() {
-    let controlPoint1 = Point.add(
+    const delta = Point.minus(this.bPosition, this.aPosition);
+
+    const delta1 = Point.getComponentByDirection(delta, this.a.direction);
+    const offset1 = getCtrlPointOffset(delta1);
+    const controlPoint1 = Point.moveFarther(
       this.aPosition,
-      toPoint(this.a.direction, 80),
+      this.a.direction,
+      offset1,
     );
-    if (this.connected) {
-      let controlPoint2 = Point.add(
-        this.bPosition,
-        toPoint(this.b.direction, 80),
-      );
-      return `M ${this.a.graphX} ${this.a.graphY} C ${controlPoint1.x} ${controlPoint1.y}, ${controlPoint2.x} ${controlPoint2.y}, ${this.bPosition.x} ${this.bPosition.y}`;
-    } else {
-      // controlPoint2 = this.bPosition;
-      return `M ${this.a.graphX} ${this.a.graphY} S ${controlPoint1.x} ${controlPoint1.y}, ${this.b.graphX} ${this.b.graphY}`
-    }
+
+    const delta2 = Point.getComponentByDirection(delta, this.b.direction);
+    const offset2 = getCtrlPointOffset(delta2);
+    const controlPoint2 = Point.moveFarther(
+      this.bPosition,
+      this.b.direction,
+      offset2,
+    );
+
+    return `M ${this.a.graphX} ${this.a.graphY} C ${controlPoint1.x} ${controlPoint1.y}, ${controlPoint2.x} ${controlPoint2.y}, ${this.bPosition.x} ${this.bPosition.y}`;
   }
 }

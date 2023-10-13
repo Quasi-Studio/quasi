@@ -1,12 +1,13 @@
 import { Direction } from "../types";
 
-const SAME_DIRECTION_MAX_SLOPE = 0.1;
+const SAME_DIRECTION_MAX_SLOPE = 1;
 
 export function calcLineEndDirection(
   startDirection: Direction,
   dx: number,
   dy: number,
 ) {
+  console.warn(dx, dy);
   switch (startDirection) {
     case Direction.LEFT:
       if (dx < 0) {
