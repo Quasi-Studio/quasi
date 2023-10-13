@@ -178,7 +178,11 @@ export class Graph extends ModelBase<HTMLDivElement> {
         line.b = createPointWithDirection(
           graphX,
           graphY,
-          opposite(this.hoveredSocket.direction),
+          calcLineEndDirection(
+            line.a.direction,
+            pagePos.x - line.a.pageX,
+            pagePos.y - line.a.pageY,
+          ),
         );
         line.dragging = true;
         this.state = {
