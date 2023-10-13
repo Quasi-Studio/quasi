@@ -1,32 +1,31 @@
-import { makeResetStyles, mergeClasses } from "@refina/griffel";
+import { makeResetStyles, makeStyles, mergeClasses } from "@refina/griffel";
 
 const gridStyles = makeResetStyles({
   display: "grid",
-  gridTemplateColumns: "2fr 5fr 3fr",
-  gridTemplateRows: "1fr 1fr",
+  gridTemplateColumns: "1fr 3fr",
+  gridTemplateRows: "1fr 19fr",
   gridColumnGap: "10px",
   gridRowGap: "10px",
-  gridAutoFlow: "column",
+  gridAutoFlow: "row",
 });
 
-const fullSize = makeResetStyles({
+const rootStyle = makeResetStyles({
   position: "fixed",
   width: "100%",
   height: "100%",
 });
 
-const gridFullHeight = makeResetStyles({
-  gridRow: "1 / 3",
-});
+const toolbarStyle = makeResetStyles({
+  gridColumn: "1 / 3",
+})
 
 const border = makeResetStyles({
   border: "1px solid #000",
 });
 
 export default {
-  root: mergeClasses(gridStyles, fullSize),
-  toolbar: mergeClasses(border),
-  attribute: mergeClasses(border),
-  visual_flow: mergeClasses(gridFullHeight, border),
-  block: mergeClasses(gridFullHeight, border),
+  root: mergeClasses(gridStyles, rootStyle),
+  toolbar: mergeClasses(border, toolbarStyle),
+  block: mergeClasses(border),
+  visual_flow: mergeClasses(border)
 };
