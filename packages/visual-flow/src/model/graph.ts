@@ -196,6 +196,7 @@ export class Graph extends ModelBase<HTMLDivElement> {
         const line = this.hoveredSocket.connected
           ? this.hoveredSocket.disconnect()
           : this.hoveredSocket.connect(graphX, graphY);
+        line.arrowSide = "b";
         line.b = createPointWithDirection(
           graphX,
           graphY,

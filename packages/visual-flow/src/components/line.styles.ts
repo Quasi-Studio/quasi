@@ -12,17 +12,21 @@ const rootStyles = makeStyles({
     stroke: tokens.colorCompoundBrandStrokePressed,
     strokeWidth: tokens.strokeWidthThickest,
   },
-  notDragging: {
-    ":hover": {
-      stroke: tokens.colorCompoundBrandStrokeHover,
-    },
+});
+
+const arrowClassName = makeResetStyles({
+  fill: tokens.colorCompoundBrandStroke,
+});
+
+const arrowStyles = makeStyles({
+  dragging: {
+    fill: tokens.colorCompoundBrandStrokePressed,
   },
 });
 
 export default {
   root: (dragging: boolean) =>
-    mergeClasses(
-      rootClassName,
-      dragging ? rootStyles.dragging : rootStyles.notDragging,
-    ),
+    mergeClasses(rootClassName, dragging && rootStyles.dragging),
+  arrow: (dragging: boolean) =>
+    mergeClasses(arrowClassName, dragging && arrowStyles.dragging),
 };

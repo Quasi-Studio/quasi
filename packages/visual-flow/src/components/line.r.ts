@@ -6,10 +6,19 @@ import styles from "./line.styles";
 export class VFLine extends OutputComponent {
   main(_: Context, model: Line) {
     styles.root(model.dragging)(_);
-    _.$ref(model.ref) &&
+
+    _.$ref(model.lineRef) &&
       _._svgPath({
-        d: model.path,
+        d: model.linePath,
       });
+
+    if (model.arrowSide) {
+      styles.arrow(model.dragging)(_);
+      _.$ref(model.arrowRef) &&
+        _._svgPath({
+          d: model.arrowPath,
+        });
+    }
   }
 }
 

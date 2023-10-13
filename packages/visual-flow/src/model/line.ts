@@ -1,9 +1,14 @@
+import { SVGElementComponent, ref } from "refina";
 import { Graph } from ".";
-import { Direction, Point } from "../types";
+import { Direction, Point, rotate } from "../types";
 import { ModelBase } from "./base";
 import { Socket } from "./socket";
 
 const CTRL_POINT_OFFSET_SCALE = 0.8;
+
+const ARROW_LENGTH = 25;
+const ARROW_WIDTH = 7;
+const LINE_OFFSET_FOR_ARROW = 3;
 
 function getCtrlPointOffset(delta: number) {
   return Math.abs(delta * CTRL_POINT_OFFSET_SCALE);
@@ -42,6 +47,18 @@ export class Line extends ModelBase<SVGElement> {
 
   dragging: boolean = false;
 
+  arrowSide: "a" | "b" | null = null;
+
+  lineRef = ref<SVGElementComponent>();
+  get lineEl() {
+    return this.lineRef.current!.node as SVGElement;
+  }
+
+  arrowRef = ref<SVGElementComponent>();
+  get arrowEl() {
+    return this.arrowRef.current!.node as SVGElement;
+  }
+
   get aPosition(): Point {
     return {
       x: this.a.graphX,
@@ -56,21 +73,34 @@ export class Line extends ModelBase<SVGElement> {
     };
   }
 
+  get arrowPosition() {
+    if (this.arrowSide === "a") {
+      return this.aPosition;
+    } else if (this.arrowSide === "b") {
+      return this.bPosition;
+    } else {
+      return null;
+    }
+  }
+
   get connected() {
     //@ts-ignore
     return this.b[pointWithDirectionSym] !== true;
   }
 
   updatePath() {
-    this.el!.setAttribute("d", this.path);
+    this.lineEl!.setAttribute("d", this.linePath);
+    this.arrowEl.setAttribute("d", this.arrowPath);
   }
 
   hover() {
-    this.el!.classList.add("hovered");
+    this.lineEl!.classList.add("hovered");
+    this.arrowEl!.classList.add("hovered");
   }
 
   unhover() {
-    this.el!.classList.remove("hovered");
+    this.lineEl!.classList.remove("hovered");
+    this.arrowEl!.classList.remove("hovered");
   }
 
   connect(s: Socket) {
@@ -95,25 +125,43 @@ export class Line extends ModelBase<SVGElement> {
     }
   }
 
-  get path() {
-    const delta = Point.minus(this.bPosition, this.aPosition);
+  get linePath() {
+    let point1 = this.aPosition;
+    let point2 = this.bPosition;
+
+    const delta = Point.minus(point2, point1);
 
     const delta1 = Point.getComponentByDirection(delta, this.a.direction);
     const offset1 = getCtrlPointOffset(delta1);
-    const controlPoint1 = Point.moveFarther(
-      this.aPosition,
-      this.a.direction,
-      offset1,
-    );
+    const controlPoint1 = Point.moveFarther(point1, this.a.direction, offset1);
 
     const delta2 = Point.getComponentByDirection(delta, this.b.direction);
     const offset2 = getCtrlPointOffset(delta2);
-    const controlPoint2 = Point.moveFarther(
-      this.bPosition,
-      this.b.direction,
-      offset2,
-    );
+    const controlPoint2 = Point.moveFarther(point2, this.b.direction, offset2);
+
+    if (this.arrowSide === "a") {
+      point1 = Point.moveFarther(
+        point1,
+        this.a.direction,
+        LINE_OFFSET_FOR_ARROW,
+      );
+    } else if (this.arrowSide === "b") {
+      point2 = Point.moveFarther(
+        point2,
+        this.b.direction,
+        LINE_OFFSET_FOR_ARROW,
+      );
+    }
 
     return `M ${this.a.graphX} ${this.a.graphY} C ${controlPoint1.x} ${controlPoint1.y}, ${controlPoint2.x} ${controlPoint2.y}, ${this.bPosition.x} ${this.bPosition.y}`;
+  }
+
+  get arrowPath() {
+    const p0 = this.arrowPosition!;
+    const p1 = Point.moveFarther(p0, this.b.direction, ARROW_LENGTH);
+    const p2 = Point.moveFarther(p1, rotate(this.b.direction), ARROW_WIDTH);
+    const p3 = Point.moveFarther(p1, rotate(this.b.direction), -ARROW_WIDTH);
+
+    return `M${p0.x} ${p0.y} L${p2.x} ${p2.y} L${p3.x} ${p3.y} Z`;
   }
 }
