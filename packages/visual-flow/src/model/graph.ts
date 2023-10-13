@@ -255,4 +255,9 @@ export class Graph extends ModelBase<HTMLDivElement> {
     }
     return false;
   }
+
+  onResize() {
+    this.blocks.forEach((b) => b.updatePos());
+    this.lines.forEach((l) => l.updatePath());
+  }
 }

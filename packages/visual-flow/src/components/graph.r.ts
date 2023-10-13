@@ -6,6 +6,10 @@ import styles from "./graph.styles";
 @outputComponent("vfGraph")
 export class VfGraph extends OutputComponent {
   main(_: OutputComponentContext<this>, model: Graph): void {
+    _.$app.registerWindowEventListener("resize", () => {
+      model.onResize();
+      // not update here, because it will cause performance issue
+    });
     _.$app.registerDocumentEventListener("mousemove", (e) => {
       model.onMouseMove(getPagePos(e)) && e.preventDefault();
       // not update here, because it will cause performance issue
