@@ -4,14 +4,9 @@ import { ModelBase } from "./base";
 import { Socket } from "./socket";
 
 const CTRL_POINT_OFFSET_SCALE = 0.8;
-const CTRL_POINT_OFFSET_MAX = Infinity;
 
 function getCtrlPointOffset(delta: number) {
-  return Math.abs(
-    delta * CTRL_POINT_OFFSET_SCALE > CTRL_POINT_OFFSET_MAX
-      ? CTRL_POINT_OFFSET_MAX
-      : delta * CTRL_POINT_OFFSET_SCALE,
-  );
+  return Math.abs(delta * CTRL_POINT_OFFSET_SCALE);
 }
 
 const pointWithDirectionSym = Symbol();
