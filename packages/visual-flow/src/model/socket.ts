@@ -2,9 +2,13 @@ import { SVGElementComponent, ref } from "refina";
 import { Point, type Direction } from "../types";
 import { ModelBase } from "./base";
 import { Block } from "./block";
+import { Graph } from "./graph";
 import { Line } from "./line";
 
 export abstract class Socket extends ModelBase {
+  get graph(): Graph {
+    return this.block.graph;
+  }
   type: string;
 
   /**

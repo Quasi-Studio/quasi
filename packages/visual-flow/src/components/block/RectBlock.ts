@@ -45,7 +45,6 @@ export class RectBlock extends Block {
   }
 
   addSocket(direction: Direction, socket: Socket) {
-    socket.graph = this.graph;
     socket.block = this;
     socket.direction = direction;
     this.getSocketsByDirection(direction).push(socket);

@@ -1,6 +1,7 @@
 import { Context, HTMLElementComponent, ref } from "refina";
 import { Point } from "../types";
 import { ModelBase } from "./base";
+import { Graph } from "./graph";
 import { Line } from "./line";
 import { Socket } from "./socket";
 
@@ -8,6 +9,8 @@ const MIN_INSIDE_DISTANCE_SQUARE = 15 * 15;
 const MIN_OUTSIDE_DISTANCE_SQUARE = 30 * 30;
 
 export abstract class Block extends ModelBase {
+  graph: Graph;
+
   ref = ref<HTMLElementComponent<"div">>();
   get el() {
     return this.ref.current?.node;

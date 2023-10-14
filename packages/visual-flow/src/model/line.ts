@@ -2,6 +2,7 @@ import { SVGElementComponent, ref } from "refina";
 import { Direction, Point } from "../types";
 import { calcLineEndDirection } from "../utils";
 import { ModelBase } from "./base";
+import { Graph } from "./graph";
 import { Socket } from "./socket";
 
 const pointWithDirectionSym = Symbol();
@@ -14,6 +15,7 @@ export type PointWithDirection = {
 };
 
 export abstract class Line extends ModelBase {
+  graph: Graph;
   type: string;
 
   hasArrow: boolean = true;
@@ -38,16 +40,18 @@ export abstract class Line extends ModelBase {
     this.setBoardPosB(boardPosB);
   }
 
-  setBoardPosB(boardPosB: Point, direction?:Direction) {
+  setBoardPosB(boardPosB: Point, direction?: Direction) {
     const boardPosA = this.a.boardPos;
     this.b = {
       boardX: boardPosB.x,
       boardY: boardPosB.y,
-      direction: direction ?? calcLineEndDirection(
-        this.a.direction,
-        boardPosB.x - boardPosA.x,
-        boardPosB.y - boardPosA.y,
-      ),
+      direction:
+        direction ??
+        calcLineEndDirection(
+          this.a.direction,
+          boardPosB.x - boardPosA.x,
+          boardPosB.y - boardPosA.y,
+        ),
       [pointWithDirectionSym]: true,
     };
   }
