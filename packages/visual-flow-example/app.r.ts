@@ -1,73 +1,90 @@
 /// <reference types="vite/client" />
 import { Direction, Graph, InSocket, MultiOutSocket, RectBlock, SingleOutSocket } from "@quasi-dev/visual-flow";
 import "@refina/fluentui";
-import { app } from "refina";
+import { app, d } from "refina";
 
 const graph = new Graph();
 
-const socket1 = new InSocket();
-socket1.label = "in(L)";
-socket1.type = "L";
-
-const socket12 = new InSocket();
-socket12.label = "in(L)";
-socket12.type = "L";
-
-const socket2 = new SingleOutSocket();
-socket2.label = "s-out(D)";
-socket2.type = "D";
-
-const socket3 = new InSocket();
-socket3.label = "in(D)";
-socket3.type = "D";
-
-const socket4 = new MultiOutSocket();
-socket4.label = "m-out(L)";
-socket4.type = "L";
-
-const socket5 = new MultiOutSocket();
-socket5.label = "m-out(D)";
-socket5.type = "D";
-
-const block1 = new RectBlock();
-block1.content = (_) => _._svgText({}, "block1");
-block1.nonAttachedPageX = 50;
-block1.nonAttachedPageY = 100;
-block1.boardHeight = 50;
-block1.boardWidth = 200;
-
-const block2 = new RectBlock();
-block1.content = (_) => _._svgText({}, "block2");
-block2.nonAttachedPageX = 300;
-block2.nonAttachedPageY = 100;
-block2.boardHeight = 50;
-block2.boardWidth = 200;
-
-graph.addBlock(block1);
-graph.addBlock(block2);
-
-block1.addSocket(Direction.TOP, socket1);
-block1.addSocket(Direction.TOP, socket12);
-block1.addSocket(Direction.RIGHT, socket2);
-block1.addSocket(Direction.BOTTOM, socket3);
-block2.addSocket(Direction.TOP, socket4);
-block2.addSocket(Direction.LEFT, socket5);
+const blockName = d("");
 
 app((_) => {
   _.$rootCss`position:fixed; top:0; left:0; right:0; bottom:0;`;
 
   _.provideFTheme();
 
-  _._h1({}, "Visual flow example");
+  _.$css`position:fixed;left:0;top:0;width:100%;height:5%;z-index:101;background-color:#ddd`;
+  _._div({}, () => _._h3({}, "Visual Flow | Quasi Studio"));
 
-  _._br();
-  _._br();
-  _._br();
-  _._br();
-  _._p({}, `scale: ${graph.boardScale}`);
-  _._p({}, `offsetX: ${graph.boardOffsetX}`);
-  _._p({}, `offsetY: ${graph.boardOffsetY}`);
+  _.$css`position:fixed;left:0;top:5%;width:15%;height:100%;z-index:100;background-color:#fefefe`;
+  _._div({}, () => {
+    _._h4({}, "Blocks");
 
-  _.$css`position:relative;left:10%;width:80%;height:60%;border: 2px blue dashed;`;
+    _.fTextInput(blockName, false, "Input block name here...");
+    _.$css`margin-right:20px`;
+    _.vfCreator(
+      graph,
+      () => _.fButton("Block type 1"),
+      () => {
+        const block = new RectBlock();
+        block.boardHeight = 50;
+        block.boardWidth = 200;
+        const name = blockName.value;
+        block.content = (_) => _._svgText({}, name);
+        blockName.value = "";
+
+        const socket1 = new InSocket();
+        socket1.label = "in(L)";
+        socket1.type = "L";
+
+        const socket2 = new InSocket();
+        socket2.label = "in(L)";
+        socket2.type = "L";
+
+        const socket3 = new SingleOutSocket();
+        socket3.label = "s-out(D)";
+        socket3.type = "D";
+
+        const socket4 = new InSocket();
+        socket4.label = "in(D)";
+        socket4.type = "D";
+
+        block.addSocket(Direction.TOP, socket1);
+        block.addSocket(Direction.TOP, socket2);
+        block.addSocket(Direction.RIGHT, socket3);
+        block.addSocket(Direction.BOTTOM, socket4);
+
+        return block;
+      },
+    );
+    _.vfCreator(
+      graph,
+      () => _.fButton("Block type 2"),
+      () => {
+        const block = new RectBlock();
+        block.boardHeight = 50;
+        block.boardWidth = 200;
+        const name = blockName.value;
+        block.content = (_) => _._svgText({}, name);
+        blockName.value = "";
+        const socket1 = new MultiOutSocket();
+        socket1.label = "m-out(L)";
+        socket1.type = "L";
+
+        const socket2 = new MultiOutSocket();
+        socket2.label = "m-out(D)";
+        socket2.type = "D";
+
+        block.addSocket(Direction.TOP, socket1);
+        block.addSocket(Direction.LEFT, socket2);
+
+        return block;
+      },
+    );
+    _._p({}, `scale: ${graph.boardScale}`);
+    _._p({}, `offsetX: ${graph.boardOffsetX}`);
+    _._p({}, `offsetY: ${graph.boardOffsetY}`);
+  });
+
+  _.$css`position:fixed;left:15%;top:5%;width:100%;height:100%;z-index:-1;border:3px gray solid`;
   _._div({}, () => _.vfGraph(graph));
 });
