@@ -1,5 +1,5 @@
 import { Line, Socket } from "../../model";
-import { Direction, Point, rotate } from "../../types";
+import { Point, rotate } from "../../types";
 
 const CTRL_POINT_OFFSET_SCALE = 0.8;
 const CTRL_POINT_OFFSET_MIN = 30;
@@ -15,63 +15,7 @@ function getCtrlPointOffset(delta: number) {
   );
 }
 
-const pointWithDirectionSym = Symbol();
-
-export type PointWithDirection = {
-  graphX: number;
-  graphY: number;
-  direction: Direction;
-  [pointWithDirectionSym]: true;
-};
-
-export function createPointWithDirection(
-  graphX: number,
-  graphY: number,
-  direction: Direction,
-): PointWithDirection {
-  return {
-    graphX,
-    graphY,
-    direction,
-    [pointWithDirectionSym]: true,
-  };
-}
-
 export class BasicLine extends Line {
-  dragging: boolean = false;
-
-  hover() {
-    this.lineEl!.classList.add("hovered");
-    this.arrowEl!.classList.add("hovered");
-  }
-
-  unhover() {
-    this.lineEl!.classList.remove("hovered");
-    this.arrowEl!.classList.remove("hovered");
-  }
-
-  connect(s: Socket) {
-    if (this.connected) {
-      throw new Error("Line already connected");
-    }
-    this.b = s;
-  }
-
-  disconnect(s: Socket) {
-    if (s === this.a) {
-      if (!this.connected) {
-        this.graph.removeLine(this);
-        return;
-      }
-      this.a = this.b as Socket;
-      this.b = undefined as any;
-    } else if (s === this.b) {
-      this.b = undefined as any;
-    } else {
-      throw new Error("Socket not connected");
-    }
-  }
-
   get linePath() {
     let point1 = this.graphPosA;
     let point2 = this.graphPosB;

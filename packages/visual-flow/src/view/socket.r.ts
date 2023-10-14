@@ -1,5 +1,5 @@
 import { OutputComponent, OutputComponentContext, outputComponent } from "refina";
-import { Socket } from "../../model";
+import { Socket } from "../model";
 import styles from "./socket.styles";
 
 @outputComponent("vfSocket")

@@ -1,5 +1,5 @@
 import { OutputComponent, OutputComponentContext, outputComponent } from "refina";
-import { Graph } from "../../model";
+import { Graph } from "../model";
 import styles from "./graph.styles";
 
 @outputComponent("vfGraph")

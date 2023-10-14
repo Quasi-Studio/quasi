@@ -1,5 +1,5 @@
 import { OutputComponent, OutputComponentContext, byIndex, outputComponent } from "refina";
-import { Block } from "../../model";
+import { Block } from "../model";
 import styles from "./block.styles";
 
 @outputComponent("vfBlock")

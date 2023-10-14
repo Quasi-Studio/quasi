@@ -1,5 +1,5 @@
 import { Context, OutputComponent, outputComponent } from "refina";
-import { Line } from "../../model";
+import { Line } from "../model";
 import styles from "./line.styles";
 
 @outputComponent("vfLine")
