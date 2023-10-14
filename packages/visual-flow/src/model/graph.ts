@@ -140,6 +140,13 @@ export class Graph {
     this.blocks.push(block);
     this.blockZIndex.push(block);
   }
+  removeBlock(block: Block) {
+    this.blocks.splice(this.blocks.indexOf(block), 1);
+    const index = this.blockZIndex.indexOf(block);
+    if (index === -1) throw new Error("Block not found");
+    this.blockZIndex.splice(index, 1);
+    this.updateBlockZIndex(index);
+  }
 
   addLine(line: Line) {
     this.lines.push(line);
@@ -308,8 +315,12 @@ export class Graph {
     if (this.state.type === StateType.DRAGGING_BLOCK) {
       const { block } = this.state;
       block.dragging = false;
-      if (this.isMouseInsideGraph && !block.attached) {
-        block.attach();
+      if (!block.attached) {
+        if (this.isMouseInsideGraph) {
+          block.attach();
+        } else {
+          this.removeBlock(block);
+        }
       }
       this.state = idelState;
       return true;
