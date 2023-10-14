@@ -8,19 +8,18 @@ export class InSocket extends Socket {
   }
 
   connectTo(line: Line): void {
+    if (this.connectedLine) {
+      this.connectedLine.a.disconnectTo(this.connectedLine);
+    }
     this.connectedLine = line;
     line.b = this;
   }
-  disconnectTo(line: Line): void {
-    if (this.connectedLine === line) {
-      this.connectedLine = null;
-    } else {
-      throw new Error("line not found");
-    }
+  disconnectTo(_line: Line): void {
+    throw new Error("Method not supported.");
   }
 
   checkConnectable(line: Line): boolean {
-    return !this.connectedLine && line.type === this.type;
+    return line.type === this.type;
   }
 
   onMouseDown(): void {

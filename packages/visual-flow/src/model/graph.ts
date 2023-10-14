@@ -332,7 +332,6 @@ export class Graph {
         line.dragging = false;
       } else {
         line.a.disconnectTo(line);
-        this.removeLine(line);
       }
       this.state = idelState;
       return true;

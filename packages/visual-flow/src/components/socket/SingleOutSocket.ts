@@ -13,6 +13,7 @@ export class SingleOutSocket extends Socket {
   }
   disconnectTo(line: Line): void {
     if (this.connectedLine === line) {
+      this.graph.removeLine(line);
       this.connectedLine = null;
     } else {
       throw new Error("line not found");
