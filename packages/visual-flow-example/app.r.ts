@@ -12,10 +12,12 @@ app((_) => {
 
   _.provideFTheme();
 
-  _.$css`position:fixed;left:0;top:0;width:100%;height:5%;z-index:101;background-color:#ddd`;
+  _.$css`position:fixed;left:0;top:0;width:100%;height:5%;z-index:101;
+    background-color:#ddd;border-bottom:3px gray solid`;
   _._div({}, () => _._h3({}, "Visual Flow | Quasi Studio"));
 
-  _.$css`position:fixed;left:0;top:5%;width:15%;height:100%;z-index:100;background-color:#fefefe`;
+  _.$css`position:fixed;left:0;top:5%;width:15%;height:100%;z-index:100;
+    background-color:#fefefe;border-right:3px gray solid`;
   _._div({}, () => {
     _._h4({}, "Blocks");
 
@@ -85,6 +87,6 @@ app((_) => {
     _._p({}, `offsetY: ${graph.boardOffsetY}`);
   });
 
-  _.$css`position:fixed;left:15%;top:5%;width:100%;height:100%;z-index:-1;border:3px gray solid`;
+  _.$css`position:fixed;left:15%;top:5%;width:100%;height:100%;z-index:-1`;
   _._div({}, () => _.vfGraph(graph));
 });
