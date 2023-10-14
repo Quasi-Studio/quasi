@@ -19,7 +19,7 @@ export class InSocket extends Socket {
   }
 
   checkConnectable(line: Line): boolean {
-    return line.type === this.type;
+    return line.type === this.type && this.block.id !== line.a.block.id;
   }
 
   onMouseDown(): void {
