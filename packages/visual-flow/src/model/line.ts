@@ -38,12 +38,12 @@ export abstract class Line extends ModelBase {
     this.setBoardPosB(boardPosB);
   }
 
-  setBoardPosB(boardPosB: Point) {
+  setBoardPosB(boardPosB: Point, direction?:Direction) {
     const boardPosA = this.a.boardPos;
     this.b = {
       boardX: boardPosB.x,
       boardY: boardPosB.y,
-      direction: calcLineEndDirection(
+      direction: direction ?? calcLineEndDirection(
         this.a.direction,
         boardPosB.x - boardPosA.x,
         boardPosB.y - boardPosA.y,

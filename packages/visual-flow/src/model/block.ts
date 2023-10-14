@@ -121,22 +121,14 @@ export abstract class Block extends ModelBase {
   /**
    * @returns Whether the line is accepted.
    */
-  acceptLine(line: Line): boolean {
+  checkConnectable(line: Line): Socket | null {
     const connectableSockets = this.allSockets.filter((s) =>
       s.checkConnectable(line),
     );
-    
+
     const pagePos = this.graph.mousePagePos;
     const blockPos = this.pagePos2BlockPos(pagePos);
-    const result = getNearSocket(connectableSockets, blockPos);
-
-    if (result) {
-      const [_distanceSquare, socket] = result;
-      socket.connectTo(line);
-      return true;
-    } else {
-      return false;
-    }
+    return getNearSocket(connectableSockets, blockPos)?.[1] ?? null;
   }
 
   testHovered(pagePos: Point): boolean {

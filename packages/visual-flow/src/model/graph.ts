@@ -2,6 +2,7 @@ import { HTMLElementComponent, ref } from "refina";
 import { Point } from "../types";
 import { Block } from "./block";
 import { Line } from "./line";
+import { Socket } from "./socket";
 
 const MIN_ZINDEX = 0;
 const BOARD_SCALE_MIN = 0.3;
@@ -240,7 +241,16 @@ export class Graph {
         throw new Error("Not dragging line");
       }
       const { line } = this.state;
-      line.setBoardPosB(this.mouseBoardPos);
+      const hoveredBlock = this.getHoveredBlock();
+      let connectableSocket: Socket | null;
+      if (
+        hoveredBlock &&
+        (connectableSocket = hoveredBlock.checkConnectable(line))
+      ) {
+        line.setBoardPosB(this.mouseBoardPos, connectableSocket.direction);
+      } else {
+        line.setBoardPosB(this.mouseBoardPos);
+      }
       line.updatePosition();
     }
     if (this.state.type === StateType.DRAGGING_BLOCK) {
@@ -328,7 +338,12 @@ export class Graph {
     if (this.state.type === StateType.DRAGGING_LINE) {
       const { line } = this.state;
       const hoveredBlock = this.getHoveredBlock();
-      if (hoveredBlock && hoveredBlock.acceptLine(line)) {
+      let connectableSocket: Socket | null;
+      if (
+        hoveredBlock &&
+        (connectableSocket = hoveredBlock.checkConnectable(line))
+      ) {
+        connectableSocket.connectTo(line);
         line.dragging = false;
       } else {
         line.a.disconnectTo(line);
