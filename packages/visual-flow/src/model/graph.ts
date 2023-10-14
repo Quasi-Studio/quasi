@@ -51,6 +51,10 @@ export class Graph {
   boardOffsetX: number = 0;
   boardOffsetY: number = 0;
 
+  get originGraphPos(): Point {
+    return this.boardPos2GraphPos({ x: 0, y: 0 });
+  }
+
   /**
    * 1 in board coord equals `boardScale` px in screen.
    */
@@ -203,24 +207,26 @@ export class Graph {
     };
   }
 
-  onScale(graphPos: Point, scaleDelta: number) {
+  onScaling(scaleDelta: number) {
     if (
       (this.boardScale <= BOARD_SCALE_MIN && scaleDelta < 0) ||
       (this.boardScale >= BOARD_SCALE_MAX && scaleDelta > 0)
     )
       return false;
 
-    const coordPos = this.graphPos2BoardPos(graphPos);
+    const oldScale = this.boardScale;
+    let newScale = this.boardScale + scaleDelta;
+    if (newScale < BOARD_SCALE_MIN) newScale = BOARD_SCALE_MIN;
+    else if (newScale > BOARD_SCALE_MAX) newScale = BOARD_SCALE_MAX;
 
-    this.boardScale += scaleDelta;
-    if (this.boardScale < BOARD_SCALE_MIN) this.boardScale = BOARD_SCALE_MIN;
-    else if (this.boardScale > BOARD_SCALE_MAX)
-      this.boardScale = BOARD_SCALE_MAX;
+    const { x: mouseGraphX, y: mouseGraphY } = this.mouseGraphPos;
 
-    const newPosPos = this.graphPos2BoardPos(graphPos);
+    const k = 1 / oldScale - 1 / newScale;
 
-    this.boardOffsetX += coordPos.x - newPosPos.x;
-    this.boardOffsetY += coordPos.y - newPosPos.y;
+    this.boardOffsetX += mouseGraphX * k;
+    this.boardOffsetY += mouseGraphY * k;
+
+    this.boardScale = newScale;
 
     this.updatePosition();
     return true;

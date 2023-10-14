@@ -43,6 +43,21 @@ export class VfGraph extends OutputComponent {
       }
       return true;
     });
+    _.$app.registerDocumentEventListener(
+      "wheel",
+      (ev) => {
+        if (ev.ctrlKey) {
+          if (model.onScaling(-ev.deltaY / 1500)) {
+            _.$update();
+          }
+        }
+        ev.preventDefault();
+        return true;
+      },
+      {
+        passive: false,
+      },
+    );
 
     styles.root(_);
     _.$ref(model.ref) &&
@@ -57,33 +72,19 @@ export class VfGraph extends OutputComponent {
 
           const boardOriginGraphPos = model.boardPos2GraphPos({ x: 0, y: 0 });
           _._svgCircle({
-            cx:boardOriginGraphPos.x,
-            cy:boardOriginGraphPos.y,
+            cx: boardOriginGraphPos.x,
+            cy: boardOriginGraphPos.y,
             r: 10,
             fill: "red",
           });
         });
 
         styles.fgSvg(_);
-        _._svgSvg(
-          {
-            onwheel: (ev) => {
-              if (ev.ctrlKey) {
-                const graphPos = { x: ev.offsetX, y: ev.offsetY };
-                if (model.onScale(graphPos, ev.deltaY / 1500)) {
-                  ev.preventDefault();
-                  _.$update();
-                }
-              }
-              return false;
-            },
-          },
-          () => {
-            _.for(fg, "id", (line) => {
-              _.vfLine(line);
-            });
-          },
-        );
+        _._svgSvg({}, () => {
+          _.for(fg, "id", (line) => {
+            _.vfLine(line);
+          });
+        });
       });
 
     _.for(model.blocks, "id", (block) => {
