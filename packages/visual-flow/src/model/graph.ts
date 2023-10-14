@@ -5,8 +5,8 @@ import { Line } from "./line";
 import { Socket } from "./socket";
 
 const MIN_ZINDEX = 0;
-const BOARD_SCALE_MIN = 0.3;
-const BOARD_SCALE_MAX = 1.5;
+const BOARD_SCALE_MIN = 0.2;
+const BOARD_SCALE_MAX = 4;
 
 export enum StateType {
   IDLE,
