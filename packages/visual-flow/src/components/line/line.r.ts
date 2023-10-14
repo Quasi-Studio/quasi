@@ -1,5 +1,5 @@
 import { Context, OutputComponent, outputComponent } from "refina";
-import { Line } from "../model";
+import { Line } from "../../model";
 import styles from "./line.styles";
 
 @outputComponent("vfLine")
@@ -12,13 +12,11 @@ export class VFLine extends OutputComponent {
         d: model.linePath,
       });
 
-    if (model.arrowSide) {
-      styles.arrow(model.dragging)(_);
-      _.$ref(model.arrowRef) &&
-        _._svgPath({
-          d: model.arrowPath,
-        });
-    }
+    styles.arrow(model.dragging)(_);
+    _.$ref(model.arrowRef) &&
+      _._svgPath({
+        d: model.arrowPath,
+      });
   }
 }
 

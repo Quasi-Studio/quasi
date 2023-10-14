@@ -1,83 +1,72 @@
-import { Block } from ".";
-import { opposite, type Direction, Point } from "../types";
+import { SVGElementComponent, ref } from "refina";
+import { Point, type Direction } from "../types";
 import { ModelBase } from "./base";
-import { Line, createPointWithDirection } from "./line";
+import { Block } from "./block";
+import { Line } from "./line";
 
-export class Socket extends ModelBase<SVGElement> {
-  constructor(public label: string) {
-    super();
+export abstract class Socket extends ModelBase {
+  type: string;
+
+  /**
+   * label to be displayed
+   */
+  label: string;
+
+  ref = ref<SVGElementComponent<"circle">>();
+  get el() {
+    return this.ref.current?.node;
   }
 
   block: Block;
   direction: Direction;
 
-  // position relative to the block
+  /**
+   * position relative to the block.
+   * unit: board coord
+   */
   blockX: number;
   blockY: number;
 
-  checkConnectable: (line: Line) => boolean = () => this.connected === null;
-
-  get graph() {
-    return this.block.graph;
+  get blockDisplayX() {
+    return this.blockX * this.graph.boardScale;
+  }
+  get blockDisplayY() {
+    return this.blockY * this.graph.boardScale;
   }
 
-  get graphX() {
-    const graphPageX = this.graph.el!.getBoundingClientRect().left;
-    return this.block.pageX + this.blockX - graphPageX;
+  abstract get allConnectedLines(): Line[];
+
+  abstract connectTo(line: Line): void;
+  abstract disconnectTo(line: Line): void;
+
+  get blockPos() {
+    return { x: this.blockX, y: this.blockY };
   }
-  get graphY() {
-    const graphPageY = this.graph.el!.getBoundingClientRect().top;
-    return this.block.pageY + this.blockY - graphPageY;
+  get boardPos() {
+    return Point.add(this.block.boardPos, this.blockPos);
+  }
+  get graphPos() {
+    return this.graph.boardPos2GraphPos(this.boardPos);
   }
 
-  get pageX() {
-    return this.block.pageX + this.blockX;
-  }
-  get pageY() {
-    return this.block.pageY + this.blockY;
-  }
+  abstract checkConnectable(line: Line): boolean;
 
-  connected: Line | null = null;
-
-  clone(): Socket {
-    return new Socket(this.label);
-  }
-
-  hover() {
+  onHover() {
     this.el!.classList.add("hovered");
-    this.connected?.hover();
   }
 
-  unhover() {
+  onUnhover() {
     this.el!.classList.remove("hovered");
-    this.connected?.unhover();
   }
 
-  connect(currentX: number, currentY: number, line?: Line) {
-    if (!line) {
-      line = new Line(
-        this.graph,
-        this,
-        createPointWithDirection(currentX, currentY, opposite(this.direction)),
-      );
-      this.graph.addLine(line);
-      this.connected = line;
-      return line;
-    }
-    if (this.connected) {
-      throw new Error("Socket already connected");
-    }
-    this.connected = line;
-    line.connect(this);
+  abstract onMouseDown(): void;
+
+  protected connectToNewLine(line: Line) {
+    line.graph = this.graph;
+    line.type = this.type;
+    line.initialize(this, this.graph.mouseBoardPos);
+    this.graph.addLine(line);
+    this.connectTo(line);
     return line;
   }
-
-  disconnect() {
-    const line = this.connected;
-    line!.disconnect(this);
-    this.connected = null;
-    return line!;
-  }
 }
-
-export type Sockets = Record<Direction, Socket[]>;

@@ -1,57 +1,24 @@
 import { SVGElementComponent, ref } from "refina";
-import { Graph } from ".";
-import { Direction, Point, rotate } from "../types";
+import { Direction, Point } from "../types";
+import { calcLineEndDirection } from "../utils";
 import { ModelBase } from "./base";
 import { Socket } from "./socket";
-
-const CTRL_POINT_OFFSET_SCALE = 0.8;
-const CTRL_POINT_OFFSET_MIN = 30;
-
-const ARROW_LENGTH = 25;
-const ARROW_WIDTH = 7;
-const LINE_OFFSET_FOR_ARROW = 25;
-
-function getCtrlPointOffset(delta: number) {
-  return Math.max(
-    Math.abs(delta * CTRL_POINT_OFFSET_SCALE),
-    CTRL_POINT_OFFSET_MIN,
-  );
-}
 
 const pointWithDirectionSym = Symbol();
 
 export type PointWithDirection = {
-  graphX: number;
-  graphY: number;
+  boardX: number;
+  boardY: number;
   direction: Direction;
   [pointWithDirectionSym]: true;
 };
 
-export function createPointWithDirection(
-  graphX: number,
-  graphY: number,
-  direction: Direction,
-): PointWithDirection {
-  return {
-    graphX,
-    graphY,
-    direction,
-    [pointWithDirectionSym]: true,
-  };
-}
+export abstract class Line extends ModelBase {
+  type: string;
 
-export class Line extends ModelBase<SVGElement> {
-  constructor(
-    public graph: Graph,
-    public a: Socket,
-    public b: Socket | PointWithDirection,
-  ) {
-    super();
-  }
+  hasArrow: boolean = true;
 
   dragging: boolean = false;
-
-  arrowSide: "a" | "b" | null = null;
 
   lineRef = ref<SVGElementComponent>();
   get lineEl() {
@@ -63,27 +30,39 @@ export class Line extends ModelBase<SVGElement> {
     return this.arrowRef.current!.node as SVGElement;
   }
 
-  get aPosition(): Point {
-    return {
-      x: this.a.graphX,
-      y: this.a.graphY,
+  a: Socket;
+  b: Socket | PointWithDirection;
+
+  initialize(socketA: Socket, boardPosB: Point) {
+    this.a = socketA;
+    this.setBoardPosB(boardPosB);
+  }
+
+  setBoardPosB(boardPosB: Point) {
+    const boardPosA = this.a.boardPos;
+    this.b = {
+      boardX: boardPosB.x,
+      boardY: boardPosB.y,
+      direction: calcLineEndDirection(
+        this.a.direction,
+        boardPosB.x - boardPosA.x,
+        boardPosB.y - boardPosA.y,
+      ),
+      [pointWithDirectionSym]: true,
     };
   }
 
-  get bPosition(): Point {
-    return {
-      x: (this.b as Socket).graphX,
-      y: (this.b as Socket).graphY,
-    };
+  get graphPosA() {
+    return this.a.graphPos;
   }
-
-  get arrowPosition() {
-    if (this.arrowSide === "a") {
-      return this.aPosition;
-    } else if (this.arrowSide === "b") {
-      return this.bPosition;
+  get graphPosB() {
+    if (this.connected) {
+      return (this.b as Socket).graphPos;
     } else {
-      return null;
+      return this.graph.boardPos2GraphPos({
+        x: (this.b as PointWithDirection).boardX,
+        y: (this.b as PointWithDirection).boardY,
+      });
     }
   }
 
@@ -92,7 +71,7 @@ export class Line extends ModelBase<SVGElement> {
     return this.b[pointWithDirectionSym] !== true;
   }
 
-  updatePath() {
+  updatePosition() {
     this.lineEl!.setAttribute("d", this.linePath);
     this.arrowEl.setAttribute("d", this.arrowPath);
   }
@@ -129,43 +108,7 @@ export class Line extends ModelBase<SVGElement> {
     }
   }
 
-  get linePath() {
-    let point1 = this.aPosition;
-    let point2 = this.bPosition;
+  abstract get linePath(): string;
 
-    if (this.arrowSide === "a") {
-      point1 = Point.moveFarther(
-        point1,
-        this.a.direction,
-        LINE_OFFSET_FOR_ARROW,
-      );
-    } else if (this.arrowSide === "b") {
-      point2 = Point.moveFarther(
-        point2,
-        this.b.direction,
-        LINE_OFFSET_FOR_ARROW,
-      );
-    }
-
-    const delta = Point.minus(point2, point1);
-
-    const delta1 = Point.getComponentByDirection(delta, this.a.direction);
-    const offset1 = getCtrlPointOffset(delta1);
-    const controlPoint1 = Point.moveFarther(point1, this.a.direction, offset1);
-
-    const delta2 = Point.getComponentByDirection(delta, this.b.direction);
-    const offset2 = getCtrlPointOffset(delta2);
-    const controlPoint2 = Point.moveFarther(point2, this.b.direction, offset2);
-
-    return `M${point1.x} ${point1.y} C${controlPoint1.x} ${controlPoint1.y}, ${controlPoint2.x} ${controlPoint2.y}, ${point2.x} ${point2.y}`;
-  }
-
-  get arrowPath() {
-    const p0 = this.arrowPosition!;
-    const p1 = Point.moveFarther(p0, this.b.direction, ARROW_LENGTH);
-    const p2 = Point.moveFarther(p1, rotate(this.b.direction), ARROW_WIDTH);
-    const p3 = Point.moveFarther(p1, rotate(this.b.direction), -ARROW_WIDTH);
-
-    return `M${p0.x} ${p0.y} L${p2.x} ${p2.y} L${p3.x} ${p3.y} Z`;
-  }
+  abstract get arrowPath(): string;
 }

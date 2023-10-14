@@ -16,6 +16,7 @@ const svgClassName = makeResetStyles({
 const svgStyles = makeStyles({
   fg: {
     zIndex: 1000,
+    pointerEvents: "none",
   },
 });
 

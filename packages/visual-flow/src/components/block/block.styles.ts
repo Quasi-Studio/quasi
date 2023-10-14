@@ -24,6 +24,9 @@ const rootStyles = makeStyles({
   dragging: {
     filter: `drop-shadow(0 14px 28px rgba(0,0,0,0.14))`,
   },
+  unattached: {
+    opacity: 0.4,
+  },
 });
 
 const svgClassName = makeResetStyles({
@@ -58,8 +61,12 @@ const textStyles = makeResetStyles({
 });
 
 export default {
-  root: (dragging: boolean) =>
-    mergeClasses(rootClassName, dragging && rootStyles.dragging),
+  root: (dragging: boolean, attached: boolean) =>
+    mergeClasses(
+      rootClassName,
+      dragging && rootStyles.dragging,
+      !attached && rootStyles.unattached,
+    ),
   svg: mergeClasses(svgClassName),
   bg: (dragging: boolean) =>
     mergeClasses(

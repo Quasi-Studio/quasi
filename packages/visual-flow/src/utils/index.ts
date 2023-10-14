@@ -1,2 +1,3 @@
+export * from "./allocateId";
 export * from "./calcLineEndDirection";
-export * from "./getPagePos";
+export * from "./spreadItems";

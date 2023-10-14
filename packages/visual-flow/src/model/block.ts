@@ -1,172 +1,190 @@
-import { Direction, Point } from "../types";
+import { Context, HTMLElementComponent, ref } from "refina";
+import { Point } from "../types";
 import { ModelBase } from "./base";
+import { Line } from "./line";
 import { Socket } from "./socket";
-import { Graph } from "./graph";
 
-const MIN_INSIDE_DISTANCE = 7 * 7;
-const MIN_OUTSIDE_DISTANCE = 14 * 14;
+const MIN_INSIDE_DISTANCE_SQUARE = 15 * 15;
+const MIN_OUTSIDE_DISTANCE_SQUARE = 30 * 30;
 
-export class Block extends ModelBase<HTMLDivElement> {
-  constructor(public text: string) {
-    super();
+export abstract class Block extends ModelBase {
+  ref = ref<HTMLElementComponent<"div">>();
+  get el() {
+    return this.ref.current?.node;
   }
 
-  graph: Graph;
+  abstract content: (_: Context) => void;
 
-  pageX: number;
-  pageY: number;
-  width: number;
-  height: number;
+  /**
+   * `NaN` if not attached to the graph.
+   * unit: board coord
+   */
+  boardX: number = NaN;
+  boardY: number = NaN;
+  get boardPos(): Point {
+    return this.attached
+      ? { x: this.boardX, y: this.boardY }
+      : this.graph.pagePos2BoardPos(this.nonAttachedPagePos);
+  }
+  get graphPos(): Point {
+    return this.attached
+      ? this.graph.boardPos2GraphPos(this.boardPos)
+      : this.graph.pagePos2GraphPos(this.nonAttachedPagePos);
+  }
+  get pagePos(): Point {
+    return this.attached
+      ? this.graph.boardPos2PagePos(this.boardPos)
+      : this.nonAttachedPagePos;
+  }
+
+  graphPos2BlockPos(graphPos: Point): Point {
+    return Point.minus(graphPos, this.graphPos);
+  }
+  pagePos2BlockPos(pagePos: Point): Point {
+    return this.graphPos2BlockPos(this.graph.pagePos2GraphPos(pagePos));
+  }
+  blockPos2GraphPos(blockPos: Point): Point {
+    return Point.add(blockPos, this.graphPos);
+  }
+  blockPos2PagePos(blockPos: Point): Point {
+    return this.graph.graphPos2PagePos(this.blockPos2GraphPos(blockPos));
+  }
 
   zIndex: number;
 
   dragging: boolean = false;
 
-  outsideGraph = true;
+  /**
+   * Whether the block is attached to the graph.
+   * When dragging from the panel, it is not attached until the mouse is released inside the graph.
+   */
+  attached = false;
+  /**
+   * The position relative to body.
+   * `NaN` if attached to the graph.
+   */
+  nonAttachedPageX: number;
+  nonAttachedPageY: number;
 
-  leftSockets: Socket[] = [];
-  rightSockets: Socket[] = [];
-  topSockets: Socket[] = [];
-  bottomSockets: Socket[] = [];
-
-  get allSockets(): Socket[] {
-    return [
-      ...this.leftSockets,
-      ...this.rightSockets,
-      ...this.topSockets,
-      ...this.bottomSockets,
-    ];
+  get nonAttachedPagePos(): Point {
+    return { x: this.nonAttachedPageX, y: this.nonAttachedPageY };
   }
 
-  clone(): Block {
-    const block = new Block(this.text);
-    block.pageX = this.pageX;
-    block.pageY = this.pageY;
-    block.width = this.width;
-    block.height = this.height;
-    block.leftSockets = this.leftSockets.map((s) => s.clone());
-    block.rightSockets = this.rightSockets.map((s) => s.clone());
-    block.topSockets = this.topSockets.map((s) => s.clone());
-    block.bottomSockets = this.bottomSockets.map((s) => s.clone());
-    return block;
+  abstract get allSockets(): Socket[];
+
+  setPagePos(pagePos: Point) {
+    if (this.attached) {
+      const boardPos = this.graph.pagePos2BoardPos(pagePos);
+      this.boardX = boardPos.x;
+      this.boardY = boardPos.y;
+    } else {
+      this.nonAttachedPageX = pagePos.x;
+      this.nonAttachedPageY = pagePos.y;
+    }
   }
 
-  addSocket(direction: Direction, socket: Socket) {
-    socket.block = this;
-    socket.direction = direction;
-    this.getSocketsByDirection(direction).push(socket);
+  /**
+   * Only can be called after the block is attached to the graph.
+   */
+  moveTo(boardX: number, boardY: number) {
+    this.boardX = boardX;
+    this.boardY = boardY;
+    this.updatePosition();
+  }
+
+  attach() {
+    this.attached = true;
+    const boardPos = this.graph.pagePos2BoardPos(this.nonAttachedPagePos);
+    this.boardX = boardPos.x;
+    this.boardY = boardPos.y;
+    this.nonAttachedPageX = NaN;
+    this.nonAttachedPageY = NaN;
+  }
+
+  updatePosition() {
+    const { x, y } = this.pagePos;
+    this.el!.style.left = `${x}px`;
+    this.el!.style.top = `${y}px`;
     this.updateSocketPosition();
   }
 
-  getSocketsByDirection(direction: Direction) {
-    return {
-      [Direction.LEFT]: this.leftSockets,
-      [Direction.RIGHT]: this.rightSockets,
-      [Direction.TOP]: this.topSockets,
-      [Direction.BOTTOM]: this.bottomSockets,
-    }[direction];
+  updateLinkedLinesPosition() {
+    this.allSockets.forEach((s) =>
+      s.allConnectedLines.forEach((l) => l.updatePosition()),
+    );
   }
 
-  moveTo(x: number, y: number) {
-    this.pageX = x;
-    this.pageY = y;
-    this.updatePos();
-    for (const socket of this.allSockets) {
-      if (socket.connected) {
-        socket.connected.updatePath();
-      }
+  abstract updateSocketPosition(): void;
+
+  abstract isBlockPosInside(blockPos: Point): boolean;
+
+  /**
+   * @returns Whether the line is accepted.
+   */
+  acceptLine(line: Line): boolean {
+    const connectableSockets = this.allSockets.filter((s) =>
+      s.checkConnectable(line),
+    );
+    
+    const pagePos = this.graph.mousePagePos;
+    const blockPos = this.pagePos2BlockPos(pagePos);
+    const result = getNearSocket(connectableSockets, blockPos);
+
+    if (result) {
+      const [_distanceSquare, socket] = result;
+      socket.connectTo(line);
+      return true;
+    } else {
+      return false;
     }
   }
 
-  updatePos(){
-    this.el!.style.left = `${this.pageX}px`;
-    this.el!.style.top = `${this.pageY}px`;
-  }
-
-  updateSocketPosition() {
-    calcSocketPos(this.height, this.leftSockets.length).forEach((offset, i) => {
-      this.leftSockets[i].blockX = 0;
-      this.leftSockets[i].blockY = offset;
-    });
-    calcSocketPos(this.height, this.rightSockets.length).forEach(
-      (offset, i) => {
-        this.rightSockets[i].blockX = this.width;
-        this.rightSockets[i].blockY = offset;
-      },
-    );
-    calcSocketPos(this.width, this.topSockets.length).forEach((offset, i) => {
-      this.topSockets[i].blockX = offset;
-      this.topSockets[i].blockY = 0;
-    });
-    calcSocketPos(this.width, this.bottomSockets.length).forEach(
-      (offset, i) => {
-        this.bottomSockets[i].blockX = offset;
-        this.bottomSockets[i].blockY = this.height;
-      },
-    );
-  }
-
-  getNearestSocket(pos: Point): null | { socket: Socket; distance: number } {
-    const dx = pos.x - this.pageX;
-    const dy = pos.y - this.pageY;
-
-    let socket: Socket | null = null;
-    let distance = Infinity;
-    for (const s of this.allSockets) {
-      const inside =
-        (s.direction === Direction.LEFT && s.pageX < pos.x) ||
-        (s.direction === Direction.RIGHT && s.pageX > pos.x) ||
-        (s.direction === Direction.TOP && s.pageY < pos.y) ||
-        (s.direction === Direction.BOTTOM && s.pageY > pos.y);
-
-      const d =
-        (s.blockY - dy) * (s.blockY - dy) + (s.blockX - dx) * (s.blockX - dx);
-
-      if (
-        (inside && d > MIN_INSIDE_DISTANCE) ||
-        (!inside && d > MIN_OUTSIDE_DISTANCE)
-      ) {
-        continue;
-      }
-
-      if (d < distance) {
-        distance = d;
-        socket = s;
-      }
+  testHovered(pagePos: Point): boolean {
+    if (this.isBlockPosInside(this.pagePos2BlockPos(pagePos))) {
+      return true;
+    } else {
+      const blockPos = this.pagePos2BlockPos(pagePos);
+      return this.allSockets.some((s) => {
+        return (
+          Point.distanceSquare(s.blockPos, blockPos) <=
+          MIN_OUTSIDE_DISTANCE_SQUARE
+        );
+      });
     }
-    return socket ? { socket, distance } : null;
   }
 
-  isPosInside(pos: Point) {
-    return (
-      pos.x >= this.pageX &&
-      pos.x <= this.pageX + this.width &&
-      pos.y >= this.pageY &&
-      pos.y <= this.pageY + this.height
-    );
+  onMouseDown(): void {
+    const pagePos = this.graph.mousePagePos;
+    const blockPos = this.pagePos2BlockPos(pagePos);
+
+    const maxSocketDistanceSquare = this.isBlockPosInside(blockPos)
+      ? MIN_INSIDE_DISTANCE_SQUARE
+      : MIN_OUTSIDE_DISTANCE_SQUARE;
+
+    const result = getNearSocket(this.allSockets, blockPos);
+
+    if (result && result[0] <= maxSocketDistanceSquare) {
+      result[1].onMouseDown();
+    } else {
+      this.graph.startDraggingBlock(this);
+    }
   }
 
-  get path() {
-    return `m 0 12 v ${this.height - 24} c 0 9 3 12 12 12 h ${
-      this.width - 24
-    } c 9 0 12 -3 12 -12 
-            v -${this.height - 24} c 0 -9 -3 -12 -12 -12 h -${
-              this.width - 24
-            } c -9 0 -12 3 -12 12`;
-  }
+  abstract get backgroudPath(): string;
 }
 
-/**
- * Calculate the position of sockets.
- * Additional `0.1*length` padding is added to the left and right.
- */
-function calcSocketPos(length: number, socketNum: number) {
-  const ret: number[] = [];
-  const offset = (0.8 * length) / (socketNum + 1);
-  let x = 0.1 * length;
-  for (let i = 0; i < socketNum; i++) {
-    x += offset;
-    ret.push(x);
+function getNearSocket(
+  sockets: Socket[],
+  blockPos: Point,
+): [number, Socket] | null {
+  let minSocketDistanceSquare = Infinity;
+  let nearestSocket: null | Socket = null;
+  for (const socket of sockets) {
+    const distance = Point.distanceSquare(socket.blockPos, blockPos);
+    if (distance < minSocketDistanceSquare) {
+      minSocketDistanceSquare = distance;
+      nearestSocket = socket;
+    }
   }
-  return ret;
+  return nearestSocket ? [minSocketDistanceSquare, nearestSocket!] : null;
 }

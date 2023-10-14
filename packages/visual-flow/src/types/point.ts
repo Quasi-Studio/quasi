@@ -6,8 +6,8 @@ export class Point {
     public y: number,
   ) {}
 
-  static distance(a: Point, b: Point): number {
-    return Math.sqrt((a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y));
+  static distanceSquare(a: Point, b: Point): number {
+    return (a.x - b.x) * (a.x - b.x) + (a.y - b.y) * (a.y - b.y);
   }
 
   static eq(lhs: Point, rhs: Point): boolean {
