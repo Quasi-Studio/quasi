@@ -236,6 +236,9 @@ export class Graph {
       const result = block.getDraggingSource();
       if (result !== null) {
         if (Array.isArray(result)) {
+          if (result[1] === -Infinity) {
+            return [result[0].block, result[0]] as const;
+          }
           if (result[1] < minSocketDistanceSquare) {
             socketTarget = result[0];
             minSocketDistanceSquare = result[1];

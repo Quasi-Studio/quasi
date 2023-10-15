@@ -173,7 +173,7 @@ export abstract class Block extends ModelBase {
     );
 
     if (hoveredSocket) {
-      return hoveredSocket;
+      return isInside ? [hoveredSocket[0], -Infinity] : hoveredSocket;
     } else {
       return isInside ? this : null;
     }
