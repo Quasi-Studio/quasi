@@ -10,7 +10,7 @@ export class VfSocket extends OutputComponent {
       _._svgCircle({
         cx: model.blockDisplayX,
         cy: model.blockDisplayY,
-        r: 5,
+        r: model.blockDisplayRadius,
       });
     _._svgText(
       {

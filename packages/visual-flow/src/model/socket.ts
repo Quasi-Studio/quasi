@@ -37,6 +37,9 @@ export abstract class Socket extends ModelBase {
   get blockDisplayY() {
     return this.blockY * this.graph.boardScale;
   }
+  get blockDisplayRadius() {
+    return Math.min(this.graph.boardScale * 3, 1) * 5;
+  }
 
   abstract get allConnectedLines(): Line[];
 
