@@ -84,6 +84,6 @@ app((_) => {
     _._p({}, `offsetY: ${graph.boardOffsetY}`);
   });
 
-  _.$css`position:absolute;left:15%;top:5%;width:100%;height:100%;`;
+  _.$css`position:absolute;left:15%;top:5%;width:85%;height:95%;`;
   _._div({}, () => _.vfGraph(graph));
 });
