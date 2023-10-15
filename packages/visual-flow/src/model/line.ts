@@ -25,6 +25,8 @@ export abstract class Line extends ModelBase {
   dragging: boolean = false;
   predicting: boolean = false;
 
+  neverLeaves: Socket | null = null;
+
   lineRef = ref<SVGElementComponent>();
   get lineEl() {
     return this.lineRef.current!.node as SVGElement;

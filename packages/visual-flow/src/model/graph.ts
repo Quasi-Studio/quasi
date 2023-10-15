@@ -303,10 +303,17 @@ export class Graph {
       const { line, predictor } = this.state;
       const targetSocket = this.getDraggingTarget(line);
       if (targetSocket) {
+        if (targetSocket !== line.neverLeaves) {
+          line.neverLeaves = null;
+        }
         this.setHoveredItem(targetSocket);
         line.setBoardPosB(this.mouseBoardPos, targetSocket.direction);
-        predictor.setBoardPosB(targetSocket.boardPos, targetSocket.direction);
+        predictor.setBoardPosB(
+          line.neverLeaves ? this.mouseBoardPos : targetSocket.boardPos,
+          targetSocket.direction,
+        );
       } else {
+        line.neverLeaves = null;
         this.setHoveredItem(null);
         line.setBoardPosB(this.mouseBoardPos);
         predictor.setBoardPosB(this.mouseBoardPos);
@@ -403,7 +410,7 @@ export class Graph {
     if (this.state.type === StateType.DRAGGING_LINE) {
       const { line, predictor } = this.state;
       const targetSocket = this.getDraggingTarget(line);
-      if (targetSocket) {
+      if (!line.neverLeaves && targetSocket) {
         targetSocket.connectTo(line);
         line.dragging = false;
       } else {

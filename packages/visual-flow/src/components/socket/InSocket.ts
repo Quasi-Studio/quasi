@@ -33,6 +33,7 @@ export class InSocket extends Socket {
     if (this.connectedLine) {
       const line = this.connectedLine;
       this.connectedLine = null;
+      line.neverLeaves = this;
       this.graph.startDraggingLine(line);
     } else {
       // do nothing
