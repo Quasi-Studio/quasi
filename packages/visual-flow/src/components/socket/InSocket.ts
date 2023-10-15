@@ -19,7 +19,7 @@ export class InSocket extends Socket {
   }
 
   canDragFrom(): boolean {
-    return false;
+    return this.connectedLine !== null;
   }
   checkConnectable(line: Line): boolean {
     return (
