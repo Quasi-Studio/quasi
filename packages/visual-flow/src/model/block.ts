@@ -1,4 +1,4 @@
-import { Context, HTMLElementComponent, ref } from "refina";
+import { Context, HTMLElementComponent, SVGElementComponent, ref } from "refina";
 import { Point } from "../types";
 import { ModelBase } from "./base";
 import { Graph } from "./graph";
@@ -14,6 +14,11 @@ export abstract class Block extends ModelBase {
   ref = ref<HTMLElementComponent<"div">>();
   get el() {
     return this.ref.current?.node;
+  }
+
+  bgRef = ref<SVGElementComponent<"path">>();
+  get bgEl() {
+    return this.bgRef.current?.node;
   }
 
   /**
@@ -135,35 +140,38 @@ export abstract class Block extends ModelBase {
 
     const pagePos = this.graph.mousePagePos;
     const blockPos = this.pagePos2BlockPos(pagePos);
-    return getNearSocket(connectableSockets, blockPos)?.[1] ?? null;
+
+    return getNearSocket(connectableSockets, blockPos)?.[0] ?? null;
   }
 
-  testHovered(pagePos: Point): boolean {
+  testHovered(pagePos: Point): null | Block | [Socket, number] {
     if (this.isBlockPosInside(this.pagePos2BlockPos(pagePos))) {
-      return true;
+      return this;
     } else {
       const blockPos = this.pagePos2BlockPos(pagePos);
-      return this.allSockets.some((s) => {
-        return (
-          Point.distanceSquare(s.blockPos, blockPos) <=
-          MIN_OUTSIDE_DISTANCE_SQUARE
-        );
-      });
+
+      const draggableSockets = this.allSockets.filter((s) => s.canDragFrom());
+
+      const maxSocketDistanceSquare: number = this.isBlockPosInside(blockPos)
+        ? MIN_INSIDE_DISTANCE_SQUARE
+        : MIN_OUTSIDE_DISTANCE_SQUARE;
+
+      return getNearSocket(draggableSockets, blockPos, maxSocketDistanceSquare);
     }
   }
 
-  onMouseDown(): void {
-    const pagePos = this.graph.mousePagePos;
-    const blockPos = this.pagePos2BlockPos(pagePos);
+  onHover(): void {
+    this.el!.classList.add("hovered");
+    this.bgEl!.classList.add("hovered");
+  }
+  onUnhover(): void {
+    this.el!.classList.remove("hovered");
+    this.bgEl!.classList.remove("hovered");
+  }
 
-    const maxSocketDistanceSquare = this.isBlockPosInside(blockPos)
-      ? MIN_INSIDE_DISTANCE_SQUARE
-      : MIN_OUTSIDE_DISTANCE_SQUARE;
-
-    const result = getNearSocket(this.allSockets, blockPos);
-
-    if (result && result[0] <= maxSocketDistanceSquare) {
-      result[1].onMouseDown();
+  onMouseDown(targetSocket: Socket | null): void {
+    if (targetSocket) {
+      targetSocket.onMouseDown();
     } else {
       this.graph.startDraggingBlock(this);
     }
@@ -177,8 +185,9 @@ export abstract class Block extends ModelBase {
 function getNearSocket(
   sockets: Socket[],
   blockPos: Point,
-): [number, Socket] | null {
-  let minSocketDistanceSquare = Infinity;
+  maxSocketDistanceSquare: number = Infinity,
+): [Socket, number] | null {
+  let minSocketDistanceSquare = maxSocketDistanceSquare;
   let nearestSocket: null | Socket = null;
   for (const socket of sockets) {
     const distance = Point.distanceSquare(socket.blockPos, blockPos);
@@ -187,5 +196,5 @@ function getNearSocket(
       nearestSocket = socket;
     }
   }
-  return nearestSocket ? [minSocketDistanceSquare, nearestSocket!] : null;
+  return nearestSocket ? [nearestSocket, minSocketDistanceSquare] : null;
 }

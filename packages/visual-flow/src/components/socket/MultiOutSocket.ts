@@ -15,7 +15,10 @@ export class MultiOutSocket extends Socket {
     this.graph.removeLine(line);
     this.connectedLines.splice(index, 1);
   }
-
+  
+  canDragFrom(): boolean {
+    return true;
+  }
   checkConnectable(_line: Line): boolean {
     return false;
   }

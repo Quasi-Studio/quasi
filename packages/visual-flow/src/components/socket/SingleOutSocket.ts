@@ -20,6 +20,9 @@ export class SingleOutSocket extends Socket {
     }
   }
 
+  canDragFrom(): boolean {
+    return true;
+  }
   checkConnectable(_line: Line): boolean {
     return false;
   }

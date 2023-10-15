@@ -56,12 +56,12 @@ export abstract class Socket extends ModelBase {
     return this.graph.boardPos2GraphPos(this.boardPos);
   }
 
+  abstract canDragFrom(): boolean;
   abstract checkConnectable(line: Line): boolean;
 
   onHover() {
     this.el!.classList.add("hovered");
   }
-
   onUnhover() {
     this.el!.classList.remove("hovered");
   }

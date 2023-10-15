@@ -18,6 +18,9 @@ export class InSocket extends Socket {
     throw new Error("Method not supported.");
   }
 
+  canDragFrom(): boolean {
+    return false;
+  }
   checkConnectable(line: Line): boolean {
     return line.type === this.type && this.block.id !== line.a.block.id;
   }

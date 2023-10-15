@@ -49,7 +49,7 @@ const bgStyles = makeStyles({
     strokeWidth: tokens.strokeWidthThicker,
   },
   notDragging: {
-    ":hover": {
+    "&.hovered": {
       fill: tokens.colorNeutralBackground5,
       stroke: tokens.colorBrandStroke2Hover,
     },

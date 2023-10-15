@@ -15,9 +15,10 @@ export class VfBlock extends OutputComponent {
           styles.svg(_);
           _._svgSvg({}, () => {
             styles.bg(model.dragging)(_);
-            _._svgPath({
-              d: model.backgroudPath,
-            });
+            _.$ref(model.bgRef) &&
+              _._svgPath({
+                d: model.backgroudPath,
+              });
 
             _.for(model.allSockets, byIndex, (socket) => {
               _.vfSocket(socket);
@@ -29,9 +30,9 @@ export class VfBlock extends OutputComponent {
               onmousedown: (ev) => {
                 ev.stopPropagation();
               },
-              onmousemove: (ev) => {
-                if (!model.dragging) ev.stopPropagation();
-              },
+              // onmousemove: (ev) => {
+              //   if (!model.dragging) ev.stopPropagation();
+              // },
               onmouseup: (ev) => {
                 if (!model.dragging) ev.stopPropagation();
               },
