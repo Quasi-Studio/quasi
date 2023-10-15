@@ -1,12 +1,23 @@
 /// <reference types="vite/client" />
-import { Direction, Graph, InSocket, MultiOutSocket, RectBlock, SingleOutSocket } from "@quasi-dev/visual-flow";
+import {
+  Direction,
+  Graph,
+  InSocket,
+  BasicLine,
+  MultiOutSocket,
+  RectBlock,
+  SingleOutSocket,
+  exportVf,
+  importVf,
+} from "@quasi-dev/visual-flow";
 import "@refina/fluentui";
 import { app, d } from "refina";
 import { InputBlock } from "./components";
 
-const graph = new Graph();
+let graph = new Graph();
 
 const blockName = d("");
+const record = d("");
 
 app((_) => {
   _.$rootCss`position:fixed; top:0; left:0; right:0; bottom:0;`;
@@ -82,6 +93,29 @@ app((_) => {
     _._p({}, `scale: ${graph.boardScale}`);
     _._p({}, `offsetX: ${graph.boardOffsetX}`);
     _._p({}, `offsetY: ${graph.boardOffsetY}`);
+
+    if (_.fButton("export")) {
+      record.value = JSON.stringify(exportVf(graph));
+    }
+    if (_.fButton("import")) {
+      graph = importVf(
+        {
+          RectBlock,
+          InputBlock,
+        },
+        {
+          InSocket,
+          MultiOutSocket,
+          SingleOutSocket,
+        },
+        {
+          BasicLine,
+        },
+        JSON.parse(record.value),
+      );
+    }
+    _._br();
+    _.fTextInput(record);
   });
 
   _.$css`position:absolute;left:15%;top:5%;width:85%;height:95%;`;
