@@ -277,11 +277,11 @@ export class Graph {
         throw new Error("Not dragging line");
       }
       const { line } = this.state;
-      const hoveredItem = this.getHoveredBlock();
+      const hoveredBlock = this.getHoveredBlock();
       let connectableSocket: Socket | null;
       if (
-        hoveredItem &&
-        (connectableSocket = hoveredItem[0].checkConnectable(line))
+        hoveredBlock &&
+        (connectableSocket = hoveredBlock[0].checkConnectable(line))
       ) {
         line.setBoardPosB(this.mouseBoardPos, connectableSocket.direction);
       } else {
