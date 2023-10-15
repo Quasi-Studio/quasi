@@ -100,9 +100,9 @@ export class RectBlock extends Block {
   isBlockPosInside(blockPos: Point): boolean {
     return (
       blockPos.x >= 0 &&
-      blockPos.x <= this.pageWidth &&
+      blockPos.x <= this.boardWidth &&
       blockPos.y >= 0 &&
-      blockPos.y <= this.pageHeight
+      blockPos.y <= this.boardHeight
     );
   }
 
