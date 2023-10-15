@@ -99,6 +99,7 @@ export class RectBlock extends Block {
     _.$css`width:${this.pageWidth}px;height:${this.pageHeight}px;`;
     _._div({}, () => {
       styles.contentInnerWrapper(_);
+      _.$css`transform:scale(${this.graph.boardScale})`
       _._div({}, this.content);
     });
   };

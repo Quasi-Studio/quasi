@@ -16,6 +16,7 @@ const contentInnerWrapperClassName = makeResetStyles({
   flexShrink: 0,
   width: "max-content",
   height: "max-content",
+  transformOrigin: "center left",
 });
 
 export default {
