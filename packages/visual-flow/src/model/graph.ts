@@ -174,6 +174,7 @@ export class Graph {
   }
 
   addLine(line: Line) {
+    line.graph = this;
     this.lines.push(line);
   }
   removeLine(line: Line) {
