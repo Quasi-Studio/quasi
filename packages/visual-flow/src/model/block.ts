@@ -40,17 +40,23 @@ export abstract class Block extends ModelBase {
       : this.nonAttachedPagePos;
   }
 
+  boardPos2BlockPos(boardPos: Point): Point {
+    return Point.minus(boardPos, this.boardPos);
+  }
   graphPos2BlockPos(graphPos: Point): Point {
-    return Point.minus(graphPos, this.graphPos);
+    return this.boardPos2BlockPos(this.graph.graphPos2BoardPos(graphPos));
   }
   pagePos2BlockPos(pagePos: Point): Point {
-    return this.graphPos2BlockPos(this.graph.pagePos2GraphPos(pagePos));
+    return this.boardPos2BlockPos(this.graph.pagePos2BoardPos(pagePos));
+  }
+  blockPos2BoardPos(blockPos: Point): Point {
+    return Point.add(blockPos, this.boardPos);
   }
   blockPos2GraphPos(blockPos: Point): Point {
-    return Point.add(blockPos, this.graphPos);
+    return this.graph.boardPos2GraphPos(this.blockPos2BoardPos(blockPos));
   }
   blockPos2PagePos(blockPos: Point): Point {
-    return this.graph.graphPos2PagePos(this.blockPos2GraphPos(blockPos));
+    return this.graph.boardPos2PagePos(this.blockPos2BoardPos(blockPos));
   }
 
   zIndex: number;
