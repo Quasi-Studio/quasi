@@ -11,7 +11,7 @@ import { Line } from "./line";
 import { Socket } from "./socket";
 
 const MIN_INSIDE_DISTANCE_SQUARE = 30 * 30;
-const MIN_OUTSIDE_DISTANCE_SQUARE = 30 * 30;
+const MIN_OUTSIDE_DISTANCE_SQUARE = 50 * 50;
 
 export abstract class Block extends ModelBase {
   graph: Graph;
