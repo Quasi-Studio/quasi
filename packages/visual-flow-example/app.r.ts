@@ -22,7 +22,7 @@ app((_) => {
     _._h4({}, "Blocks");
 
     _.fTextInput(blockName, false, "Input block name here...");
-    _.$css`margin-right:20px`;
+
     _.vfCreator(
       graph,
       () => _.fButton("Block type 1"),
