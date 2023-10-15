@@ -7,6 +7,10 @@ import { Socket } from "./socket";
 const MIN_ZINDEX = 0;
 const BOARD_SCALE_MIN = 0.2;
 const BOARD_SCALE_MAX = 4;
+const AUTO_MOVE_INTERVAL = 10;
+const AUTO_MOVE_START_PADDING = 70;
+const AUTO_MOVE_SPEED_SCALE = 0.07;
+const AUTO_MOVE_SPEED_MAX = AUTO_MOVE_START_PADDING * AUTO_MOVE_SPEED_SCALE;
 
 export enum StateType {
   IDLE,
@@ -15,28 +19,32 @@ export enum StateType {
   DRAGGING_BOARD,
 }
 
-export type State =
-  | {
-      type: StateType.IDLE;
-    }
-  | {
-      type: StateType.DRAGGING_LINE;
-      line: Line;
-      predictor: Line;
-    }
-  | {
-      type: StateType.DRAGGING_BLOCK;
-      block: Block;
-      offsetPageX0: number;
-      offsetPageY0: number;
-    }
-  | {
-      type: StateType.DRAGGING_BOARD;
-      startPageX: number;
-      startPageY: number;
-      initialBoardOffsetX: number;
-      initialBoardOffsetY: number;
-    };
+type IdelState = {
+  type: StateType.IDLE;
+};
+type DraggingLineState = {
+  type: StateType.DRAGGING_LINE;
+  line: Line;
+  predictor: Line;
+};
+type DraggingBlockState = {
+  type: StateType.DRAGGING_BLOCK;
+  block: Block;
+  offsetPageX0: number;
+  offsetPageY0: number;
+};
+type DraggingBoardState = {
+  type: StateType.DRAGGING_BOARD;
+  startPageX: number;
+  startPageY: number;
+  initialBoardOffsetX: number;
+  initialBoardOffsetY: number;
+};
+type State =
+  | IdelState
+  | DraggingLineState
+  | DraggingBlockState
+  | DraggingBoardState;
 
 const idelState = { type: StateType.IDLE } as const;
 
@@ -176,6 +184,48 @@ export class Graph {
     this.blocks.forEach((b) => b.updatePosition());
     this.lines.forEach((l) => l.updatePosition());
   }
+  protected updateDraggingBlockPosition({
+    block,
+    offsetPageX0,
+    offsetPageY0,
+  }: DraggingBlockState) {
+    const { x: pageX0, y: pageY0 } = this.mousePagePos;
+    block.setPagePos({ x: pageX0 - offsetPageX0, y: pageY0 - offsetPageY0 });
+    block.updatePosition();
+    block.updateLinkedLinesPosition();
+  }
+  protected updateDraggingLinePosition({ line, predictor }: DraggingLineState) {
+    line.updatePosition();
+    predictor.updatePosition();
+  }
+
+  protected boardMoveSpeed: Point = { x: 0, y: 0 };
+  protected boardMovingInterval = setInterval(() => {
+    if (this.boardMoveSpeed.x === 0 && this.boardMoveSpeed.y === 0) return;
+    this.boardOffsetX += this.boardMoveSpeed.x / this.boardScale;
+    this.boardOffsetY += this.boardMoveSpeed.y / this.boardScale;
+    this.updatePosition();
+    if (this.state.type === StateType.DRAGGING_BLOCK) {
+      this.updateDraggingBlockPosition(this.state);
+    } else if (this.state.type === StateType.DRAGGING_LINE) {
+      this.updateDraggingLinePosition(this.state);
+    }
+  }, AUTO_MOVE_INTERVAL);
+  protected updateBoardMoveSpeed() {
+    if (
+      this.mouseDown &&
+      ((this.state.type === StateType.DRAGGING_BLOCK &&
+        this.state.block.attached) ||
+        this.state.type === StateType.DRAGGING_LINE)
+    ) {
+      this.boardMoveSpeed = {
+        x: calcMoveSpeed(this.mouseGraphPos.x, this.el!.clientWidth),
+        y: calcMoveSpeed(this.mouseGraphPos.y, this.el!.clientHeight),
+      };
+    } else {
+      this.boardMoveSpeed = { x: 0, y: 0 };
+    }
+  }
 
   protected getDraggingSource(): null | readonly [Block, Socket | null] {
     let socketTarget: Socket | null = null,
@@ -287,6 +337,7 @@ export class Graph {
       return this.onMouseUp();
     }
 
+    this.updateBoardMoveSpeed();
     if (this.state.type === StateType.IDLE) {
       const draggingSource = this.getDraggingSource();
       if (draggingSource) {
@@ -426,4 +477,22 @@ export class Graph {
   onResize() {
     this.updatePosition();
   }
+}
+
+function calcMoveSpeed(graphPos: number, sideLength: number) {
+  if (graphPos < 0) {
+    return -AUTO_MOVE_SPEED_MAX;
+  }
+  if (graphPos < AUTO_MOVE_START_PADDING) {
+    return AUTO_MOVE_SPEED_SCALE * (graphPos - AUTO_MOVE_START_PADDING);
+  }
+  if (graphPos > sideLength) {
+    return AUTO_MOVE_SPEED_MAX;
+  }
+  if (graphPos > sideLength - AUTO_MOVE_START_PADDING) {
+    return (
+      AUTO_MOVE_SPEED_SCALE * (graphPos - sideLength + AUTO_MOVE_START_PADDING)
+    );
+  }
+  return 0;
 }
