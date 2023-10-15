@@ -19,7 +19,10 @@ export class VfGraph extends OutputComponent {
       "mousemove",
       (ev) => {
         model.setMousePos(ev);
-        model.onMouseMove((ev.buttons & 1) !== 0);
+        if (model.onMouseMove((ev.buttons & 1) !== 0)) {
+          window.getSelection()?.removeAllRanges();
+          _.$update();
+        }
       },
       {
         passive: true,

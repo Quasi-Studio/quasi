@@ -253,14 +253,12 @@ export class Graph {
     return true;
   }
 
-  onMouseMove(mouseDown: boolean) {
+  onMouseMove(mouseDown: boolean): boolean {
     if (mouseDown && !this.mouseDown) {
-      this.onMouseDown();
-      return;
+      return this.onMouseDown();
     }
     if (!mouseDown && this.mouseDown) {
-      this.onMouseUp();
-      return;
+      return this.onMouseUp();
     }
 
     if (this.state.type === StateType.IDLE) {
@@ -270,7 +268,7 @@ export class Graph {
       } else {
         this.setHoveredItem(null);
       }
-      return;
+      return false;
     }
     if (this.state.type === StateType.DRAGGING_LINE) {
       if (!mouseDown) {
@@ -288,7 +286,7 @@ export class Graph {
         line.setBoardPosB(this.mouseBoardPos);
       }
       line.updatePosition();
-      return;
+      return false;
     }
     if (this.state.type === StateType.DRAGGING_BLOCK) {
       if (!mouseDown) {
@@ -299,7 +297,7 @@ export class Graph {
       block.setPagePos({ x: pageX0 - offsetPageX0, y: pageY0 - offsetPageY0 });
       block.updatePosition();
       block.updateLinkedLinesPosition();
-      return;
+      return false;
     }
     if (this.state.type === StateType.DRAGGING_BOARD) {
       if (!mouseDown) {
@@ -317,8 +315,9 @@ export class Graph {
       this.boardOffsetY =
         initialBoardOffsetY + (startPageY - mousePageY) / this.boardScale;
       this.updatePosition();
-      return;
+      return false;
     }
+    return false;
   }
 
   onMouseDown() {

@@ -1,11 +1,16 @@
-import { Context, HTMLElementComponent, SVGElementComponent, ref } from "refina";
+import {
+  Context,
+  HTMLElementComponent,
+  SVGElementComponent,
+  ref,
+} from "refina";
 import { Point } from "../types";
 import { ModelBase } from "./base";
 import { Graph } from "./graph";
 import { Line } from "./line";
 import { Socket } from "./socket";
 
-const MIN_INSIDE_DISTANCE_SQUARE = 15 * 15;
+const MIN_INSIDE_DISTANCE_SQUARE = 30 * 30;
 const MIN_OUTSIDE_DISTANCE_SQUARE = 30 * 30;
 
 export abstract class Block extends ModelBase {
@@ -145,18 +150,24 @@ export abstract class Block extends ModelBase {
   }
 
   testHovered(pagePos: Point): null | Block | [Socket, number] {
-    if (this.isBlockPosInside(this.pagePos2BlockPos(pagePos))) {
-      return this;
+    const blockPos = this.pagePos2BlockPos(pagePos);
+
+    const draggableSockets = this.allSockets.filter((s) => s.canDragFrom());
+
+    const maxSocketDistanceSquare: number = this.isBlockPosInside(blockPos)
+      ? MIN_INSIDE_DISTANCE_SQUARE
+      : MIN_OUTSIDE_DISTANCE_SQUARE;
+
+    const hoveredSocket = getNearSocket(
+      draggableSockets,
+      blockPos,
+      maxSocketDistanceSquare,
+    );
+
+    if (hoveredSocket) {
+      return hoveredSocket;
     } else {
-      const blockPos = this.pagePos2BlockPos(pagePos);
-
-      const draggableSockets = this.allSockets.filter((s) => s.canDragFrom());
-
-      const maxSocketDistanceSquare: number = this.isBlockPosInside(blockPos)
-        ? MIN_INSIDE_DISTANCE_SQUARE
-        : MIN_OUTSIDE_DISTANCE_SQUARE;
-
-      return getNearSocket(draggableSockets, blockPos, maxSocketDistanceSquare);
+      return this.isBlockPosInside(blockPos) ? this : null;
     }
   }
 
