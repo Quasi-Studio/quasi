@@ -19,6 +19,9 @@ export class MultiOutSocket extends Socket {
   canDragFrom(): boolean {
     return true;
   }
+  canDragRemove(): boolean {
+    return false;
+  }
   checkConnectable(_line: Line): boolean {
     return false;
   }

@@ -10,8 +10,8 @@ import { Graph } from "./graph";
 import { Line } from "./line";
 import { Socket } from "./socket";
 
-const MIN_INSIDE_DISTANCE_SQUARE = 30 * 30;
-const MIN_OUTSIDE_DISTANCE_SQUARE = 50 * 50;
+const MIN_INSIDE_DISTANCE_SQUARE = 25 * 25;
+const MIN_OUTSIDE_DISTANCE_SQUARE = 40 * 40;
 
 export abstract class Block extends ModelBase {
   graph: Graph;
@@ -150,15 +150,19 @@ export abstract class Block extends ModelBase {
   }
 
   getDraggingSource(): null | Block | [Socket, number] {
-    if(!this.attached){
+    if (!this.attached) {
       return this;
     }
 
     const blockPos = this.pagePos2BlockPos(this.graph.mousePagePos);
 
-    const draggableSockets = this.allSockets.filter((s) => s.canDragFrom());
+    const isInside = this.isBlockPosInside(blockPos);
 
-    const maxSocketDistanceSquare: number = this.isBlockPosInside(blockPos)
+    const draggableSockets = isInside
+      ? this.allSockets.filter((s) => s.canDragFrom())
+      : this.allSockets.filter((s) => s.canDragRemove() || s.canDragFrom());
+
+    const maxSocketDistanceSquare: number = isInside
       ? MIN_INSIDE_DISTANCE_SQUARE
       : MIN_OUTSIDE_DISTANCE_SQUARE;
 
@@ -171,7 +175,7 @@ export abstract class Block extends ModelBase {
     if (hoveredSocket) {
       return hoveredSocket;
     } else {
-      return this.isBlockPosInside(blockPos) ? this : null;
+      return isInside ? this : null;
     }
   }
 

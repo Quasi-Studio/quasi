@@ -19,6 +19,9 @@ export class InSocket extends Socket {
   }
 
   canDragFrom(): boolean {
+    return false;
+  }
+  canDragRemove(): boolean {
     return this.connectedLine !== null;
   }
   checkConnectable(line: Line): boolean {

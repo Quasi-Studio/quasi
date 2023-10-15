@@ -57,6 +57,7 @@ export abstract class Socket extends ModelBase {
   }
 
   abstract canDragFrom(): boolean;
+  abstract canDragRemove(): boolean;
   abstract checkConnectable(line: Line): boolean;
 
   onHover() {
