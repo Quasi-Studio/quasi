@@ -84,8 +84,9 @@ export abstract class Socket extends ModelBase {
     return {
       ctor: this.constructor.name,
       id: this.id,
-      blockId: this.block.id,
       type: this.type,
+      label: this.label,
+      blockId: this.block.id,
       data: this.exportData(),
     };
   }
@@ -93,6 +94,7 @@ export abstract class Socket extends ModelBase {
   importRecord(record: SocketRecord) {
     this.id = record.id;
     this.type = record.type;
+    this.label = record.label;
     this.importData(record.data);
   }
 }
@@ -101,6 +103,7 @@ export interface SocketRecord {
   ctor: string;
   id: number;
   type: string;
+  label: string;
   blockId: number;
   data: any;
 }

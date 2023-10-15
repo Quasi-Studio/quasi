@@ -1,4 +1,5 @@
 import { Block, Line, Socket, Graph } from "../model";
+import { setCurrentId } from "../utils";
 import { CtorMap, VfRecord } from "./types";
 
 export function importVf(
@@ -12,6 +13,8 @@ export function importVf(
   const sockets = Object.fromEntries(
     record.sockets.map((socketRecord) => {
       const socket = new socketCtors[socketRecord.ctor]();
+      socket.importRecord(socketRecord);
+      setCurrentId(socketRecord.id);
       return [socketRecord.id, socket];
     }),
   );
@@ -21,17 +24,21 @@ export function importVf(
       const block = new blockCtors[blockRecord.ctor]();
       block.importRecord(blockRecord, sockets);
       graph.addBlock(block);
-      return [block.id, block];
+      setCurrentId(blockRecord.id);
+      return [blockRecord.id, block];
     }),
   );
 
   record.lines.forEach((lineRecord) => {
     const line = new lineCtors[lineRecord.ctor]();
     line.importRecord(lineRecord, sockets);
-    line.connect(sockets[lineRecord.socketAId]);
-    line.connect(sockets[lineRecord.socketBId]);
+    line.a = sockets[lineRecord.socketAId];
+    line.b = sockets[lineRecord.socketBId];
     graph.addLine(line);
+    setCurrentId(lineRecord.id);
   });
 
   graph.importRecord(record.graph, blocks);
+
+  return graph;
 }

@@ -492,6 +492,7 @@ export class Graph {
     this.boardOffsetY = record.boardOffsetY;
     this.boardScale = record.boardScale;
     this.blockZIndex = record.blockZIndex.map((id) => blocks[id]);
+    this.updateBlockZIndex(0);
   }
 }
 

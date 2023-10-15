@@ -235,6 +235,7 @@ export abstract class Block extends ModelBase {
   ): void;
   importRecord(record: BlockRecord, sockets: Record<number, Socket>) {
     this.id = record.id;
+    this.attached = true;
     this.boardX = record.boardX;
     this.boardY = record.boardY;
     this.importData(record.data, sockets);
