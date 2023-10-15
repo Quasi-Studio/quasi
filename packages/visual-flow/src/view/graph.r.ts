@@ -28,6 +28,7 @@ export class VfGraph extends OutputComponent {
     _.$app.registerDocumentEventListener("mousedown", (ev) => {
       model.setMousePos(ev);
       if (model.onMouseDown()) {
+        window.getSelection()?.removeAllRanges();
         ev.preventDefault();
         _.$update();
         return false;
