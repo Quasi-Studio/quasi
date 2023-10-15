@@ -146,7 +146,7 @@ export abstract class Block extends ModelBase {
     const pagePos = this.graph.mousePagePos;
     const blockPos = this.pagePos2BlockPos(pagePos);
 
-    return getNearSocket(connectableSockets, blockPos)?.[0] ?? null;
+    return getNearestSocket(connectableSockets, blockPos)?.[0] ?? null;
   }
 
   testHovered(pagePos: Point): null | Block | [Socket, number] {
@@ -158,7 +158,7 @@ export abstract class Block extends ModelBase {
       ? MIN_INSIDE_DISTANCE_SQUARE
       : MIN_OUTSIDE_DISTANCE_SQUARE;
 
-    const hoveredSocket = getNearSocket(
+    const hoveredSocket = getNearestSocket(
       draggableSockets,
       blockPos,
       maxSocketDistanceSquare,
@@ -193,7 +193,7 @@ export abstract class Block extends ModelBase {
   abstract contentMain: (_: Context) => void;
 }
 
-function getNearSocket(
+function getNearestSocket(
   sockets: Socket[],
   blockPos: Point,
   maxSocketDistanceSquare: number = Infinity,
