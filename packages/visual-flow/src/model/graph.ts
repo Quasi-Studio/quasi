@@ -174,12 +174,12 @@ export class Graph {
     this.lines.forEach((l) => l.updatePosition());
   }
 
-  protected getHoveredBlock(): null | readonly [Block, Socket | null] {
+  protected getDraggingSource(): null | readonly [Block, Socket | null] {
     let socketTarget: Socket | null = null,
       minSocketDistanceSquare: number = Infinity;
     for (let i = this.blockZIndex.length - 1; i >= 0; i--) {
       const block = this.blockZIndex[i];
-      const result = block.testHovered(this.mousePagePos);
+      const result = block.getDraggingSource();
       if (result !== null) {
         if (Array.isArray(result)) {
           if (result[1] < minSocketDistanceSquare) {
@@ -192,6 +192,25 @@ export class Graph {
       }
     }
     return socketTarget ? [socketTarget.block, socketTarget] : null;
+  }
+  protected getDraggingTarget(line: Line): null | Socket {
+    let socketTarget: Socket | null = null,
+      minSocketDistanceSquare: number = Infinity;
+    for (let i = this.blockZIndex.length - 1; i >= 0; i--) {
+      const block = this.blockZIndex[i];
+      const result = block.getDraggingLineTarget(line);
+      if (result !== null) {
+        if (Array.isArray(result)) {
+          if (result[1] < minSocketDistanceSquare) {
+            socketTarget = result[0];
+            minSocketDistanceSquare = result[1];
+          }
+        } else {
+          return result;
+        }
+      }
+    }
+    return socketTarget;
   }
 
   protected moveBlockToTop(block: Block) {
@@ -262,9 +281,9 @@ export class Graph {
     }
 
     if (this.state.type === StateType.IDLE) {
-      const hoveredBlock = this.getHoveredBlock();
-      if (hoveredBlock) {
-        this.setHoveredItem(hoveredBlock[1] ?? hoveredBlock[0]);
+      const draggingSource = this.getDraggingSource();
+      if (draggingSource) {
+        this.setHoveredItem(draggingSource[1] ?? draggingSource[0]);
       } else {
         this.setHoveredItem(null);
       }
@@ -275,14 +294,12 @@ export class Graph {
         throw new Error("Not dragging line");
       }
       const { line } = this.state;
-      const hoveredBlock = this.getHoveredBlock();
-      let connectableSocket: Socket | null;
-      if (
-        hoveredBlock &&
-        (connectableSocket = hoveredBlock[0].checkConnectable(line))
-      ) {
-        line.setBoardPosB(this.mouseBoardPos, connectableSocket.direction);
+      const targetSocket = this.getDraggingTarget(line);
+      if (targetSocket) {
+        this.setHoveredItem(targetSocket);
+        line.setBoardPosB(this.mouseBoardPos, targetSocket.direction);
       } else {
+        this.setHoveredItem(null);
         line.setBoardPosB(this.mouseBoardPos);
       }
       line.updatePosition();
@@ -328,7 +345,7 @@ export class Graph {
 
     this.state = idelState;
 
-    const hoveredBlock = this.getHoveredBlock();
+    const hoveredBlock = this.getDraggingSource();
     if (hoveredBlock) {
       hoveredBlock[0].onMouseDown(hoveredBlock[1]);
       return true;
@@ -375,13 +392,9 @@ export class Graph {
     }
     if (this.state.type === StateType.DRAGGING_LINE) {
       const { line } = this.state;
-      const hoveredBlock = this.getHoveredBlock();
-      let connectableSocket: Socket | null;
-      if (
-        hoveredBlock &&
-        (connectableSocket = hoveredBlock[0].checkConnectable(line))
-      ) {
-        connectableSocket.connectTo(line);
+      const targetSocket = this.getDraggingTarget(line);
+      if (targetSocket) {
+        targetSocket.connectTo(line);
         line.dragging = false;
       } else {
         line.a.disconnectTo(line);

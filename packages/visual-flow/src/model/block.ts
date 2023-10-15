@@ -149,8 +149,12 @@ export abstract class Block extends ModelBase {
     return getNearestSocket(connectableSockets, blockPos)?.[0] ?? null;
   }
 
-  testHovered(pagePos: Point): null | Block | [Socket, number] {
-    const blockPos = this.pagePos2BlockPos(pagePos);
+  getDraggingSource(): null | Block | [Socket, number] {
+    if(!this.attached){
+      return this;
+    }
+
+    const blockPos = this.pagePos2BlockPos(this.graph.mousePagePos);
 
     const draggableSockets = this.allSockets.filter((s) => s.canDragFrom());
 
@@ -168,6 +172,25 @@ export abstract class Block extends ModelBase {
       return hoveredSocket;
     } else {
       return this.isBlockPosInside(blockPos) ? this : null;
+    }
+  }
+
+  getDraggingLineTarget(line: Line): null | Socket | [Socket, number] {
+    const blockPos = this.pagePos2BlockPos(this.graph.mousePagePos);
+
+    const connectableSockets = this.allSockets.filter((s) =>
+      s.checkConnectable(line),
+    );
+
+    if (this.isBlockPosInside(blockPos)) {
+      // if the mouse is inside the block, must connect to the nearest connectable socket.
+      return getNearestSocket(connectableSockets, blockPos)?.[0] ?? null;
+    } else {
+      return getNearestSocket(
+        connectableSockets,
+        blockPos,
+        MIN_OUTSIDE_DISTANCE_SQUARE,
+      );
     }
   }
 
