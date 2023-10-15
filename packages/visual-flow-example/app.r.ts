@@ -2,6 +2,7 @@
 import { Direction, Graph, InSocket, MultiOutSocket, RectBlock, SingleOutSocket } from "@quasi-dev/visual-flow";
 import "@refina/fluentui";
 import { app, d } from "refina";
+import { InputBlock } from "./components";
 
 const graph = new Graph();
 
@@ -30,8 +31,6 @@ app((_) => {
         const block = new RectBlock();
         block.boardHeight = 50;
         block.boardWidth = 200;
-        const name = blockName.value;
-        block.content = (_) => _._svgText({}, name);
         blockName.value = "";
 
         const socket1 = new InSocket();
@@ -62,11 +61,9 @@ app((_) => {
       graph,
       () => _.fButton("Block type 2"),
       () => {
-        const block = new RectBlock();
+        const block = new InputBlock();
         block.boardHeight = 50;
         block.boardWidth = 200;
-        const name = blockName.value;
-        block.content = (_) => _._svgText({}, name);
         blockName.value = "";
         const socket1 = new MultiOutSocket();
         socket1.label = "m-out(L)";

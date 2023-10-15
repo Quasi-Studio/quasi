@@ -1,7 +1,8 @@
 import { Context } from "refina";
-import { Block, Line, Socket } from "../../model";
+import { Block, Socket } from "../../model";
 import { Direction, Point } from "../../types";
 import { spreadItems } from "../../utils";
+import styles from "./RectBlock.styles";
 
 const SOCKET_PADDING_SCALE = 0.1;
 
@@ -36,12 +37,7 @@ export class RectBlock extends Block {
   bottomSockets: Socket[] = [];
 
   get allSockets(): Socket[] {
-    return [
-      ...this.leftSockets,
-      ...this.rightSockets,
-      ...this.topSockets,
-      ...this.bottomSockets,
-    ];
+    return [...this.leftSockets, ...this.rightSockets, ...this.topSockets, ...this.bottomSockets];
   }
 
   addSocket(direction: Direction, socket: Socket) {
@@ -60,70 +56,50 @@ export class RectBlock extends Block {
     }[direction];
   }
 
-  content: (_: Context) => void;
-
   updateSocketPosition() {
-    spreadItems(
-      this.boardHeight,
-      this.leftSockets.length,
-      SOCKET_PADDING_SCALE,
-    ).forEach((offset, i) => {
+    spreadItems(this.boardHeight, this.leftSockets.length, SOCKET_PADDING_SCALE).forEach((offset, i) => {
       this.leftSockets[i].blockX = 0;
       this.leftSockets[i].blockY = offset;
     });
-    spreadItems(
-      this.boardHeight,
-      this.rightSockets.length,
-      SOCKET_PADDING_SCALE,
-    ).forEach((offset, i) => {
+    spreadItems(this.boardHeight, this.rightSockets.length, SOCKET_PADDING_SCALE).forEach((offset, i) => {
       this.rightSockets[i].blockX = this.boardWidth;
       this.rightSockets[i].blockY = offset;
     });
-    spreadItems(
-      this.boardWidth,
-      this.topSockets.length,
-      SOCKET_PADDING_SCALE,
-    ).forEach((offset, i) => {
+    spreadItems(this.boardWidth, this.topSockets.length, SOCKET_PADDING_SCALE).forEach((offset, i) => {
       this.topSockets[i].blockX = offset;
       this.topSockets[i].blockY = 0;
     });
-    spreadItems(
-      this.boardWidth,
-      this.bottomSockets.length,
-      SOCKET_PADDING_SCALE,
-    ).forEach((offset, i) => {
+    spreadItems(this.boardWidth, this.bottomSockets.length, SOCKET_PADDING_SCALE).forEach((offset, i) => {
       this.bottomSockets[i].blockX = offset;
       this.bottomSockets[i].blockY = this.boardHeight;
     });
   }
 
   isBlockPosInside(blockPos: Point): boolean {
-    return (
-      blockPos.x >= 0 &&
-      blockPos.x <= this.boardWidth &&
-      blockPos.y >= 0 &&
-      blockPos.y <= this.boardHeight
-    );
+    return blockPos.x >= 0 && blockPos.x <= this.boardWidth && blockPos.y >= 0 && blockPos.y <= this.boardHeight;
   }
 
   get backgroudPath(): string {
-    const {
-      pageHeight: height,
-      pageWidth: width,
-      pageBorderRadius: radius,
-    } = this;
+    const { pageHeight: height, pageWidth: width, pageBorderRadius: radius } = this;
     const t1 = radius / 4;
     const t2 = (radius * 3) / 4;
 
-    return `m 0 ${radius} v ${
-      height - radius * 2
-    } c 0 ${t2} ${t1} ${radius} ${radius} ${radius} h ${
+    return `m 0 ${radius} v ${height - radius * 2} c 0 ${t2} ${t1} ${radius} ${radius} ${radius} h ${
       width - radius * 2
     } c ${t2} 0 ${radius} -${t1} ${radius} -${radius} 
-            v -${
-              height - radius * 2
-            } c 0 -${t2} -${t1} -${radius} -${radius} -${radius} h -${
+            v -${height - radius * 2} c 0 -${t2} -${t1} -${radius} -${radius} -${radius} h -${
               width - radius * 2
             } c -${t2} 0 -${radius} ${t1} -${radius} ${radius}`;
   }
+
+  content: (_: Context) => void;
+
+  contentMain = (_: Context) => {
+    styles.contentOuterWrapper(_);
+    _.$css`width:${this.pageWidth}px;height:${this.pageHeight}px;`;
+    _._div({}, () => {
+      styles.contentInnerWrapper(_);
+      _._div({}, this.content);
+    });
+  };
 }

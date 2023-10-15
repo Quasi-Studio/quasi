@@ -19,12 +19,25 @@ export class VfBlock extends OutputComponent {
               d: model.backgroudPath,
             });
 
-            _.embed(model.content);
-
             _.for(model.allSockets, byIndex, (socket) => {
               _.vfSocket(socket);
             });
           });
+
+          _._div(
+            {
+              onmousedown: (ev) => {
+                ev.stopPropagation();
+              },
+              onmousemove: (ev) => {
+                if (!model.dragging) ev.stopPropagation();
+              },
+              onmouseup: (ev) => {
+                if (!model.dragging) ev.stopPropagation();
+              },
+            },
+            model.contentMain,
+          );
         });
     });
   }

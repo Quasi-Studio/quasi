@@ -16,8 +16,6 @@ export abstract class Block extends ModelBase {
     return this.ref.current?.node;
   }
 
-  abstract content: (_: Context) => void;
-
   /**
    * `NaN` if not attached to the graph.
    * unit: board coord
@@ -172,6 +170,8 @@ export abstract class Block extends ModelBase {
   }
 
   abstract get backgroudPath(): string;
+
+  abstract contentMain: (_: Context) => void;
 }
 
 function getNearSocket(
