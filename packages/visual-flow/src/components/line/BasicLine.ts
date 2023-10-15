@@ -16,6 +16,10 @@ function getCtrlPointOffset(delta: number) {
 }
 
 export class BasicLine extends Line {
+  ctor(): Line {
+    return new BasicLine();
+  }
+
   get linePath() {
     let point1 = this.graphPosA;
     let point2 = this.graphPosB;

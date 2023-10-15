@@ -1,6 +1,6 @@
 import { SVGElementComponent, ref } from "refina";
 import { Direction, Point } from "../types";
-import { calcLineEndDirection } from "../utils";
+import { allocateId, calcLineEndDirection } from "../utils";
 import { ModelBase } from "./base";
 import { Graph } from "./graph";
 import { Socket } from "./socket";
@@ -15,12 +15,15 @@ export type PointWithDirection = {
 };
 
 export abstract class Line extends ModelBase {
+  abstract ctor(): Line;
+
   graph: Graph;
   type: string;
 
   hasArrow: boolean = true;
 
   dragging: boolean = false;
+  predicting: boolean = false;
 
   lineRef = ref<SVGElementComponent>();
   get lineEl() {
@@ -115,4 +118,13 @@ export abstract class Line extends ModelBase {
   abstract get linePath(): string;
 
   abstract get arrowPath(): string;
+
+  createPredictor(): Line {
+    const predictor = this.ctor();
+    predictor.graph = this.graph;
+    predictor.a = this.a;
+    predictor.b = this.b;
+    predictor.predicting = true;
+    return predictor;
+  }
 }

@@ -22,6 +22,7 @@ export type State =
   | {
       type: StateType.DRAGGING_LINE;
       line: Line;
+      predictor: Line;
     }
   | {
       type: StateType.DRAGGING_BLOCK;
@@ -115,8 +116,10 @@ export class Graph {
     const state = this.state;
     if (state.type === StateType.DRAGGING_LINE) {
       return {
-        bg: this.lines.filter((line) => line !== state.line),
-        fg: [state.line],
+        bg: this.lines.filter(
+          (line) => line !== state.line && line !== state.predictor,
+        ),
+        fg: [state.predictor, state.line],
       };
     } else {
       return {
@@ -240,10 +243,14 @@ export class Graph {
   }
 
   startDraggingLine(line: Line) {
+    const predictor = line.createPredictor();
+    this.addLine(predictor);
+
     line.dragging = true;
     this.state = {
       type: StateType.DRAGGING_LINE,
       line,
+      predictor,
     };
   }
 
@@ -293,16 +300,19 @@ export class Graph {
       if (!mouseDown) {
         throw new Error("Not dragging line");
       }
-      const { line } = this.state;
+      const { line, predictor } = this.state;
       const targetSocket = this.getDraggingTarget(line);
       if (targetSocket) {
         this.setHoveredItem(targetSocket);
         line.setBoardPosB(this.mouseBoardPos, targetSocket.direction);
+        predictor.setBoardPosB(targetSocket.boardPos, targetSocket.direction);
       } else {
         this.setHoveredItem(null);
         line.setBoardPosB(this.mouseBoardPos);
+        predictor.setBoardPosB(this.mouseBoardPos);
       }
       line.updatePosition();
+      predictor.updatePosition();
       return false;
     }
     if (this.state.type === StateType.DRAGGING_BLOCK) {
@@ -391,7 +401,7 @@ export class Graph {
       return true;
     }
     if (this.state.type === StateType.DRAGGING_LINE) {
-      const { line } = this.state;
+      const { line, predictor } = this.state;
       const targetSocket = this.getDraggingTarget(line);
       if (targetSocket) {
         targetSocket.connectTo(line);
@@ -399,6 +409,7 @@ export class Graph {
       } else {
         line.a.disconnectTo(line);
       }
+      this.removeLine(predictor);
       this.state = idelState;
       return true;
     }

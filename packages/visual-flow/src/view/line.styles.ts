@@ -1,16 +1,19 @@
 import { tokens } from "@fluentui/tokens";
 import { makeResetStyles, makeStyles, mergeClasses } from "@refina/griffel";
 
-const rootClassName = makeResetStyles({
+const curveClassName = makeResetStyles({
   stroke: tokens.colorCompoundBrandStroke,
   strokeWidth: tokens.strokeWidthThick,
   fill: "none",
 });
 
-const rootStyles = makeStyles({
+const curveStyles = makeStyles({
   dragging: {
     stroke: tokens.colorCompoundBrandStrokePressed,
     strokeWidth: tokens.strokeWidthThickest,
+  },
+  predicting: {
+    opacity: 0.4,
   },
 });
 
@@ -22,11 +25,22 @@ const arrowStyles = makeStyles({
   dragging: {
     fill: tokens.colorCompoundBrandStrokePressed,
   },
+  predicting: {
+    opacity: 0.4,
+  },
 });
 
 export default {
-  root: (dragging: boolean) =>
-    mergeClasses(rootClassName, dragging && rootStyles.dragging),
-  arrow: (dragging: boolean) =>
-    mergeClasses(arrowClassName, dragging && arrowStyles.dragging),
+  curve: (dragging: boolean, predicting: boolean) =>
+    mergeClasses(
+      curveClassName,
+      dragging && curveStyles.dragging,
+      predicting && curveStyles.predicting,
+    ),
+  arrow: (dragging: boolean, predicting: boolean) =>
+    mergeClasses(
+      arrowClassName,
+      dragging && arrowStyles.dragging,
+      predicting && arrowStyles.predicting,
+    ),
 };

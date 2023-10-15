@@ -72,7 +72,9 @@ export abstract class Socket extends ModelBase {
     line.graph = this.graph;
     line.type = this.type;
     line.initialize(this, this.graph.mouseBoardPos);
+
     this.graph.addLine(line);
+
     this.connectTo(line);
     return line;
   }
