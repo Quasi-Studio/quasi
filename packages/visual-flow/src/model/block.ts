@@ -218,6 +218,27 @@ export abstract class Block extends ModelBase {
   abstract get backgroudPath(): string;
 
   abstract contentMain: (_: Context) => void;
+
+  protected abstract exportData(): any;
+  exportRecord(): BlockRecord {
+    return {
+      ctor: this.constructor.name,
+      id: this.id,
+      boardX: this.boardX,
+      boardY: this.boardY,
+      data: this.exportData(),
+    };
+  }
+  protected abstract importData(
+    data: any,
+    sockets: Record<number, Socket>,
+  ): void;
+  importRecord(record: BlockRecord, sockets: Record<number, Socket>) {
+    this.id = record.id;
+    this.boardX = record.boardX;
+    this.boardY = record.boardY;
+    this.importData(record.data, sockets);
+  }
 }
 
 function getNearestSocket(
@@ -235,4 +256,12 @@ function getNearestSocket(
     }
   }
   return nearestSocket ? [nearestSocket, minSocketDistanceSquare] : null;
+}
+
+export interface BlockRecord {
+  ctor: string;
+  id: number;
+  boardX: number;
+  boardY: number;
+  data: any;
 }

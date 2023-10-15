@@ -1,4 +1,4 @@
-import { Context } from "refina";
+import { Context, D } from "refina";
 import { Block, Socket } from "../../model";
 import { Direction, Point } from "../../types";
 import { spreadItems } from "../../utils";
@@ -99,8 +99,45 @@ export class RectBlock extends Block {
     _.$css`width:${this.pageWidth}px;height:${this.pageHeight}px;`;
     _._div({}, () => {
       styles.contentInnerWrapper(_);
-      _.$css`transform:scale(${this.graph.boardScale})`
+      _.$css`transform:scale(${this.graph.boardScale})`;
       _._div({}, this.content);
     });
   };
+
+  protected exportData(): any {
+    return {
+      boardHeight: this.boardHeight,
+      boardWidth: this.boardWidth,
+      boardBorderRadius: this.boardBorderRadius,
+      leftSockets: this.leftSockets.map((s) => s.id),
+      rightSockets: this.rightSockets.map((s) => s.id),
+      topSockets: this.topSockets.map((s) => s.id),
+      bottomSockets: this.bottomSockets.map((s) => s.id),
+    } satisfies RectBlockRecordData;
+  }
+  protected importSocket(direction: Direction, array: Socket[], socket: Socket) {
+    socket.block = this;
+    socket.direction = direction;
+    array.push(socket);
+  }
+  protected importData(data: RectBlockRecordData, sockets: Record<number, Socket>): void {
+    this.boardHeight = data.boardHeight;
+    this.boardWidth = data.boardWidth;
+    this.boardBorderRadius = data.boardBorderRadius;
+    data.leftSockets.forEach((id) => this.importSocket(Direction.LEFT, this.leftSockets, sockets[id]));
+    data.rightSockets.forEach((id) => this.importSocket(Direction.RIGHT, this.rightSockets, sockets[id]));
+    data.topSockets.forEach((id) => this.importSocket(Direction.TOP, this.topSockets, sockets[id]));
+    data.bottomSockets.forEach((id) => this.importSocket(Direction.BOTTOM, this.bottomSockets, sockets[id]));
+    this.updateSocketPosition();
+  }
+}
+
+interface RectBlockRecordData {
+  boardHeight: number;
+  boardWidth: number;
+  boardBorderRadius: number;
+  leftSockets: number[];
+  rightSockets: number[];
+  topSockets: number[];
+  bottomSockets: number[];
 }

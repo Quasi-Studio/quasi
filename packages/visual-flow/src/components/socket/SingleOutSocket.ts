@@ -38,4 +38,11 @@ export class SingleOutSocket extends Socket {
       this.graph.startDraggingLine(line);
     }
   }
+
+  protected exportData(): any {
+    return {};
+  }
+  protected importData(_data: any): void {
+    // do nothing
+  }
 }

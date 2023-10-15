@@ -129,4 +129,41 @@ export abstract class Line extends ModelBase {
     predictor.predicting = true;
     return predictor;
   }
+
+  protected abstract exportData(): any;
+  exportRecord(): LineRecord {
+    return {
+      ctor: this.constructor.name,
+      id: this.id,
+      type: this.type,
+      socketAId: this.a.id,
+      socketBId: (this.b as Socket).id,
+      hasArrow: this.hasArrow,
+      data: this.exportData(),
+    };
+  }
+  protected abstract importData(
+    data: any,
+    sockets: Record<number, Socket>,
+  ): void;
+  importRecord(record: LineRecord, sockets: Record<number, Socket>) {
+    this.id = record.id;
+    this.type = record.type;
+    this.a = sockets[record.socketAId];
+    this.a.connectTo(this);
+    this.b = sockets[record.socketBId];
+    this.b.connectTo(this);
+    this.hasArrow = record.hasArrow;
+    this.importData(record.data, sockets);
+  }
+}
+
+export interface LineRecord {
+  ctor: string;
+  id: number;
+  type: string;
+  socketAId: number;
+  socketBId: number;
+  hasArrow: boolean;
+  data: any;
 }

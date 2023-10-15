@@ -1,4 +1,4 @@
-import { Line } from "../../model";
+import { Line, Socket } from "../../model";
 import { Point, rotate } from "../../types";
 
 const CTRL_POINT_OFFSET_SCALE = 0.8;
@@ -57,5 +57,12 @@ export class BasicLine extends Line {
     const p3 = Point.moveFarther(p1, rotate(this.b.direction), -arrowWidth);
 
     return `M${p0.x} ${p0.y} L${p2.x} ${p2.y} L${p3.x} ${p3.y} Z`;
+  }
+
+  protected exportData(): any {
+    return {};
+  }
+  protected importData(_data: any, _sockets: Record<number, Socket>): void {
+    // do nothing
   }
 }

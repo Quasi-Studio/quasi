@@ -1,8 +1,8 @@
 import { HTMLElementComponent, ref } from "refina";
 import { Point } from "../types";
-import { Block } from "./block";
-import { Line } from "./line";
-import { Socket } from "./socket";
+import { Block, BlockRecord } from "./block";
+import { Line, LineRecord } from "./line";
+import { Socket, SocketRecord } from "./socket";
 
 const MIN_ZINDEX = 0;
 const BOARD_SCALE_MIN = 0.2;
@@ -477,6 +477,21 @@ export class Graph {
   onResize() {
     this.updatePosition();
   }
+
+  exportRecord(): GraphRecord {
+    return {
+      boardOffsetX: this.boardOffsetX,
+      boardOffsetY: this.boardOffsetY,
+      boardScale: this.boardScale,
+      blockZIndex: this.blockZIndex.map((b) => b.id),
+    };
+  }
+  importRecord(record: GraphRecord, blocks: Record<number, Block>) {
+    this.boardOffsetX = record.boardOffsetX;
+    this.boardOffsetY = record.boardOffsetY;
+    this.boardScale = record.boardScale;
+    this.blockZIndex = record.blockZIndex.map((id) => blocks[id]);
+  }
 }
 
 function calcMoveSpeed(graphPos: number, sideLength: number) {
@@ -495,4 +510,11 @@ function calcMoveSpeed(graphPos: number, sideLength: number) {
     );
   }
   return 0;
+}
+
+export interface GraphRecord {
+  boardOffsetX: number;
+  boardOffsetY: number;
+  boardScale: number;
+  blockZIndex: number[];
 }

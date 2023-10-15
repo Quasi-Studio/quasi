@@ -79,4 +79,29 @@ export abstract class Socket extends ModelBase {
     this.connectTo(line);
     return line;
   }
+
+  protected abstract exportData(): any;
+  exportRecord(): SocketRecord {
+    return {
+      ctor: this.constructor.name,
+      id: this.id,
+      blockId: this.block.id,
+      type: this.type,
+      data: this.exportData(),
+    };
+  }
+  protected abstract importData(data: any): void;
+  importRecord(record: SocketRecord) {
+    this.id = record.id;
+    this.type = record.type;
+    this.importData(record.data);
+  }
+}
+
+export interface SocketRecord {
+  ctor: string;
+  id: number;
+  type: string;
+  blockId: number;
+  data: any;
 }

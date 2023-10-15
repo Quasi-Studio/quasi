@@ -34,4 +34,11 @@ export class MultiOutSocket extends Socket {
     const line = this.connectToNewLine(new BasicLine());
     this.graph.startDraggingLine(line);
   }
+
+  protected exportData(): any {
+    return {};
+  }
+  protected importData(_data: any): void {
+    // do nothing
+  }
 }

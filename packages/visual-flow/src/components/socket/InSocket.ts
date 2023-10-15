@@ -42,4 +42,11 @@ export class InSocket extends Socket {
       // do nothing
     }
   }
+
+  protected exportData(): any {
+    return {};
+  }
+  protected importData(_data: any): void {
+    // do nothing
+  }
 }
