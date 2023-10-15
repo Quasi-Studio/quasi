@@ -29,6 +29,9 @@ export class VfGraph extends OutputComponent {
       model.setMousePos(ev);
       if (model.onMouseDown()) {
         window.getSelection()?.removeAllRanges();
+        if (document.activeElement instanceof HTMLElement) {
+          document.activeElement?.blur();
+        }
         ev.preventDefault();
         _.$update();
         return false;
