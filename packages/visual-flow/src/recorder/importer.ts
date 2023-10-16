@@ -22,12 +22,16 @@ export function importVf(
   const blocks = Object.fromEntries(
     record.blocks.map((blockRecord) => {
       const block = new blockCtors[blockRecord.ctor]();
-      block.importRecord(blockRecord, sockets);
-      graph.addBlock(block);
-      setCurrentId(blockRecord.id);
       return [blockRecord.id, block];
     }),
   );
+
+  record.blocks.forEach((blockRecord) => {
+    const block = blocks[blockRecord.id];
+    block.importRecord(blockRecord, blocks, sockets);
+    graph.addBlock(block);
+    setCurrentId(blockRecord.id);
+  });
 
   record.lines.forEach((lineRecord) => {
     const line = new lineCtors[lineRecord.ctor]();

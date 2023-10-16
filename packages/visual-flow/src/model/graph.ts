@@ -1,5 +1,5 @@
 import { HTMLElementComponent, ref } from "refina";
-import { Point } from "../types";
+import { Direction, Point } from "../types";
 import { Block, BlockRecord } from "./block";
 import { Line, LineRecord } from "./line";
 import { Socket, SocketRecord } from "./socket";
@@ -193,7 +193,6 @@ export class Graph {
     const { x: pageX0, y: pageY0 } = this.mousePagePos;
     block.setPagePos({ x: pageX0 - offsetPageX0, y: pageY0 - offsetPageY0 });
     block.updatePosition();
-    block.updateLinkedLinesPosition();
   }
   protected updateDraggingLinePosition({ line, predictor }: DraggingLineState) {
     line.updatePosition();
@@ -268,6 +267,22 @@ export class Graph {
       }
     }
     return socketTarget;
+  }
+  protected getDockingTarget(block: Block): null | [Block, Direction] {
+    let minDockingDistanceSquare = Infinity;
+    let dockingTarget: [Block, Direction] | null = null;
+    for (let i = this.blockZIndex.length - 1; i >= 0; i--) {
+      const target = this.blockZIndex[i];
+      if (target === block) continue;
+      const result = target.isDockableBy(block);
+      if (result !== null) {
+        if (result[1] < minDockingDistanceSquare) {
+          minDockingDistanceSquare = result[1];
+          dockingTarget = [target, result[0]];
+        }
+      }
+    }
+    return dockingTarget;
   }
 
   protected moveBlockToTop(block: Block) {
@@ -385,7 +400,12 @@ export class Graph {
       const { block, offsetPageX0, offsetPageY0 } = this.state;
       block.setPagePos({ x: pageX0 - offsetPageX0, y: pageY0 - offsetPageY0 });
       block.updatePosition();
-      block.updateLinkedLinesPosition();
+
+      const dockingTarget = this.getDockingTarget(block);
+      // if (dockingTarget) {
+      // } else {
+      // }
+
       return false;
     }
     if (this.state.type === StateType.DRAGGING_BOARD) {
@@ -459,6 +479,12 @@ export class Graph {
           this.removeBlock(block);
         }
       }
+
+      const dockingTarget = this.getDockingTarget(block);
+      if (dockingTarget) {
+        block.dockTo(...dockingTarget);
+      }
+
       this.state = idelState;
       return true;
     }

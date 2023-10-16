@@ -4,7 +4,7 @@ import {
   SVGElementComponent,
   ref,
 } from "refina";
-import { Point } from "../types";
+import { Direction, Point, rotate } from "../types";
 import { ModelBase } from "./base";
 import { Graph } from "./graph";
 import { Line } from "./line";
@@ -12,6 +12,7 @@ import { Socket } from "./socket";
 
 const MIN_INSIDE_DISTANCE_SQUARE = 25 * 25;
 const MIN_OUTSIDE_DISTANCE_SQUARE = 40 * 40;
+const MIN_DOCKING_DISTANCE_SQUARE = 40 * 40;
 
 export abstract class Block extends ModelBase {
   graph: Graph;
@@ -69,7 +70,16 @@ export abstract class Block extends ModelBase {
 
   zIndex: number;
 
-  dragging: boolean = false;
+  protected _dragging: boolean = false;
+  get dragging() {
+    return this._dragging;
+  }
+  set dragging(dragging: boolean) {
+    this._dragging = dragging;
+    for (const [_d, b] of this.dockedByBlocks) {
+      b.dragging = dragging;
+    }
+  }
 
   /**
    * Whether the block is attached to the graph.
@@ -89,7 +99,29 @@ export abstract class Block extends ModelBase {
 
   abstract get allSockets(): Socket[];
 
+  dockableDirections: Direction[] = [];
+  dockingDirections: Direction[] = [];
+  dockedToBlock: Block | null = null;
+  dockedByBlocks: [Direction, Block][] = [];
+
+  /**
+   * @example `direction` is `LEFT`, then returns the top-left point of the block.
+   */
+  abstract getDockingBenchmarkBlockPos(direction: Direction): Point;
+  getDockingBenchmarkBoardPos(direction: Direction): Point {
+    return this.blockPos2BoardPos(this.getDockingBenchmarkBlockPos(direction));
+  }
+  getDockedBenchmarkBlockPos(direction: Direction): Point {
+    return this.getDockingBenchmarkBlockPos(rotate(direction));
+  }
+  getDockedBenchmarkBoardPos(direction: Direction): Point {
+    return this.getDockingBenchmarkBoardPos(rotate(direction));
+  }
+
   setPagePos(pagePos: Point) {
+    if (this.dockedToBlock) {
+      return;
+    }
     if (this.attached) {
       const boardPos = this.graph.pagePos2BoardPos(pagePos);
       this.boardX = boardPos.x;
@@ -98,15 +130,24 @@ export abstract class Block extends ModelBase {
       this.nonAttachedPageX = pagePos.x;
       this.nonAttachedPageY = pagePos.y;
     }
+    this.setDockedBlocksPos();
   }
 
-  /**
-   * Only can be called after the block is attached to the graph.
-   */
-  moveTo(boardX: number, boardY: number) {
-    this.boardX = boardX;
-    this.boardY = boardY;
-    this.updatePosition();
+  setDockPos(direction: Direction, benchmarkBoardPoint: Point) {
+    const benchmarkBlockPos = this.getDockingBenchmarkBlockPos(direction);
+    this.boardX = benchmarkBoardPoint.x - benchmarkBlockPos.x;
+    this.boardY = benchmarkBoardPoint.y - benchmarkBlockPos.y;
+    this.setDockedBlocksPos();
+    this.updatePosition(); // TODO: why remove this will cause issue?
+  }
+
+  protected setDockedBlocksPos() {
+    for (const [dockedDirection, dockedBlock] of this.dockedByBlocks) {
+      dockedBlock.setDockPos(
+        dockedDirection,
+        this.getDockedBenchmarkBoardPos(dockedDirection),
+      );
+    }
   }
 
   attach() {
@@ -118,20 +159,41 @@ export abstract class Block extends ModelBase {
     this.nonAttachedPageY = NaN;
   }
 
+  dockTo(block: Block, direction: Direction) {
+    this.dockedToBlock = block;
+    block.dockBy(this, direction);
+  }
+  dockBy(block: Block, direction: Direction) {
+    this.dockedByBlocks.push([direction, block]);
+    block.setDockPos(direction, this.getDockedBenchmarkBoardPos(direction));
+  }
+  undockFrom() {
+    this.dockedToBlock!.undockBy(this);
+    this.dockedToBlock = null;
+  }
+  undockBy(block: Block) {
+    this.dockedByBlocks = this.dockedByBlocks.filter(([_d, b]) => b !== block);
+  }
+
   updatePosition() {
     const { x, y } = this.pagePos;
     this.el!.style.left = `${x}px`;
     this.el!.style.top = `${y}px`;
     this.updateSocketPosition();
+    this.updateLinkedLinesPosition();
+    this.updateDockedBlocksPosition();
   }
-
-  updateLinkedLinesPosition() {
+  abstract updateSocketPosition(): void;
+  protected updateLinkedLinesPosition() {
     this.allSockets.forEach((s) =>
       s.allConnectedLines.forEach((l) => l.updatePosition()),
     );
   }
-
-  abstract updateSocketPosition(): void;
+  protected updateDockedBlocksPosition() {
+    this.dockedByBlocks.forEach(([_d, b]) => {
+      b.updatePosition();
+    });
+  }
 
   abstract isBlockPosInside(blockPos: Point): boolean;
 
@@ -198,19 +260,52 @@ export abstract class Block extends ModelBase {
     }
   }
 
+  isDockableBy(block: Block): null | [Direction, number] {
+    let minDockingDistanceSquare = MIN_DOCKING_DISTANCE_SQUARE;
+    let dockableDirection: null | Direction = null;
+    for (const direction of this.dockableDirections) {
+      if (
+        block.dockingDirections.includes(direction) &&
+        !this.dockedByBlocks.some(([d, _b]) => d === direction)
+      ) {
+        const p1 = this.getDockedBenchmarkBoardPos(direction);
+        const p2 = block.getDockingBenchmarkBoardPos(direction);
+        const distanceSquare = Point.distanceSquare(p1, p2);
+        console.warn("dockable", direction, p1, p2, distanceSquare);
+        if (distanceSquare < minDockingDistanceSquare) {
+          minDockingDistanceSquare = distanceSquare;
+          dockableDirection = direction;
+        }
+      }
+    }
+
+    return dockableDirection !== null
+      ? [dockableDirection, minDockingDistanceSquare]
+      : null;
+  }
+
   onHover(): void {
     this.el!.classList.add("hovered");
     this.bgEl!.classList.add("hovered");
+    for (const [_d, b] of this.dockedByBlocks) {
+      b.onHover();
+    }
   }
   onUnhover(): void {
     this.el!.classList.remove("hovered");
     this.bgEl!.classList.remove("hovered");
+    for (const [_d, b] of this.dockedByBlocks) {
+      b.onUnhover();
+    }
   }
 
   onMouseDown(targetSocket: Socket | null): void {
     if (targetSocket) {
       targetSocket.onMouseDown();
     } else {
+      if (this.dockedToBlock) {
+        this.undockFrom();
+      }
       this.graph.startDraggingBlock(this);
     }
   }
@@ -226,6 +321,10 @@ export abstract class Block extends ModelBase {
       id: this.id,
       boardX: this.boardX,
       boardY: this.boardY,
+      dockableDirections: this.dockableDirections,
+      dockingDirection: this.dockingDirections,
+      dockedToBlock: this.dockedToBlock?.id ?? null,
+      dockedByBlocks: this.dockedByBlocks.map(([d, b]) => [d, b.id]),
       data: this.exportData(),
     };
   }
@@ -233,11 +332,21 @@ export abstract class Block extends ModelBase {
     data: any,
     sockets: Record<number, Socket>,
   ): void;
-  importRecord(record: BlockRecord, sockets: Record<number, Socket>) {
+  importRecord(
+    record: BlockRecord,
+    blocks: Record<number, Block>,
+    sockets: Record<number, Socket>,
+  ) {
     this.id = record.id;
     this.attached = true;
     this.boardX = record.boardX;
     this.boardY = record.boardY;
+    this.dockableDirections = record.dockableDirections;
+    this.dockingDirections = record.dockingDirection;
+    this.dockedToBlock = record.dockedToBlock
+      ? blocks[record.dockedToBlock]
+      : null;
+    this.dockedByBlocks = record.dockedByBlocks.map(([d, b]) => [d, blocks[b]]);
     this.importData(record.data, sockets);
   }
 }
@@ -264,5 +373,9 @@ export interface BlockRecord {
   id: number;
   boardX: number;
   boardY: number;
+  dockableDirections: Direction[];
+  dockingDirection: Direction[];
+  dockedToBlock: number | null;
+  dockedByBlocks: [Direction, number][];
   data: any;
 }

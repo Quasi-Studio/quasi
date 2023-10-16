@@ -31,6 +31,19 @@ export class RectBlock extends Block {
     return this.graphBorderRadius;
   }
 
+  getDockingBenchmarkBlockPos(direction: Direction): Point {
+    switch (direction) {
+      case Direction.LEFT:
+        return new Point(0, 0);
+      case Direction.RIGHT:
+        return new Point(this.boardWidth, this.boardHeight);
+      case Direction.TOP:
+        return new Point(this.boardWidth, 0);
+      case Direction.BOTTOM:
+        return new Point(0, this.boardHeight);
+    }
+  }
+
   leftSockets: Socket[] = [];
   rightSockets: Socket[] = [];
   topSockets: Socket[] = [];
