@@ -15,8 +15,12 @@ export class VfCreator extends TriggerComponent<void> {
           const block = factory();
 
           const padding = graph.boardScale * DRAGGING_START_PADDING;
-          block.nonAttachedPageX = ev.pageX - padding;
-          block.nonAttachedPageY = ev.pageY - padding;
+          const { x: boardX, y: boardY } = graph.pagePos2BoardPos({
+            x: ev.pageX - padding,
+            y: ev.pageY - padding,
+          });
+          block.boardX = boardX;
+          block.boardY = boardY;
 
           graph.addBlock(block);
 

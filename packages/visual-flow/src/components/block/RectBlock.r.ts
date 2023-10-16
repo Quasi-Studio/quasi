@@ -7,6 +7,10 @@ import styles from "./RectBlock.styles";
 const SOCKET_PADDING_SCALE = 0.1;
 
 export class RectBlock extends Block {
+  ctor(): Block {
+    return new RectBlock();
+  }
+
   boardWidth: number;
   boardHeight: number;
   boardBorderRadius: number = 8;
@@ -116,6 +120,15 @@ export class RectBlock extends Block {
       _._div({}, this.content);
     });
   };
+
+  createPredictor(): Block {
+    const predictor = super.createPredictor() as RectBlock;
+    predictor.boardWidth = this.boardWidth;
+    predictor.boardHeight = this.boardHeight;
+    predictor.boardBorderRadius = this.boardBorderRadius;
+    predictor.content = () => {};
+    return predictor;
+  }
 
   protected exportData(): any {
     return {

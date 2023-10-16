@@ -27,6 +27,9 @@ const rootStyles = makeStyles({
   unattached: {
     opacity: 0.4,
   },
+  predicting: {
+    opacity: 0.4,
+  },
 });
 
 const svgClassName = makeResetStyles({
@@ -61,11 +64,12 @@ const textStyles = makeResetStyles({
 });
 
 export default {
-  root: (dragging: boolean, attached: boolean) =>
+  root: (dragging: boolean, attached: boolean, predicting: boolean) =>
     mergeClasses(
       rootClassName,
       dragging && rootStyles.dragging,
       !attached && rootStyles.unattached,
+      predicting && rootStyles.predicting,
     ),
   svg: mergeClasses(svgClassName),
   bg: (dragging: boolean) =>

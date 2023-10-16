@@ -1,8 +1,8 @@
 import { HTMLElementComponent, ref } from "refina";
 import { Direction, Point } from "../types";
-import { Block, BlockRecord } from "./block";
-import { Line, LineRecord } from "./line";
-import { Socket, SocketRecord } from "./socket";
+import { Block } from "./block";
+import { Line } from "./line";
+import { Socket } from "./socket";
 
 const MIN_ZINDEX = 0;
 const BOARD_SCALE_MIN = 0.2;
@@ -30,8 +30,9 @@ type DraggingLineState = {
 type DraggingBlockState = {
   type: StateType.DRAGGING_BLOCK;
   block: Block;
-  offsetPageX0: number;
-  offsetPageY0: number;
+  predictor: Block;
+  offsetBoardX0: number;
+  offsetBoardY0: number;
 };
 type DraggingBoardState = {
   type: StateType.DRAGGING_BOARD;
@@ -187,11 +188,14 @@ export class Graph {
   }
   protected updateDraggingBlockPosition({
     block,
-    offsetPageX0,
-    offsetPageY0,
+    offsetBoardX0,
+    offsetBoardY0,
   }: DraggingBlockState) {
-    const { x: pageX0, y: pageY0 } = this.mousePagePos;
-    block.setPagePos({ x: pageX0 - offsetPageX0, y: pageY0 - offsetPageY0 });
+    const { x: boardX0, y: boardY0 } = this.mouseBoardPos;
+    block.setBoardPos({
+      x: boardX0 - offsetBoardX0,
+      y: boardY0 - offsetBoardY0,
+    });
     block.updatePosition();
   }
   protected updateDraggingLinePosition({ line, predictor }: DraggingLineState) {
@@ -270,18 +274,19 @@ export class Graph {
     }
     return socketTarget;
   }
-  protected getDockingTarget(block: Block): null | [Block, Direction] {
+  protected getDockingTarget(block: Block): [Block, Direction, Point] | null {
     let minDockingDistanceSquare = Infinity;
-    let dockingTarget: [Block, Direction] | null = null;
+    let dockingTarget: [Block, Direction, Point] | null = null;
     for (let i = this.blockZIndex.length - 1; i >= 0; i--) {
       const target = this.blockZIndex[i];
       if (!target) continue;
       if (target === block) continue;
       const result = target.isDockableBy(block);
       if (result !== null) {
-        if (result[1] < minDockingDistanceSquare) {
-          minDockingDistanceSquare = result[1];
-          dockingTarget = [target, result[0]];
+        const [distanceSquare, ...dockingInfo] = result;
+        if (distanceSquare < minDockingDistanceSquare) {
+          minDockingDistanceSquare = distanceSquare;
+          dockingTarget = [target, ...dockingInfo];
         }
       }
     }
@@ -305,13 +310,17 @@ export class Graph {
   }
 
   startDraggingBlock(block: Block) {
+    const predictor = block.createPredictor();
+    this.addBlock(predictor);
+    predictor.moveToTop();
     block.dragging = true;
-    const { x: blockPageX, y: blockPageY } = block.pagePos;
+    const { x: blockBoardX, y: blockBoardY } = block.boardPos;
     this.state = {
       type: StateType.DRAGGING_BLOCK,
       block,
-      offsetPageX0: this.mousePagePos.x - blockPageX,
-      offsetPageY0: this.mousePagePos.y - blockPageY,
+      predictor: predictor,
+      offsetBoardX0: this.mouseBoardPos.x - blockBoardX,
+      offsetBoardY0: this.mouseBoardPos.y - blockBoardY,
     };
   }
 
@@ -400,15 +409,27 @@ export class Graph {
       if (!mouseDown) {
         throw new Error("Not dragging block");
       }
-      const { x: pageX0, y: pageY0 } = this.mousePagePos;
-      const { block, offsetPageX0, offsetPageY0 } = this.state;
-      block.setPagePos({ x: pageX0 - offsetPageX0, y: pageY0 - offsetPageY0 });
+      const { x: boardX0, y: boardY0 } = this.mouseBoardPos;
+      const { block, predictor, offsetBoardX0, offsetBoardY0 } = this.state;
+
+      const newBlockBoardPos = {
+        x: boardX0 - offsetBoardX0,
+        y: boardY0 - offsetBoardY0,
+      };
+
+      block.setBoardPos(newBlockBoardPos);
       block.updatePosition();
 
       const dockingTarget = this.getDockingTarget(block);
-      // if (dockingTarget) {
-      // } else {
-      // }
+      if (dockingTarget) {
+        const [blockToDock, _direction, movementBoardPos] = dockingTarget;
+        this.setHoveredItem(blockToDock);
+        predictor.setBoardPos(Point.add(newBlockBoardPos, movementBoardPos));
+      } else {
+        this.setHoveredItem(null);
+        predictor.setBoardPos(newBlockBoardPos);
+      }
+      predictor.updatePosition();
 
       return false;
     }
@@ -474,7 +495,7 @@ export class Graph {
       return true;
     }
     if (this.state.type === StateType.DRAGGING_BLOCK) {
-      const { block } = this.state;
+      const { block, predictor } = this.state;
       block.dragging = false;
       if (!block.attached) {
         if (this.isMouseInsideGraph) {
@@ -486,9 +507,12 @@ export class Graph {
 
       const dockingTarget = this.getDockingTarget(block);
       if (dockingTarget) {
-        block.dockTo(...dockingTarget);
+        const [blockToDock, dockingDirection, _movementBoardPos] =
+          dockingTarget;
+        block.dockTo(blockToDock, dockingDirection);
       }
 
+      this.removeBlock(predictor);
       this.state = idelState;
       return true;
     }

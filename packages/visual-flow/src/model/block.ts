@@ -15,6 +15,8 @@ const MIN_OUTSIDE_DISTANCE_SQUARE = 40 * 40;
 const MIN_DOCKING_DISTANCE_SQUARE = 40 * 40;
 
 export abstract class Block extends ModelBase {
+  abstract ctor(): Block;
+
   graph: Graph;
 
   ref = ref<HTMLElementComponent<"div">>();
@@ -27,26 +29,16 @@ export abstract class Block extends ModelBase {
     return this.bgRef.current?.node;
   }
 
-  /**
-   * `NaN` if not attached to the graph.
-   * unit: board coord
-   */
-  boardX: number = NaN;
-  boardY: number = NaN;
+  boardX: number;
+  boardY: number;
   get boardPos(): Point {
-    return this.attached
-      ? { x: this.boardX, y: this.boardY }
-      : this.graph.pagePos2BoardPos(this.nonAttachedPagePos);
+    return { x: this.boardX, y: this.boardY };
   }
   get graphPos(): Point {
-    return this.attached
-      ? this.graph.boardPos2GraphPos(this.boardPos)
-      : this.graph.pagePos2GraphPos(this.nonAttachedPagePos);
+    return this.graph.boardPos2GraphPos(this.boardPos);
   }
   get pagePos(): Point {
-    return this.attached
-      ? this.graph.boardPos2PagePos(this.boardPos)
-      : this.nonAttachedPagePos;
+    return this.graph.boardPos2PagePos(this.boardPos);
   }
 
   boardPos2BlockPos(boardPos: Point): Point {
@@ -80,22 +72,13 @@ export abstract class Block extends ModelBase {
       b.dragging = dragging;
     }
   }
+  predicting: boolean = false;
 
   /**
    * Whether the block is attached to the graph.
    * When dragging from the panel, it is not attached until the mouse is released inside the graph.
    */
   attached = false;
-  /**
-   * The position relative to body.
-   * `NaN` if attached to the graph.
-   */
-  nonAttachedPageX: number;
-  nonAttachedPageY: number;
-
-  get nonAttachedPagePos(): Point {
-    return { x: this.nonAttachedPageX, y: this.nonAttachedPageY };
-  }
 
   abstract get allSockets(): Socket[];
 
@@ -118,18 +101,12 @@ export abstract class Block extends ModelBase {
     return this.getDockingBenchmarkBoardPos(rotate(direction));
   }
 
-  setPagePos(pagePos: Point) {
+  setBoardPos(boardPos: Point) {
     if (this.dockedToBlock) {
       return;
     }
-    if (this.attached) {
-      const boardPos = this.graph.pagePos2BoardPos(pagePos);
-      this.boardX = boardPos.x;
-      this.boardY = boardPos.y;
-    } else {
-      this.nonAttachedPageX = pagePos.x;
-      this.nonAttachedPageY = pagePos.y;
-    }
+    this.boardX = boardPos.x;
+    this.boardY = boardPos.y;
     this.setDockedBlocksPos();
   }
 
@@ -150,7 +127,7 @@ export abstract class Block extends ModelBase {
     }
   }
 
-  protected moveToTop() {
+  moveToTop() {
     for (const [_d, b] of this.dockedByBlocks) {
       this.graph.moveBlockToTop(b);
     }
@@ -160,11 +137,6 @@ export abstract class Block extends ModelBase {
 
   attach() {
     this.attached = true;
-    const boardPos = this.graph.pagePos2BoardPos(this.nonAttachedPagePos);
-    this.boardX = boardPos.x;
-    this.boardY = boardPos.y;
-    this.nonAttachedPageX = NaN;
-    this.nonAttachedPageY = NaN;
   }
 
   dockTo(block: Block, direction: Direction) {
@@ -186,8 +158,8 @@ export abstract class Block extends ModelBase {
 
   updatePosition() {
     const { x, y } = this.pagePos;
-    this.el!.style.left = `${x}px`;
-    this.el!.style.top = `${y}px`;
+    if (this.el) this.el.style.left = `${x}px`;
+    if (this.el) this.el.style.top = `${y}px`;
     this.updateSocketPosition();
     this.updateLinkedLinesPosition();
     this.updateDockedBlocksPosition();
@@ -269,9 +241,9 @@ export abstract class Block extends ModelBase {
     }
   }
 
-  isDockableBy(block: Block): null | [Direction, number] {
+  isDockableBy(block: Block): null | [number, Direction, Point] {
     let minDockingDistanceSquare = MIN_DOCKING_DISTANCE_SQUARE;
-    let dockableDirection: null | Direction = null;
+    let dockingInfo: [Direction, Point] | null = null;
     for (const direction of this.dockableDirections) {
       if (
         block.dockingDirections.includes(direction) &&
@@ -282,13 +254,13 @@ export abstract class Block extends ModelBase {
         const distanceSquare = Point.distanceSquare(p1, p2);
         if (distanceSquare < minDockingDistanceSquare) {
           minDockingDistanceSquare = distanceSquare;
-          dockableDirection = direction;
+          dockingInfo = [direction, Point.minus(p1, p2)];
         }
       }
     }
 
-    return dockableDirection !== null
-      ? [dockableDirection, minDockingDistanceSquare]
+    return dockingInfo !== null
+      ? [minDockingDistanceSquare, ...dockingInfo]
       : null;
   }
 
@@ -314,14 +286,25 @@ export abstract class Block extends ModelBase {
       if (this.dockedToBlock) {
         this.undockFrom();
       }
-      this.moveToTop();
       this.graph.startDraggingBlock(this);
+      this.moveToTop();
     }
   }
 
   abstract get backgroudPath(): string;
 
   abstract contentMain: (_: Context) => void;
+
+  createPredictor(): Block {
+    const predictor = this.ctor();
+    predictor.graph = this.graph;
+    predictor.attached = this.attached;
+    predictor.dragging = true;
+    predictor.predicting = true;
+    predictor.boardX = this.boardX;
+    predictor.boardY = this.boardY;
+    return predictor;
+  }
 
   protected abstract exportData(): any;
   exportRecord(): BlockRecord {
