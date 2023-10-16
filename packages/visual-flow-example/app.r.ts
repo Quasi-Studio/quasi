@@ -154,21 +154,7 @@ app((_) => {
       record.value = JSON.stringify(exportVf(graph));
     }
     if (_.fButton("import")) {
-      graph = importVf(
-        {
-          RectBlock,
-          InputBlock,
-        },
-        {
-          InSocket,
-          MultiOutSocket,
-          SingleOutSocket,
-        },
-        {
-          BasicLine,
-        },
-        JSON.parse(record.value),
-      );
+      graph = importVf(JSON.parse(record.value));
     }
     _._br();
     _.fTextInput(record);

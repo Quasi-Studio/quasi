@@ -1,4 +1,5 @@
 import { Line, Socket } from "../../model";
+import { socketCtors } from "../../recorder";
 import { BasicLine } from "../line";
 
 export class SingleOutSocket extends Socket {
@@ -45,3 +46,5 @@ export class SingleOutSocket extends Socket {
     // do nothing
   }
 }
+
+socketCtors["SingleOutSocket"] = SingleOutSocket;

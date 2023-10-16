@@ -1,4 +1,5 @@
 import { Line, Socket } from "../../model";
+import { socketCtors } from "../../recorder";
 
 export class InSocket extends Socket {
   connectedLine: Line | null = null;
@@ -51,3 +52,5 @@ export class InSocket extends Socket {
     // do nothing
   }
 }
+
+socketCtors["InSocket"] = InSocket;

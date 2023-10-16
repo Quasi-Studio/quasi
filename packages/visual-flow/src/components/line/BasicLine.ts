@@ -1,4 +1,5 @@
 import { Line, Socket } from "../../model";
+import { lineCtors } from "../../recorder";
 import { Point, rotate } from "../../types";
 
 const CTRL_POINT_OFFSET_SCALE = 0.8;
@@ -66,3 +67,5 @@ export class BasicLine extends Line {
     // do nothing
   }
 }
+
+lineCtors["BasicLine"] = BasicLine;

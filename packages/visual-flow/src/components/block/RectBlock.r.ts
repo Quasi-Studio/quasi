@@ -1,5 +1,6 @@
-import { Context, D } from "refina";
+import { Context } from "refina";
 import { Block, Socket } from "../../model";
+import { blockCtors } from "../../recorder";
 import { Direction, Point } from "../../types";
 import { spreadItems } from "../../utils";
 import styles from "./RectBlock.styles";
@@ -167,3 +168,5 @@ interface RectBlockRecordData {
   topSockets: number[];
   bottomSockets: number[];
 }
+
+blockCtors["RectBlock"] = RectBlock;
