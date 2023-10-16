@@ -29,12 +29,12 @@ export abstract class Line extends ModelBase {
 
   lineRef = ref<SVGElementComponent>();
   get lineEl() {
-    return this.lineRef.current!.node as SVGElement;
+    return this.lineRef.current?.node as SVGElement;
   }
 
   arrowRef = ref<SVGElementComponent>();
   get arrowEl() {
-    return this.arrowRef.current!.node as SVGElement;
+    return this.arrowRef.current?.node as SVGElement;
   }
 
   a: Socket;
