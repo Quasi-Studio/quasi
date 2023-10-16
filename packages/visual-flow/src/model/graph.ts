@@ -386,9 +386,6 @@ export class Graph {
       const { line, predictor } = this.state;
       const targetSocket = this.getDraggingTarget(line);
       if (targetSocket) {
-        if (targetSocket !== line.neverLeaves) {
-          line.neverLeaves = null;
-        }
         this.setHoveredItem(targetSocket);
         line.setBoardPosB(this.mouseBoardPos, targetSocket.direction);
         predictor.setBoardPosB(
@@ -396,7 +393,6 @@ export class Graph {
           targetSocket.direction,
         );
       } else {
-        line.neverLeaves = null;
         this.setHoveredItem(null);
         line.setBoardPosB(this.mouseBoardPos);
         predictor.setBoardPosB(this.mouseBoardPos);

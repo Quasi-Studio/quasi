@@ -5,6 +5,8 @@ import { ModelBase } from "./base";
 import { Graph } from "./graph";
 import { Socket } from "./socket";
 
+const NEVER_LEAVES_DISTANCE_SQUARE = 100;
+
 const pointWithDirectionSym = Symbol();
 
 export type PointWithDirection = {
@@ -46,6 +48,13 @@ export abstract class Line extends ModelBase {
   }
 
   setBoardPosB(boardPosB: Point, direction?: Direction) {
+    if (
+      this.neverLeaves &&
+      Point.distanceSquare(this.neverLeaves.boardPos, boardPosB) >=
+        NEVER_LEAVES_DISTANCE_SQUARE
+    ) {
+      this.neverLeaves = null;
+    }
     const boardPosA = this.a.boardPos;
     this.b = {
       boardX: boardPosB.x,
