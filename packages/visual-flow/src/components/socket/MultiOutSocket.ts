@@ -12,7 +12,6 @@ export class MultiOutSocket extends Socket {
     if (index === -1) {
       throw new Error("line not found");
     }
-    this.graph.removeLine(line);
     this.connectedLines.splice(index, 1);
   }
 

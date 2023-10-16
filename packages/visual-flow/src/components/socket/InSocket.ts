@@ -10,6 +10,7 @@ export class InSocket extends Socket {
   connectTo(line: Line): void {
     if (this.connectedLine) {
       this.connectedLine.a.disconnectTo(this.connectedLine);
+      this.graph.removeLine(this.connectedLine);
     }
     this.connectedLine = line;
     line.b = this;
