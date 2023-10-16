@@ -150,6 +150,14 @@ export abstract class Block extends ModelBase {
     }
   }
 
+  protected moveToTop() {
+    for (const [_d, b] of this.dockedByBlocks) {
+      this.graph.moveBlockToTop(b);
+    }
+    this.graph.moveBlockToTop(this);
+    this.graph.updateBlockZIndex();
+  }
+
   attach() {
     this.attached = true;
     const boardPos = this.graph.pagePos2BoardPos(this.nonAttachedPagePos);
@@ -165,6 +173,7 @@ export abstract class Block extends ModelBase {
   }
   dockBy(block: Block, direction: Direction) {
     this.dockedByBlocks.push([direction, block]);
+    this.moveToTop();
     block.setDockPos(direction, this.getDockedBenchmarkBoardPos(direction));
   }
   undockFrom() {
@@ -306,6 +315,7 @@ export abstract class Block extends ModelBase {
       if (this.dockedToBlock) {
         this.undockFrom();
       }
+      this.moveToTop();
       this.graph.startDraggingBlock(this);
     }
   }

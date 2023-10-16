@@ -158,7 +158,7 @@ export class Graph {
     this.mouseBoardPos = this.graphPos2BoardPos(this.mouseGraphPos);
   }
 
-  protected blockZIndex: Block[] = [];
+  protected blockZIndex: (Block | null)[] = [];
 
   addBlock(block: Block) {
     block.graph = this;
@@ -170,7 +170,7 @@ export class Graph {
     const index = this.blockZIndex.indexOf(block);
     if (index === -1) throw new Error("Block not found");
     this.blockZIndex.splice(index, 1);
-    this.updateBlockZIndex(index);
+    this.updateBlockZIndex();
   }
 
   addLine(line: Line) {
@@ -232,6 +232,7 @@ export class Graph {
       minSocketDistanceSquare: number = Infinity;
     for (let i = this.blockZIndex.length - 1; i >= 0; i--) {
       const block = this.blockZIndex[i];
+      if (!block) continue;
       const result = block.getDraggingSource();
       if (result !== null) {
         if (Array.isArray(result)) {
@@ -254,6 +255,7 @@ export class Graph {
       minSocketDistanceSquare: number = Infinity;
     for (let i = this.blockZIndex.length - 1; i >= 0; i--) {
       const block = this.blockZIndex[i];
+      if (!block) continue;
       const result = block.getDraggingLineTarget(line);
       if (result !== null) {
         if (Array.isArray(result)) {
@@ -273,6 +275,7 @@ export class Graph {
     let dockingTarget: [Block, Direction] | null = null;
     for (let i = this.blockZIndex.length - 1; i >= 0; i--) {
       const target = this.blockZIndex[i];
+      if (!target) continue;
       if (target === block) continue;
       const result = target.isDockableBy(block);
       if (result !== null) {
@@ -285,17 +288,19 @@ export class Graph {
     return dockingTarget;
   }
 
-  protected moveBlockToTop(block: Block) {
+  moveBlockToTop(block: Block) {
     const index = this.blockZIndex.indexOf(block);
     if (index === -1) throw new Error("Block not found");
-    this.blockZIndex.splice(index, 1);
+    this.blockZIndex[index] = null;
     this.blockZIndex.push(block);
-    this.updateBlockZIndex(index);
   }
 
-  protected updateBlockZIndex(fromIndex: number) {
-    for (let i = fromIndex; i < this.blockZIndex.length; i++) {
-      this.blockZIndex[i].zIndex = i + MIN_ZINDEX;
+  updateBlockZIndex() {
+    for (let i = 0; i < this.blockZIndex.length; i++) {
+      const block = this.blockZIndex[i];
+      if (block) {
+        block.zIndex = i + MIN_ZINDEX;
+      }
     }
   }
 
@@ -308,7 +313,6 @@ export class Graph {
       offsetPageX0: this.mousePagePos.x - blockPageX,
       offsetPageY0: this.mousePagePos.y - blockPageY,
     };
-    this.moveBlockToTop(block);
   }
 
   startDraggingLine(line: Line) {
@@ -513,7 +517,9 @@ export class Graph {
       boardOffsetX: this.boardOffsetX,
       boardOffsetY: this.boardOffsetY,
       boardScale: this.boardScale,
-      blockZIndex: this.blockZIndex.map((b) => b.id),
+      blockZIndex: (this.blockZIndex.filter((b) => b !== null) as Block[]).map(
+        (b) => b.id,
+      ),
     };
   }
   importRecord(record: GraphRecord, blocks: Record<number, Block>) {
@@ -521,7 +527,7 @@ export class Graph {
     this.boardOffsetY = record.boardOffsetY;
     this.boardScale = record.boardScale;
     this.blockZIndex = record.blockZIndex.map((id) => blocks[id]);
-    this.updateBlockZIndex(0);
+    this.updateBlockZIndex();
   }
 }
 
