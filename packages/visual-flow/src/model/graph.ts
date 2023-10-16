@@ -1,4 +1,11 @@
 import { HTMLElementComponent, ref } from "refina";
+import {
+  VfMacroOperation,
+  VfMicroOperation,
+  blockCtors,
+  lineCtors,
+  socketCtors,
+} from "../recorder";
 import { Direction, Point } from "../types";
 import { Block } from "./block";
 import { Line } from "./line";
@@ -53,6 +60,104 @@ export class Graph {
   ref = ref<HTMLElementComponent<"div">>();
   get el() {
     return this.ref.current?.node;
+  }
+
+  operationStack: VfMacroOperation[] = [];
+  currentOperationIndex: number = 0;
+  get hasUndo() {
+    return this.currentOperationIndex > 0;
+  }
+  get hasRedo() {
+    return this.currentOperationIndex < this.operationStack.length;
+  }
+
+  undo() {
+    const macroOperation = this.operationStack[--this.currentOperationIndex];
+    for (let i = macroOperation.length - 1; i >= 0; i--) {
+      this.undoMicro(macroOperation[i]);
+    }
+  }
+  redo() {
+    const macroOperation = this.operationStack[this.currentOperationIndex++];
+    for (let i = 0; i < macroOperation.length; i++) {
+      this.redoMicro(macroOperation[i]);
+    }
+  }
+
+  protected undoMicro(operation: VfMicroOperation) {
+    switch (operation.type) {
+      case "add-block":
+        this.removeBlock(operation.block);
+        break;
+      case "remove-block":
+        this.addBlock(operation.block);
+        break;
+      case "add-line":
+        this.removeLine(operation.line);
+        break;
+      case "remove-line":
+        this.addLine(operation.line);
+        break;
+      case "modify-connection":
+        operation.toSocket.disconnectTo(operation.line);
+        operation.fromSocket.connectTo(operation.line);
+        break;
+      case "dock":
+        operation.dockBy.undockFrom();
+        break;
+      case "undock":
+        operation.dockBy.dockTo(operation.dockTo, operation.direction);
+        break;
+      case "move-block":
+        operation.block.setBoardPos(operation.fromBoardPos);
+        break;
+      case "drag-board":
+        this.boardOffsetX = operation.fromBoardOffset.x;
+        this.boardOffsetY = operation.fromBoardOffset.y;
+        break;
+      case "scale-board":
+        this.boardScale = operation.fromBoardScale;
+        break;
+      default:
+        const _: never = operation;
+        throw new Error(`Cannot redo: unknown operation type: ${operation}`);
+    }
+  }
+  redoMicro(operation: VfMicroOperation) {
+    switch (operation.type) {
+      case "add-block":
+        this.addBlock(operation.block);
+        break;
+      case "remove-block":
+        this.removeBlock(operation.block);
+        break;
+      case "add-line":
+        this.addLine(operation.line);
+        break;
+      case "remove-line":
+        this.removeLine(operation.line);
+        break;
+      case "modify-connection":
+        operation.fromSocket.disconnectTo(operation.line);
+        operation.toSocket.connectTo(operation.line);
+        break;
+      case "dock":
+        operation.dockBy.dockTo(operation.dockTo, operation.direction);
+        break;
+      case "undock":
+        operation.dockBy.undockFrom();
+        break;
+      case "move-block":
+        operation.block.setBoardPos(operation.toBoardPos);
+        break;
+      case "drag-board":
+        this.boardOffsetX = operation.toBoardOffset.x;
+        this.boardOffsetY = operation.toBoardOffset.y;
+        break;
+      case "scale-board":
+        this.boardScale = operation.toBoardScale;
+        break;
+    }
   }
 
   /**
@@ -116,7 +221,29 @@ export class Graph {
   }
 
   blocks: Block[] = [];
+  getBlockById(id: number): Block {
+    const block = this.blocks.find((b) => b.id === id);
+    if (!block) throw new Error(`Block ${id} not found`);
+    return block;
+  }
+  get blocksIdMap(): Record<number, Block> {
+    return Object.fromEntries(this.blocks.map((b) => [b.id, b]));
+  }
+  get socketsIdMap(): Record<number, Socket> {
+    return Object.fromEntries(
+      this.blocks.flatMap((b) => b.allSockets).map((s) => [s.id, s]),
+    );
+  }
+
   lines: Line[] = [];
+  getLineById(id: number): Line {
+    const line = this.lines.find((l) => l.id === id);
+    if (!line) throw new Error(`Line ${id} not found`);
+    return line;
+  }
+  get linesIdMap(): Record<number, Line> {
+    return Object.fromEntries(this.lines.map((l) => [l.id, l]));
+  }
 
   get displayLines(): {
     bg: Line[];
@@ -520,6 +647,7 @@ export class Graph {
         line.dragging = false;
       } else {
         line.a.disconnectTo(line);
+        this.removeLine(line);
       }
       this.removeLine(predictor);
       this.state = idelState;
