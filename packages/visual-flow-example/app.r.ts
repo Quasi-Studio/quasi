@@ -90,6 +90,62 @@ app((_) => {
         return block;
       },
     );
+    _.vfCreator(
+      graph,
+      () => _.fButton("Input block"),
+      () => {
+        const block = new RectBlock();
+        block.boardHeight = 50;
+        block.boardWidth = 200;
+        block.content = (_) => _.t`Input ${blockName}`;
+        blockName.value = "";
+        block.dockableDirections = [Direction.LEFT, Direction.UP];
+
+        const socket1 = new InSocket();
+        socket1.type = "L";
+
+        const socket2 = new MultiOutSocket();
+        socket2.type = "D";
+
+        block.addSocket(Direction.TOP, socket1);
+        block.addSocket(Direction.LEFT, socket2);
+        return block;
+      },
+    );
+    _.vfCreator(
+      graph,
+      () => _.fButton("Validator block"),
+      () => {
+        const block = new RectBlock();
+        block.boardHeight = 50;
+        block.boardWidth = 200;
+        block.content = (_) => _.t`Validator ${blockName}`;
+        blockName.value = "";
+        block.dockableDirections = [Direction.LEFT];
+        block.dockingDirections = [Direction.LEFT];
+        return block;
+      },
+    );
+    _.vfCreator(
+      graph,
+      () => _.fButton("Validator block 2"),
+      () => {
+        const block = new RectBlock();
+        block.boardHeight = 50;
+        block.boardWidth = 200;
+        block.content = (_) => _.t`Validator2 ${blockName}`;
+        blockName.value = "";
+        block.dockableDirections = [Direction.UP];
+        block.dockingDirections = [Direction.UP];
+
+        const socket1 = new MultiOutSocket();
+        socket1.type = "L";
+
+        block.addSocket(Direction.LEFT, socket1);
+
+        return block;
+      },
+    );
     _._p({}, `scale: ${graph.boardScale}`);
     _._p({}, `offsetX: ${graph.boardOffsetX}`);
     _._p({}, `offsetY: ${graph.boardOffsetY}`);
