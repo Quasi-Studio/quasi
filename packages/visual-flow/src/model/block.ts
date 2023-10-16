@@ -280,7 +280,6 @@ export abstract class Block extends ModelBase {
         const p1 = this.getDockedBenchmarkBoardPos(direction);
         const p2 = block.getDockingBenchmarkBoardPos(direction);
         const distanceSquare = Point.distanceSquare(p1, p2);
-        console.warn("dockable", direction, p1, p2, distanceSquare);
         if (distanceSquare < minDockingDistanceSquare) {
           minDockingDistanceSquare = distanceSquare;
           dockableDirection = direction;
