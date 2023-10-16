@@ -143,7 +143,7 @@ export abstract class Block extends ModelBase {
     this.dockedToBlock = block;
     block.dockBy(this, direction);
   }
-  dockBy(block: Block, direction: Direction) {
+  protected dockBy(block: Block, direction: Direction) {
     this.dockedByBlocks.push([direction, block]);
     this.moveToTop();
     block.setDockPos(direction, this.getDockedBenchmarkBoardPos(direction));
@@ -152,7 +152,7 @@ export abstract class Block extends ModelBase {
     this.dockedToBlock!.undockBy(this);
     this.dockedToBlock = null;
   }
-  undockBy(block: Block) {
+  protected undockBy(block: Block) {
     this.dockedByBlocks = this.dockedByBlocks.filter(([_d, b]) => b !== block);
   }
 
