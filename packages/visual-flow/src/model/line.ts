@@ -104,13 +104,6 @@ export abstract class Line extends ModelBase {
     this.arrowEl!.classList.remove("hovered");
   }
 
-  connect(s: Socket) {
-    if (this.connected) {
-      throw new Error("Line already connected");
-    }
-    this.b = s;
-  }
-
   disconnect(s: Socket) {
     if (s === this.a) {
       if (!this.connected) {
