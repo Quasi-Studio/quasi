@@ -1,8 +1,9 @@
-import { OutputComponent, OutputComponentContext, outputComponent } from "refina";
+import { OutputComponent, OutputComponentContext } from "refina";
 import { Socket } from "../model";
+import Vf from "../plugin";
 import styles from "./socket.styles";
 
-@outputComponent("vfSocket")
+@Vf.outputComponent("vfSocket")
 export class VfSocket extends OutputComponent {
   main(_: OutputComponentContext<this>, model: Socket): void {
     styles.root(_);

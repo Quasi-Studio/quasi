@@ -1,8 +1,9 @@
-import { Context, OutputComponent, outputComponent } from "refina";
+import { Context, OutputComponent } from "refina";
 import { Line } from "../model";
+import Vf from "../plugin";
 import styles from "./line.styles";
 
-@outputComponent("vfLine")
+@Vf.outputComponent("vfLine")
 export class VFLine extends OutputComponent {
   main(_: Context, model: Line) {
     styles.curve(model.dragging, model.predicting)(_);

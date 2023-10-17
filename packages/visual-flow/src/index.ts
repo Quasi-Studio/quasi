@@ -3,3 +3,6 @@ export * from "./model";
 export * from "./recorder";
 export * from "./types";
 export * from "./view";
+
+import Vf from "./plugin";
+export default Vf;

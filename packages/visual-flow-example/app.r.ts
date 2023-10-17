@@ -1,16 +1,15 @@
 /// <reference types="vite/client" />
-import {
+import Vf, {
   Direction,
   Graph,
   InSocket,
-  BasicLine,
   MultiOutSocket,
   RectBlock,
   SingleOutSocket,
   exportVf,
   importVf,
 } from "@quasi-dev/visual-flow";
-import "@refina/fluentui";
+import FluentUI from "@refina/fluentui";
 import { app, d } from "refina";
 import { InputBlock } from "./components";
 
@@ -19,10 +18,8 @@ let graph = new Graph();
 const blockName = d("");
 const record = d("");
 
-app((_) => {
+app.use(FluentUI).use(Vf)((_) => {
   _.$rootCss`position:fixed; top:0; left:0; right:0; bottom:0;`;
-
-  _.provideFTheme();
 
   _.$css`position:fixed;left:0;top:0;width:100%;height:5%;z-index:101;
     background-color:#ddd;border-bottom:3px gray solid`;

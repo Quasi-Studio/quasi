@@ -1,8 +1,9 @@
-import { OutputComponent, OutputComponentContext, byIndex, outputComponent } from "refina";
+import { OutputComponent, OutputComponentContext, byIndex } from "refina";
 import { Block } from "../model";
+import Vf from "../plugin";
 import styles from "./block.styles";
 
-@outputComponent("vfBlock")
+@Vf.outputComponent("vfBlock")
 export class VfBlock extends OutputComponent {
   main(_: OutputComponentContext<this>, model: Block): void {
     _.portal(() => {
