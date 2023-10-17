@@ -1,11 +1,11 @@
-import { OutputComponent, OutputComponentContext, byIndex } from "refina";
+import { ComponentContext, OutputComponent, byIndex } from "refina";
 import { Block } from "../model";
 import Vf from "../plugin";
 import styles from "./block.styles";
 
 @Vf.outputComponent("vfBlock")
 export class VfBlock extends OutputComponent {
-  main(_: OutputComponentContext<this>, model: Block): void {
+  main(_: ComponentContext<this>, model: Block): void {
     _.portal(() => {
       const { x: pageX, y: pageY } = model.pagePos;
 

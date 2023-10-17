@@ -1,11 +1,11 @@
-import { OutputComponent, OutputComponentContext } from "refina";
+import { ComponentContext, OutputComponent } from "refina";
 import { Graph } from "../model";
 import Vf from "../plugin";
 import styles from "./graph.styles";
 
 @Vf.outputComponent("vfGraph")
 export class VfGraph extends OutputComponent {
-  main(_: OutputComponentContext<this>, model: Graph): void {
+  main(_: ComponentContext<this>, model: Graph): void {
     _.$app.registerWindowEventListener(
       "resize",
       () => {
