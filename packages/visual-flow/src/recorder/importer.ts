@@ -3,10 +3,15 @@ import { setCurrentId } from "../utils";
 import { blockCtors, lineCtors, socketCtors } from "./ctors";
 import { VfRecord } from "./types";
 
-export function importVf(
-  record: VfRecord,
-) {
-  const graph = new Graph();
+export function importVf(record: VfRecord, graphRaw?: Graph) {
+  if (graphRaw) {
+    graphRaw.reset();
+  } else {
+    graphRaw = new Graph();
+    graphRaw.recordStack = [record];
+    graphRaw.recordIndex = 0;
+  }
+  const graph = graphRaw;
 
   const sockets = Object.fromEntries(
     record.sockets.map((socketRecord) => {

@@ -1,11 +1,5 @@
-import { HTMLElementComponent, ref } from "refina";
-import {
-  VfMacroOperation,
-  VfMicroOperation,
-  blockCtors,
-  lineCtors,
-  socketCtors,
-} from "../recorder";
+import { App, HTMLElementComponent, ref } from "refina";
+import { VfRecord, exportVf, importVf } from "../recorder";
 import { Direction, Point } from "../types";
 import { Block } from "./block";
 import { Line } from "./line";
@@ -57,107 +51,47 @@ type State =
 const idelState = { type: StateType.IDLE } as const;
 
 export class Graph {
+  app: App;
+
   ref = ref<HTMLElementComponent<"div">>();
   get el() {
     return this.ref.current?.node;
   }
 
-  operationStack: VfMacroOperation[] = [];
-  currentOperationIndex: number = 0;
-  get hasUndo() {
-    return this.currentOperationIndex > 0;
+  recordStack: VfRecord[] = [];
+  recordIndex: number = -1;
+  get canUndo() {
+    return this.recordIndex >= 0;
   }
-  get hasRedo() {
-    return this.currentOperationIndex < this.operationStack.length;
+  get canRedo() {
+    return this.recordIndex < this.recordStack.length - 1;
   }
 
+  reset() {
+    this.blocks = [];
+    this.blockZIndex = [];
+    this.boardMoveSpeed = { x: 0, y: 0 };
+    this.lines = [];
+    this.boardOffsetX = 0;
+    this.boardOffsetY = 0;
+    this.boardScale = 1;
+  }
   undo() {
-    const macroOperation = this.operationStack[--this.currentOperationIndex];
-    for (let i = macroOperation.length - 1; i >= 0; i--) {
-      this.undoMicro(macroOperation[i]);
+    if (this.recordIndex === 0) {
+      this.reset();
+      --this.recordIndex;
+    } else {
+      importVf(this.recordStack[--this.recordIndex], this);
     }
   }
   redo() {
-    const macroOperation = this.operationStack[this.currentOperationIndex++];
-    for (let i = 0; i < macroOperation.length; i++) {
-      this.redoMicro(macroOperation[i]);
-    }
+    importVf(this.recordStack[++this.recordIndex], this);
   }
 
-  protected undoMicro(operation: VfMicroOperation) {
-    switch (operation.type) {
-      case "add-block":
-        this.removeBlock(operation.block);
-        break;
-      case "remove-block":
-        this.addBlock(operation.block);
-        break;
-      case "add-line":
-        this.removeLine(operation.line);
-        break;
-      case "remove-line":
-        this.addLine(operation.line);
-        break;
-      case "modify-connection":
-        operation.toSocket.disconnectTo(operation.line);
-        operation.fromSocket.connectTo(operation.line);
-        break;
-      case "dock":
-        operation.dockBy.undockFrom();
-        break;
-      case "undock":
-        operation.dockBy.dockTo(operation.dockTo, operation.direction);
-        break;
-      case "move-block":
-        operation.block.setBoardPos(operation.fromBoardPos);
-        break;
-      case "drag-board":
-        this.boardOffsetX = operation.fromBoardOffset.x;
-        this.boardOffsetY = operation.fromBoardOffset.y;
-        break;
-      case "scale-board":
-        this.boardScale = operation.fromBoardScale;
-        break;
-      default:
-        const _: never = operation;
-        throw new Error(`Cannot redo: unknown operation type: ${operation}`);
-    }
-  }
-  redoMicro(operation: VfMicroOperation) {
-    switch (operation.type) {
-      case "add-block":
-        this.addBlock(operation.block);
-        break;
-      case "remove-block":
-        this.removeBlock(operation.block);
-        break;
-      case "add-line":
-        this.addLine(operation.line);
-        break;
-      case "remove-line":
-        this.removeLine(operation.line);
-        break;
-      case "modify-connection":
-        operation.fromSocket.disconnectTo(operation.line);
-        operation.toSocket.connectTo(operation.line);
-        break;
-      case "dock":
-        operation.dockBy.dockTo(operation.dockTo, operation.direction);
-        break;
-      case "undock":
-        operation.dockBy.undockFrom();
-        break;
-      case "move-block":
-        operation.block.setBoardPos(operation.toBoardPos);
-        break;
-      case "drag-board":
-        this.boardOffsetX = operation.toBoardOffset.x;
-        this.boardOffsetY = operation.toBoardOffset.y;
-        break;
-      case "scale-board":
-        this.boardScale = operation.toBoardScale;
-        break;
-    }
+  protected pushRecord() {
+    this.recordStack = this.recordStack.slice(0, this.recordIndex + 1);
+    this.recordStack.push(exportVf(this));
+    this.recordIndex++;
   }
 
   /**
@@ -267,6 +201,7 @@ export class Graph {
 
   protected state: State = idelState;
   protected mouseDown: boolean = false;
+  protected scaleEndTimeout: number = NaN;
   protected hoveredItem: Block | Socket | null = null;
   mousePagePos: Point;
   mouseGraphPos: Point;
@@ -467,8 +402,15 @@ export class Graph {
     if (
       (this.boardScale <= BOARD_SCALE_MIN && scaleDelta < 0) ||
       (this.boardScale >= BOARD_SCALE_MAX && scaleDelta > 0)
-    )
-      return false;
+    ) {
+      return;
+    }
+    if (!Number.isNaN(this.scaleEndTimeout)) clearTimeout(this.scaleEndTimeout);
+    this.scaleEndTimeout = setTimeout(() => {
+      this.pushRecord();
+      this.scaleEndTimeout = NaN;
+      this.app.update();
+    }, 500);
 
     const oldScale = this.boardScale;
     let newScale = this.boardScale + scaleDelta;
@@ -615,6 +557,7 @@ export class Graph {
     }
     if (this.state.type === StateType.DRAGGING_BOARD) {
       this.state = idelState;
+      this.pushRecord();
       return true;
     }
     if (this.state.type === StateType.DRAGGING_BLOCK) {
@@ -637,6 +580,7 @@ export class Graph {
 
       this.removeBlock(predictor);
       this.state = idelState;
+      this.pushRecord();
       return true;
     }
     if (this.state.type === StateType.DRAGGING_LINE) {
@@ -651,6 +595,7 @@ export class Graph {
       }
       this.removeLine(predictor);
       this.state = idelState;
+      this.pushRecord();
       return true;
     }
     return false;

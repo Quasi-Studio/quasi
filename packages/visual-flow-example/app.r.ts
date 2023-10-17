@@ -147,6 +147,13 @@ app.use(FluentUI).use(Vf)((_) => {
     _._p({}, `offsetX: ${graph.boardOffsetX}`);
     _._p({}, `offsetY: ${graph.boardOffsetY}`);
 
+    if (_.fButton("undo", !graph.canUndo)) {
+      graph.undo();
+    }
+    if (_.fButton("redo", !graph.canRedo)) {
+      graph.redo();
+    }
+
     if (_.fButton("export")) {
       record.value = JSON.stringify(exportVf(graph));
     }
