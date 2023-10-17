@@ -1,4 +1,4 @@
-import { RectBlock } from "@quasi-dev/visual-flow";
+import { RectBlock, blockCtors } from "@quasi-dev/visual-flow";
 import "@refina/fluentui";
 import { Context, d } from "refina";
 
@@ -9,3 +9,5 @@ export class InputBlock extends RectBlock {
     _.fTextInput(this.text);
   };
 }
+
+blockCtors["InputBlock"] = InputBlock;
