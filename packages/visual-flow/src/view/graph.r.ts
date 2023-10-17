@@ -52,11 +52,19 @@ export class VfGraph extends OutputComponent {
       }
       return true;
     });
-    _.$app.registerDocumentEventListener(
+    _.$app.registerRootEventListener(
       "wheel",
       (ev) => {
         if (ev.ctrlKey) {
           if (model.onScaling(-ev.deltaY / 1500)) {
+            _.$update();
+          }
+        } else if (ev.shiftKey) {
+          if (model.onHorizontalScroll(ev.deltaY / 2)) {
+            _.$update();
+          }
+        } else {
+          if (model.onVerticalScroll(ev.deltaY / 2)) {
             _.$update();
           }
         }

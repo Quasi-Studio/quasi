@@ -609,6 +609,18 @@ export class Graph {
     return false;
   }
 
+  onHorizontalScroll(delta: number) {
+    this.boardOffsetX += delta / this.boardScale;
+    this.updatePosition();
+    return true;
+  }
+
+  onVerticalScroll(delta: number) {
+    this.boardOffsetY += delta / this.boardScale;
+    this.updatePosition();
+    return true;
+  }
+
   onResize() {
     this.updatePosition();
   }
