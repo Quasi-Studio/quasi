@@ -25,7 +25,7 @@ export class VfCreator extends TriggerComponent<void> {
 
           graph.addBlock(block);
 
-          _.$fire();
+          this.$fire();
           _.$update();
         },
       },
