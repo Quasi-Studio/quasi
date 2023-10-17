@@ -217,6 +217,9 @@ export class Graph {
 
   setMousePos(ev: MouseEvent) {
     this.mousePagePos = { x: ev.pageX, y: ev.pageY };
+    this.syncGraphAndBoardMousePos();
+  }
+  protected syncGraphAndBoardMousePos() {
     this.mouseGraphPos = this.pagePos2GraphPos(this.mousePagePos);
     this.mouseBoardPos = this.graphPos2BoardPos(this.mouseGraphPos);
   }
@@ -250,15 +253,19 @@ export class Graph {
   }
   protected updateDraggingBlockPosition({
     block,
+    predictor,
     offsetBoardX0,
     offsetBoardY0,
   }: DraggingBlockState) {
     const { x: boardX0, y: boardY0 } = this.mouseBoardPos;
-    block.setBoardPos({
+    const newPagePos = {
       x: boardX0 - offsetBoardX0,
       y: boardY0 - offsetBoardY0,
-    });
+    };
+    block.setBoardPos(newPagePos);
+    predictor.setBoardPos(newPagePos);
     block.updatePosition();
+    predictor.updatePosition();
   }
   protected updateDraggingLinePosition({ line, predictor }: DraggingLineState) {
     line.updatePosition();
@@ -270,6 +277,7 @@ export class Graph {
     if (this.boardMoveSpeed.x === 0 && this.boardMoveSpeed.y === 0) return;
     this.boardOffsetX += this.boardMoveSpeed.x / this.boardScale;
     this.boardOffsetY += this.boardMoveSpeed.y / this.boardScale;
+    this.syncGraphAndBoardMousePos();
     this.updatePosition();
     if (this.state.type === StateType.DRAGGING_BLOCK) {
       this.updateDraggingBlockPosition(this.state);
