@@ -7,7 +7,7 @@ const DRAGGING_START_PADDING = 20;
 
 @Vf.triggerComponent("vfCreator")
 export class VfCreator extends TriggerComponent<void> {
-  main(_: TriggerComponentContext<void, this>, graph: Graph, inner: D<Content>, factory: () => Block): void {
+  main(_: TriggerComponentContext<this>, graph: Graph, inner: D<Content>, factory: () => Block): void {
     styles.root(_);
     _._div(
       {
