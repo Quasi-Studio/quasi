@@ -18,6 +18,22 @@ importers:
         specifier: 3.0.0
         version: 3.0.0
 
+  packages/block-data:
+    dependencies:
+      '@quasi-dev/visual-flow':
+        specifier: workspace:^
+        version: link:../visual-flow
+      '@refina/fluentui':
+        specifier: link:..\..\..\refina\packages\fluentui
+        version: link:../../../refina/packages/fluentui
+      refina:
+        specifier: link:..\..\..\refina\packages\core
+        version: link:../../../refina/packages/core
+    devDependencies:
+      typescript:
+        specifier: ^5.1.6
+        version: 5.2.2
+
   packages/compiler:
     devDependencies:
       '@types/node':

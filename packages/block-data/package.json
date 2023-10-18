@@ -1,0 +1,17 @@
+{
+  "name": "@quasi-dev/block-data",
+  "version": "0.0.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "check": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "^5.1.6"
+  },
+  "dependencies": {
+    "@quasi-dev/visual-flow": "workspace:^",
+    "@refina/fluentui": "link:..\\..\\..\\refina\\packages\\fluentui",
+    "refina": "link:..\\..\\..\\refina\\packages\\core"
+  }
+}
