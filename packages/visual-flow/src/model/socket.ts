@@ -16,7 +16,7 @@ export abstract class Socket extends ModelBase {
    */
   label: string;
 
-  ref = ref<SVGElementComponent<"circle">>();
+  ref = ref<SVGElementComponent<"g">>();
   get el() {
     return this.ref.current?.node;
   }
@@ -97,6 +97,8 @@ export abstract class Socket extends ModelBase {
     this.label = record.label;
     this.importData(record.data);
   }
+
+  path: string;
 }
 
 export interface SocketRecord {

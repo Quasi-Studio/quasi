@@ -1,6 +1,7 @@
 import { Line, Socket } from "../../model";
 import { socketCtors } from "../../recorder";
 import { BasicLine } from "../line";
+import { PATH_OUT_ELIPSE, PATH_OUT_RECT } from "./constants";
 
 export class SingleOutSocket extends Socket {
   connectedLine: Line | null = null;

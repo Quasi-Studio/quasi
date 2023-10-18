@@ -2,8 +2,8 @@ import { Point } from "./point";
 
 export enum Direction {
   LEFT,
-  RIGHT,
   UP,
+  RIGHT,
   DOWN,
   TOP = Direction.UP, // alias
   BOTTOM = Direction.DOWN, // alias

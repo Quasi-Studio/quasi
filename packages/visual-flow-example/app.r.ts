@@ -4,6 +4,10 @@ import Vf, {
   Graph,
   InSocket,
   MultiOutSocket,
+  PATH_IN_ELIPSE,
+  PATH_IN_RECT,
+  PATH_OUT_ELIPSE,
+  PATH_OUT_RECT,
   RectBlock,
   SingleOutSocket,
   exportVf,
@@ -44,23 +48,27 @@ app.use(FluentUI).use(Vf)((_) => {
         const socket1 = new InSocket();
         socket1.label = "in(L)";
         socket1.type = "L";
+        socket1.path = PATH_IN_RECT;
 
         const socket2 = new InSocket();
-        socket2.label = "in(L)";
-        socket2.type = "L";
+        socket2.label = "in(D)";
+        socket2.type = "D";
+        socket2.path = PATH_IN_ELIPSE;
 
         const socket3 = new SingleOutSocket();
         socket3.label = "s-out(D)";
         socket3.type = "D";
+        socket3.path = PATH_OUT_ELIPSE;
 
-        const socket4 = new InSocket();
-        socket4.label = "in(D)";
-        socket4.type = "D";
+        const socket4 = new SingleOutSocket();
+        socket4.label = "out(L)";
+        socket4.type = "L";
+        socket4.path = PATH_OUT_RECT;
 
-        block.addSocket(Direction.TOP, socket1);
+        block.addSocket(Direction.LEFT, socket1);
         block.addSocket(Direction.TOP, socket2);
-        block.addSocket(Direction.RIGHT, socket3);
-        block.addSocket(Direction.BOTTOM, socket4);
+        block.addSocket(Direction.BOTTOM, socket3);
+        block.addSocket(Direction.RIGHT, socket4);
 
         return block;
       },

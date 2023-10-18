@@ -7,7 +7,7 @@ import {
 const rootClassName = makeResetStyles({
   fill: tokens.colorBrandForegroundInverted,
 
-  "&.hovered": {
+  "&.hovered path": {
     fill: tokens.colorCompoundBrandBackgroundHover,
   },
 });
