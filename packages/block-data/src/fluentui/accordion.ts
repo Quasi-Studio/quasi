@@ -17,4 +17,4 @@ export const accordion = {
       optional: true,
     },
   ],
-} satisfies ComponentInfo;
+} satisfies ComponentInfo as ComponentInfo;

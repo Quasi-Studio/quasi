@@ -6,6 +6,11 @@
   "scripts": {
     "check": "tsc --noEmit"
   },
+  "main": "./src/index.ts",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
   "devDependencies": {
     "typescript": "^5.1.6"
   },

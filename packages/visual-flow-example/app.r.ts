@@ -1,21 +1,8 @@
 /// <reference types="vite/client" />
-import Vf, {
-  Direction,
-  Graph,
-  InSocket,
-  MultiOutSocket,
-  PATH_IN_ELIPSE,
-  PATH_IN_RECT,
-  PATH_OUT_ELIPSE,
-  PATH_OUT_RECT,
-  RectBlock,
-  SingleOutSocket,
-  exportVf,
-  importVf,
-} from "@quasi-dev/visual-flow";
+import { ComponentBlock, flentuiBlocks } from "@quasi-dev/block-data";
+import Vf, { Graph, exportVf, importVf } from "@quasi-dev/visual-flow";
 import FluentUI from "@refina/fluentui";
 import { app, d } from "refina";
-import { InputBlock } from "./components";
 
 let graph = new Graph();
 
@@ -36,7 +23,48 @@ app.use(FluentUI).use(Vf)((_) => {
 
     _.fTextInput(blockName, false, "Input block name here...");
 
-    _.vfCreator(
+    _.for(
+      Object.entries(flentuiBlocks),
+      ([k, v]: [string, any]) => k,
+      ([k, v]) => {
+        _.vfCreator(
+          graph,
+          () => _.fButton(v.displayName ?? k),
+          () => {
+            const block = new ComponentBlock(k, v);
+            return block;
+          },
+        );
+      },
+    );
+
+    _._p({}, `scale: ${graph.boardScale}`);
+    _._p({}, `offsetX: ${graph.boardOffsetX}`);
+    _._p({}, `offsetY: ${graph.boardOffsetY}`);
+
+    if (_.fButton("undo", !graph.canUndo)) {
+      graph.undo();
+    }
+    if (_.fButton("redo", !graph.canRedo)) {
+      graph.redo();
+    }
+
+    if (_.fButton("export")) {
+      record.value = JSON.stringify(exportVf(graph));
+    }
+    if (_.fButton("import")) {
+      graph = importVf(JSON.parse(record.value));
+    }
+    _._br();
+    _.fTextInput(record);
+  });
+
+  _.$css`position:absolute;left:15%;top:5%;width:85%;height:95%;`;
+  _._div({}, () => _.vfGraph(graph));
+});
+
+/*
+ _.vfCreator(
       graph,
       () => _.fButton("Block type 1"),
       () => {
@@ -151,27 +179,4 @@ app.use(FluentUI).use(Vf)((_) => {
         return block;
       },
     );
-    _._p({}, `scale: ${graph.boardScale}`);
-    _._p({}, `offsetX: ${graph.boardOffsetX}`);
-    _._p({}, `offsetY: ${graph.boardOffsetY}`);
-
-    if (_.fButton("undo", !graph.canUndo)) {
-      graph.undo();
-    }
-    if (_.fButton("redo", !graph.canRedo)) {
-      graph.redo();
-    }
-
-    if (_.fButton("export")) {
-      record.value = JSON.stringify(exportVf(graph));
-    }
-    if (_.fButton("import")) {
-      graph = importVf(JSON.parse(record.value));
-    }
-    _._br();
-    _.fTextInput(record);
-  });
-
-  _.$css`position:absolute;left:15%;top:5%;width:85%;height:95%;`;
-  _._div({}, () => _.vfGraph(graph));
-});
+    */

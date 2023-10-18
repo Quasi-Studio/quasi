@@ -19,4 +19,4 @@ export const textInput = {
       optional: true,
     },
   ],
-} satisfies ComponentInfo;
+} satisfies ComponentInfo as ComponentInfo;

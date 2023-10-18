@@ -98,6 +98,9 @@ importers:
 
   packages/visual-flow-example:
     dependencies:
+      '@quasi-dev/block-data':
+        specifier: workspace:^
+        version: link:../block-data
       '@quasi-dev/visual-flow':
         specifier: workspace:^
         version: link:../visual-flow

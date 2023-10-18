@@ -5,7 +5,7 @@ import { Direction, Point } from "../../types";
 import { spreadItems } from "../../utils";
 import styles from "./RectBlock.styles";
 
-const SOCKET_PADDING_SCALE = 0.1;
+const SOCKET_PADDING_SCALE = -0.1;
 
 export class RectBlock extends Block {
   ctor(): Block {
