@@ -191,6 +191,14 @@ export class Graph {
         ),
         fg: [state.predictor, state.line],
       };
+    } else if (state.type === StateType.DRAGGING_BLOCK) {
+      const linkedLines = state.block.allSockets.flatMap(
+        (s) => s.allConnectedLines,
+      );
+      return {
+        bg: this.lines.filter((line) => !linkedLines.includes(line)),
+        fg: linkedLines,
+      };
     } else {
       return {
         bg: this.lines,
