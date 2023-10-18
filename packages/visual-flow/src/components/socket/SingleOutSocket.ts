@@ -22,7 +22,7 @@ export class SingleOutSocket extends Socket {
   }
 
   canDragFrom(): boolean {
-    return true;
+    return !this.connectedLine;
   }
   canDragRemove(): boolean {
     return false;
