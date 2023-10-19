@@ -26,6 +26,9 @@ importers:
       '@refina/fluentui':
         specifier: link:..\..\..\refina\packages\fluentui
         version: link:../../../refina/packages/fluentui
+      '@refina/tsconfig':
+        specifier: link:..\..\..\refina\packages\tsconfig
+        version: link:../../../refina/packages/tsconfig
       refina:
         specifier: link:..\..\..\refina\packages\core
         version: link:../../../refina/packages/core

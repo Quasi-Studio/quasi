@@ -31,7 +31,8 @@ app.use(FluentUI).use(Vf)((_) => {
           graph,
           () => _.fButton(v.displayName ?? k),
           () => {
-            const block = new ComponentBlock(k, v);
+            const block = new ComponentBlock();
+            block.initialize(k, v);
             return block;
           },
         );

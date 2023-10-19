@@ -17,6 +17,7 @@
   "dependencies": {
     "@quasi-dev/visual-flow": "workspace:^",
     "@refina/fluentui": "link:..\\..\\..\\refina\\packages\\fluentui",
+    "@refina/tsconfig": "link:..\\..\\..\\refina\\packages\\tsconfig",
     "refina": "link:..\\..\\..\\refina\\packages\\core"
   }
 }

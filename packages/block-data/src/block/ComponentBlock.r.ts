@@ -10,16 +10,17 @@ import {
   RectBlock,
   SingleOutSocket,
   Socket,
+  blockCtors,
 } from "@quasi-dev/visual-flow";
 import { ComponentInfo } from "../types";
 import "@refina/fluentui";
 
 export class ComponentBlock extends RectBlock {
-  constructor(
-    public componentId: string,
-    public info: ComponentInfo,
-  ) {
-    super();
+  componentId: string;
+  info: ComponentInfo;
+  initialize(componentId: string, info: ComponentInfo) {
+    this.componentId = componentId;
+    this.info = info;
 
     this.content = (_) => {
       _.t(info.displayName ?? componentId);
@@ -75,8 +76,10 @@ export class ComponentBlock extends RectBlock {
         default:
           const _: never = param.type[0];
       }
-      socket!.label = param.name;
-      this.addSocket(direction!, socket!);
+      if (socket!) {
+        socket.label = param.name;
+        this.addSocket(direction!, socket);
+      }
     }
 
     this.boardWidth = Math.max(this.topSockets.length, this.bottomSockets.length) * 10 + 200;
@@ -85,6 +88,10 @@ export class ComponentBlock extends RectBlock {
   }
 
   ctor() {
-    return new ComponentBlock(this.componentId, this.info);
+    const block = new ComponentBlock();
+    block.initialize(this.componentId, this.info);
+    return block;
   }
 }
+
+blockCtors["ComponentBlock"] = ComponentBlock;
