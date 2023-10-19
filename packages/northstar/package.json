@@ -11,11 +11,16 @@
   },
   "devDependencies": {
     "@refina/tsconfig": "link:..\\..\\..\\refina\\packages\\tsconfig",
+    "tailwindcss": "^3.3.3",
     "typescript": "^5.1.6",
     "vite": "^4.4.8",
+    "autoprefixer": "^10.4.15",
+    "postcss": "^8.4.27",
     "vite-plugin-refina": "link:..\\..\\..\\refina\\packages\\plugin"
   },
   "dependencies": {
+    "@quasi-dev/visual-flow": "workspace:^",
+    "@refina/basic-components": "link:..\\..\\..\\refina\\packages\\basic-components",
     "@refina/fluentui": "link:..\\..\\..\\refina\\packages\\fluentui",
     "@refina/griffel": "link:..\\..\\..\\refina\\packages\\griffel",
     "refina": "link:..\\..\\..\\refina\\packages\\core"
