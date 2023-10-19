@@ -86,14 +86,6 @@ export class VfGraph extends OutputComponent {
           _.for(bg, "id", (line) => {
             _.vfLine(line);
           });
-
-          const boardOriginGraphPos = model.boardPos2GraphPos({ x: 0, y: 0 });
-          _._svgCircle({
-            cx: boardOriginGraphPos.x,
-            cy: boardOriginGraphPos.y,
-            r: 10,
-            fill: "red",
-          });
         });
 
         styles.fgSvg(_);
