@@ -1,35 +1,140 @@
-import { View } from "refina";
-import { ComponentBlock } from "../block/ComponentBlock.r";
+import { Direction } from "@quasi-dev/visual-flow";
 
-export type ComponentParamType =
-  | readonly ["content"]
-  | readonly ["output", string]
-  | readonly ["input", string]
-  | readonly ["singleOutput", string]
-  | readonly ["pluginArray", string];
+export type TypeInfo = string;
 
-export const content = ["content"] as const;
-export const output = (type: string) => ["output", type] as const;
-export const input = (type: string) => ["input", type] as const;
-export const pluginArray = (type: string) => ["pluginArray", type] as const;
+export type PositionInfo =
+  | {
+      direction: Direction;
+      pos: "pre" | "post" | "default";
+    }
+  | "default";
 
-export interface ComponentParamRaw {
-  name: string;
-  type: ComponentParamType;
-  /**
-   * The way to display the parameter.
-   * If "both", it displays both in block content and as a socket.
-   */
-  noSocket?: boolean;
-  optional?: boolean;
+export function position(
+  direction: Direction,
+  pos: "pre" | "post" | "default" = "default",
+): PositionInfo {
+  return {
+    direction,
+    pos,
+  };
 }
 
-export type ComponentKind = "output" | "trigger";
+type ContentType =
+  | "required-socket"
+  | "optional-socket"
+  | "hidden-by-default"
+  | "as-primary"
+  | "as-primary-and-socket";
+
+export interface ContentInfo {
+  name: string;
+  kind: ContentType;
+  position: PositionInfo;
+}
+
+export function content(
+  name: string = "inner",
+  kind: ContentType = "required-socket",
+  position: PositionInfo = "default",
+): ContentInfo {
+  return {
+    name,
+    kind,
+    position,
+  };
+}
+
+type DataKind =
+  | "as-required-socket"
+  | "as-optional-socket"
+  | "as-primary"
+  | "as-primary-and-socket";
+
+export interface DataInfo {
+  name: string;
+  dataType: TypeInfo;
+  kind: DataKind;
+  position: PositionInfo;
+}
+
+export function data(
+  name: string,
+  dataType: TypeInfo,
+  kind: DataKind = "as-optional-socket",
+  position: PositionInfo = "default",
+): DataInfo {
+  return {
+    name,
+    dataType,
+    kind,
+    position,
+  };
+}
+
+export const output = data;
+export const input = data;
+export const event = data;
+
+export interface PluginInfo {
+  name: string;
+  dataType: TypeInfo;
+  direction: Direction;
+}
+
+export function plugin(
+  name: string,
+  dataType: TypeInfo,
+  direction: Direction = Direction.LEFT,
+): PluginInfo {
+  return {
+    name,
+    dataType,
+    direction,
+  };
+}
 
 export interface ComponentInfo {
-  kind: ComponentKind;
-  displayName?: string;
-  params: ComponentParamRaw[];
+  /**
+   * Display name
+   */
+  name: string;
 
-  content?: View<[block: ComponentBlock]>;
+  contents: ContentInfo[];
+
+  events: DataInfo[];
+  inputs: DataInfo[];
+  outputs: DataInfo[];
+  plugins: PluginInfo[];
+}
+
+export function component(
+  name: string,
+  contents: ContentInfo[] | ContentInfo,
+  events: DataInfo[] | DataInfo = [],
+  inputs: DataInfo[] | DataInfo = [],
+  outputs: DataInfo[] | DataInfo = [],
+  plugins: PluginInfo[] | PluginInfo = [],
+): ComponentInfo {
+  function toArray<T>(v: T[] | T) {
+    return Array.isArray(v) ? v : [v];
+  }
+  return {
+    name,
+    contents: toArray(contents),
+    events: toArray(events),
+    inputs: toArray(inputs),
+    outputs: toArray(outputs),
+    plugins: toArray(plugins),
+  };
+}
+
+export const t = {
+  void: "void",
+  string: "string",
+  number: "number",
+  union: (a: TypeInfo, b: TypeInfo) => a + "|" + b,
+};
+
+export function outputWrap(name: string) {
+  return component(name, content("inner", "as-primary-and-socket"));
 }
