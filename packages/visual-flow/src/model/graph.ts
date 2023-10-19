@@ -218,7 +218,7 @@ export class Graph {
   mouseGraphPos: Point;
   mouseBoardPos: Point;
 
-  protected selectedBlocks = new Set<Block>();
+  selectedBlocks = new Set<Block>();
   clearSelectedBlocks() {
     for (const block of this.selectedBlocks) {
       block.selected = false;
