@@ -1,4 +1,4 @@
-import { ComponentInfo, input, output } from "../types";
+import { ComponentInfo, input, output, pluginArray } from "../types";
 
 export const textInput = {
   displayName: "Text Input",
@@ -16,6 +16,11 @@ export const textInput = {
     {
       name: "placeholder",
       type: input("string"),
+      optional: true,
+    },
+    {
+      name: "validators",
+      type: pluginArray("validator"),
       optional: true,
     },
   ],

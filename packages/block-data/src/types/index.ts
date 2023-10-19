@@ -5,11 +5,13 @@ export type ComponentParamType =
   | readonly ["content"]
   | readonly ["output", string]
   | readonly ["input", string]
-  | readonly ["singleOutput", string];
+  | readonly ["singleOutput", string]
+  | readonly ["pluginArray", string];
 
 export const content = ["content"] as const;
 export const output = (type: string) => ["output", type] as const;
 export const input = (type: string) => ["input", type] as const;
+export const pluginArray = (type: string) => ["pluginArray", type] as const;
 
 export interface ComponentParamRaw {
   name: string;

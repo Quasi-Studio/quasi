@@ -69,6 +69,9 @@ export class ComponentBlock extends RectBlock {
           socket.path = PATH_IN_ELIPSE;
           direction = Direction.BOTTOM;
           break;
+        case "pluginArray":
+          this.dockableDirections.push(Direction.LEFT);
+          break;
         default:
           const _: never = param.type[0];
       }
