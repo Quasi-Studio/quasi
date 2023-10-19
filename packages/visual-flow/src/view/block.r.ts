@@ -29,7 +29,7 @@ export class VfBlock extends OutputComponent {
           _._div(
             {
               onmousedown: (ev) => {
-                ev.stopPropagation();
+                if(ev.defaultPrevented) ev.stopPropagation();
               },
               // onmousemove: (ev) => {
               //   if (!model.dragging) ev.stopPropagation();

@@ -93,6 +93,9 @@ export class Graph {
     this.recordStack.push(exportVf(this));
     this.recordIndex++;
   }
+  protected overwriteRecord() {
+    this.recordStack[this.recordIndex] = exportVf(this);
+  }
 
   /**
    * The position of the left-top corner of the graph in board coord.
@@ -214,6 +217,21 @@ export class Graph {
   mousePagePos: Point;
   mouseGraphPos: Point;
   mouseBoardPos: Point;
+
+  protected selectedBlocks = new Set<Block>();
+  clearSelectedBlocks() {
+    for (const block of this.selectedBlocks) {
+      block.selected = false;
+    }
+    this.selectedBlocks.clear();
+  }
+  addSelectedBlock(block: Block, preserveSelected: boolean) {
+    if (!preserveSelected) {
+      this.clearSelectedBlocks();
+    }
+    this.selectedBlocks.add(block);
+    block.selected = true;
+  }
 
   setHoveredItem(hoveredItem: Block | Socket | null) {
     if (this.hoveredItem !== hoveredItem) {
@@ -391,7 +409,6 @@ export class Graph {
     const predictor = block.createPredictor();
     this.addBlock(predictor);
     predictor.moveToTop();
-    block.selected = true;
     const { x: blockBoardX, y: blockBoardY } = block.boardPos;
     this.state = {
       type: StateType.DRAGGING_BLOCK,
@@ -448,10 +465,10 @@ export class Graph {
 
   onMouseMove(mouseDown: boolean): boolean {
     if (mouseDown && !this.mouseDown) {
-      return this.onMouseDown();
+      return this.onMouseDown(false);
     }
     if (!mouseDown && this.mouseDown) {
-      return this.onMouseUp();
+      return this.onMouseUp(false);
     }
 
     this.updateBoardMoveSpeed();
@@ -498,6 +515,7 @@ export class Graph {
         y: boardY0 - offsetBoardY0,
       };
 
+      block.pendingClick = false;
       block.setBoardPos(newBlockBoardPos);
       block.updatePosition();
 
@@ -535,9 +553,9 @@ export class Graph {
     return false;
   }
 
-  onMouseDown() {
+  onMouseDown(preserveSelected: boolean) {
     if (this.mouseDown) {
-      this.onMouseUp();
+      this.onMouseUp(preserveSelected);
     }
     this.mouseDown = true;
 
@@ -545,10 +563,11 @@ export class Graph {
 
     const hoveredBlock = this.getDraggingSource();
     if (hoveredBlock) {
-      hoveredBlock[0].onMouseDown(hoveredBlock[1]);
+      hoveredBlock[0].onMouseDown(hoveredBlock[1], preserveSelected);
       return true;
     }
     if (this.isMouseInsideGraph) {
+      if (!preserveSelected) this.clearSelectedBlocks();
       const pagePos = this.mousePagePos;
       this.state = {
         type: StateType.DRAGGING_BOARD,
@@ -562,9 +581,9 @@ export class Graph {
     return false;
   }
 
-  onMouseUp() {
+  onMouseUp(preserveSelected: boolean) {
     if (!this.mouseDown) {
-      this.onMouseDown();
+      this.onMouseDown(false);
     }
     this.mouseDown = false;
 
@@ -578,14 +597,7 @@ export class Graph {
     }
     if (this.state.type === StateType.DRAGGING_BLOCK) {
       const { block, predictor } = this.state;
-      block.selected = false;
-      if (!block.attached) {
-        if (this.isMouseInsideGraph) {
-          block.attach();
-        } else {
-          this.removeBlock(block);
-        }
-      }
+      this.removeBlock(predictor);
 
       const dockingTarget = this.getDockingTarget(block);
       if (dockingTarget) {
@@ -594,9 +606,22 @@ export class Graph {
         block.dockTo(blockToDock, dockingDirection);
       }
 
-      this.removeBlock(predictor);
+      if (!block.attached) {
+        if (this.isMouseInsideGraph) {
+          block.attach();
+          block.selected = false;
+        } else {
+          this.removeBlock(block);
+        }
+      } else if (block.pendingClick) {
+        this.addSelectedBlock(block, preserveSelected);
+        this.overwriteRecord();
+      } else {
+        block.selected = false;
+        this.pushRecord();
+      }
+      block.pendingClick = false;
       this.state = idelState;
-      this.pushRecord();
       return true;
     }
     if (this.state.type === StateType.DRAGGING_LINE) {

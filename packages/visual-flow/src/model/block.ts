@@ -66,13 +66,14 @@ export abstract class Block extends ModelBase {
   get selected() {
     return this._selected;
   }
-  set selected(dragging: boolean) {
-    this._selected = dragging;
+  set selected(selected: boolean) {
+    this._selected = selected;
     for (const [_d, b] of this.dockedByBlocks) {
-      b.selected = dragging;
+      b.selected = selected;
     }
   }
   predicting: boolean = false;
+  pendingClick: boolean = false;
 
   /**
    * Whether the block is attached to the graph.
@@ -279,15 +280,17 @@ export abstract class Block extends ModelBase {
     }
   }
 
-  onMouseDown(targetSocket: Socket | null): void {
+  onMouseDown(targetSocket: Socket | null, preserveSelected:boolean): void {
     if (targetSocket) {
       targetSocket.onMouseDown();
     } else {
       if (this.dockedToBlock) {
         this.undockFrom();
       }
-      this.graph.startDraggingBlock(this);
+      this.graph.addSelectedBlock(this, preserveSelected);
+      this.pendingClick = true;
       this.moveToTop();
+      this.graph.startDraggingBlock(this);
     }
   }
 

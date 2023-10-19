@@ -32,7 +32,7 @@ export class VfGraph extends OutputComponent {
     );
     _.$app.registerDocumentEventListener("mousedown", (ev) => {
       model.setMousePos(ev);
-      if (model.onMouseDown()) {
+      if (model.onMouseDown(ev.shiftKey)) {
         window.getSelection()?.removeAllRanges();
         if (document.activeElement instanceof HTMLElement) {
           document.activeElement?.blur();
@@ -45,7 +45,7 @@ export class VfGraph extends OutputComponent {
     });
     _.$app.registerDocumentEventListener("mouseup", (ev) => {
       model.setMousePos(ev);
-      if (model.onMouseUp()) {
+      if (model.onMouseUp(ev.shiftKey)) {
         ev.preventDefault();
         _.$update();
         return false;
