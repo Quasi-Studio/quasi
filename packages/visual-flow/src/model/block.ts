@@ -62,14 +62,14 @@ export abstract class Block extends ModelBase {
 
   zIndex: number;
 
-  protected _dragging: boolean = false;
-  get dragging() {
-    return this._dragging;
+  protected _selected: boolean = false;
+  get selected() {
+    return this._selected;
   }
-  set dragging(dragging: boolean) {
-    this._dragging = dragging;
+  set selected(dragging: boolean) {
+    this._selected = dragging;
     for (const [_d, b] of this.dockedByBlocks) {
-      b.dragging = dragging;
+      b.selected = dragging;
     }
   }
   predicting: boolean = false;
@@ -299,7 +299,7 @@ export abstract class Block extends ModelBase {
     const predictor = this.ctor();
     predictor.graph = this.graph;
     predictor.attached = this.attached;
-    predictor.dragging = true;
+    predictor.selected = true;
     predictor.predicting = true;
     predictor.boardX = this.boardX;
     predictor.boardY = this.boardY;

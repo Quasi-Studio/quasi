@@ -46,12 +46,12 @@ const bgClassName = makeResetStyles({
 });
 
 const bgStyles = makeStyles({
-  dragging: {
+  selected: {
     fill: tokens.colorNeutralBackground5Pressed,
     stroke: tokens.colorBrandStroke2Pressed,
     strokeWidth: tokens.strokeWidthThicker,
   },
-  notDragging: {
+  notSelected: {
     "&.hovered": {
       fill: tokens.colorNeutralBackground5,
       stroke: tokens.colorBrandStroke2Hover,
@@ -64,18 +64,18 @@ const textStyles = makeResetStyles({
 });
 
 export default {
-  root: (dragging: boolean, attached: boolean, predicting: boolean) =>
+  root: (selected: boolean, attached: boolean, predicting: boolean) =>
     mergeClasses(
       rootClassName,
-      dragging && rootStyles.dragging,
+      selected && rootStyles.dragging,
       !attached && rootStyles.unattached,
       predicting && rootStyles.predicting,
     ),
   svg: mergeClasses(svgClassName),
-  bg: (dragging: boolean) =>
+  bg: (selected: boolean) =>
     mergeClasses(
       bgClassName,
-      dragging ? bgStyles.dragging : bgStyles.notDragging,
+      selected ? bgStyles.selected : bgStyles.notSelected,
     ),
   text: mergeClasses(textStyles),
 };

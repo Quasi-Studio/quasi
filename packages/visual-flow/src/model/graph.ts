@@ -391,7 +391,7 @@ export class Graph {
     const predictor = block.createPredictor();
     this.addBlock(predictor);
     predictor.moveToTop();
-    block.dragging = true;
+    block.selected = true;
     const { x: blockBoardX, y: blockBoardY } = block.boardPos;
     this.state = {
       type: StateType.DRAGGING_BLOCK,
@@ -578,7 +578,7 @@ export class Graph {
     }
     if (this.state.type === StateType.DRAGGING_BLOCK) {
       const { block, predictor } = this.state;
-      block.dragging = false;
+      block.selected = false;
       if (!block.attached) {
         if (this.isMouseInsideGraph) {
           block.attach();

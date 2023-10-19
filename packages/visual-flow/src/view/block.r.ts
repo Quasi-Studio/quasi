@@ -9,13 +9,13 @@ export class VfBlock extends OutputComponent {
     _.portal(() => {
       const { x: pageX, y: pageY } = model.pagePos;
 
-      styles.root(model.dragging, model.attached, model.predicting)(_);
+      styles.root(model.selected, model.attached, model.predicting)(_);
       _.$css`top:${pageY}px;left:${pageX}px;z-index:${model.attached ? model.zIndex : 10000}`;
       _.$ref(model.ref) &&
         _._div({}, (_) => {
           styles.svg(_);
           _._svgSvg({}, () => {
-            styles.bg(model.dragging)(_);
+            styles.bg(model.selected)(_);
             _.$ref(model.bgRef) &&
               _._svgPath({
                 d: model.backgroudPath,
@@ -35,7 +35,7 @@ export class VfBlock extends OutputComponent {
               //   if (!model.dragging) ev.stopPropagation();
               // },
               onmouseup: (ev) => {
-                if (!model.dragging) ev.stopPropagation();
+                if (!model.selected) ev.stopPropagation();
               },
             },
             model.contentMain,
