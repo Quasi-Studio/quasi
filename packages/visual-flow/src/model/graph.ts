@@ -617,7 +617,7 @@ export class Graph {
         this.addSelectedBlock(block, preserveSelected);
         this.overwriteRecord();
       } else {
-        block.selected = false;
+        if (!preserveSelected) this.clearSelectedBlocks();
         this.pushRecord();
       }
       block.pendingClick = false;
