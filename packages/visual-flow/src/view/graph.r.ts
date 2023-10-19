@@ -55,20 +55,26 @@ export class VfGraph extends OutputComponent {
     _.$app.registerRootEventListener(
       "wheel",
       (ev) => {
+        model.setMousePos(ev);
+        if (!model.isMouseInsideGraph) {
+          return;
+        }
         if (ev.ctrlKey) {
           if (model.onScaling(-ev.deltaY / 1500)) {
+            ev.preventDefault();
             _.$update();
           }
         } else if (ev.shiftKey) {
           if (model.onHorizontalScroll(ev.deltaY / 2)) {
+            ev.preventDefault();
             _.$update();
           }
         } else {
           if (model.onVerticalScroll(ev.deltaY / 2)) {
+            ev.preventDefault();
             _.$update();
           }
         }
-        ev.preventDefault();
         return true;
       },
       {
