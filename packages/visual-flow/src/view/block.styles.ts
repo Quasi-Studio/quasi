@@ -21,7 +21,7 @@ const rootClassName = makeResetStyles({
 });
 
 const rootStyles = makeStyles({
-  dragging: {
+  selected: {
     filter: `drop-shadow(0 14px 28px rgba(0,0,0,0.14))`,
   },
   unattached: {
@@ -67,7 +67,7 @@ export default {
   root: (selected: boolean, attached: boolean, predicting: boolean) =>
     mergeClasses(
       rootClassName,
-      selected && rootStyles.dragging,
+      selected && rootStyles.selected,
       !attached && rootStyles.unattached,
       predicting && rootStyles.predicting,
     ),
