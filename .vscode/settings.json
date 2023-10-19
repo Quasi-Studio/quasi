@@ -1,0 +1,14 @@
+{
+  "editor.quickSuggestions": {
+    "strings": "on"
+  },
+  "tailwindCSS.experimental.classRegex": [
+    ["\\$cls`([\\s\\S]*?)`", "(\\S+)"],
+    ["\\$rootCls`([^`]*)`", "(\\S+)"],
+    ["\\$cls\\(([^\\)]*)\\)", "\\\"(.*?)\\\""]
+  ],
+  "[*.r.js][*.r.ts]": {
+    "editor.guides.bracketPairs": "active"
+  },
+  "editor.guides.bracketPairs": "active"
+}
