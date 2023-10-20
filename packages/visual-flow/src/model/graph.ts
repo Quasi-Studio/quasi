@@ -437,7 +437,7 @@ export class Graph {
       (this.boardScale <= BOARD_SCALE_MIN && scaleDelta < 0) ||
       (this.boardScale >= BOARD_SCALE_MAX && scaleDelta > 0)
     ) {
-      return;
+      return true;
     }
     if (!Number.isNaN(this.scaleEndTimeout)) clearTimeout(this.scaleEndTimeout);
     this.scaleEndTimeout = setTimeout(() => {
