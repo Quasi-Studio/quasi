@@ -28,6 +28,7 @@ export class InSocket extends Socket {
   }
   checkConnectable(line: Line): boolean {
     return (
+      !this.disabled &&
       line.type === this.type &&
       this.block.id !== line.a.block.id &&
       (!this.connectedLine || line.a.id !== this.connectedLine.a.id)

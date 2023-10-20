@@ -15,6 +15,7 @@ export abstract class Socket extends ModelBase {
    * label to be displayed
    */
   label: string;
+  disabled = false;
 
   ref = ref<SVGElementComponent<"g">>();
   get el() {
@@ -86,6 +87,7 @@ export abstract class Socket extends ModelBase {
       id: this.id,
       type: this.type,
       label: this.label,
+      disabled: this.disabled,
       blockId: this.block.id,
       data: this.exportData(),
     };
@@ -95,6 +97,7 @@ export abstract class Socket extends ModelBase {
     this.id = record.id;
     this.type = record.type;
     this.label = record.label;
+    this.disabled = record.disabled;
     this.importData(record.data);
   }
 
@@ -106,6 +109,7 @@ export interface SocketRecord {
   id: number;
   type: string;
   label: string;
+  disabled: boolean;
   blockId: number;
   data: any;
 }

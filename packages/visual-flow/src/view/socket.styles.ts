@@ -1,17 +1,23 @@
 import { tokens } from "@fluentui/tokens";
-import {
-  makeResetStyles,
-  mergeClasses
-} from "@refina/griffel";
+import { makeResetStyles, makeStyles, mergeClasses } from "@refina/griffel";
 
 const rootClassName = makeResetStyles({
   fill: tokens.colorBrandForegroundInverted,
+});
 
-  "&.hovered path": {
-    fill: tokens.colorCompoundBrandBackgroundHover,
+const rootStyles = makeStyles({
+  disabled: { fill: tokens.colorNeutralForegroundDisabled },
+  notDisabled: {
+    "&.hovered path": {
+      fill: tokens.colorCompoundBrandBackgroundHover,
+    },
   },
 });
 
 export default {
-  root: mergeClasses(rootClassName),
+  root: (disabled: boolean) =>
+    mergeClasses(
+      rootClassName,
+      disabled ? rootStyles.disabled : rootStyles.notDisabled,
+    ),
 };

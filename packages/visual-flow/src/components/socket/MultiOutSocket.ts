@@ -17,7 +17,7 @@ export class MultiOutSocket extends Socket {
   }
 
   canDragFrom(): boolean {
-    return true;
+    return !this.disabled;
   }
   canDragRemove(): boolean {
     return false;
@@ -41,8 +41,6 @@ export class MultiOutSocket extends Socket {
   protected importData(_data: any): void {
     // do nothing
   }
-
-
 }
 
 socketCtors["MultiOutSocket"] = MultiOutSocket;
