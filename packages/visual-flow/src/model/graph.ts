@@ -609,7 +609,6 @@ export class Graph {
       if (!block.attached) {
         if (this.isMouseInsideGraph) {
           block.attach();
-          block.selected = false;
         } else {
           this.removeBlock(block);
         }
