@@ -11,7 +11,7 @@ export class VfCreator extends TriggerComponent<void> {
     styles.root(_);
     _._div(
       {
-        onmousedown: (ev) => {
+        onmousedown: ev => {
           ev.preventDefault();
           const block = factory();
 

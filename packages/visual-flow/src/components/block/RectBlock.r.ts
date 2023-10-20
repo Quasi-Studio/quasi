@@ -136,10 +136,10 @@ export class RectBlock extends Block {
       boardHeight: this.boardHeight,
       boardWidth: this.boardWidth,
       boardBorderRadius: this.boardBorderRadius,
-      leftSockets: this.leftSockets.map((s) => s.id),
-      rightSockets: this.rightSockets.map((s) => s.id),
-      topSockets: this.topSockets.map((s) => s.id),
-      bottomSockets: this.bottomSockets.map((s) => s.id),
+      leftSockets: this.leftSockets.map(s => s.id),
+      rightSockets: this.rightSockets.map(s => s.id),
+      topSockets: this.topSockets.map(s => s.id),
+      bottomSockets: this.bottomSockets.map(s => s.id),
     } satisfies RectBlockRecordData;
   }
   protected importSocket(direction: Direction, array: Socket[], socket: Socket) {
@@ -151,10 +151,10 @@ export class RectBlock extends Block {
     this.boardHeight = data.boardHeight;
     this.boardWidth = data.boardWidth;
     this.boardBorderRadius = data.boardBorderRadius;
-    data.leftSockets.forEach((id) => this.importSocket(Direction.LEFT, this.leftSockets, sockets[id]));
-    data.rightSockets.forEach((id) => this.importSocket(Direction.RIGHT, this.rightSockets, sockets[id]));
-    data.topSockets.forEach((id) => this.importSocket(Direction.TOP, this.topSockets, sockets[id]));
-    data.bottomSockets.forEach((id) => this.importSocket(Direction.BOTTOM, this.bottomSockets, sockets[id]));
+    data.leftSockets.forEach(id => this.importSocket(Direction.LEFT, this.leftSockets, sockets[id]));
+    data.rightSockets.forEach(id => this.importSocket(Direction.RIGHT, this.rightSockets, sockets[id]));
+    data.topSockets.forEach(id => this.importSocket(Direction.TOP, this.topSockets, sockets[id]));
+    data.bottomSockets.forEach(id => this.importSocket(Direction.BOTTOM, this.bottomSockets, sockets[id]));
     this.updateSocketPosition();
   }
 }

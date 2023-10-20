@@ -2,7 +2,11 @@
  * Calculate the position of items.
  * Additional `paddingScale*length` padding is added to the left and right.
  */
-export function spreadItems(length: number, itemNum: number, paddingScale: number) {
+export function spreadItems(
+  length: number,
+  itemNum: number,
+  paddingScale: number,
+) {
   const positions: number[] = [];
   const offset = ((1 - 2 * paddingScale) * length) / (itemNum + 1);
   let x = paddingScale * length;

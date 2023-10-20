@@ -1,8 +1,8 @@
 import { FUnderlineTextInput } from "@refina/fluentui";
 import { ref, view } from "refina";
 
-export default view((_) => {
-  _.forRange(15, (i) => {
+export default view(_ => {
+  _.forRange(15, i => {
     const r = ref<FUnderlineTextInput>();
     _.$cls`col-span-1 flex justify-center items-center border-b border-gray-500 cursor-text`;
     _._div(

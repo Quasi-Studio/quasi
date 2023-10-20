@@ -2,7 +2,7 @@ import type {
   BlockRecord,
   GraphRecord,
   LineRecord,
-  SocketRecord
+  SocketRecord,
 } from "../model";
 
 export type CtorMap<T> = Record<string, new () => T>;

@@ -6,7 +6,7 @@ import "@refina/fluentui-icons/arrowRedo.r.ts";
 
 const previewMode = d(false);
 
-export default view((_) => {
+export default view(_ => {
   _.$cls`flex items-center h-full`;
   _.div(() => {
     _.$cls`font-bold text-xl px-2`;
@@ -18,7 +18,7 @@ export default view((_) => {
         _.button(() => _.fiDocumentBulletList20Regular()) && open();
       },
       "File",
-      (_) => {
+      _ => {
         _.$cls`flex flex-col gap-4`;
         _.div(() => {
           _.fButton("New");

@@ -52,8 +52,6 @@ export class InSocket extends Socket {
   protected importData(_data: any): void {
     // do nothing
   }
-
-
 }
 
 socketCtors["InSocket"] = InSocket;

@@ -12,7 +12,7 @@ export class VfBlock extends OutputComponent {
       styles.root(model.selected, model.attached, model.predicting)(_);
       _.$css`top:${pageY}px;left:${pageX}px;z-index:${model.attached ? model.zIndex : 10000}`;
       _.$ref(model.ref) &&
-        _._div({}, (_) => {
+        _._div({}, _ => {
           styles.svg(_);
           _._svgSvg({}, () => {
             styles.bg(model.selected)(_);
@@ -21,20 +21,20 @@ export class VfBlock extends OutputComponent {
                 d: model.backgroudPath,
               });
 
-            _.for(model.allSockets, byIndex, (socket) => {
+            _.for(model.allSockets, byIndex, socket => {
               _.vfSocket(socket);
             });
           });
 
           _._div(
             {
-              onmousedown: (ev) => {
-                if(ev.defaultPrevented) ev.stopPropagation();
+              onmousedown: ev => {
+                if (ev.defaultPrevented) ev.stopPropagation();
               },
               // onmousemove: (ev) => {
               //   if (!model.dragging) ev.stopPropagation();
               // },
-              onmouseup: (ev) => {
+              onmouseup: ev => {
                 if (!model.selected) ev.stopPropagation();
               },
             },

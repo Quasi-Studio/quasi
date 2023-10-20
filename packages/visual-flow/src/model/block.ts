@@ -280,7 +280,7 @@ export abstract class Block extends ModelBase {
     }
   }
 
-  onMouseDown(targetSocket: Socket | null, preserveSelected:boolean): void {
+  onMouseDown(targetSocket: Socket | null, preserveSelected: boolean): void {
     if (targetSocket) {
       this.graph.clearSelectedBlocks();
       targetSocket.onMouseDown();

@@ -9,7 +9,7 @@ let graph = new Graph();
 const blockName = d("");
 const record = d("");
 
-app.use(FluentUI).use(Vf)((_) => {
+app.use(FluentUI).use(Vf)(_ => {
   _.$rootCss`position:fixed; top:0; left:0; right:0; bottom:0;`;
 
   _.$css`position:fixed;left:0;top:0;width:100%;height:5%;z-index:101;

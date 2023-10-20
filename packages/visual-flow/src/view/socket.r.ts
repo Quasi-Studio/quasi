@@ -10,7 +10,7 @@ export class VfSocket extends OutputComponent {
     styles.root(model.disabled)(_);
     _.$css`transform: translate(${model.blockDisplayX}px, ${model.blockDisplayY}px) scale(${model.graph.boardScale})`;
     _.$ref(model.ref) &&
-      _._svgG({}, (_) => {
+      _._svgG({}, _ => {
         _.$css`transform: rotate(${
           {
             [Direction.LEFT]: 180,

@@ -19,7 +19,7 @@ export class VfGraph extends OutputComponent {
     );
     _.$app.registerDocumentEventListener(
       "mousemove",
-      (ev) => {
+      ev => {
         model.setMousePos(ev);
         if (model.onMouseMove((ev.buttons & 1) !== 0)) {
           window.getSelection()?.removeAllRanges();
@@ -30,7 +30,7 @@ export class VfGraph extends OutputComponent {
         passive: true,
       },
     );
-    _.$app.registerDocumentEventListener("mousedown", (ev) => {
+    _.$app.registerDocumentEventListener("mousedown", ev => {
       model.setMousePos(ev);
       if (model.onMouseDown(ev.shiftKey)) {
         window.getSelection()?.removeAllRanges();
@@ -43,7 +43,7 @@ export class VfGraph extends OutputComponent {
       }
       return true;
     });
-    _.$app.registerDocumentEventListener("mouseup", (ev) => {
+    _.$app.registerDocumentEventListener("mouseup", ev => {
       model.setMousePos(ev);
       if (model.onMouseUp(ev.shiftKey)) {
         ev.preventDefault();
@@ -54,7 +54,7 @@ export class VfGraph extends OutputComponent {
     });
     _.$app.registerRootEventListener(
       "wheel",
-      (ev) => {
+      ev => {
         model.setMousePos(ev);
         if (!model.isMouseInsideGraph) {
           return;
@@ -84,25 +84,25 @@ export class VfGraph extends OutputComponent {
 
     styles.root(_);
     _.$ref(model.ref) &&
-      _._div({}, (_) => {
+      _._div({}, _ => {
         const { bg, fg } = model.displayLines;
 
         styles.bgSvg(_);
         _._svgSvg({}, () => {
-          _.for(bg, "id", (line) => {
+          _.for(bg, "id", line => {
             _.vfLine(line);
           });
         });
 
         styles.fgSvg(_);
         _._svgSvg({}, () => {
-          _.for(fg, "id", (line) => {
+          _.for(fg, "id", line => {
             _.vfLine(line);
           });
         });
       });
 
-    _.for(model.blocks, "id", (block) => {
+    _.for(model.blocks, "id", block => {
       _.vfBlock(block);
     });
   }
