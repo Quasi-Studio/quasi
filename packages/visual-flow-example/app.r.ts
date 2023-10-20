@@ -14,11 +14,11 @@ app.use(FluentUI).use(Vf)(_ => {
 
   _.$css`position:fixed;left:0;top:0;width:100%;height:5%;z-index:101;
     background-color:#ddd;border-bottom:3px gray solid`;
-  _._div({}, () => _._h3({}, "Visual Flow | Quasi Studio"));
+  _._div({}, _ => _._h3({}, "Visual Flow | Quasi Studio"));
 
   _.$css`position:fixed;left:0;top:5%;width:15%;height:100%;z-index:100;
     background-color:#fefefe;border-right:3px gray solid`;
-  _._div({}, () => {
+  _._div({}, _ => {
     _._h4({}, "Blocks");
 
     _.fTextInput(blockName, false, "Input block name here...");
@@ -29,7 +29,7 @@ app.use(FluentUI).use(Vf)(_ => {
       ([k, v]) => {
         _.vfCreator(
           graph,
-          () => _.fButton(v.displayName ?? k),
+          _ => _.fButton(v.displayName ?? k),
           () => {
             const block = new ComponentBlock();
             block.initialize(k, v);
@@ -61,14 +61,14 @@ app.use(FluentUI).use(Vf)(_ => {
   });
 
   _.$css`position:absolute;left:15%;top:5%;width:85%;height:95%;`;
-  _._div({}, () => _.vfGraph(graph));
+  _._div({}, _ => _.vfGraph(graph));
 });
 
 /*
  _.vfCreator(
       graph,
-      () => _.fButton("Block type 1"),
-      () => {
+      _ => _.fButton("Block type 1"),
+      _ => {
         const block = new RectBlock();
         block.boardHeight = 50;
         block.boardWidth = 200;
@@ -104,8 +104,8 @@ app.use(FluentUI).use(Vf)(_ => {
     );
     _.vfCreator(
       graph,
-      () => _.fButton("Block type 2"),
-      () => {
+      _ => _.fButton("Block type 2"),
+      _ => {
         const block = new InputBlock();
         block.boardHeight = 50;
         block.boardWidth = 200;
@@ -126,8 +126,8 @@ app.use(FluentUI).use(Vf)(_ => {
     );
     _.vfCreator(
       graph,
-      () => _.fButton("Input block"),
-      () => {
+      _ => _.fButton("Input block"),
+      _ => {
         const block = new RectBlock();
         block.boardHeight = 50;
         block.boardWidth = 200;
@@ -148,8 +148,8 @@ app.use(FluentUI).use(Vf)(_ => {
     );
     _.vfCreator(
       graph,
-      () => _.fButton("Validator block"),
-      () => {
+      _ => _.fButton("Validator block"),
+      _ => {
         const block = new RectBlock();
         block.boardHeight = 50;
         block.boardWidth = 200;
@@ -162,8 +162,8 @@ app.use(FluentUI).use(Vf)(_ => {
     );
     _.vfCreator(
       graph,
-      () => _.fButton("Validator block 2"),
-      () => {
+      _ => _.fButton("Validator block 2"),
+      _ => {
         const block = new RectBlock();
         block.boardHeight = 50;
         block.boardWidth = 200;

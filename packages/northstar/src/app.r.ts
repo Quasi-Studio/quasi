@@ -18,19 +18,19 @@ app.use(FluentUI).use(Vf).use(Basics)(_ => {
 
   _.$cls`absolute left-0 top-8 w-80 ${hasSelectedBlock ? "bottom-[40%]" : "bottom-0"}
    bg-gray-200 select-none z-[1000] border-r border-gray-400`;
-  _.div(() => {
+  _.div(_ => {
     _.$cls`flex items-center w-full bg-gray-300 pl-2 leading-7`;
     _.div("Blocks");
 
     _.$cls`overflow-y-scroll h-full`;
-    _.div(() => _.embed(blocksView));
+    _.div(_ => _.embed(blocksView));
   });
 
   if (hasSelectedBlock) {
     _.$cls`absolute left-0 bottom-0 w-80 h-2/5 border-t-4 border-gray-400 border-r border-gray-400 z-[1000]`;
-    _.div(() => {
+    _.div(_ => {
       _.$cls`flex items-center w-full bg-gray-300 pl-2 leading-7`;
-      _.div(() => {
+      _.div(_ => {
         _.t`Properties`;
 
         _.$cls`text-xs pl-3`;
@@ -38,10 +38,10 @@ app.use(FluentUI).use(Vf).use(Basics)(_ => {
       });
 
       _.$cls`overflow-y-scroll h-full bg-gray-200 grid grid-cols-5`;
-      _.div(() => _.embed(propertiesView));
+      _.div(_ => _.embed(propertiesView));
     });
   }
 
   _.$cls`absolute left-80 top-8 right-0 bottom-0`;
-  _._div({}, () => _.vfGraph(graph));
+  _._div({}, _ => _.vfGraph(graph));
 });

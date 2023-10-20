@@ -13,12 +13,12 @@ import { graph } from "../store";
 export default view(_ => {
   if (_.fAccordion("Special")) {
     _.$cls`flex flex-wrap justify-around`;
-    _.div(() => {
+    _.div(_ => {
       _.forRange(6, i => {
         _.$cls`my-1 border-2 border-transparent hover:border-gray-400`;
         _.vfCreator(
           graph,
-          () => {
+          _ => {
             _.img("https://via.placeholder.com/80x80?text=" + i);
             _.$cls`text-center text-sm`;
             _.div("Root");
@@ -49,10 +49,10 @@ export default view(_ => {
   }
   if (_.fAccordion("Components")) {
     _.$cls`flex flex-wrap justify-around`;
-    _.div(() => {
+    _.div(_ => {
       _.forRange(12, i => {
         _.$cls`my-1`;
-        _.div(() => {
+        _.div(_ => {
           _.img("https://via.placeholder.com/80x80?text=" + i);
           _.$cls`text-center text-sm overflow-hidden`;
           _.div("Text input");
@@ -62,10 +62,10 @@ export default view(_ => {
   }
   if (_.fAccordion("Views")) {
     _.$cls`flex flex-wrap justify-around`;
-    _.div(() => {
+    _.div(_ => {
       _.forRange(6, i => {
         _.$cls`my-1`;
-        _.div(() => {
+        _.div(_ => {
           _.img("https://via.placeholder.com/80x80?text=" + i);
           _.$cls`text-center text-sm`;
           _.div("View " + i);

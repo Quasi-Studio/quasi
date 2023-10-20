@@ -88,14 +88,14 @@ export class VfGraph extends OutputComponent {
         const { bg, fg } = model.displayLines;
 
         styles.bgSvg(_);
-        _._svgSvg({}, () => {
+        _._svgSvg({}, _ => {
           _.for(bg, "id", line => {
             _.vfLine(line);
           });
         });
 
         styles.fgSvg(_);
-        _._svgSvg({}, () => {
+        _._svgSvg({}, _ => {
           _.for(fg, "id", line => {
             _.vfLine(line);
           });

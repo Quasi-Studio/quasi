@@ -6,7 +6,7 @@ import styles from "./block.styles";
 @Vf.outputComponent("vfBlock")
 export class VfBlock extends OutputComponent {
   main(_: ComponentContext<this>, model: Block): void {
-    _.portal(() => {
+    _.portal(_ => {
       const { x: pageX, y: pageY } = model.pagePos;
 
       styles.root(model.selected, model.attached, model.predicting)(_);
@@ -14,7 +14,7 @@ export class VfBlock extends OutputComponent {
       _.$ref(model.ref) &&
         _._div({}, _ => {
           styles.svg(_);
-          _._svgSvg({}, () => {
+          _._svgSvg({}, _ => {
             styles.bg(model.selected)(_);
             _.$ref(model.bgRef) &&
               _._svgPath({

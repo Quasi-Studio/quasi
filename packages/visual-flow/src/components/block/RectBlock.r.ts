@@ -115,7 +115,7 @@ export class RectBlock extends Block {
   contentMain = (_: Context) => {
     styles.contentOuterWrapper(_);
     _.$css`width:${this.pageWidth}px;height:${this.pageHeight}px;`;
-    _._div({}, () => {
+    _._div({}, _ => {
       styles.contentInnerWrapper(_);
       _.$css`transform:scale(${this.graph.boardScale})`;
       _._div({}, this.content);
@@ -127,7 +127,7 @@ export class RectBlock extends Block {
     predictor.boardWidth = this.boardWidth;
     predictor.boardHeight = this.boardHeight;
     predictor.boardBorderRadius = this.boardBorderRadius;
-    predictor.content = () => {};
+    predictor.content = _ => {};
     return predictor;
   }
 

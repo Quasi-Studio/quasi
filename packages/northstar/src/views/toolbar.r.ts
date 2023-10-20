@@ -8,19 +8,19 @@ const previewMode = d(false);
 
 export default view(_ => {
   _.$cls`flex items-center h-full`;
-  _.div(() => {
+  _.div(_ => {
     _.$cls`font-bold text-xl px-2`;
     _.span("Quasi Studio");
 
     _.fDialog(
       (_, open) => {
         _.$cls`h-full flex items-center hover:bg-gray-300 px-2`;
-        _.button(() => _.fiDocumentBulletList20Regular()) && open();
+        _.button(_ => _.fiDocumentBulletList20Regular()) && open();
       },
       "File",
       _ => {
         _.$cls`flex flex-col gap-4`;
-        _.div(() => {
+        _.div(_ => {
           _.fButton("New");
           _.fButton("Open");
           _.fButton("Save");
@@ -32,13 +32,13 @@ export default view(_ => {
 
     console.warn(graph.canUndo, graph.canRedo);
     _.$cls`disabled:opacity-30 enabled:hover:bg-gray-300 px-2`;
-    _.button(() => _.fiArrowUndo20Filled(), !graph.canUndo) && graph.undo();
+    _.button(_ => _.fiArrowUndo20Filled(), !graph.canUndo) && graph.undo();
     _.$cls`disabled:opacity-30 enabled:hover:bg-gray-300 px-2`;
-    _.button(() => _.fiArrowRedo20Filled(), !graph.canRedo) && graph.redo();
+    _.button(_ => _.fiArrowRedo20Filled(), !graph.canRedo) && graph.redo();
   });
 
   _.$cls`absolute flex items-center h-full right-0 pr-4`;
-  _.div(() => {
+  _.div(_ => {
     _.span("Preview mode");
     _.fSwitch("", previewMode);
 
