@@ -12,12 +12,43 @@ import {
   Socket,
   blockCtors,
 } from "@quasi-dev/visual-flow";
-import { ComponentInfo } from "../types";
+import { ComponentInfo } from "@quasi-dev/block-data";
 import "@refina/fluentui";
 
 export class ComponentBlock extends RectBlock {
   componentId: string;
   info: ComponentInfo;
+  props: Record<string, any> = {};
+  primaryFilled = false;
+  socketMap = new Map<string, Socket>();
+
+  removeSocket(name: string) {
+    const socket = this.socketMap.get(name)!;
+    socket.allConnectedLines.forEach((l) => {
+      l.a.disconnectTo(l);
+      (l.b as Socket).disconnectTo(l);
+      this.graph.removeLine(l);
+    });
+    const sockets = this.getSocketsByDirection(socket.direction);
+    const index = sockets.indexOf(socket);
+    sockets.splice(index, 1);
+  }
+
+  updateSocket<T extends Socket>(
+    name: string,
+    ctor: new () => T,
+    direction: Direction,
+    data: Partial<T>,
+  ) {
+    let socket = this.socketMap.get(name);
+    if (!socket) {
+      socket = new ctor();
+      socket.label = name;
+      this.addSocket(direction, socket);
+    }
+    Object.assign(socket, data);
+  }
+
   initialize(componentId: string, info: ComponentInfo) {
     this.componentId = componentId;
     this.info = info;
@@ -82,8 +113,12 @@ export class ComponentBlock extends RectBlock {
       }
     }
 
-    this.boardWidth = Math.max(this.topSockets.length, this.bottomSockets.length) * 10 + 200;
-    this.boardHeight = Math.max(50, Math.max(this.leftSockets.length, this.rightSockets.length) * 50 + 10);
+    this.boardWidth =
+      Math.max(this.topSockets.length, this.bottomSockets.length) * 10 + 200;
+    this.boardHeight = Math.max(
+      50,
+      Math.max(this.leftSockets.length, this.rightSockets.length) * 50 + 10,
+    );
     this.updateSocketPosition();
   }
 

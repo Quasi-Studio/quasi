@@ -26,6 +26,6 @@ export const textInput = component(
   [],
   event("input", t.string),
   input("label", "string", "as-primary"),
-  output("value", "string", "as-required-socket"),
+  output("value", "string"),
   plugin("validator", "#input-validator"),
 );

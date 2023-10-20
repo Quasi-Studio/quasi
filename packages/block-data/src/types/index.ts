@@ -2,40 +2,36 @@ import { Direction } from "@quasi-dev/visual-flow";
 
 export type TypeInfo = string;
 
-export type PositionInfo =
-  | {
-      direction: Direction;
-      pos: "pre" | "post" | "default";
-    }
-  | "default";
+export type PositionInfo = Direction | null;
 
-export function position(
-  direction: Direction,
-  pos: "pre" | "post" | "default" = "default",
-): PositionInfo {
-  return {
-    direction,
-    pos,
-  };
-}
+//   | {
+//       direction: Direction;
+//       pos: "pre" | "post" | "default";
+//     }
+//   | "default";
 
-type ContentType =
-  | "required-socket"
-  | "optional-socket"
-  | "hidden-by-default"
-  | "as-primary"
-  | "as-primary-and-socket";
+// export function position(
+//   direction: Direction,
+//   pos: "pre" | "post" | "default" = "default",
+// ): PositionInfo {
+//   return {
+//     direction,
+//     pos,
+//   };
+// }
+
+type ContentDisplay = "as-socket" | "as-primary" | "as-primary-and-socket";
 
 export interface ContentInfo {
   name: string;
-  kind: ContentType;
+  kind: ContentDisplay;
   position: PositionInfo;
 }
 
 export function content(
   name: string = "inner",
-  kind: ContentType = "required-socket",
-  position: PositionInfo = "default",
+  kind: ContentDisplay = "as-socket",
+  position: PositionInfo = null,
 ): ContentInfo {
   return {
     name,
@@ -44,25 +40,21 @@ export function content(
   };
 }
 
-type DataKind =
-  | "as-required-socket"
-  | "as-optional-socket"
-  | "as-primary"
-  | "as-primary-and-socket";
+type InputDisplay = "as-socket" | "as-primary" | "as-primary-and-socket";
 
-export interface DataInfo {
+export interface InputInfo {
   name: string;
   dataType: TypeInfo;
-  kind: DataKind;
+  kind: InputDisplay;
   position: PositionInfo;
 }
 
-export function data(
+export function input(
   name: string,
   dataType: TypeInfo,
-  kind: DataKind = "as-optional-socket",
-  position: PositionInfo = "default",
-): DataInfo {
+  kind: InputDisplay = "as-socket",
+  position: PositionInfo = null,
+): InputInfo {
   return {
     name,
     dataType,
@@ -71,9 +63,51 @@ export function data(
   };
 }
 
-export const output = data;
-export const input = data;
-export const event = data;
+type OutputDisplay = "as-socket";
+
+export interface OutputInfo {
+  name: string;
+  dataType: TypeInfo;
+  kind: OutputDisplay;
+  position: PositionInfo;
+}
+
+export function output(
+  name: string,
+  dataType: TypeInfo,
+  kind: OutputDisplay = "as-socket",
+  position: PositionInfo = null,
+): OutputInfo {
+  return {
+    name,
+    dataType,
+    kind,
+    position,
+  };
+}
+
+type EventDisplay = "as-socket";
+
+export interface EventInfo {
+  name: string;
+  dataType: TypeInfo;
+  kind: EventDisplay;
+  position: PositionInfo;
+}
+
+export function event(
+  name: string,
+  dataType: TypeInfo,
+  kind: EventDisplay = "as-socket",
+  position: PositionInfo = null,
+): EventInfo {
+  return {
+    name,
+    dataType,
+    kind,
+    position,
+  };
+}
 
 export interface PluginInfo {
   name: string;
@@ -101,18 +135,18 @@ export interface ComponentInfo {
 
   contents: ContentInfo[];
 
-  events: DataInfo[];
-  inputs: DataInfo[];
-  outputs: DataInfo[];
+  events: EventInfo[];
+  inputs: InputInfo[];
+  outputs: OutputInfo[];
   plugins: PluginInfo[];
 }
 
 export function component(
   name: string,
   contents: ContentInfo[] | ContentInfo,
-  events: DataInfo[] | DataInfo = [],
-  inputs: DataInfo[] | DataInfo = [],
-  outputs: DataInfo[] | DataInfo = [],
+  events: EventInfo[] | EventInfo = [],
+  inputs: InputInfo[] | InputInfo = [],
+  outputs: OutputInfo[] | OutputInfo = [],
   plugins: PluginInfo[] | PluginInfo = [],
 ): ComponentInfo {
   function toArray<T>(v: T[] | T) {

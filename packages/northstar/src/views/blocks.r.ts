@@ -1,4 +1,4 @@
-import { RectBlock } from "@quasi-dev/visual-flow";
+import { Direction, InSocket, MultiOutSocket, PATH_IN_RECT, PATH_OUT_ELIPSE, PATH_OUT_RECT, RectBlock } from "@quasi-dev/visual-flow";
 import { view } from "refina";
 import { graph } from "../store";
 
@@ -17,6 +17,19 @@ export default view((_) => {
           },
           () => {
             const block = new RectBlock();
+            const socket1 = new InSocket();
+            socket1.path = PATH_IN_RECT;
+            socket1.type = "L";
+            socket1.disabled = true;
+            block.addSocket(Direction.LEFT, socket1);
+
+
+            const socket2 = new MultiOutSocket();
+            socket2.path = PATH_OUT_RECT;
+            socket2.type = "L";
+            socket2.disabled = false;
+            block.addSocket(Direction.RIGHT, socket2);
+
             //@ts-ignore
             block.name = "block " + i;
             block.boardWidth = 200;

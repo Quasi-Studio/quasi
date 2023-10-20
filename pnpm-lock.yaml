@@ -54,6 +54,9 @@ importers:
 
   packages/northstar:
     dependencies:
+      '@quasi-dev/block-data':
+        specifier: workspace:^
+        version: link:../block-data
       '@quasi-dev/visual-flow':
         specifier: workspace:^
         version: link:../visual-flow
@@ -63,6 +66,9 @@ importers:
       '@refina/fluentui':
         specifier: link:..\..\..\refina\packages\fluentui
         version: link:../../../refina/packages/fluentui
+      '@refina/fluentui-icons':
+        specifier: link:..\..\..\refina\packages\fluentui-icons
+        version: link:../../../refina/packages/fluentui-icons
       '@refina/griffel':
         specifier: link:..\..\..\refina\packages\griffel
         version: link:../../../refina/packages/griffel
