@@ -262,6 +262,7 @@ export class Graph {
     const index = this.blockZIndex.indexOf(block);
     if (index === -1) throw new Error("Block not found");
     this.blockZIndex.splice(index, 1);
+    this.selectedBlocks.delete(block);
     this.updateBlockZIndex();
   }
 
