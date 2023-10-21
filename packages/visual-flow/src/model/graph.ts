@@ -214,7 +214,7 @@ export class Graph {
     }
   }
 
-  protected state: State = idelState;
+  state: State = idelState;
   protected mouseDown: boolean = false;
   protected scaleEndTimeout: number = NaN;
   protected hoveredItem: Block | Socket | null = null;
