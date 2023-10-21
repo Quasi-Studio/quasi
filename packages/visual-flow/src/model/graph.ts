@@ -94,7 +94,11 @@ export class Graph {
     this.recordIndex++;
   }
   overwriteRecord() {
-    this.recordStack[this.recordIndex] = exportVf(this);
+    if (this.recordIndex < 0) {
+      this.pushRecord();
+    } else {
+      this.recordStack[this.recordIndex] = exportVf(this);
+    }
   }
 
   /**
@@ -612,6 +616,7 @@ export class Graph {
       if (!block.attached) {
         if (this.isMouseInsideGraph) {
           block.attach();
+          this.pushRecord();
         } else {
           this.removeBlock(block);
         }
