@@ -89,6 +89,7 @@ export abstract class Socket extends ModelBase {
       label: this.label,
       disabled: this.disabled,
       blockId: this.block.id,
+      path: this.path,
       data: this.exportData(),
     };
   }
@@ -98,6 +99,7 @@ export abstract class Socket extends ModelBase {
     this.type = record.type;
     this.label = record.label;
     this.disabled = record.disabled;
+    this.path = record.path;
     this.importData(record.data);
   }
 
@@ -111,5 +113,6 @@ export interface SocketRecord {
   label: string;
   disabled: boolean;
   blockId: number;
+  path: string;
   data: any;
 }
