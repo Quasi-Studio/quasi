@@ -1,2 +1,4 @@
-export * as flentuiBlocks from "./components";
+import * as blocksObj from "./components";
 export * from "./types";
+
+export default Object.entries(blocksObj);

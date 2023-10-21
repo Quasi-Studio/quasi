@@ -3,17 +3,28 @@ import {
   InSocket,
   MultiOutSocket,
   PATH_IN_ELIPSE,
+  PATH_IN_RECT,
+  PATH_OUT_ELIPSE,
   PATH_OUT_RECT,
   PATH_OUT_TRIANGLE,
-  SingleOutSocket,
-  Socket,
 } from "@quasi-dev/visual-flow";
-import { ComponentBlock } from "./ComponentBlock";
+import { ComponentBlock } from ".";
+import { updateSize } from "../utils";
 
 export function updateSockets(block: ComponentBlock) {
   const { info } = block;
 
   const { contents, events, inputs, outputs, plugins } = info;
+
+  block.updateSocket(
+    "",
+    InSocket,
+    Direction.LEFT,
+    {
+      type: "L",
+      path: PATH_IN_RECT,
+    },
+  )
 
   for (const content of contents) {
     if (content.kind === "as-primary") {
@@ -52,7 +63,7 @@ export function updateSockets(block: ComponentBlock) {
       block.updateSocket(
         input.name,
         InSocket,
-        input.position ?? Direction.TOP,
+        input.position ?? Direction.UP,
         {
           type: "D",
           path: PATH_IN_ELIPSE,
@@ -70,8 +81,10 @@ export function updateSockets(block: ComponentBlock) {
       output.position ?? Direction.BOTTOM,
       {
         type: "D",
-        path: PATH_IN_ELIPSE,
+        path: PATH_OUT_ELIPSE,
       },
     );
   }
+
+  updateSize(block);
 }
