@@ -225,8 +225,8 @@ export class Graph {
     }
     this.selectedBlocks.clear();
   }
-  addSelectedBlock(block: Block, preserveSelected: boolean) {
-    if (!preserveSelected) {
+  addSelectedBlock(block: Block, shiftKey: boolean) {
+    if (!shiftKey) {
       this.clearSelectedBlocks();
     }
     this.selectedBlocks.add(block);
@@ -328,13 +328,15 @@ export class Graph {
     }
   }
 
-  protected getDraggingSource(): null | readonly [Block, Socket | null] {
+  protected getDraggingSource(
+    blockOnly: boolean,
+  ): null | readonly [Block, Socket | null] {
     let socketTarget: Socket | null = null,
       minSocketDistanceSquare: number = Infinity;
     for (let i = this.blockZIndex.length - 1; i >= 0; i--) {
       const block = this.blockZIndex[i];
       if (!block) continue;
-      const result = block.getDraggingSource();
+      const result = block.getDraggingSource(blockOnly);
       if (result !== null) {
         if (Array.isArray(result)) {
           if (result[1] === -Infinity) {
@@ -464,7 +466,7 @@ export class Graph {
     return true;
   }
 
-  onMouseMove(mouseDown: boolean): boolean {
+  onMouseMove(mouseDown: boolean, shiftKey: boolean): boolean {
     if (mouseDown && !this.mouseDown) {
       return this.onMouseDown(false);
     }
@@ -474,7 +476,7 @@ export class Graph {
 
     this.updateBoardMoveSpeed();
     if (this.state.type === StateType.IDLE) {
-      const draggingSource = this.getDraggingSource();
+      const draggingSource = this.getDraggingSource(shiftKey);
       if (draggingSource) {
         this.setHoveredItem(draggingSource[1] ?? draggingSource[0]);
       } else {
@@ -554,21 +556,21 @@ export class Graph {
     return false;
   }
 
-  onMouseDown(preserveSelected: boolean) {
+  onMouseDown(shiftKey: boolean) {
     if (this.mouseDown) {
-      this.onMouseUp(preserveSelected);
+      this.onMouseUp(shiftKey);
     }
     this.mouseDown = true;
 
     this.state = idelState;
 
-    const hoveredBlock = this.getDraggingSource();
+    const hoveredBlock = this.getDraggingSource(shiftKey);
     if (hoveredBlock) {
-      hoveredBlock[0].onMouseDown(hoveredBlock[1], preserveSelected);
+      hoveredBlock[0].onMouseDown(hoveredBlock[1], shiftKey);
       return true;
     }
     if (this.isMouseInsideGraph) {
-      if (!preserveSelected) this.clearSelectedBlocks();
+      if (!shiftKey) this.clearSelectedBlocks();
       const pagePos = this.mousePagePos;
       this.state = {
         type: StateType.DRAGGING_BOARD,
@@ -582,7 +584,7 @@ export class Graph {
     return false;
   }
 
-  onMouseUp(preserveSelected: boolean) {
+  onMouseUp(shiftKey: boolean) {
     if (!this.mouseDown) {
       this.onMouseDown(false);
     }
@@ -614,10 +616,10 @@ export class Graph {
           this.removeBlock(block);
         }
       } else if (block.pendingClick) {
-        this.addSelectedBlock(block, preserveSelected);
+        this.addSelectedBlock(block, shiftKey);
         this.overwriteRecord();
       } else {
-        if (!preserveSelected) this.clearSelectedBlocks();
+        if (!shiftKey) this.clearSelectedBlocks();
         this.pushRecord();
       }
       block.pendingClick = false;

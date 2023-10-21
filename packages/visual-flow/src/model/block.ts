@@ -193,7 +193,7 @@ export abstract class Block extends ModelBase {
     return getNearestSocket(connectableSockets, blockPos)?.[0] ?? null;
   }
 
-  getDraggingSource(): null | Block | [Socket, number] {
+  getDraggingSource(blockOnly: boolean): null | Block | [Socket, number] {
     if (!this.attached) {
       return this;
     }
@@ -201,6 +201,8 @@ export abstract class Block extends ModelBase {
     const blockPos = this.pagePos2BlockPos(this.graph.mousePagePos);
 
     const isInside = this.isBlockPosInside(blockPos);
+
+    if(blockOnly) return isInside ? this : null;
 
     const draggableSockets = isInside
       ? this.allSockets.filter((s) => s.canDragFrom())

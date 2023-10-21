@@ -21,7 +21,7 @@ export class VfGraph extends OutputComponent {
       "mousemove",
       ev => {
         model.setMousePos(ev);
-        if (model.onMouseMove((ev.buttons & 1) !== 0)) {
+        if (model.onMouseMove((ev.buttons & 1) !== 0, ev.shiftKey)) {
           window.getSelection()?.removeAllRanges();
           _.$update();
         }
