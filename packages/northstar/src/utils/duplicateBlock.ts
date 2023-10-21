@@ -1,7 +1,9 @@
+import { GraphStateType } from "@quasi-dev/visual-flow";
 import { isComponentBlock } from "../blocks/component";
 import { graph } from "../store";
 
 export function hasBlocksToDuplicate() {
+  if (graph.state.type === GraphStateType.DRAGGING_BLOCK) return false;
   return [...graph.selectedBlocks].filter(isComponentBlock).length > 0;
 }
 
