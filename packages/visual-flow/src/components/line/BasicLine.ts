@@ -5,7 +5,8 @@ import { Point, rotate } from "../../types";
 const CTRL_POINT_OFFSET_SCALE = 0.8;
 const CTRL_POINT_OFFSET_MIN = 30;
 
-const ARROW_SCALE_TO_BOARD = 3;
+const ARROW_SCALE_TO_BOARD = 0.7;
+const ARROW_MIN_SCALE = 0.4;
 const ARROW_GRAPH_LENGTH_MAX = 25;
 const ARROW_GRAPH_WIDTH_MAX = 7;
 
@@ -26,7 +27,7 @@ export class BasicLine extends Line {
     let point2 = this.graphPosB;
 
     const lineOffset =
-      Math.min(1, this.graph.boardScale * ARROW_SCALE_TO_BOARD) *
+      Math.max(ARROW_MIN_SCALE, this.graph.boardScale * ARROW_SCALE_TO_BOARD) *
       ARROW_GRAPH_LENGTH_MAX;
 
     point2 = Point.moveFarther(point2, this.b.direction, lineOffset);
@@ -46,10 +47,10 @@ export class BasicLine extends Line {
 
   get arrowPath() {
     const arrowLength =
-      Math.min(1, this.graph.boardScale * ARROW_SCALE_TO_BOARD) *
+      Math.max(ARROW_MIN_SCALE, this.graph.boardScale * ARROW_SCALE_TO_BOARD) *
       ARROW_GRAPH_LENGTH_MAX;
     const arrowWidth =
-      Math.min(1, this.graph.boardScale * ARROW_SCALE_TO_BOARD) *
+      Math.max(ARROW_MIN_SCALE, this.graph.boardScale * ARROW_SCALE_TO_BOARD) *
       ARROW_GRAPH_WIDTH_MAX;
 
     const p0 = this.graphPosB;
