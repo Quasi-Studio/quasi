@@ -17,7 +17,7 @@ export class InSocket extends Socket {
     line.b = this;
   }
   disconnectTo(_line: Line): void {
-    throw new Error("Method not supported.");
+    this.connectedLine = null;
   }
 
   canDragFrom(): boolean {
