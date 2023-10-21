@@ -14,8 +14,12 @@ export class ComponentBlock extends RectBlock {
   componentType: string;
   info: ComponentInfo;
   props: Record<string, any> = {};
-  primaryFilled = false;
+
   socketMap = new Map<string, Socket>();
+
+  get primaryFilled() {
+    return false;
+  }
 
   removeSocket(name: string) {
     const socket = this.socketMap.get(name);
@@ -56,6 +60,21 @@ export class ComponentBlock extends RectBlock {
     const block = new ComponentBlock();
     block.initialize(this.componentType, this.info);
     return block;
+  }
+
+  protected exportData() {
+    return {
+      ...super.exportData(),
+      componentType: this.componentType,
+      info: this.info,
+      props: this.props,
+    };
+  }
+  protected importData(data: any, sockets: Record<number, Socket>): void {
+    super.importData(data, sockets);
+    this.componentType = data.componentType;
+    this.info = data.info;
+    this.props = data.props;
   }
 }
 
