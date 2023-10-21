@@ -67,7 +67,7 @@ export default view(_ => {
     _.embed(
       toolItem,
       "Reset",
-      _ => _.fiResizeLarge20Filled(),
+      _ => _.fiResizeLarge20Regular(),
       false,
       () => {
         graph.boardOffsetX = 0;
