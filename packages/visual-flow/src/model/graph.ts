@@ -13,7 +13,7 @@ const AUTO_MOVE_START_PADDING = 70;
 const AUTO_MOVE_SPEED_SCALE = 0.07;
 const AUTO_MOVE_SPEED_MAX = AUTO_MOVE_START_PADDING * AUTO_MOVE_SPEED_SCALE;
 
-export enum StateType {
+export enum GraphStateType {
   IDLE,
   DRAGGING_LINE,
   DRAGGING_BLOCK,
@@ -21,22 +21,22 @@ export enum StateType {
 }
 
 type IdelState = {
-  type: StateType.IDLE;
+  type: GraphStateType.IDLE;
 };
 type DraggingLineState = {
-  type: StateType.DRAGGING_LINE;
+  type: GraphStateType.DRAGGING_LINE;
   line: Line;
   predictor: Line;
 };
 type DraggingBlockState = {
-  type: StateType.DRAGGING_BLOCK;
+  type: GraphStateType.DRAGGING_BLOCK;
   block: Block;
   predictor: Block;
   offsetBoardX0: number;
   offsetBoardY0: number;
 };
 type DraggingBoardState = {
-  type: StateType.DRAGGING_BOARD;
+  type: GraphStateType.DRAGGING_BOARD;
   startPageX: number;
   startPageY: number;
   initialBoardOffsetX: number;
@@ -48,7 +48,7 @@ type State =
   | DraggingBlockState
   | DraggingBoardState;
 
-const idelState = { type: StateType.IDLE } as const;
+const idelState = { type: GraphStateType.IDLE } as const;
 
 export class Graph {
   app: App;
@@ -191,14 +191,14 @@ export class Graph {
     fg: Line[];
   } {
     const state = this.state;
-    if (state.type === StateType.DRAGGING_LINE) {
+    if (state.type === GraphStateType.DRAGGING_LINE) {
       return {
         bg: this.lines.filter(
           (line) => line !== state.line && line !== state.predictor,
         ),
         fg: [state.predictor, state.line],
       };
-    } else if (state.type === StateType.DRAGGING_BLOCK) {
+    } else if (state.type === GraphStateType.DRAGGING_BLOCK) {
       const linkedLines = state.block.allSockets.flatMap(
         (s) => s.allConnectedLines,
       );
@@ -310,18 +310,18 @@ export class Graph {
     this.boardOffsetY += this.boardMoveSpeed.y / this.boardScale;
     this.syncGraphAndBoardMousePos();
     this.updatePosition();
-    if (this.state.type === StateType.DRAGGING_BLOCK) {
+    if (this.state.type === GraphStateType.DRAGGING_BLOCK) {
       this.updateDraggingBlockPosition(this.state);
-    } else if (this.state.type === StateType.DRAGGING_LINE) {
+    } else if (this.state.type === GraphStateType.DRAGGING_LINE) {
       this.updateDraggingLinePosition(this.state);
     }
   }, AUTO_MOVE_INTERVAL);
   protected updateBoardMoveSpeed() {
     if (
       this.mouseDown &&
-      ((this.state.type === StateType.DRAGGING_BLOCK &&
+      ((this.state.type === GraphStateType.DRAGGING_BLOCK &&
         this.state.block.attached) ||
-        this.state.type === StateType.DRAGGING_LINE)
+        this.state.type === GraphStateType.DRAGGING_LINE)
     ) {
       this.boardMoveSpeed = {
         x: calcMoveSpeed(this.mouseGraphPos.x, this.el!.clientWidth),
@@ -418,7 +418,7 @@ export class Graph {
     predictor.moveToTop();
     const { x: blockBoardX, y: blockBoardY } = block.boardPos;
     this.state = {
-      type: StateType.DRAGGING_BLOCK,
+      type: GraphStateType.DRAGGING_BLOCK,
       block,
       predictor: predictor,
       offsetBoardX0: this.mouseBoardPos.x - blockBoardX,
@@ -432,7 +432,7 @@ export class Graph {
 
     line.dragging = true;
     this.state = {
-      type: StateType.DRAGGING_LINE,
+      type: GraphStateType.DRAGGING_LINE,
       line,
       predictor,
     };
@@ -479,7 +479,7 @@ export class Graph {
     }
 
     this.updateBoardMoveSpeed();
-    if (this.state.type === StateType.IDLE) {
+    if (this.state.type === GraphStateType.IDLE) {
       const draggingSource = this.getDraggingSource(shiftKey);
       if (draggingSource) {
         this.setHoveredItem(draggingSource[1] ?? draggingSource[0]);
@@ -488,7 +488,7 @@ export class Graph {
       }
       return false;
     }
-    if (this.state.type === StateType.DRAGGING_LINE) {
+    if (this.state.type === GraphStateType.DRAGGING_LINE) {
       if (!mouseDown) {
         throw new Error("Not dragging line");
       }
@@ -510,7 +510,7 @@ export class Graph {
       predictor.updatePosition();
       return false;
     }
-    if (this.state.type === StateType.DRAGGING_BLOCK) {
+    if (this.state.type === GraphStateType.DRAGGING_BLOCK) {
       if (!mouseDown) {
         throw new Error("Not dragging block");
       }
@@ -539,7 +539,7 @@ export class Graph {
 
       return false;
     }
-    if (this.state.type === StateType.DRAGGING_BOARD) {
+    if (this.state.type === GraphStateType.DRAGGING_BOARD) {
       if (!mouseDown) {
         throw new Error("Not dragging board");
       }
@@ -577,7 +577,7 @@ export class Graph {
       if (!shiftKey) this.clearSelectedBlocks();
       const pagePos = this.mousePagePos;
       this.state = {
-        type: StateType.DRAGGING_BOARD,
+        type: GraphStateType.DRAGGING_BOARD,
         startPageX: pagePos.x,
         startPageY: pagePos.y,
         initialBoardOffsetX: this.boardOffsetX,
@@ -594,15 +594,15 @@ export class Graph {
     }
     this.mouseDown = false;
 
-    if (this.state.type === StateType.IDLE) {
+    if (this.state.type === GraphStateType.IDLE) {
       return false;
     }
-    if (this.state.type === StateType.DRAGGING_BOARD) {
+    if (this.state.type === GraphStateType.DRAGGING_BOARD) {
       this.state = idelState;
       this.pushRecord();
       return true;
     }
-    if (this.state.type === StateType.DRAGGING_BLOCK) {
+    if (this.state.type === GraphStateType.DRAGGING_BLOCK) {
       const { block, predictor } = this.state;
       this.removeBlock(predictor);
 
@@ -631,7 +631,7 @@ export class Graph {
       this.state = idelState;
       return true;
     }
-    if (this.state.type === StateType.DRAGGING_LINE) {
+    if (this.state.type === GraphStateType.DRAGGING_LINE) {
       const { line, predictor } = this.state;
       const targetSocket = this.getDraggingTarget(line);
       if (!line.neverLeaves && targetSocket) {
