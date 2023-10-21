@@ -632,6 +632,8 @@ export class Graph {
       if (!line.neverLeaves && targetSocket) {
         targetSocket.connectTo(line);
         line.dragging = false;
+        this.moveBlockToTop(targetSocket.block);
+        this.updateBlockZIndex();
       } else {
         line.a.disconnectTo(line);
         this.removeLine(line);
