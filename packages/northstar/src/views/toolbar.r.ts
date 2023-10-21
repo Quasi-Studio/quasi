@@ -1,12 +1,15 @@
+import "@refina/fluentui-icons/addSquareMultiple.r.ts";
+import "@refina/fluentui-icons/alignLeft.r.ts";
+import "@refina/fluentui-icons/alignTop.r.ts";
 import "@refina/fluentui-icons/arrowRedo.r.ts";
 import "@refina/fluentui-icons/arrowUndo.r.ts";
 import "@refina/fluentui-icons/delete.r.ts";
 import "@refina/fluentui-icons/documentBulletList.r.ts";
 import "@refina/fluentui-icons/resizeLarge.r.ts";
-import "@refina/fluentui-icons/addSquareMultiple.r.ts";
 import { Content, d, view } from "refina";
 import { graph } from "../store";
 import { hasBlocksToRemove, removeBlocks } from "../utils";
+import { alignBlocksToLeft, alignBlocksToTop, hasBlocksToAlign } from "../utils/align.r";
 import { duplicateBlocks, hasBlocksToDuplicate } from "../utils/duplicateBlock";
 
 const previewMode = d(false);
@@ -78,6 +81,9 @@ export default view(_ => {
 
     _.embed(toolItem, "Duplicate", _ => _.fiAddSquareMultiple20Regular(), !hasBlocksToDuplicate(), duplicateBlocks);
     _.embed(toolItem, "Remove", _ => _.fiDelete20Regular(), !hasBlocksToRemove(), removeBlocks);
+
+    _.embed(toolItem, "Align left", _ => _.fiAlignLeft20Regular(), !hasBlocksToAlign(), alignBlocksToLeft);
+    _.embed(toolItem, "Align top", _ => _.fiAlignTop20Regular(), !hasBlocksToAlign(), alignBlocksToTop);
   });
 
   _.$cls`absolute flex items-center h-full right-0`;
