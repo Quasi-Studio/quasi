@@ -3,7 +3,7 @@ import { makeResetStyles, makeStyles, mergeClasses } from "@refina/griffel";
 
 const curveClassName = makeResetStyles({
   stroke: tokens.colorCompoundBrandStroke,
-  strokeWidth: tokens.strokeWidthThick,
+  strokeWidth: tokens.strokeWidthThicker,
   fill: "none",
 });
 
