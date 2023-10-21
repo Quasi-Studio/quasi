@@ -88,12 +88,12 @@ export class Graph {
     importVf(this.recordStack[++this.recordIndex], this);
   }
 
-  protected pushRecord() {
+  pushRecord() {
     this.recordStack = this.recordStack.slice(0, this.recordIndex + 1);
     this.recordStack.push(exportVf(this));
     this.recordIndex++;
   }
-  protected overwriteRecord() {
+  overwriteRecord() {
     this.recordStack[this.recordIndex] = exportVf(this);
   }
 
