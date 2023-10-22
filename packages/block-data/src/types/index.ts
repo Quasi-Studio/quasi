@@ -65,9 +65,12 @@ export function input(
 
 type OutputDisplay = "as-socket";
 
+type CodeProcessor = (value: string) => string;
+
 export interface OutputInfo {
   name: string;
   dataType: TypeInfo;
+  getter: CodeProcessor;
   kind: OutputDisplay;
   position: PositionInfo;
 }
@@ -75,12 +78,14 @@ export interface OutputInfo {
 export function output(
   name: string,
   dataType: TypeInfo,
+  getter: CodeProcessor,
   kind: OutputDisplay = "as-socket",
   position: PositionInfo = null,
 ): OutputInfo {
   return {
     name,
     dataType,
+    getter,
     kind,
     position,
   };
@@ -109,6 +114,32 @@ export function event(
   };
 }
 
+type MethodDisplay = "as-socket";
+
+export interface MethodInfo {
+  name: string;
+  argTypes: TypeInfo[];
+  kind: MethodDisplay;
+  position: PositionInfo;
+  call: CodeProcessor;
+}
+
+export function method(
+  name: string,
+  argTypes: TypeInfo[],
+  call: CodeProcessor,
+  kind: MethodDisplay = "as-socket",
+  position: PositionInfo = null,
+): MethodInfo {
+  return {
+    name,
+    argTypes: argTypes,
+    kind,
+    position,
+    call,
+  };
+}
+
 export interface PluginInfo {
   name: string;
   dataType: TypeInfo;
@@ -133,20 +164,25 @@ export interface ComponentInfo {
    */
   name: string;
 
+  modelAllocator: string | null;
+
   contents: ContentInfo[];
 
-  events: EventInfo[];
   inputs: InputInfo[];
   outputs: OutputInfo[];
+  events: EventInfo[];
+  methods: MethodInfo[];
   plugins: PluginInfo[];
 }
 
 export function component(
   name: string,
+  modelAllocator: string | null,
   contents: ContentInfo[] | ContentInfo,
-  events: EventInfo[] | EventInfo = [],
   inputs: InputInfo[] | InputInfo = [],
   outputs: OutputInfo[] | OutputInfo = [],
+  events: EventInfo[] | EventInfo = [],
+  methods: MethodInfo[] | MethodInfo = [],
   plugins: PluginInfo[] | PluginInfo = [],
 ): ComponentInfo {
   function toArray<T>(v: T[] | T) {
@@ -154,10 +190,12 @@ export function component(
   }
   return {
     name,
+    modelAllocator,
     contents: toArray(contents),
-    events: toArray(events),
     inputs: toArray(inputs),
     outputs: toArray(outputs),
+    events: toArray(events),
+    methods: toArray(methods),
     plugins: toArray(plugins),
   };
 }
@@ -170,5 +208,5 @@ export const t = {
 };
 
 export function outputWrap(name: string) {
-  return component(name, content("inner", "as-primary-and-socket"));
+  return component(name, null, content("inner", "as-primary-and-socket"));
 }

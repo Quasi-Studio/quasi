@@ -3,6 +3,7 @@ import {
   content,
   event,
   input,
+  method,
   output,
   outputWrap,
   plugin,
@@ -11,6 +12,7 @@ import {
 
 export const button = component(
   "Button",
+  null,
   content("inner", "as-primary-and-socket"),
   event("click", "void"),
 );
@@ -23,9 +25,11 @@ export const span = outputWrap("Span");
 
 export const textInput = component(
   "Text input",
+  `new q.TextInput()`,
   [],
-  event("input", t.string),
   input("label", "string", "as-primary"),
-  output("value", "string"),
+  output("value", "string", (id) => id),
+  event("input", t.string),
+  method("clear", [], (id) => `${id}.clear()`),
   plugin("validator", "#input-validator"),
 );
