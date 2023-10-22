@@ -79,6 +79,9 @@ importers:
       '@refina/tsconfig':
         specifier: link:..\..\..\refina\packages\tsconfig
         version: link:../../../refina/packages/tsconfig
+      '@types/wicg-file-system-access':
+        specifier: ^2023.10.2
+        version: 2023.10.2
       autoprefixer:
         specifier: ^10.4.15
         version: 10.4.16(postcss@8.4.31)
@@ -475,6 +478,10 @@ packages:
     resolution: {integrity: sha512-SPlobFgbidfIeOYlzXiEjSYeIJiOCthv+9tSQVpvk4PAdIIc+2SmjNVzWXk9t0Y7dl73Zdf+OgXKHX9XtkqUpw==}
     dependencies:
       undici-types: 5.25.3
+    dev: true
+
+  /@types/wicg-file-system-access@2023.10.2:
+    resolution: {integrity: sha512-nSiK8qt0O7sQmDcW3HYfvya7GDoD6ipgdcUFzk3QN+UBIqXeNg38Nh6VnKv7EIPfkVETRiquyMskCbpxUzgX1Q==}
     dev: true
 
   /abbrev@1.1.1:

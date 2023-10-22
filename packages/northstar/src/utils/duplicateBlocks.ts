@@ -12,8 +12,8 @@ export function duplicateBlocks() {
   graph.clearSelectedBlocks();
   blocks.forEach((block) => {
     const newBlock = block.ctor();
-    newBlock.boardX = block.boardX + 10;
-    newBlock.boardY = block.boardY + 10;
+    newBlock.boardX = block.boardX + 100;
+    newBlock.boardY = block.boardY + 100;
     newBlock.attached = true;
     graph.addBlock(newBlock);
     graph.moveBlockToTop(newBlock);

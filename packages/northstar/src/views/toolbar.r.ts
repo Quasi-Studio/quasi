@@ -8,9 +8,16 @@ import "@refina/fluentui-icons/documentBulletList.r.ts";
 import "@refina/fluentui-icons/resizeLarge.r.ts";
 import { Content, d, view } from "refina";
 import { graph } from "../store";
-import { hasBlocksToRemove, removeBlocks } from "../utils";
-import { alignBlocksToLeft, alignBlocksToTop, hasBlocksToAlign } from "../utils/align.r";
-import { duplicateBlocks, hasBlocksToDuplicate } from "../utils/duplicateBlock";
+import {
+  alignBlocksToLeft,
+  alignBlocksToTop,
+  duplicateBlocks,
+  hasBlocksToAlign,
+  hasBlocksToDuplicate,
+  hasBlocksToRemove,
+  removeBlocks,
+  saveAs,
+} from "../utils";
 
 const previewMode = d(false);
 
@@ -41,13 +48,15 @@ export default view(_ => {
         );
       },
       "File",
-      _ => {
+      (_, close) => {
         _.$cls`flex flex-col gap-4`;
         _.div(_ => {
           _.fButton("New");
           _.fButton("Open");
           _.fButton("Save");
-          _.fButton("Save as");
+          if (_.fButton("Save as")) {
+            saveAs().then(close);
+          }
         });
       },
       (_, close) => {},
