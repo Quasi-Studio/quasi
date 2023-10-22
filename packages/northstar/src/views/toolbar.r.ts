@@ -6,6 +6,7 @@ import "@refina/fluentui-icons/arrowUndo.r.ts";
 import "@refina/fluentui-icons/delete.r.ts";
 import "@refina/fluentui-icons/documentBulletList.r.ts";
 import "@refina/fluentui-icons/resizeLarge.r.ts";
+import "@refina/fluentui-icons/drawerArrowDownload.r.ts";
 import { Content, d, view } from "refina";
 import { graph } from "../store";
 import {
@@ -18,6 +19,7 @@ import {
   removeBlocks,
   saveAs,
 } from "../utils";
+import { toOutput } from "../utils/toOutpus";
 
 const previewMode = d(false);
 
@@ -30,6 +32,8 @@ const toolItem = view((_, tip: string, buttonContent: Content, disabled: boolean
     tip,
   );
 });
+
+let buildOutput = "";
 
 export default view(_ => {
   _.$cls`flex items-center h-full`;
@@ -59,8 +63,35 @@ export default view(_ => {
           }
         });
       },
-      (_, close) => {},
     );
+
+    if (
+      _.fDialog(
+        (_, open) => {
+          _.fTooltip(
+            _ =>
+              _.$cls`h-full flex items-center hover:bg-gray-300 px-2` &&
+              _.button(_ => _.fiDrawerArrowDownload20Regular()) &&
+              open(),
+            "Build",
+          );
+        },
+        "Build",
+        (_, close) => {
+          _.$cls`block h-56 w-full border-2 overflow-y-scroll rounded shadow-inner border-gray-400 p-3 font-[Consolas]`;
+          _._textarea(
+            {
+              onwheel: e => {
+                e.stopPropagation();
+              },
+            },
+            buildOutput,
+          );
+        },
+      )
+    ) {
+      buildOutput = _.$ev ? JSON.stringify(toOutput(), undefined, 2) : "Building...";
+    }
 
     _.embed(
       toolItem,

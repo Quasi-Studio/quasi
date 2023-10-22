@@ -1,5 +1,5 @@
 import { GraphStateType } from "@quasi-dev/visual-flow";
-import { isComponentBlock } from "../blocks/component";
+import { isComponentBlock } from "../blocks/component/block";
 import { graph } from "../store";
 
 export function hasBlocksToDuplicate() {

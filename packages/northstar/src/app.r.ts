@@ -6,7 +6,7 @@ import { graph } from "./store";
 import blocksView from "./views/blocks.r";
 import propertiesView from "./views/properties.r";
 import toolbarView from "./views/toolbar.r";
-import { isComponentBlock } from "./blocks/component";
+import { isComponentBlock } from "./blocks/component/block";
 
 app.use(FluentUI).use(Vf).use(Basics)(_ => {
   _.$rootCls`fixed top-0 left-0 right-0 bottom-0`;

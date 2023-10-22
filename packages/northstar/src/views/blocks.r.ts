@@ -1,5 +1,5 @@
 import { byProp, view } from "refina";
-import { ComponentBlock } from "../blocks/component";
+import { ComponentBlock } from "../blocks/component/block";
 import { graph } from "../store";
 import special from "../blocks/special";
 import blocks from "@quasi-dev/block-data";
