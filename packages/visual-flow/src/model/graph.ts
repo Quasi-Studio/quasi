@@ -77,6 +77,7 @@ export class Graph {
     this.boardScale = 1;
   }
   undo() {
+    this.selectedBlocks.clear();
     if (this.recordIndex === 0) {
       this.reset();
       --this.recordIndex;
@@ -85,6 +86,7 @@ export class Graph {
     }
   }
   redo() {
+    this.selectedBlocks.clear();
     importVf(this.recordStack[++this.recordIndex], this);
   }
 
