@@ -7,6 +7,7 @@ import blocksView from "./views/blocks.r";
 import propertiesView from "./views/properties.r";
 import toolbarView from "./views/toolbar.r";
 import { isComponentBlock } from "./blocks/component/block";
+import { duplicateBlocks, hasBlocksToDuplicate, hasBlocksToRemove, removeBlocks } from "./utils";
 
 app.use(FluentUI).use(Vf).use(Basics)(_ => {
   _.$rootCls`fixed top-0 left-0 right-0 bottom-0`;
@@ -50,4 +51,28 @@ app.use(FluentUI).use(Vf).use(Basics)(_ => {
 
   _.$cls`absolute left-80 top-8 right-0 bottom-0`;
   _._div({}, _ => _.vfGraph(graph));
+
+  _.$app.registerDocumentEventListener("keydown", ev => {
+    if (ev.ctrlKey) {
+      if (ev.key === "z" && graph.canUndo) {
+        graph.undo();
+        _.$update();
+      } else if (ev.key === "y" && graph.canRedo) {
+        graph.redo();
+        _.$update();
+      } else if (ev.key === "s") {
+        // save
+      } else if (ev.key === "d" && hasBlocksToDuplicate()) {
+        duplicateBlocks();
+        _.$update();
+      }
+      ev.preventDefault();
+    } else if (ev.key === "Delete") {
+      if (hasBlocksToRemove()) {
+        removeBlocks();
+        _.$update();
+      }
+      ev.preventDefault();
+    }
+  });
 });
