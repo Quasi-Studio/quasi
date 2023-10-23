@@ -1,7 +1,21 @@
-import { exportVf } from "@quasi-dev/visual-flow";
+import { exportVf, importVf } from "@quasi-dev/visual-flow";
 import { graph } from "../store";
 
 export async function open() {
+  const [handle] = await window.showOpenFilePicker({
+    types: [
+      {
+        description: "Quasi Studio Project",
+        accept: {
+          "application/json": [".q.json"],
+        },
+      },
+    ],
+  });
+  const file = await handle.getFile();
+  const json = await file.text();
+  const vf = JSON.parse(json);
+  importVf(vf, graph);
 }
 
 export async function saveAs() {

@@ -16,6 +16,7 @@ import {
   hasBlocksToAlign,
   hasBlocksToDuplicate,
   hasBlocksToRemove,
+  open,
   removeBlocks,
   saveAs,
 } from "../utils";
@@ -56,11 +57,9 @@ export default view(_ => {
         _.$cls`flex flex-col gap-4`;
         _.div(_ => {
           _.fButton("New");
-          _.fButton("Open");
+          _.fButton("Open") && open().then(close);
           _.fButton("Save");
-          if (_.fButton("Save as")) {
-            saveAs().then(close);
-          }
+          _.fButton("Save as") && saveAs().then(close);
         });
       },
     );
