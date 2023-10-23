@@ -19,7 +19,10 @@ export function getContent(block: ComponentBlock) {
         onclick: ev => ev.stopPropagation(),
         onkeydown: ev => ev.stopPropagation(),
       },
-      _ => _.fUnderlineTextInput(block.primaryValue, false, info.name) && updateSockets(block),
+      _ =>
+        _.$css`font-family: Consolas` &&
+        _.fUnderlineTextInput(block.primaryValue, false, info.name) &&
+        updateSockets(block),
     );
   };
 }
