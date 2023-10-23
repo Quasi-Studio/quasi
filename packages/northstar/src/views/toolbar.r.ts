@@ -22,7 +22,7 @@ import {
 } from "../utils";
 import { toOutput } from "../utils/toOutpus";
 
-const previewMode = d(false);
+export const previewMode = d(false);
 
 const toolItem = view((_, tip: string, buttonContent: Content, disabled: boolean, callback: () => void) => {
   _.fTooltip(
