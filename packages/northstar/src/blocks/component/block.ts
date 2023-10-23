@@ -86,6 +86,10 @@ export class ComponentBlock extends RectBlock {
     this.componentType = data.componentType;
     this.info = data.info;
     this.props = data.props;
+    this.content = getContent(this);
+    for(const socket of this.allSockets){
+      this.socketMap.set(socket.label, socket);
+    }
   }
 }
 
