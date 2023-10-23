@@ -14,6 +14,8 @@ export const button = component(
   "Button",
   null,
   content("inner", "as-primary-and-socket"),
+  [],
+  [],
   event("click", "void"),
 );
 
