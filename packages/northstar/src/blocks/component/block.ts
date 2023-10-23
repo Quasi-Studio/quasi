@@ -7,6 +7,8 @@ import {
 } from "@quasi-dev/visual-flow";
 import "@refina/fluentui";
 import { updateSockets } from "./updateSockets";
+import { d } from "refina";
+import { getContent } from "./getContent.r";
 
 export class ComponentBlock extends RectBlock {
   isComponentBlock = true;
@@ -17,8 +19,9 @@ export class ComponentBlock extends RectBlock {
 
   socketMap = new Map<string, Socket>();
 
+  primaryValue = d.trim("");
   get primaryFilled() {
-    return false;
+    return this.primaryValue.value !== "";
   }
 
   removeSocket(name: string) {
@@ -47,12 +50,20 @@ export class ComponentBlock extends RectBlock {
       this.addSocket(direction, socket);
       this.socketMap.set(name, socket);
     }
+    if (data.disabled) {
+      socket.allConnectedLines.forEach((l) => {
+        l.a.disconnectTo(l);
+        (l.b as Socket).disconnectTo(l);
+        this.graph.removeLine(l);
+      });
+    }
     Object.assign(socket, data);
   }
 
   initialize(componentType: string, info: ComponentInfo) {
     this.componentType = componentType;
     this.info = info;
+    this.content = getContent(this);
     updateSockets(this);
   }
 
