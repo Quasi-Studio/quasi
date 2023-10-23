@@ -3,7 +3,7 @@ import {
   isComponentBlock,
   toBlockOutput,
 } from "../blocks/component";
-import { graph } from "../store";
+import { currentGraph } from "../store";
 
 export interface ViewOutput {
   name: string;
@@ -19,7 +19,7 @@ export function toOutput() {
     views: [
       {
         name: "view1",
-        components: graph.blocks.filter(isComponentBlock).map(toBlockOutput),
+        components: currentGraph.blocks.filter(isComponentBlock).map(toBlockOutput),
       },
     ],
   } satisfies QuasiOutput;

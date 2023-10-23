@@ -1,6 +1,6 @@
 import { byProp, view } from "refina";
 import { ComponentBlock } from "../blocks/component/block";
-import { graph } from "../store";
+import { currentGraph } from "../store";
 import special from "../blocks/special";
 import blocks from "@quasi-dev/block-data";
 
@@ -13,7 +13,7 @@ export default view(_ => {
         ([k]: any) => k,
         ([k, v]) => {
           _.vfCreator(
-            graph,
+            currentGraph,
             _ => {
               _.$cls`my-1`;
               _.div(_ => {
@@ -39,7 +39,7 @@ export default view(_ => {
         ([k]: any) => k,
         ([k, v]) => {
           _.vfCreator(
-            graph,
+            currentGraph,
             _ => {
               _.$cls`my-1`;
               _.div(_ => {

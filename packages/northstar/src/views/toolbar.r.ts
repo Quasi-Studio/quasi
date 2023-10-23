@@ -8,7 +8,7 @@ import "@refina/fluentui-icons/documentBulletList.r.ts";
 import "@refina/fluentui-icons/resizeLarge.r.ts";
 import "@refina/fluentui-icons/drawerArrowDownload.r.ts";
 import { Content, d, view } from "refina";
-import { graph } from "../store";
+import { currentGraph } from "../store";
 import {
   alignBlocksToLeft,
   alignBlocksToTop,
@@ -96,15 +96,15 @@ export default view(_ => {
       toolItem,
       "Undo",
       _ => _.fiArrowUndo20Filled(),
-      !graph.canUndo,
-      () => graph.undo(),
+      !currentGraph.canUndo,
+      () => currentGraph.undo(),
     );
     _.embed(
       toolItem,
       "Redo",
       _ => _.fiArrowRedo20Filled(),
-      !graph.canRedo,
-      () => graph.redo(),
+      !currentGraph.canRedo,
+      () => currentGraph.redo(),
     );
     _.embed(
       toolItem,
@@ -112,9 +112,9 @@ export default view(_ => {
       _ => _.fiResizeLarge20Regular(),
       false,
       () => {
-        graph.boardOffsetX = 0;
-        graph.boardOffsetY = 0;
-        graph.boardScale = 1;
+        currentGraph.boardOffsetX = 0;
+        currentGraph.boardOffsetY = 0;
+        currentGraph.boardScale = 1;
       },
     );
 

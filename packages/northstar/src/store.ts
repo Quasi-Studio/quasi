@@ -1,3 +1,3 @@
 import { Graph } from "@quasi-dev/visual-flow";
 
-export const graph = new Graph();
+export const currentGraph = new Graph();
