@@ -9,6 +9,8 @@ import toolbarView from "./views/toolbar.r";
 import { isComponentBlock } from "./blocks/component/block";
 import { duplicateBlocks, hasBlocksToDuplicate, hasBlocksToRemove, removeBlocks } from "./utils";
 
+document.body.spellcheck = false;
+
 app.use(FluentUI).use(Vf).use(Basics)(_ => {
   _.$rootCls`fixed top-0 left-0 right-0 bottom-0`;
 
