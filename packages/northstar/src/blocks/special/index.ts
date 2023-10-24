@@ -1,4 +1,5 @@
 import { ExprBlock } from "./expr";
+import { ImpBlock } from "./imp";
 import { IfElseBlock } from "./if.r";
 import { RootBlock } from "./root.r";
 import { StringBlock } from "./string";
@@ -8,4 +9,5 @@ export default Object.entries({
   string: StringBlock,
   expr: ExprBlock,
   "if-else": IfElseBlock,
+  imperative: ImpBlock,
 });
