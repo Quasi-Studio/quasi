@@ -10,7 +10,7 @@ export class StringBlock extends FuncBlockBase {
 
   getSlots() {
     const template = this.inputValue.value;
-    const matches = template.matchAll(/\{[a-zA-Z_]+\}/g);
+    const matches = template.matchAll(/\{[a-zA-Z0-9_]+\}/g);
     return [...matches].map((match) => match[0].slice(1, -1));
   }
 }
