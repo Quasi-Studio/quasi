@@ -10,10 +10,16 @@ export function getContent(block: ComponentBlock) {
   const info =
     inputs.find(input => input.kind === "as-primary" || input.kind === "as-primary-and-socket") ??
     contents.find(content => content.kind === "as-primary" || content.kind === "as-primary-and-socket");
-  if (!info) return (_: Context) => {};
-  return (_: Context) => {
-    _.$cls`mx-2 text-sm text-gray-600`;
+
+  const title = (_: Context) => {
+    _.$cls`mx-2 text-sm`;
     _.span(name);
+  };
+
+  if (!info) return title;
+  return (_: Context) => {
+    _.$cls`text-gray-600`
+    title(_);
 
     _._span(
       {
