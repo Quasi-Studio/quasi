@@ -5,9 +5,10 @@ import {
   input,
   method,
   output,
-  outputWrap,
+  contentWrapper,
   plugin,
   t,
+  layer,
 } from "../types";
 
 export const button = component(
@@ -19,11 +20,11 @@ export const button = component(
   event("click", "void"),
 );
 
-export const p = outputWrap("Paragraph");
+export const p = contentWrapper("Paragraph");
 
-export const div = outputWrap("Div");
+export const div = layer("Div");
 
-export const span = outputWrap("Span");
+export const span = contentWrapper("Span");
 
 export const textInput = component(
   "TextInput",

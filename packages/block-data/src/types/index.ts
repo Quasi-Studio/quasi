@@ -178,7 +178,7 @@ export interface ComponentInfo {
 export function component(
   name: string,
   modelAllocator: string | null,
-  contents: ContentInfo[] | ContentInfo,
+  contents: ContentInfo[] | ContentInfo = [],
   inputs: InputInfo[] | InputInfo = [],
   outputs: OutputInfo[] | OutputInfo = [],
   events: EventInfo[] | EventInfo = [],
@@ -207,6 +207,10 @@ export const t = {
   union: (a: TypeInfo, b: TypeInfo) => a + "|" + b,
 };
 
-export function outputWrap(name: string) {
+export function contentWrapper(name: string) {
   return component(name, null, content("inner", "as-primary-and-socket"));
+}
+
+export function layer(name: string) {
+  return component(name, null, content("inner", "as-socket"));
 }
