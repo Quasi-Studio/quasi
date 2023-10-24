@@ -7,11 +7,18 @@ const DRAGGING_START_PADDING = 20;
 
 @Vf.triggerComponent("vfCreator")
 export class VfCreator extends TriggerComponent<void> {
-  main(_: ComponentContext<this>, graph: Graph, inner: D<Content>, factory: () => Block): void {
+  main(
+    _: ComponentContext<this>,
+    graph: Graph,
+    inner: D<Content>,
+    factory: () => Block,
+    disabled: D<boolean> = false,
+  ): void {
     styles.root(_);
     _._div(
       {
         onmousedown: ev => {
+          if (disabled) return;
           ev.preventDefault();
           const block = factory();
 
