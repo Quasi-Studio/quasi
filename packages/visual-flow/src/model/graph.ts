@@ -12,6 +12,7 @@ const AUTO_MOVE_INTERVAL = 10;
 const AUTO_MOVE_START_PADDING = 70;
 const AUTO_MOVE_SPEED_SCALE = 0.07;
 const AUTO_MOVE_SPEED_MAX = AUTO_MOVE_START_PADDING * AUTO_MOVE_SPEED_SCALE;
+const GRID_SIZE = 25;
 
 export enum GraphStateType {
   IDLE,
@@ -440,6 +441,13 @@ export class Graph {
     };
   }
 
+  toGridPos(pos: Point) {
+    return {
+      x: Math.round(pos.x / GRID_SIZE) * GRID_SIZE,
+      y: Math.round(pos.y / GRID_SIZE) * GRID_SIZE,
+    };
+  }
+
   onScaling(scaleDelta: number) {
     if (
       (this.boardScale <= BOARD_SCALE_MIN && scaleDelta < 0) ||
@@ -605,7 +613,7 @@ export class Graph {
       return true;
     }
     if (this.state.type === GraphStateType.DRAGGING_BLOCK) {
-      const { block, predictor } = this.state;
+      const { block, predictor, offsetBoardX0, offsetBoardY0 } = this.state;
       this.removeBlock(predictor);
 
       const dockingTarget = this.getDockingTarget(block);
@@ -614,6 +622,14 @@ export class Graph {
           dockingTarget;
         block.dockTo(blockToDock, dockingDirection);
       }
+
+      const { x: boardX0, y: boardY0 } = this.mouseBoardPos;
+      const newBlockBoardPos = this.toGridPos({
+        x: boardX0 - offsetBoardX0,
+        y: boardY0 - offsetBoardY0,
+      });
+      block.setBoardPos(newBlockBoardPos);
+      block.updatePosition();
 
       if (!block.attached) {
         if (this.isMouseInsideGraph) {
