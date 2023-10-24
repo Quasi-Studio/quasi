@@ -129,7 +129,7 @@ export default view(_ => {
   _.$cls`flex font-[Consolas] absolute left-1/2 h-full items-center`;
   _.div(
     previewMode.value
-      ? "Preview"
+      ? "Preview App"
       : _ => {
           _.span("Graph:");
           if (currentViewId === "app") {
