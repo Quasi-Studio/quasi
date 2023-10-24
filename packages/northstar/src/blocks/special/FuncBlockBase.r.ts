@@ -46,7 +46,7 @@ export abstract class FuncBlockBase extends RectBlock {
         _.$css`--fontFamilyBase: Consolas,'Segoe UI', 'Segoe UI Web (West European)', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif`;
         (this.useTextarea
           ? _.$css`margin-top:4px;max-width:180px` && _.fTextarea(this.inputValue, false, this.placeholder, "none")
-          : _.$css`min-height:24px` && _.fUnderlineTextInput(this.inputValue, false, this.placeholder)) &&
+          : _.$css`min-height:24px;margin-left:-4px` && _.fUnderlineTextInput(this.inputValue, false, this.placeholder)) &&
           this.updateSockets();
       },
     );

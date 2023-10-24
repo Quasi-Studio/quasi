@@ -23,7 +23,7 @@ export function getContent(block: ComponentBlock) {
         onkeydown: ev => ev.stopPropagation(),
       },
       _ => {
-        _.$css`font-family: Consolas; max-width: 120px` &&
+        _.$css`font-family: Consolas; max-width: 108px; padding-left:4px` &&
           _.fUnderlineTextInput(block.primaryValue, false, info.name) &&
           updateSockets(block);
       },
