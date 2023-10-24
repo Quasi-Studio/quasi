@@ -42,7 +42,7 @@ app.use(FluentUI).use(Vf).use(Basics)(_ => {
         _.$cls`flex items-center w-full bg-gray-300 pl-2 leading-7`;
         _.div("Blocks");
 
-        _.$cls`overflow-y-scroll h-full`;
+        _.$cls`overflow-y-scroll h-full pb-16`;
         _.div(_ => _.embed(blocksView));
       });
 

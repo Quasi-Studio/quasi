@@ -8,7 +8,7 @@ import "@refina/fluentui-icons/documentBulletList.r.ts";
 import "@refina/fluentui-icons/resizeLarge.r.ts";
 import "@refina/fluentui-icons/drawerArrowDownload.r.ts";
 import { Content, d, view } from "refina";
-import { currentGraph } from "../store";
+import { currentGraph, currentViewId } from "../store";
 import {
   alignBlocksToLeft,
   alignBlocksToTop,
@@ -126,7 +126,7 @@ export default view(_ => {
   });
 
   _.$cls`flex font-[Consolas] absolute left-1/2 h-full items-center`;
-  _.div(previewMode.value ? "Preview" : "Graph");
+  _.div(previewMode.value ? "Preview" : `Graph: ${currentViewId}`);
 
   _.$cls`absolute flex items-center h-full right-0`;
   _.div(_ => {

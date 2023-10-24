@@ -4,6 +4,7 @@ import { IfBlockOutput, IfElseBlock } from "./if.r";
 import { RootBlock, RootBlockOutput } from "./root.r";
 import { StringBlock } from "./string";
 import { FuncBlockOutput } from "./FuncBlockBase.r";
+import { ViewBlock } from "./view.r";
 
 export default Object.entries({
   root: RootBlock,
@@ -16,4 +17,5 @@ export default Object.entries({
 export type SpecialBlockOutput =
   | RootBlockOutput
   | FuncBlockOutput
-  | IfBlockOutput;
+  | IfBlockOutput
+  | ViewBlock;

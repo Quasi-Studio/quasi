@@ -1,8 +1,10 @@
-import { byProp, view } from "refina";
-import { ComponentBlock } from "../blocks/component/block";
-import { currentGraph } from "../store";
-import special from "../blocks/special";
 import blocks from "@quasi-dev/block-data";
+import "@refina/fluentui-icons/edit.r.ts";
+import { byProp, bySelf, view } from "refina";
+import { ComponentBlock } from "../blocks/component/block";
+import special from "../blocks/special";
+import { ViewBlock } from "../blocks/special/view.r";
+import { createNewView, currentGraph, setCurrentView, views } from "../store";
 
 export default view(_ => {
   if (_.fAccordionDefaultOpen("Special")) {
@@ -61,14 +63,51 @@ export default view(_ => {
   if (_.fAccordionDefaultOpen("Views")) {
     _.$cls`grid grid-cols-3 justify-items-center`;
     _.div(_ => {
-      _.forRange(6, i => {
+      _.for(views.keys(), bySelf, id => {
         _.$cls`my-1`;
-        _.div(_ => {
-          _.img("https://via.placeholder.com/80x80?text=" + i);
-          _.$cls`text-center text-sm`;
-          _.div("View " + i);
-        });
+        _.vfCreator(
+          currentGraph,
+          _ => {
+            _.img("https://via.placeholder.com/80x80?text=" + id);
+            _.$cls`text-center text-sm flex-nowrap`;
+            _.div(_ => {
+              _.t(id);
+              _.$cls`float-right mr-1 hover:bg-gray-300`;
+              _._div(
+                {
+                  onmousedown: ev => ev.stopPropagation(),
+                  onclick: () => {
+                    setCurrentView(id);
+                    _.$update();
+                  },
+                },
+                _ => _.fiEdit20Regular(),
+              );
+            });
+          },
+          () => {
+            const block = new ViewBlock();
+            block.viewName = id;
+            return block;
+          },
+          id === "app",
+        );
       });
+      _.$cls`my-1 hover:border-2 hover:border-gray-400`;
+      _._div(
+        {
+          onclick: () => {
+            const id = createNewView();
+            setCurrentView(id);
+            _.$update();
+          },
+        },
+        _ => {
+          _.img("https://via.placeholder.com/80x80?text=%2B");
+          _.$cls`w-full text-center text-sm flex-nowrap`;
+          _.div("New View");
+        },
+      );
     });
   }
 });
