@@ -1,14 +1,17 @@
 import { GraphStateType } from "@quasi-dev/visual-flow";
-import { isComponentBlock } from "../blocks/component/block";
 import { currentGraph } from "../store";
+
+function isDuplicateable(block: any) {
+  return block.duplicateable;
+}
 
 export function hasBlocksToDuplicate() {
   if (currentGraph.state.type === GraphStateType.DRAGGING_BLOCK) return false;
-  return [...currentGraph.selectedBlocks].filter(isComponentBlock).length > 0;
+  return [...currentGraph.selectedBlocks].filter(isDuplicateable).length > 0;
 }
 
 export function duplicateBlocks() {
-  const blocks = [...currentGraph.selectedBlocks].filter(isComponentBlock);
+  const blocks = [...currentGraph.selectedBlocks].filter(isDuplicateable);
   currentGraph.clearSelectedBlocks();
   blocks.forEach((block) => {
     const newBlock = block.ctor();

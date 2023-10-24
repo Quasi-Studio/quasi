@@ -13,6 +13,9 @@ import { getContent } from "./getContent.r";
 export class ComponentBlock extends RectBlock {
   isComponentBlock = true;
 
+  removable = true;
+  duplicateable = true;
+
   componentType: string;
   info: ComponentInfo;
   props: Record<string, any> = {};
@@ -87,7 +90,7 @@ export class ComponentBlock extends RectBlock {
     this.info = data.info;
     this.props = data.props;
     this.content = getContent(this);
-    for(const socket of this.allSockets){
+    for (const socket of this.allSockets) {
       this.socketMap.set(socket.label, socket);
     }
   }
