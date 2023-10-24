@@ -26,7 +26,7 @@ export const div = outputWrap("Div");
 export const span = outputWrap("Span");
 
 export const textInput = component(
-  "Text input",
+  "TextInput",
   `new q.TextInput()`,
   [],
   input("label", "string", "as-primary"),
