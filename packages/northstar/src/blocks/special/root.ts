@@ -5,7 +5,6 @@ import {
   RectBlock,
   blockCtors,
 } from "@quasi-dev/visual-flow";
-import { updateSize } from "../utils";
 
 export class RootBlock extends RectBlock {
   constructor() {
@@ -17,9 +16,11 @@ export class RootBlock extends RectBlock {
     outSocket.path = PATH_OUT_RECT;
 
     this.addSocket(Direction.RIGHT, outSocket);
-
-    updateSize(this);
   }
+
+  boardWidth = 200;
+  boardHeight = 50;
+
   ctor() {
     return new RootBlock();
   }

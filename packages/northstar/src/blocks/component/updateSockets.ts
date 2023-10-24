@@ -9,7 +9,6 @@ import {
   PATH_OUT_TRIANGLE,
 } from "@quasi-dev/visual-flow";
 import { ComponentBlock } from "./block";
-import { updateSize } from "../utils";
 
 export function updateSockets(block: ComponentBlock) {
   const { info } = block;
@@ -85,6 +84,4 @@ export function updateSockets(block: ComponentBlock) {
       },
     );
   }
-
-  updateSize(block);
 }

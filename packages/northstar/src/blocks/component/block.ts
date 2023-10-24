@@ -22,6 +22,9 @@ export class ComponentBlock extends RectBlock {
 
   socketMap = new Map<string, Socket>();
 
+  boardWidth = 200;
+  boardHeight = 50;
+
   primaryValue = d.trim("");
   get primaryFilled() {
     return this.primaryValue.value !== "";

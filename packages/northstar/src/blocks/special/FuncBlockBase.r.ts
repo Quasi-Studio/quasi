@@ -22,8 +22,8 @@ export abstract class FuncBlockBase extends RectBlock {
   removable = true;
   duplicateable = true;
 
-  boardWidth: number = 210;
-  boardHeight: number = 55;
+  boardWidth: number = 200;
+  boardHeight: number = 50;
 
   useTextarea: boolean = false;
   inputValue = d("");
