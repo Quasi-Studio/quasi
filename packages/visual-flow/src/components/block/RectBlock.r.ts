@@ -115,6 +115,7 @@ export class RectBlock extends Block {
   contentMain = (_: Context) => {
     styles.contentOuterWrapper(_);
     _.$css`width:${this.pageWidth}px;height:${this.pageHeight}px;`;
+    _.$css`padding:${8 * this.graph.boardScale}px;`;
     _._div({}, _ => {
       styles.contentInnerWrapper(_);
       _.$css`transform:scale(${this.graph.boardScale})`;
