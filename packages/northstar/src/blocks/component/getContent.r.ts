@@ -12,7 +12,10 @@ export function getContent(block: ComponentBlock) {
     contents.find(content => content.kind === "as-primary" || content.kind === "as-primary-and-socket");
   if (!info) return (_: Context) => {};
   return (_: Context) => {
-    _._div(
+    _.$cls`mx-2 text-sm text-gray-600`;
+    _.span(name);
+
+    _._span(
       {
         onmousedown: ev => ev.stopPropagation(),
         onmouseup: ev => ev.stopPropagation(),
@@ -20,9 +23,6 @@ export function getContent(block: ComponentBlock) {
         onkeydown: ev => ev.stopPropagation(),
       },
       _ => {
-        _.$cls`mx-2 text-sm text-gray-600`
-        _.span(name);
-
         _.$css`font-family: Consolas; max-width: 120px` &&
           _.fUnderlineTextInput(block.primaryValue, false, info.name) &&
           updateSockets(block);
