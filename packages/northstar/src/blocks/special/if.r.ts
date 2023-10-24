@@ -2,14 +2,14 @@ import {
   Block,
   Direction,
   InSocket,
-  MultiOutSocket,
   PATH_IN_ELIPSE,
   PATH_IN_TRIANGLE,
   PATH_OUT_TRIANGLE,
   RectBlock,
-  blockCtors,
+  SingleOutSocket,
+  blockCtors
 } from "@quasi-dev/visual-flow";
-import { Context, d } from "refina";
+import { Context } from "refina";
 
 export class IfElseBlock extends RectBlock {
   ctor(): Block {
@@ -27,19 +27,19 @@ export class IfElseBlock extends RectBlock {
 
     const inputSocket = new InSocket();
     inputSocket.type = "E";
-    inputSocket.label = "input";
+    inputSocket.label = "when";
     inputSocket.path = PATH_IN_TRIANGLE;
     this.addSocket(Direction.UP, inputSocket);
 
-    const thenSocket = new MultiOutSocket();
+    const thenSocket = new SingleOutSocket();
     thenSocket.type = "D";
-    thenSocket.label = "output";
+    thenSocket.label = "then";
     thenSocket.path = PATH_OUT_TRIANGLE;
     this.addSocket(Direction.DOWN, thenSocket);
 
-    const elseSocket = new MultiOutSocket();
+    const elseSocket = new SingleOutSocket();
     elseSocket.type = "D";
-    elseSocket.label = "output";
+    elseSocket.label = "else";
     elseSocket.path = PATH_OUT_TRIANGLE;
     this.addSocket(Direction.DOWN, elseSocket);
   }

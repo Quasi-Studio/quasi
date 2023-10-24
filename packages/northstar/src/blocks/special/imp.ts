@@ -1,10 +1,23 @@
-import { Block, blockCtors } from "@quasi-dev/visual-flow";
+import { Block, Direction, InSocket, MultiOutSocket, PATH_IN_TRIANGLE, PATH_OUT_TRIANGLE, SingleOutSocket, blockCtors } from "@quasi-dev/visual-flow";
 import { FuncBlockBase } from "./FuncBlockBase.r";
 
 export class ImpBlock extends FuncBlockBase {
   constructor() {
     super();
     this.boardHeight = 80;
+
+    const inputSocket = new InSocket();
+    inputSocket.type = "E";
+    inputSocket.label = "when";
+    inputSocket.path = PATH_IN_TRIANGLE;
+    this.addSocket(Direction.LEFT, inputSocket);
+
+    const thenSocket = new SingleOutSocket();
+    thenSocket.type = "D";
+    thenSocket.label = "then";
+    thenSocket.path = PATH_OUT_TRIANGLE;
+    this.addSocket(Direction.RIGHT, thenSocket);
+
     this.updateSocketPosition();
   }
 
