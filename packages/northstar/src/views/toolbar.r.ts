@@ -5,10 +5,11 @@ import "@refina/fluentui-icons/arrowRedo.r.ts";
 import "@refina/fluentui-icons/arrowUndo.r.ts";
 import "@refina/fluentui-icons/delete.r.ts";
 import "@refina/fluentui-icons/documentBulletList.r.ts";
-import "@refina/fluentui-icons/resizeLarge.r.ts";
 import "@refina/fluentui-icons/drawerArrowDownload.r.ts";
+import "@refina/fluentui-icons/edit.r.ts";
+import "@refina/fluentui-icons/resizeLarge.r.ts";
 import { Content, d, view } from "refina";
-import { currentGraph, currentViewId } from "../store";
+import { currentGraph, currentViewId, setCurrentViewId } from "../store";
 import {
   alignBlocksToLeft,
   alignBlocksToTop,
@@ -126,7 +127,24 @@ export default view(_ => {
   });
 
   _.$cls`flex font-[Consolas] absolute left-1/2 h-full items-center`;
-  _.div(previewMode.value ? "Preview" : `Graph: ${currentViewId}`);
+  _.div(
+    previewMode.value
+      ? "Preview"
+      : _ => {
+          _.span("Graph:");
+          if (currentViewId === "app") {
+            _.$cls`ml-1`;
+            _.span("app");
+          } else {
+            _._span(
+              {
+                onkeydown: ev => ev.stopPropagation(),
+              },
+              _ => _.fUnderlineTextInput(currentViewId) && setCurrentViewId(_.$ev),
+            );
+          }
+        },
+  );
 
   _.$cls`absolute flex items-center h-full right-0`;
   _.div(_ => {

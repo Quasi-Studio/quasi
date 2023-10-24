@@ -28,3 +28,8 @@ export function setCurrentView(id: string) {
   currentGraph = views.get(id)?.graph || new Graph();
   views.set(id, { graph: currentGraph });
 }
+export function setCurrentViewId(id: string) {
+  views.set(id, views.get(currentViewId)!);
+  views.delete(currentViewId);
+  currentViewId = id;
+}
