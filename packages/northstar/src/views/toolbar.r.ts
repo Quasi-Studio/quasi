@@ -125,11 +125,8 @@ export default view(_ => {
     _.embed(toolItem, "Align top", _ => _.fiAlignTop20Regular(), !hasBlocksToAlign(), alignBlocksToTop);
   });
 
-  _.$cls`absolute flex justify-center items-center w-full h-full`;
-  _.div(_ => {
-    _.$cls`font-[Consolas]`
-    _.span(previewMode.value ? "Preview" : "Graph");
-  });
+  _.$cls`font-[Consolas] absolute left-1/2`;
+  _.div(previewMode.value ? "Preview" : "Graph");
 
   _.$cls`absolute flex items-center h-full right-0`;
   _.div(_ => {
