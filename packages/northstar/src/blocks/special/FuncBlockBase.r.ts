@@ -8,16 +8,19 @@ import {
   Socket,
 } from "@quasi-dev/visual-flow";
 import { Context, d } from "refina";
+import { SpecialBlock } from "./base";
 
-export abstract class FuncBlockBase extends RectBlock {
+export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
   constructor() {
     super();
-    const outSocket = new MultiOutSocket();
-    outSocket.type = "D";
-    outSocket.label = "output";
-    outSocket.path = PATH_OUT_ELIPSE;
-    this.addSocket(Direction.DOWN, outSocket);
+    this.outputSocket = new MultiOutSocket();
+    this.outputSocket.type = "D";
+    this.outputSocket.label = "output";
+    this.outputSocket.path = PATH_OUT_ELIPSE;
+    this.addSocket(Direction.DOWN, this.outputSocket);
   }
+
+  outputSocket: MultiOutSocket;
 
   removable = true;
   duplicateable = true;
@@ -46,21 +49,21 @@ export abstract class FuncBlockBase extends RectBlock {
         _.$css`--fontFamilyBase: Consolas,'Segoe UI', 'Segoe UI Web (West European)', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif`;
         (this.useTextarea
           ? _.$css`margin-top:4px;max-width:180px` && _.fTextarea(this.inputValue, false, this.placeholder, "none")
-          : _.$css`min-height:24px;margin-left:-4px` && _.fUnderlineTextInput(this.inputValue, false, this.placeholder)) &&
-          this.updateSockets();
+          : _.$css`min-height:24px;margin-left:-4px` &&
+            _.fUnderlineTextInput(this.inputValue, false, this.placeholder)) && this.updateInputSockets();
       },
     );
   };
 
   abstract getSlots(): string[];
 
-  sockets: Record<string, InSocket> = {};
-  updateSockets() {
+  inputSockets: Record<string, InSocket> = {};
+  updateInputSockets() {
     const slots = this.getSlots();
     const newSockets: Record<string, InSocket> = {};
     for (const slot of slots) {
-      if (this.sockets[slot]) {
-        newSockets[slot] = this.sockets[slot];
+      if (this.inputSockets[slot]) {
+        newSockets[slot] = this.inputSockets[slot];
       } else {
         const socket = new InSocket();
         socket.type = "D";
@@ -70,9 +73,9 @@ export abstract class FuncBlockBase extends RectBlock {
         this.addSocket(Direction.UP, socket);
       }
     }
-    for (const key in this.sockets) {
+    for (const key in this.inputSockets) {
       if (!newSockets[key]) {
-        const socket = this.sockets[key];
+        const socket = this.inputSockets[key];
         socket.allConnectedLines.forEach(line => {
           line.a.disconnectTo(line);
           (line.b as Socket).disconnectTo(line);
@@ -83,7 +86,7 @@ export abstract class FuncBlockBase extends RectBlock {
         sockets.splice(index, 1);
       }
     }
-    this.sockets = newSockets;
+    this.inputSockets = newSockets;
     this.updateSocketPosition();
   }
 
@@ -96,4 +99,57 @@ export abstract class FuncBlockBase extends RectBlock {
     this.inputValue.value = data.inputValue;
     // this.updateSockets();
   }
+
+  abstract type: FuncBlockTypes;
+
+  toOutput(): FuncBlockOutput {
+    const inputs = [];
+    for (const [slot, socket] of Object.entries(this.inputSockets)) {
+      if (socket.connectedLine) {
+        inputs.push({
+          slot,
+          name: socket.connectedLine.a.label,
+          blockId: socket.connectedLine.a.block.id,
+        });
+      }
+    }
+
+    return {
+      type: this.type,
+      id: this.id,
+      value: this.inputValue.value,
+      inputs,
+      output:
+        this.outputSocket.allConnectedLines?.map(l => ({
+          blockId: (l.b as Socket).block.id,
+          name: (l.b as Socket).label,
+        })) ?? [],
+    };
+  }
+}
+
+export type FuncBlockTypes = "expr" | "imp" | "string";
+
+export interface FuncBlockOutput {
+  type: FuncBlockTypes;
+  id: number;
+  value: string;
+  inputs: {
+    /**
+     * connected block id
+     */
+    blockId: number;
+    /**
+     * connected line start end socket name
+     */
+    name: string;
+    /**
+     * slot name. i.e. function parameter name
+     */
+    slot: string;
+  }[];
+  output: {
+    blockId: number;
+    name: string;
+  }[];
 }

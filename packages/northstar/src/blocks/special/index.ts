@@ -1,8 +1,9 @@
 import { ExprBlock } from "./expr";
 import { ImpBlock } from "./imp";
-import { IfElseBlock } from "./if.r";
-import { RootBlock } from "./root.r";
+import { IfBlockOutput, IfElseBlock } from "./if.r";
+import { RootBlock, RootBlockOutput } from "./root.r";
 import { StringBlock } from "./string";
+import { FuncBlockOutput } from "./FuncBlockBase.r";
 
 export default Object.entries({
   root: RootBlock,
@@ -11,3 +12,8 @@ export default Object.entries({
   "if-else": IfElseBlock,
   imperative: ImpBlock,
 });
+
+export type SpecialBlockOutput =
+  | RootBlockOutput
+  | FuncBlockOutput
+  | IfBlockOutput;

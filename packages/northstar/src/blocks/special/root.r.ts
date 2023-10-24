@@ -1,22 +1,19 @@
-import {
-  Direction,
-  MultiOutSocket,
-  PATH_OUT_RECT,
-  RectBlock,
-  blockCtors,
-} from "@quasi-dev/visual-flow";
+import { Direction, MultiOutSocket, PATH_OUT_RECT, RectBlock, Socket, blockCtors } from "@quasi-dev/visual-flow";
 import { Context } from "refina";
+import { SpecialBlock } from "./base";
 
-export class RootBlock extends RectBlock {
+export class RootBlock extends RectBlock implements SpecialBlock {
+  outSocket: MultiOutSocket;
+
   constructor() {
     super();
 
-    const outSocket = new MultiOutSocket();
+    this.outSocket = new MultiOutSocket();
 
-    outSocket.type = "L";
-    outSocket.path = PATH_OUT_RECT;
+    this.outSocket.type = "L";
+    this.outSocket.path = PATH_OUT_RECT;
 
-    this.addSocket(Direction.RIGHT, outSocket);
+    this.addSocket(Direction.RIGHT, this.outSocket);
   }
 
   boardWidth = 200;
@@ -32,6 +29,26 @@ export class RootBlock extends RectBlock {
     _.$css`transform:scale(${this.graph.boardScale})`;
     _.div("root");
   };
+
+  toOutput(): RootBlockOutput {
+    return {
+      type: "root",
+      id: this.id,
+      children: this.outSocket.connectedLines.map(line => ({
+        blockId: (line.b as Socket).block.id,
+        socketName: (line.b as Socket).label,
+      })),
+    };
+  }
 }
 
 blockCtors["RootBlock"] = RootBlock;
+
+export interface RootBlockOutput {
+  type: "root";
+  id: number;
+  children: {
+    blockId: number;
+    socketName: string;
+  }[];
+}

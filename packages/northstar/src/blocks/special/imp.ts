@@ -1,5 +1,5 @@
 import { Block, Direction, InSocket, MultiOutSocket, PATH_IN_TRIANGLE, PATH_OUT_TRIANGLE, SingleOutSocket, blockCtors } from "@quasi-dev/visual-flow";
-import { FuncBlockBase } from "./FuncBlockBase.r";
+import { FuncBlockBase, FuncBlockTypes } from "./FuncBlockBase.r";
 
 export class ImpBlock extends FuncBlockBase {
   constructor() {
@@ -34,6 +34,8 @@ export class ImpBlock extends FuncBlockBase {
     const matches = template.matchAll(/\$[a-zA-Z0-9]+/g);
     return [...matches].map((match) => match[0].slice(1));
   }
+
+  type: FuncBlockTypes = "imp";
 }
 
 blockCtors["ImpBlock"] = ImpBlock;

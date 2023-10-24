@@ -16,7 +16,7 @@ export function updateSockets(block: ComponentBlock) {
   const { contents, events, inputs, outputs, plugins } = info;
 
   block.updateSocket(
-    "",
+    "parent",
     InSocket,
     Direction.LEFT,
     {
