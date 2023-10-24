@@ -6,10 +6,12 @@ export class StringBlock extends FuncBlockBase {
     return new StringBlock();
   }
 
+  name = "string template";
+
   getSlots() {
-    const template = this.input.value;
+    const template = this.inputValue.value;
     const matches = template.matchAll(/\{[a-zA-Z_]+\}/g);
-    return [...matches].map(match => match[0].slice(1, -1));
+    return [...matches].map((match) => match[0].slice(1, -1));
   }
 }
 

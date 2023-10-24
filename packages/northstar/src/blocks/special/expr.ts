@@ -9,8 +9,10 @@ export class ExprBlock extends FuncBlockBase {
     return new ExprBlock();
   }
 
+  name = "expression"
+
   getSlots() {
-    const template = this.input.value;
+    const template = this.inputValue.value;
     const matches = template.matchAll(/\$[a-zA-Z0-9]+/g);
     return [...matches].map((match) => match[0].slice(1));
   }

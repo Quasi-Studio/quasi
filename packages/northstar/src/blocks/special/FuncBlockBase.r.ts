@@ -1,5 +1,4 @@
 import {
-  Block,
   Direction,
   InSocket,
   MultiOutSocket,
@@ -7,7 +6,6 @@ import {
   PATH_OUT_ELIPSE,
   RectBlock,
   Socket,
-  blockCtors,
 } from "@quasi-dev/visual-flow";
 import { Context, d } from "refina";
 
@@ -21,13 +19,21 @@ export abstract class FuncBlockBase extends RectBlock {
     this.addSocket(Direction.DOWN, outSocket);
   }
 
-  boardWidth: number = 200;
-  boardHeight: number = 50;
+  removable = true;
+  duplicateable = true;
+
+  boardWidth: number = 210;
+  boardHeight: number = 55;
 
   useTextarea: boolean = false;
-  input = d("");
+  inputValue = d("");
+
+  abstract name: string;
 
   content = (_: Context) => {
+    _.$cls`text-xs ml-1 mt-[5px] leading-3 text-gray-600`;
+    _.div(this.name);
+
     _._div(
       {
         onmousedown: ev => ev.stopPropagation(),
@@ -36,10 +42,10 @@ export abstract class FuncBlockBase extends RectBlock {
         onkeydown: ev => ev.stopPropagation(),
       },
       _ => {
-        _.$css`font-family: Consolas`;
+        _.$css`font-family: Consolas; min-height:24px`;
         (this.useTextarea
-          ? _.fTextarea(this.input, false, "none")
-          : _.fUnderlineTextInput(this.input, false, "template")) && this.updateSockets();
+          ? _.fTextarea(this.inputValue, false, "none")
+          : _.fUnderlineTextInput(this.inputValue, false, "template")) && this.updateSockets();
       },
     );
   };
@@ -77,5 +83,15 @@ export abstract class FuncBlockBase extends RectBlock {
     }
     this.sockets = newSockets;
     this.updateSocketPosition();
+  }
+
+  protected exportData(): any {
+    return {
+      inputValue: this.inputValue.value,
+    };
+  }
+  protected importData(data: any): void {
+    this.inputValue.value = data.inputValue;
+    // this.updateSockets();
   }
 }
