@@ -25,7 +25,7 @@ export class ComponentBlock extends RectBlock {
   boardWidth = 200;
   boardHeight = 50;
 
-  primaryValue = d.trim("");
+  primaryValue = d("");
   get primaryFilled() {
     return this.primaryValue.value !== "";
   }
