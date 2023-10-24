@@ -11,7 +11,7 @@ import {
 } from "@quasi-dev/visual-flow";
 import { Context, d } from "refina";
 
-export class StringBlock extends RectBlock {
+export abstract class FuncBlockBase extends RectBlock {
   constructor() {
     super();
     const outSocket = new MultiOutSocket();
@@ -21,14 +21,11 @@ export class StringBlock extends RectBlock {
     this.addSocket(Direction.DOWN, outSocket);
   }
 
-  ctor(): Block {
-    return new StringBlock();
-  }
-
   boardWidth: number = 200;
   boardHeight: number = 50;
 
-  template = d("");
+  useTextarea: boolean = false;
+  input = d("");
 
   content = (_: Context) => {
     _._div(
@@ -38,20 +35,20 @@ export class StringBlock extends RectBlock {
         onclick: ev => ev.stopPropagation(),
         onkeydown: ev => ev.stopPropagation(),
       },
-      _ => _.$css`font-family: Consolas` && _.fUnderlineTextInput(this.template, false, "template") && this.updateSockets(),
+      _ => {
+        _.$css`font-family: Consolas`;
+        (this.useTextarea
+          ? _.fTextarea(this.input, false, "none")
+          : _.fUnderlineTextInput(this.input, false, "template")) && this.updateSockets();
+      },
     );
   };
 
-  getSlots() {
-    const template = this.template.value;
-    const matches = template.matchAll(/\{[a-zA-Z_]+\}/g);
-    return [...matches].map(match => match[0].slice(1, -1));
-  }
+  abstract getSlots(): string[];
 
   sockets: Record<string, InSocket> = {};
   updateSockets() {
     const slots = this.getSlots();
-    console.warn(slots);
     const newSockets: Record<string, InSocket> = {};
     for (const slot of slots) {
       if (this.sockets[slot]) {
@@ -79,7 +76,6 @@ export class StringBlock extends RectBlock {
       }
     }
     this.sockets = newSockets;
+    this.updateSocketPosition();
   }
 }
-
-blockCtors["StringBlock"] = StringBlock;
