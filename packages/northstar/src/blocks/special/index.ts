@@ -1,6 +1,6 @@
 import { ExprBlock } from "./expr";
 import { IfElseBlock } from "./if.r";
-import { RootBlock } from "./root";
+import { RootBlock } from "./root.r";
 import { StringBlock } from "./string";
 
 export default Object.entries({

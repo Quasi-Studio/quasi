@@ -5,6 +5,7 @@ import {
   RectBlock,
   blockCtors,
 } from "@quasi-dev/visual-flow";
+import { Context } from "refina";
 
 export class RootBlock extends RectBlock {
   constructor() {
@@ -24,6 +25,13 @@ export class RootBlock extends RectBlock {
   ctor() {
     return new RootBlock();
   }
+
+  contentMain = (_: Context) => {
+    _.$cls`absolute flex items-center left-0 top-0 justify-around`;
+    _.$css`width:${this.pageWidth}px;height:${this.pageHeight}px;`;
+    _.$css`transform:scale(${this.graph.boardScale})`;
+    _.div("root");
+  };
 }
 
 blockCtors["RootBlock"] = RootBlock;
