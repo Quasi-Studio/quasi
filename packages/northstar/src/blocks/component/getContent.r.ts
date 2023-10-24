@@ -20,7 +20,7 @@ export function getContent(block: ComponentBlock) {
         onkeydown: ev => ev.stopPropagation(),
       },
       _ => {
-        _.$cls`mx-2 text-sm`
+        _.$cls`mx-2 text-sm text-gray-600`
         _.span(name);
 
         _.$css`font-family: Consolas; max-width: 120px` &&
