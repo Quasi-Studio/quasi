@@ -14,6 +14,8 @@ document.body.spellcheck = false;
 app.use(FluentUI).use(Vf).use(Basics)(_ => {
   _.$rootCls`fixed top-0 left-0 right-0 bottom-0`;
 
+  _.documentTitle("Quasi Studio");
+
   // toolbar
   _.$cls`absolute left-0 top-0 w-full h-8 bg-gray-100 flex select-none z-[1000] border-gray-400 border-b`;
   _.div(toolbarView);
