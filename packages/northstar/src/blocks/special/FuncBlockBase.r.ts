@@ -27,6 +27,7 @@ export abstract class FuncBlockBase extends RectBlock {
 
   useTextarea: boolean = false;
   inputValue = d("");
+  placeholder = "";
 
   abstract name: string;
 
@@ -42,10 +43,11 @@ export abstract class FuncBlockBase extends RectBlock {
         onkeydown: ev => ev.stopPropagation(),
       },
       _ => {
-        _.$css`font-family: Consolas; min-height:24px`;
+        _.$css`--fontFamilyBase: Consolas,'Segoe UI', 'Segoe UI Web (West European)', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif`;
         (this.useTextarea
-          ? _.fTextarea(this.inputValue, false, "none")
-          : _.fUnderlineTextInput(this.inputValue, false, "template")) && this.updateSockets();
+          ? _.$css`margin-top:4px;max-width:180px` && _.fTextarea(this.inputValue, false, this.placeholder, "none")
+          : _.$css`min-height:24px` && _.fUnderlineTextInput(this.inputValue, false, this.placeholder)) &&
+          this.updateSockets();
       },
     );
   };
