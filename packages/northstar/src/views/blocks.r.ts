@@ -5,7 +5,7 @@ import special from "../blocks/special";
 import blocks from "@quasi-dev/block-data";
 
 export default view(_ => {
-  if (_.fAccordion("Special")) {
+  if (_.fAccordionDefaultOpen("Special")) {
     _.$cls`grid grid-cols-3 justify-items-center`;
     _.div(_ => {
       _.for(
@@ -31,7 +31,7 @@ export default view(_ => {
       );
     });
   }
-  if (_.fAccordion("Components")) {
+  if (_.fAccordionDefaultOpen("Components")) {
     _.$cls`grid grid-cols-3 justify-items-center`;
     _.div(_ => {
       _.for(
@@ -58,7 +58,7 @@ export default view(_ => {
       );
     });
   }
-  if (_.fAccordion("Views")) {
+  if (_.fAccordionDefaultOpen("Views")) {
     _.$cls`grid grid-cols-3 justify-items-center`;
     _.div(_ => {
       _.forRange(6, i => {
