@@ -18,6 +18,7 @@ export enum GraphStateType {
   IDLE,
   DRAGGING_LINE,
   DRAGGING_BLOCK,
+  DRAGGING_MULTI_BLOCK,
   DRAGGING_BOARD,
 }
 
@@ -36,6 +37,14 @@ type DraggingBlockState = {
   offsetBoardX0: number;
   offsetBoardY0: number;
 };
+type DraggingMultiBlockState = {
+  type: GraphStateType.DRAGGING_MULTI_BLOCK;
+  blocks: {
+    block: Block;
+    offsetBoardX0: number;
+    offsetBoardY0: number;
+  }[];
+};
 type DraggingBoardState = {
   type: GraphStateType.DRAGGING_BOARD;
   startPageX: number;
@@ -47,6 +56,7 @@ type State =
   | IdelState
   | DraggingLineState
   | DraggingBlockState
+  | DraggingMultiBlockState
   | DraggingBoardState;
 
 const idelState = { type: GraphStateType.IDLE } as const;
@@ -429,6 +439,20 @@ export class Graph {
     };
   }
 
+  startDraggingSelectedBlocks() {
+    this.state = {
+      type: GraphStateType.DRAGGING_MULTI_BLOCK,
+      blocks: [...this.selectedBlocks].map((block) => {
+        const { x: blockBoardX, y: blockBoardY } = block.boardPos;
+        return {
+          block,
+          offsetBoardX0: this.mouseBoardPos.x - blockBoardX,
+          offsetBoardY0: this.mouseBoardPos.y - blockBoardY,
+        };
+      }),
+    };
+  }
+
   startDraggingLine(line: Line) {
     const predictor = line.createPredictor();
     this.addLine(predictor);
@@ -549,6 +573,27 @@ export class Graph {
 
       return false;
     }
+    if (this.state.type === GraphStateType.DRAGGING_MULTI_BLOCK) {
+      if (!mouseDown) {
+        throw new Error("Not dragging block");
+      }
+      const { x: boardX0, y: boardY0 } = this.mouseBoardPos;
+      const { blocks } = this.state;
+
+      for (const blockData of blocks) {
+        const { block, offsetBoardX0, offsetBoardY0 } = blockData;
+        const newBlockBoardPos = {
+          x: boardX0 - offsetBoardX0,
+          y: boardY0 - offsetBoardY0,
+        };
+        block.pendingClick = false;
+        block.setBoardPos(newBlockBoardPos);
+        block.updatePosition();
+        // this.setHoveredItem(null);
+      }
+
+      return false;
+    }
     if (this.state.type === GraphStateType.DRAGGING_BOARD) {
       if (!mouseDown) {
         throw new Error("Not dragging board");
@@ -646,6 +691,22 @@ export class Graph {
         this.pushRecord();
       }
       block.pendingClick = false;
+      this.state = idelState;
+      return true;
+    }
+    if (this.state.type === GraphStateType.DRAGGING_MULTI_BLOCK) {
+      const { blocks } = this.state;
+      for (const blockData of blocks) {
+        const { block, offsetBoardX0, offsetBoardY0 } = blockData;
+        const { x: boardX0, y: boardY0 } = this.mouseBoardPos;
+        const newBlockBoardPos = this.toGridPos({
+          x: boardX0 - offsetBoardX0,
+          y: boardY0 - offsetBoardY0,
+        });
+        block.setBoardPos(newBlockBoardPos);
+        block.updatePosition();
+      }
+      this.pushRecord();
       this.state = idelState;
       return true;
     }

@@ -202,7 +202,7 @@ export abstract class Block extends ModelBase {
 
     const isInside = this.isBlockPosInside(blockPos);
 
-    if(blockOnly) return isInside ? this : null;
+    if (blockOnly) return isInside ? this : null;
 
     const draggableSockets = isInside
       ? this.allSockets.filter((s) => s.canDragFrom())
@@ -287,13 +287,23 @@ export abstract class Block extends ModelBase {
       this.graph.clearSelectedBlocks();
       targetSocket.onMouseDown();
     } else {
-      if (this.dockedToBlock) {
-        this.undockFrom();
+      if (this.selected) {
+        for (const block of this.graph.selectedBlocks) {
+          if (block.dockedToBlock) {
+            block.undockFrom();
+          }
+          block.moveToTop();
+        }
+        this.graph.startDraggingSelectedBlocks();
+      } else {
+        if (this.dockedToBlock) {
+          this.undockFrom();
+        }
+        this.graph.addSelectedBlock(this, preserveSelected);
+        this.pendingClick = true;
+        this.moveToTop();
+        this.graph.startDraggingBlock(this);
       }
-      this.graph.addSelectedBlock(this, preserveSelected);
-      this.pendingClick = true;
-      this.moveToTop();
-      this.graph.startDraggingBlock(this);
     }
   }
 
