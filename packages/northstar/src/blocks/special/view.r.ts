@@ -6,9 +6,7 @@ import { Props } from "../../utils/props";
 export class ViewBlock extends RectBlock implements SpecialBlock {
   inSocket: InSocket;
 
-  constructor() {
-    super();
-
+  initialize(): void {
     this.inSocket = new InSocket();
 
     this.inSocket.type = "L";

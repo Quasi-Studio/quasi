@@ -6,9 +6,7 @@ import { Props } from "../../utils/props";
 export class RootBlock extends RectBlock implements SpecialBlock {
   outSocket: MultiOutSocket;
 
-  constructor() {
-    super();
-
+  initialize(): void {
     this.outSocket = new MultiOutSocket();
 
     this.outSocket.type = "L";

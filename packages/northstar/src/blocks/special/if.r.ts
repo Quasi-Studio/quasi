@@ -24,9 +24,7 @@ export class IfElseBlock extends RectBlock implements SpecialBlock {
   thenSocket: SingleOutSocket;
   elseSocket: SingleOutSocket;
 
-  constructor() {
-    super();
-
+  initialize(): void {
     this.condSocket = new InSocket();
     this.condSocket.type = "D";
     this.condSocket.label = "condition";

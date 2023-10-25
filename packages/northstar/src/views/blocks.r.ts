@@ -1,6 +1,6 @@
 import blocks from "@quasi-dev/block-data";
 import "@refina/fluentui-icons/edit.r.ts";
-import { byProp, bySelf, view } from "refina";
+import { bySelf, view } from "refina";
 import { ComponentBlock } from "../blocks/component/block";
 import special from "../blocks/special";
 import { ViewBlock } from "../blocks/special/view.r";
@@ -26,6 +26,7 @@ export default view(_ => {
             },
             () => {
               const block = new v();
+              block.initialize();
               return block;
             },
           );

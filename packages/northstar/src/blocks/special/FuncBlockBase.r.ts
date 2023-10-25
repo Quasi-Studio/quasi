@@ -14,14 +14,7 @@ import { Props } from "../../utils/props";
 export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
   constructor() {
     super();
-    this.outputSocket = new MultiOutSocket();
-    this.outputSocket.type = "D";
-    this.outputSocket.label = "output";
-    this.outputSocket.path = PATH_OUT_ELIPSE;
-    this.addSocket(Direction.DOWN, this.outputSocket);
   }
-
-  outputSocket: MultiOutSocket;
 
   removable = true;
   duplicateable = true;
@@ -89,6 +82,15 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
     }
     this.inputSockets = newSockets;
     this.updateSocketPosition();
+  }
+
+  outputSocket: MultiOutSocket;
+  initialize() {
+    this.outputSocket = new MultiOutSocket();
+    this.outputSocket.type = "D";
+    this.outputSocket.label = "output";
+    this.outputSocket.path = PATH_OUT_ELIPSE;
+    this.addSocket(Direction.DOWN, this.outputSocket);
   }
 
   protected exportData(): any {
