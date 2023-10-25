@@ -95,10 +95,12 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
 
   protected exportData(): any {
     return {
+      ...super.exportData(),
       inputValue: this.inputValue.value,
     };
   }
-  protected importData(data: any): void {
+  protected importData(data: any, sockets: any): void {
+    super.importData(data, sockets);
     this.inputValue.value = data.inputValue;
     // this.updateSockets();
   }
