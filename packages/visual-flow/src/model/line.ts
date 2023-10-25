@@ -83,6 +83,19 @@ export abstract class Line extends ModelBase {
       });
     }
   }
+  get boardPosA() {
+    return this.a.boardPos;
+  }
+  get boardPosB() {
+    if (this.connected) {
+      return (this.b as Socket).boardPos;
+    } else {
+      return {
+        x: (this.b as PointWithDirection).boardX,
+        y: (this.b as PointWithDirection).boardY,
+      };
+    }
+  }
 
   get connected() {
     //@ts-ignore

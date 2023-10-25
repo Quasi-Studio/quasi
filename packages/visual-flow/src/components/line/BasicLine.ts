@@ -5,10 +5,9 @@ import { Point, rotate } from "../../types";
 const CTRL_POINT_OFFSET_SCALE = 0.8;
 const CTRL_POINT_OFFSET_MIN = 30;
 
-const ARROW_SCALE_TO_BOARD = 0.7;
-const ARROW_MIN_SCALE = 0.4;
-const ARROW_GRAPH_LENGTH_MAX = 25;
-const ARROW_GRAPH_WIDTH_MAX = 7;
+const ARROW_BOARD_LENGTH = 25;
+const ARROW_BOARD_WIDTH = 7;
+const LINE_END_OFFSET = ARROW_BOARD_LENGTH * 0.99;
 
 function getCtrlPointOffset(delta: number) {
   return Math.max(
@@ -23,14 +22,10 @@ export class BasicLine extends Line {
   }
 
   get linePath() {
-    let point1 = this.graphPosA;
-    let point2 = this.graphPosB;
+    let point1 = this.boardPosA;
+    let point2 = this.boardPosB;
 
-    const lineOffset =
-      Math.max(ARROW_MIN_SCALE, this.graph.boardScale * ARROW_SCALE_TO_BOARD) *
-      ARROW_GRAPH_LENGTH_MAX;
-
-    point2 = Point.moveFarther(point2, this.b.direction, lineOffset);
+    point2 = Point.moveFarther(point2, this.b.direction, LINE_END_OFFSET);
 
     const delta = Point.minus(point2, point1);
 
@@ -42,23 +37,33 @@ export class BasicLine extends Line {
     const offset2 = getCtrlPointOffset(delta2);
     const controlPoint2 = Point.moveFarther(point2, this.b.direction, offset2);
 
-    return `M${point1.x} ${point1.y} C${controlPoint1.x} ${controlPoint1.y}, ${controlPoint2.x} ${controlPoint2.y}, ${point2.x} ${point2.y}`;
+    const graphPos1 = this.graphPosA;
+    const graphPos2 = this.graph.boardPos2GraphPos(point2);
+    const graphCtrl1 = this.graph.boardPos2GraphPos(controlPoint1);
+    const graphCtrl2 = this.graph.boardPos2GraphPos(controlPoint2);
+
+    return `M${graphPos1.x} ${graphPos1.y} C${graphCtrl1.x} ${graphCtrl1.y}, ${graphCtrl2.x} ${graphCtrl2.y}, ${graphPos2.x} ${graphPos2.y}`;
   }
 
   get arrowPath() {
-    const arrowLength =
-      Math.max(ARROW_MIN_SCALE, this.graph.boardScale * ARROW_SCALE_TO_BOARD) *
-      ARROW_GRAPH_LENGTH_MAX;
-    const arrowWidth =
-      Math.max(ARROW_MIN_SCALE, this.graph.boardScale * ARROW_SCALE_TO_BOARD) *
-      ARROW_GRAPH_WIDTH_MAX;
+    const p0 = this.boardPosB;
+    const p1 = Point.moveFarther(p0, this.b.direction, ARROW_BOARD_LENGTH);
+    const p2 = Point.moveFarther(
+      p1,
+      rotate(this.b.direction),
+      ARROW_BOARD_WIDTH,
+    );
+    const p3 = Point.moveFarther(
+      p1,
+      rotate(this.b.direction),
+      -ARROW_BOARD_WIDTH,
+    );
 
-    const p0 = this.graphPosB;
-    const p1 = Point.moveFarther(p0, this.b.direction, arrowLength);
-    const p2 = Point.moveFarther(p1, rotate(this.b.direction), arrowWidth);
-    const p3 = Point.moveFarther(p1, rotate(this.b.direction), -arrowWidth);
+    const gp0 = this.graphPosB;
+    const gp2 = this.graph.boardPos2GraphPos(p2);
+    const gp3 = this.graph.boardPos2GraphPos(p3);
 
-    return `M${p0.x} ${p0.y} L${p2.x} ${p2.y} L${p3.x} ${p3.y} Z`;
+    return `M${gp0.x} ${gp0.y} L${gp2.x} ${gp2.y} L${gp3.x} ${gp3.y} Z`;
   }
 
   protected exportData(): any {

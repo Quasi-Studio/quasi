@@ -7,6 +7,7 @@ import styles from "./line.styles";
 export class VFLine extends OutputComponent {
   main(_: Context, model: Line) {
     styles.curve(model.dragging, model.predicting)(_);
+    _.$css`stroke-width:${model.graph.boardScale * 3}px;`;
     _.$ref(model.lineRef) &&
       _._svgPath({
         d: model.linePath,
