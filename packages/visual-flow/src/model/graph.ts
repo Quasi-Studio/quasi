@@ -311,6 +311,20 @@ export class Graph {
     block.updatePosition();
     predictor.updatePosition();
   }
+  protected updateDraggingMultiBlocksPosition({
+    blocks,
+  }: DraggingMultiBlockState) {
+    const { x: boardX0, y: boardY0 } = this.mouseBoardPos;
+    for (const blockData of blocks) {
+      const { block, offsetBoardX0, offsetBoardY0 } = blockData;
+      const newPagePos = {
+        x: boardX0 - offsetBoardX0,
+        y: boardY0 - offsetBoardY0,
+      };
+      block.setBoardPos(newPagePos);
+      block.updatePosition();
+    }
+  }
   protected updateDraggingLinePosition({ line, predictor }: DraggingLineState) {
     line.updatePosition();
     predictor.updatePosition();
@@ -325,6 +339,8 @@ export class Graph {
     this.updatePosition();
     if (this.state.type === GraphStateType.DRAGGING_BLOCK) {
       this.updateDraggingBlockPosition(this.state);
+    } else if (this.state.type === GraphStateType.DRAGGING_MULTI_BLOCK) {
+      this.updateDraggingMultiBlocksPosition(this.state);
     } else if (this.state.type === GraphStateType.DRAGGING_LINE) {
       this.updateDraggingLinePosition(this.state);
     }
@@ -334,6 +350,7 @@ export class Graph {
       this.mouseDown &&
       ((this.state.type === GraphStateType.DRAGGING_BLOCK &&
         this.state.block.attached) ||
+        this.state.type === GraphStateType.DRAGGING_MULTI_BLOCK ||
         this.state.type === GraphStateType.DRAGGING_LINE)
     ) {
       this.boardMoveSpeed = {
