@@ -1,19 +1,28 @@
-import { FUnderlineTextInput } from "@refina/fluentui";
-import { ref, view } from "refina";
+import { MainElRef, bySelf, ref, view } from "refina";
+import { getSelectedProps } from "../utils/props";
 
 export default view(_ => {
-  _.forRange(15, i => {
-    const r = ref<FUnderlineTextInput>();
-    _.$cls`col-span-1 flex justify-center items-center border-b border-gray-500 cursor-text`;
+  const props = getSelectedProps();
+  _.for(Object.keys(props), bySelf, k => {
+    const v = props[k];
+    const r = ref() as MainElRef;
+    _.$cls`col-span-1 flex justify-center items-center border-b border-gray-500 cursor-text h-8`;
     _._div(
       {
         onclick: () => {
-          (r.current!.$mainEl?.firstChild! as HTMLInputElement).focus();
+          (r.current!.$mainEl!.firstChild! as HTMLInputElement).focus();
         },
       },
-      i,
+      k,
     );
-    _.$cls`col-span-4 cursor-text`;
-    _.$ref(r) && _.fUnderlineTextInput("Text input " + i);
+    _.$cls`col-span-4 cursor-text h-8`;
+    _.$ref(r);
+    if (v.type === "text") {
+      _.fUnderlineTextInput(v.getVal(), false, "unset") && v.setVal(_.$ev);
+    } else if (v.type === "switch") {
+      _.fSwitch("", v.getVal()) && v.setVal(_.$ev);
+    } else if (v.type === "dropdown") {
+      _.fDropdown(v.getVal(), v.options) && v.setVal(_.$ev);
+    }
   });
 });

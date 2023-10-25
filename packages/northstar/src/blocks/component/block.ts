@@ -9,6 +9,8 @@ import "@refina/fluentui";
 import { updateSockets } from "./updateSockets";
 import { d } from "refina";
 import { getContent } from "./getContent.r";
+import { Props } from "../../utils/props";
+import { getProps } from ".";
 
 export class ComponentBlock extends RectBlock {
   isComponentBlock = true;
@@ -77,6 +79,10 @@ export class ComponentBlock extends RectBlock {
     const block = new ComponentBlock();
     block.initialize(this.componentType, this.info);
     return block;
+  }
+
+  getProps(): Props {
+    return getProps(this);
   }
 
   protected exportData() {

@@ -9,6 +9,7 @@ import {
 } from "@quasi-dev/visual-flow";
 import { Context, d } from "refina";
 import { SpecialBlock } from "./base";
+import { Props } from "../../utils/props";
 
 export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
   constructor() {
@@ -101,6 +102,10 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
   }
 
   abstract type: FuncBlockTypes;
+
+  getProps(): Props {
+    return {};
+  }
 
   toOutput(): FuncBlockOutput {
     const inputs = [];

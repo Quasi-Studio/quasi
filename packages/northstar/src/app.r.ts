@@ -53,13 +53,13 @@ app.use(FluentUI).use(Vf).use(Basics)(_ => {
           _.div(_ => {
             _.t`Properties`;
 
-            _.$cls`text-xs pl-3`;
-            _.span(
-              [...currentGraph.selectedBlocks]
-                .filter(isComponentBlock)
-                .map(b => b.info.name)
-                .join(" "),
-            );
+            // _.$cls`text-xs pl-3`;
+            // _.span(
+            //   [...currentGraph.selectedBlocks]
+            //     .filter(isComponentBlock)
+            //     .map(b => b.info.name)
+            //     .join(" "),
+            // );
           });
 
           _.$cls`overflow-y-scroll h-full bg-gray-200 grid grid-cols-5`;

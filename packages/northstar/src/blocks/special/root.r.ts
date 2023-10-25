@@ -1,6 +1,7 @@
 import { Direction, MultiOutSocket, PATH_OUT_RECT, RectBlock, Socket, blockCtors } from "@quasi-dev/visual-flow";
 import { Context } from "refina";
 import { SpecialBlock } from "./base";
+import { Props } from "../../utils/props";
 
 export class RootBlock extends RectBlock implements SpecialBlock {
   outSocket: MultiOutSocket;
@@ -29,6 +30,10 @@ export class RootBlock extends RectBlock implements SpecialBlock {
     _.$css`transform:scale(${this.graph.boardScale})`;
     _.div("root");
   };
+
+  getProps(): Props {
+    return {};
+  }
 
   toOutput(): RootBlockOutput {
     return {

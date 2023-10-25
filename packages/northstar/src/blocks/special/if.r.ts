@@ -12,6 +12,7 @@ import {
 } from "@quasi-dev/visual-flow";
 import { Context } from "refina";
 import { SpecialBlock } from "./base";
+import { Props } from "../../utils/props";
 
 export class IfElseBlock extends RectBlock implements SpecialBlock {
   ctor(): Block {
@@ -63,6 +64,10 @@ export class IfElseBlock extends RectBlock implements SpecialBlock {
     _.$css`transform:scale(${this.graph.boardScale})`;
     _.div("if-else");
   };
+
+  getProps(): Props {
+    return {};
+  }
 
   toOutput(): IfBlockOutput {
     return {

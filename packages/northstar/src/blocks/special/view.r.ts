@@ -1,6 +1,7 @@
 import { Direction, InSocket, PATH_IN_RECT, RectBlock, Socket, blockCtors } from "@quasi-dev/visual-flow";
 import { Context } from "refina";
 import { SpecialBlock } from "./base";
+import { Props } from "../../utils/props";
 
 export class ViewBlock extends RectBlock implements SpecialBlock {
   inSocket: InSocket;
@@ -31,6 +32,10 @@ export class ViewBlock extends RectBlock implements SpecialBlock {
     _.$css`transform:scale(${this.graph.boardScale})`;
     _.div(this.viewName);
   };
+
+  getProps(): Props {
+    return {};
+  }
 
   toOutput(): ViewBlockOutput {
     return {
