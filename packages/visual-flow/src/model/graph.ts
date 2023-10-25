@@ -326,7 +326,9 @@ export class Graph {
     }
   }
   protected updateDraggingLinePosition({ line, predictor }: DraggingLineState) {
+    line.setBoardPosB(this.mouseBoardPos);
     line.updatePosition();
+    predictor.setBoardPosB(this.mouseBoardPos);
     predictor.updatePosition();
   }
 
