@@ -17,7 +17,8 @@
     "tailwindcss": "^3.3.3",
     "typescript": "^5.1.6",
     "vite": "^4.4.8",
-    "vite-plugin-refina": "link:..\\..\\..\\refina\\packages\\vite-plugin"
+    "vite-plugin-refina": "link:..\\..\\..\\refina\\packages\\vite-plugin",
+    "@refina/transformer": "link:..\\..\\..\\refina\\packages\\transformer"
   },
   "dependencies": {
     "@quasi-dev/block-data": "workspace:^",

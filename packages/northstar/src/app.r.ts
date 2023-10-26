@@ -8,6 +8,7 @@ import propertiesView from "./views/properties.r";
 import toolbarView, { previewMode } from "./views/toolbar.r";
 import { isComponentBlock } from "./blocks/component/block";
 import { duplicateBlocks, hasBlocksToDuplicate, hasBlocksToRemove, removeBlocks } from "./utils";
+import previewView from "./views/preview.r";
 
 document.body.spellcheck = false;
 
@@ -22,14 +23,7 @@ app.use(FluentUI).use(Vf).use(Basics)(_ => {
 
   if (previewMode.value) {
     _.$cls`absolute left-0 bottom-0 right-0 top-8 ${previewMode.value ? "" : "hidden"}`;
-    _.div(_ =>
-      _._iframe({
-        src: "https://bing.com",
-        frameBorder: "0",
-        width: "100%",
-        height: "100%",
-      }),
-    );
+    _.div(previewView);
   }
 
   if (!previewMode.value)

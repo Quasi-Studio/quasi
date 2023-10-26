@@ -76,6 +76,9 @@ importers:
         specifier: link:..\..\..\refina\packages\core
         version: link:../../../refina/packages/core
     devDependencies:
+      '@refina/transformer':
+        specifier: link:..\..\..\refina\packages\transformer
+        version: link:../../../refina/packages/transformer
       '@refina/tsconfig':
         specifier: link:..\..\..\refina\packages\tsconfig
         version: link:../../../refina/packages/tsconfig
