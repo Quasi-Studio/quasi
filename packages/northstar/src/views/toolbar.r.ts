@@ -93,37 +93,39 @@ export default view(_ => {
       buildOutput = _.$ev ? JSON.stringify(toOutput(), undefined, 2) : "Building...";
     }
 
-    _.embed(
-      toolItem,
-      "Undo",
-      _ => _.fiArrowUndo20Filled(),
-      !currentGraph.canUndo,
-      () => currentGraph.undo(),
-    );
-    _.embed(
-      toolItem,
-      "Redo",
-      _ => _.fiArrowRedo20Filled(),
-      !currentGraph.canRedo,
-      () => currentGraph.redo(),
-    );
-    _.embed(
-      toolItem,
-      "Reset",
-      _ => _.fiResizeLarge20Regular(),
-      false,
-      () => {
-        currentGraph.boardOffsetX = 0;
-        currentGraph.boardOffsetY = 0;
-        currentGraph.boardScale = 1;
-      },
-    );
+    if (!previewMode.value) {
+      _.embed(
+        toolItem,
+        "Undo",
+        _ => _.fiArrowUndo20Filled(),
+        !currentGraph.canUndo,
+        () => currentGraph.undo(),
+      );
+      _.embed(
+        toolItem,
+        "Redo",
+        _ => _.fiArrowRedo20Filled(),
+        !currentGraph.canRedo,
+        () => currentGraph.redo(),
+      );
+      _.embed(
+        toolItem,
+        "Reset",
+        _ => _.fiResizeLarge20Regular(),
+        false,
+        () => {
+          currentGraph.boardOffsetX = 0;
+          currentGraph.boardOffsetY = 0;
+          currentGraph.boardScale = 1;
+        },
+      );
 
-    _.embed(toolItem, "Duplicate", _ => _.fiAddSquareMultiple20Regular(), !hasBlocksToDuplicate(), duplicateBlocks);
-    _.embed(toolItem, "Remove", _ => _.fiDelete20Regular(), !hasBlocksToRemove(), removeBlocks);
+      _.embed(toolItem, "Duplicate", _ => _.fiAddSquareMultiple20Regular(), !hasBlocksToDuplicate(), duplicateBlocks);
+      _.embed(toolItem, "Remove", _ => _.fiDelete20Regular(), !hasBlocksToRemove(), removeBlocks);
 
-    _.embed(toolItem, "Align left", _ => _.fiAlignLeft20Regular(), !hasBlocksToAlign(), alignBlocksToLeft);
-    _.embed(toolItem, "Align top", _ => _.fiAlignTop20Regular(), !hasBlocksToAlign(), alignBlocksToTop);
+      _.embed(toolItem, "Align left", _ => _.fiAlignLeft20Regular(), !hasBlocksToAlign(), alignBlocksToLeft);
+      _.embed(toolItem, "Align top", _ => _.fiAlignTop20Regular(), !hasBlocksToAlign(), alignBlocksToTop);
+    }
   });
 
   _.$cls`flex font-[Consolas] absolute left-1/2 h-full items-center`;
