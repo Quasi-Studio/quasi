@@ -98,8 +98,8 @@ importers:
         specifier: ^4.4.8
         version: 4.4.11
       vite-plugin-refina:
-        specifier: link:..\..\..\refina\packages\plugin
-        version: link:../../../refina/packages/plugin
+        specifier: link:..\..\..\refina\packages\vite-plugin
+        version: link:../../../refina/packages/vite-plugin
 
   packages/visual-flow:
     dependencies:
@@ -154,8 +154,8 @@ importers:
         specifier: ^0.7.35
         version: 0.7.40(vite@4.4.11)
       vite-plugin-refina:
-        specifier: link:..\..\..\refina\packages\plugin
-        version: link:../../../refina/packages/plugin
+        specifier: link:..\..\..\refina\packages\vite-plugin
+        version: link:../../../refina/packages/vite-plugin
 
 packages:
 
