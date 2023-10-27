@@ -42,7 +42,7 @@ export default view(_ => {
   _.$noPreserve();
   _.$ref(iframe) &&
     _._iframe({
-      src: iframeURL,
+      // src: iframeURL,
       frameBorder: "0",
       width: "100%",
       height: "100%",
@@ -52,8 +52,13 @@ export default view(_ => {
     if (!_.$updating || !codeModified) return;
     codeModified = false;
     const iframeNode = iframe.current!.node;
+
+    iframeNode.src = iframeURL;
     iframeNode.onload = () => {
-      errorMsg = "";
+      if (errorMsg !== "") {
+        errorMsg = "";
+        _.$update();
+      }
 
       iframeNode.contentWindow!.onerror = (
         event: Event | string,
@@ -73,11 +78,6 @@ error: ${error}`;
 
         _.$update();
         errorReported = true;
-      };
-      iframeNode.contentWindow!.onload = () => {
-        if (errorMsg === "") return;
-        errorMsg = "";
-        _.$update();
       };
       //@ts-ignore
       iframeNode.contentWindow!.console.error = (...args: any[]) => {
