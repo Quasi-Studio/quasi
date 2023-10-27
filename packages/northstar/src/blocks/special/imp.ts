@@ -13,7 +13,7 @@ export class ImpBlock extends FuncBlockBase {
     this.addSocket(Direction.LEFT, inputSocket);
 
     const thenSocket = new SingleOutSocket();
-    thenSocket.type = "D";
+    thenSocket.type = "E";
     thenSocket.label = "then";
     thenSocket.path = PATH_OUT_TRIANGLE;
     this.addSocket(Direction.RIGHT, thenSocket);
