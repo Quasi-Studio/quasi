@@ -765,6 +765,12 @@ export class Graph {
     this.updatePosition();
   }
 
+  resetViewport() {
+    this.boardOffsetX = 0;
+    this.boardOffsetY = 0;
+    this.boardScale = 1;
+  }
+
   exportRecord(): GraphRecord {
     return {
       boardOffsetX: this.boardOffsetX,

@@ -143,13 +143,11 @@ export default view(_ => {
       );
       _.embed(
         toolItem,
-        "Reset",
+        "Reset viewport",
         _ => _.fiResizeLarge20Regular(),
         false,
         () => {
-          currentGraph.boardOffsetX = 0;
-          currentGraph.boardOffsetY = 0;
-          currentGraph.boardScale = 1;
+          currentGraph.resetViewport();
         },
       );
 
