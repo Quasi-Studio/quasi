@@ -99,34 +99,34 @@ export default view(_ => {
       buildOutput = _.$ev ? JSON.stringify(toOutput(), undefined, 2) : "Building...";
     }
 
-    _.fTooltip(_ => {
-      _.$cls`h-full flex items-center hover:bg-gray-300 px-2`;
-      if (_.button(_ => _.fiScreenshot20Regular())) {
-        domtoimage
-          .toBlob(graphElRef.current!.node, {
-            width: 10000,
-            height: 10000,
-          })
-          .then(async blob => {
-            const handle = await window.showSaveFilePicker({
-              suggestedName: "quasi-graph.png",
-              types: [
-                {
-                  description: "PNG",
-                  accept: {
-                    "image/png": [".png"],
-                  },
-                },
-              ],
-            });
-            const writable = await handle.createWritable();
-            await writable.write(await blob.arrayBuffer());
-            await writable.close();
-          });
-      }
-    }, "Screenshot");
-
     if (!previewMode.value) {
+      _.fTooltip(_ => {
+        _.$cls`h-full flex items-center hover:bg-gray-300 px-2`;
+        if (_.button(_ => _.fiScreenshot20Regular())) {
+          domtoimage
+            .toBlob(graphElRef.current!.node, {
+              width: 10000,
+              height: 10000,
+            })
+            .then(async blob => {
+              const handle = await window.showSaveFilePicker({
+                suggestedName: "quasi-graph.png",
+                types: [
+                  {
+                    description: "PNG",
+                    accept: {
+                      "image/png": [".png"],
+                    },
+                  },
+                ],
+              });
+              const writable = await handle.createWritable();
+              await writable.write(await blob.arrayBuffer());
+              await writable.close();
+            });
+        }
+      }, "Screenshot");
+
       _.embed(
         toolItem,
         "Undo",
