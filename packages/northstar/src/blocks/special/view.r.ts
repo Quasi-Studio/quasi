@@ -4,6 +4,16 @@ import { SpecialBlock } from "./base";
 import { Props } from "../../utils/props";
 
 export class ViewBlock extends RectBlock implements SpecialBlock {
+  ctor() {
+    const block = new ViewBlock();
+    block.viewName = this.viewName;
+    block.initialize();
+    return block;
+  }
+
+  removable = true;
+  duplicateable = true;
+
   inSocket: InSocket;
 
   initialize(): void {
@@ -17,10 +27,6 @@ export class ViewBlock extends RectBlock implements SpecialBlock {
 
   boardWidth = 200;
   boardHeight = 50;
-
-  ctor() {
-    return new ViewBlock();
-  }
 
   viewName: string;
 

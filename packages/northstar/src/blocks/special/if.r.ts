@@ -15,9 +15,14 @@ import { SpecialBlock } from "./base";
 import { Props } from "../../utils/props";
 
 export class IfElseBlock extends RectBlock implements SpecialBlock {
-  ctor(): Block {
-    return new IfElseBlock();
+  ctor() {
+    const block = new IfElseBlock();
+    block.initialize();
+    return block;
   }
+
+  removable = true;
+  duplicateable = true;
 
   condSocket: InSocket;
   inputSocket: InSocket;
@@ -49,9 +54,6 @@ export class IfElseBlock extends RectBlock implements SpecialBlock {
     this.elseSocket.path = PATH_OUT_TRIANGLE;
     this.addSocket(Direction.DOWN, this.elseSocket);
   }
-
-  removable = true;
-  duplicateable = true;
 
   boardWidth: number = 200;
   boardHeight: number = 50;

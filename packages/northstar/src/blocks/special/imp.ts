@@ -1,4 +1,13 @@
-import { Block, Direction, InSocket, MultiOutSocket, PATH_IN_TRIANGLE, PATH_OUT_TRIANGLE, SingleOutSocket, blockCtors } from "@quasi-dev/visual-flow";
+import {
+  Block,
+  Direction,
+  InSocket,
+  MultiOutSocket,
+  PATH_IN_TRIANGLE,
+  PATH_OUT_TRIANGLE,
+  SingleOutSocket,
+  blockCtors,
+} from "@quasi-dev/visual-flow";
 import { FuncBlockBase, FuncBlockTypes } from "./FuncBlockBase.r";
 
 export class ImpBlock extends FuncBlockBase {
@@ -19,10 +28,6 @@ export class ImpBlock extends FuncBlockBase {
     this.addSocket(Direction.RIGHT, thenSocket);
 
     this.updateSocketPosition();
-  }
-
-  ctor(): Block {
-    return new ImpBlock();
   }
 
   name = "imperative code";

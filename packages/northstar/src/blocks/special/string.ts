@@ -2,9 +2,6 @@ import { Block, blockCtors } from "@quasi-dev/visual-flow";
 import { FuncBlockBase, FuncBlockTypes } from "./FuncBlockBase.r";
 
 export class StringBlock extends FuncBlockBase {
-  ctor(): Block {
-    return new StringBlock();
-  }
 
   name = "string template";
 

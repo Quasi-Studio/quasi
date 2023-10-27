@@ -2,9 +2,7 @@ import { Block, blockCtors } from "@quasi-dev/visual-flow";
 import { FuncBlockBase, FuncBlockTypes } from "./FuncBlockBase.r";
 
 export class ExprBlock extends FuncBlockBase {
-  ctor(): Block {
-    return new ExprBlock();
-  }
+
 
   name = "expression";
 

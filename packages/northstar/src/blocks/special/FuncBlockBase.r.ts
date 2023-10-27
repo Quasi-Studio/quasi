@@ -12,8 +12,12 @@ import { SpecialBlock } from "./base";
 import { Props } from "../../utils/props";
 
 export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
-  constructor() {
-    super();
+  ctor(): FuncBlockBase {
+    const block = new (this.constructor as any)() as FuncBlockBase;
+    block.inputValue.value = this.inputValue.value;
+    block.initialize();
+    block.updateInputSockets();
+    return block;
   }
 
   removable = true;

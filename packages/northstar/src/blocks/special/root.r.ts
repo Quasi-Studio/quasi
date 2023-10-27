@@ -4,6 +4,12 @@ import { SpecialBlock } from "./base";
 import { Props } from "../../utils/props";
 
 export class RootBlock extends RectBlock implements SpecialBlock {
+  ctor() {
+    const block = new RootBlock();
+    block.initialize();
+    return block;
+  }
+
   outSocket: MultiOutSocket;
 
   initialize(): void {
@@ -17,10 +23,6 @@ export class RootBlock extends RectBlock implements SpecialBlock {
 
   boardWidth = 200;
   boardHeight = 50;
-
-  ctor() {
-    return new RootBlock();
-  }
 
   contentMain = (_: Context) => {
     _.$cls`absolute flex items-center left-0 top-0 justify-around text-gray-600`;
