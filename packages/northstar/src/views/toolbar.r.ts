@@ -101,9 +101,12 @@ export default view(_ => {
     }
 
     if (!previewMode.value) {
-      _.fTooltip(_ => {
-        _.$cls`h-full flex items-center hover:bg-gray-300 px-2`;
-        if (_.button(_ => _.fiImageBorder20Regular())) {
+      _.embed(
+        toolItem,
+        "Screenshot",
+        _ => _.fiImageBorder20Regular(),
+        currentGraph.blocks.length === 0,
+        () => {
           const node = graphElRef.current!.node;
 
           const { width, height } = currentGraph.fullView();
@@ -140,9 +143,8 @@ export default view(_ => {
               })
               .catch(console.error);
           }, 100);
-        }
-      }, "Screenshot");
-
+        },
+      );
       _.embed(
         toolItem,
         "Undo",
