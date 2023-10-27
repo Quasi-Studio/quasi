@@ -774,6 +774,11 @@ export class Graph {
   }
 
   fullView() {
+    if (this.blocks.length === 0) {
+      this.resetViewport();
+      return { width: NaN, height: NaN };
+    }
+
     const leftmost =
       Math.min(...this.blocks.map((b) => b.boardPos.x)) - FULL_VIEW_PADDING;
     const topmost =
