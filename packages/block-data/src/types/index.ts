@@ -182,7 +182,24 @@ export function switchProp(defaultVal: boolean = false): SwitchProp {
   };
 }
 
-export type Props = Record<string, TextProp | SwitchProp>;
+export interface DropdownProp {
+  type: "dropdown";
+  options: string[];
+  defaultVal: string;
+}
+
+export function dropdownProp(
+  options: string[],
+  defaultVal: string,
+): DropdownProp {
+  return {
+    type: "dropdown",
+    options,
+    defaultVal,
+  };
+}
+
+export type Props = Record<string, TextProp | SwitchProp | DropdownProp>;
 
 export interface ComponentInfo {
   /**

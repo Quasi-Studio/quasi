@@ -22,11 +22,15 @@ export default view(_ => {
       _.fUnderlineTextInput(v.getVal(), false, "unset") && v.setVal(_.$ev);
     } else if (v.type === "switch") {
       _.fSwitch("", v.getVal()) && v.setVal(_.$ev);
+    } else if (v.type === "dropdown") {
+      if (_.fUnderlineDropdown(v.getVal(), v.options)) {
+        v.setVal(_.$ev);
+      }
     }
   });
 
-  if(keys.length === 0){
-    _.$cls`italic ml-4 mt-1 whitespace-nowrap`
+  if (keys.length === 0) {
+    _.$cls`italic ml-4 mt-1 whitespace-nowrap`;
     _.span("No properties");
   }
 });

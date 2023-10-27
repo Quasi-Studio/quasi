@@ -11,6 +11,7 @@ import {
   layer,
   switchProp,
   textProp,
+  dropdownProp,
 } from "../types";
 
 export const button = component(
@@ -23,7 +24,10 @@ export const button = component(
   [],
   [],
   {
-    outline: switchProp(),
+    appearance: dropdownProp(
+      ["primary", "outline", "subtle", "transparent"],
+      "secondary",
+    ),
   },
 );
 
@@ -44,5 +48,9 @@ export const textInput = component(
   plugin("validator", "#input-validator"),
   {
     placeholder: textProp(),
+    appearance: dropdownProp(
+      ["outline", "underline", "filled-darker", "filled-lighter"],
+      "outline",
+    ),
   },
 );

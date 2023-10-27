@@ -7,12 +7,12 @@ export function getProps(block: ComponentBlock): Props {
   const { info } = block;
 
   return Object.fromEntries(
-    Object.entries(info.props).map(([k, { type, defaultVal }]) => [
+    Object.entries(info.props).map(([k, v]) => [
       k,
       {
-        type,
+        ...v,
         getVal: () => {
-          return block.props[k] ?? defaultVal;
+          return block.props[k] ?? v.defaultVal;
         },
         setVal: (val: any) => {
           block.props[k] = val;
