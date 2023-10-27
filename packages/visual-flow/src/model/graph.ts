@@ -13,6 +13,7 @@ const AUTO_MOVE_START_PADDING = 70;
 const AUTO_MOVE_SPEED_SCALE = 0.07;
 const AUTO_MOVE_SPEED_MAX = AUTO_MOVE_START_PADDING * AUTO_MOVE_SPEED_SCALE;
 const GRID_SIZE = 30;
+const FULL_VIEW_PADDING = 100;
 
 export enum GraphStateType {
   IDLE,
@@ -769,6 +770,33 @@ export class Graph {
     this.boardOffsetX = 0;
     this.boardOffsetY = 0;
     this.boardScale = 1;
+  }
+
+  fullView() {
+    const leftmost =
+      Math.min(...this.blocks.map((b) => b.boardPos.x)) - FULL_VIEW_PADDING;
+    const topmost =
+      Math.min(...this.blocks.map((b) => b.boardPos.y)) - FULL_VIEW_PADDING;
+    const rightmost =
+      Math.max(
+        ...this.blocks.map((b) => b.boardPos.x + b.boundingRectBoardWidth),
+      ) + FULL_VIEW_PADDING;
+    const bottommost =
+      Math.max(
+        ...this.blocks.map((b) => b.boardPos.y + b.boundingRectBoardHeight),
+      ) + FULL_VIEW_PADDING;
+
+    const { width: graphWidth, height: graphHeight } =
+      this.el!.getBoundingClientRect();
+
+    const scale = Math.min(
+      graphWidth / (rightmost - leftmost),
+      graphHeight / (bottommost - topmost),
+    );
+
+    this.boardScale = scale;
+    this.boardOffsetX = leftmost;
+    this.boardOffsetY = topmost;
   }
 
   exportRecord(): GraphRecord {

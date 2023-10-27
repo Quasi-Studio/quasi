@@ -7,8 +7,10 @@ import "@refina/fluentui-icons/delete.r.ts";
 import "@refina/fluentui-icons/documentBulletList.r.ts";
 import "@refina/fluentui-icons/drawerArrowDownload.r.ts";
 import "@refina/fluentui-icons/edit.r.ts";
+import "@refina/fluentui-icons/imageBorder.r.ts";
+import "@refina/fluentui-icons/resizeSmall.r.ts";
 import "@refina/fluentui-icons/resizeLarge.r.ts";
-import "@refina/fluentui-icons/screenshot.r.ts";
+import domtoimage from "dom-to-image";
 import { Content, HTMLElementComponent, d, ref, view } from "refina";
 import { currentGraph, currentViewId, setCurrentViewId } from "../store";
 import {
@@ -23,7 +25,6 @@ import {
   saveAs,
 } from "../utils";
 import { toOutput } from "../utils/toOutpus";
-import domtoimage from "dom-to-image";
 
 export const previewMode = d(false);
 
@@ -102,7 +103,7 @@ export default view(_ => {
     if (!previewMode.value) {
       _.fTooltip(_ => {
         _.$cls`h-full flex items-center hover:bg-gray-300 px-2`;
-        if (_.button(_ => _.fiScreenshot20Regular())) {
+        if (_.button(_ => _.fiImageBorder20Regular())) {
           domtoimage
             .toBlob(graphElRef.current!.node, {
               width: 10000,
@@ -148,6 +149,15 @@ export default view(_ => {
         false,
         () => {
           currentGraph.resetViewport();
+        },
+      );
+      _.embed(
+        toolItem,
+        "Full view",
+        _ => _.fiResizeSmall20Regular(),
+        false,
+        () => {
+          currentGraph.fullView();
         },
       );
 

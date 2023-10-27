@@ -41,6 +41,9 @@ export abstract class Block extends ModelBase {
     return this.graph.boardPos2PagePos(this.boardPos);
   }
 
+  abstract get boundingRectBoardWidth(): number;
+  abstract get boundingRectBoardHeight(): number;
+
   boardPos2BlockPos(boardPos: Point): Point {
     return Point.minus(boardPos, this.boardPos);
   }

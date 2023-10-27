@@ -16,6 +16,13 @@ export class RectBlock extends Block {
   boardHeight: number;
   boardBorderRadius: number = 8;
 
+  get boundingRectBoardWidth() {
+    return this.boardWidth;
+  }
+  get boundingRectBoardHeight() {
+    return this.boardHeight;
+  }
+
   get graphWidth() {
     return this.boardWidth * this.graph.boardScale;
   }
