@@ -1,4 +1,4 @@
-import { Props } from "../../utils/props";
+import { Prop, Props } from "../../utils/props";
 import { ComponentBlock } from "./block";
 
 let v = "";
@@ -17,7 +17,7 @@ export function getProps(block: ComponentBlock): Props {
         setVal: (val: any) => {
           block.props[k] = val;
         },
-      },
+      } as Prop,
     ]),
   );
 }

@@ -20,7 +20,7 @@ export class ComponentBlock extends RectBlock {
 
   componentType: string;
   info: ComponentInfo;
-  props: Record<string, any> = {};
+  props: Record<string, string | boolean> = {};
 
   socketMap = new Map<string, Socket>();
 
