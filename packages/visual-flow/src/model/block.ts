@@ -161,7 +161,7 @@ export abstract class Block extends ModelBase {
   }
 
   updatePosition() {
-    const { x, y } = this.pagePos;
+    const { x, y } = this.attached ? this.graphPos : this.pagePos;
     if (this.el) this.el.style.left = `${x}px`;
     if (this.el) this.el.style.top = `${y}px`;
     this.updateSocketPosition();

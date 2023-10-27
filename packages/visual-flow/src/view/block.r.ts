@@ -6,10 +6,10 @@ import styles from "./block.styles";
 @Vf.outputComponent("vfBlock")
 export class VfBlock extends OutputComponent {
   main(_: ComponentContext<this>, model: Block): void {
-    const { x: pageX, y: pageY } = model.pagePos;
+    const { x, y } = model.attached ? model.graphPos : model.pagePos;
 
     styles.root(model.selected, model.attached, model.predicting)(_);
-    _.$css`top:${pageY}px;left:${pageX}px;z-index:${model.attached ? model.zIndex : 10000}`;
+    _.$css`left:${x}px;top:${y}px;z-index:${model.attached ? model.zIndex : 10000}`;
     _.$ref(model.ref) &&
       _._div({}, _ => {
         styles.svg(_);

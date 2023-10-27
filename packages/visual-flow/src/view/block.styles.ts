@@ -7,7 +7,7 @@ import {
 } from "@refina/griffel";
 
 const rootClassName = makeResetStyles({
-  position: "fixed",
+  position: "absolute",
   width: 0,
   height: 0,
   filter: `drop-shadow(0 4px 8px rgba(0,0,0,0.14))`,
@@ -25,6 +25,7 @@ const rootStyles = makeStyles({
     filter: `drop-shadow(0 14px 28px rgba(0,0,0,0.14))`,
   },
   unattached: {
+    position: "fixed",
     opacity: 0.4,
   },
   predicting: {
