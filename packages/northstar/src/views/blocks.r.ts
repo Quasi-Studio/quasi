@@ -89,6 +89,7 @@ export default view(_ => {
           () => {
             const block = new ViewBlock();
             block.viewName = id;
+            block.initialize();
             return block;
           },
           id === "app",
