@@ -45,6 +45,7 @@ export class ViewBlock extends RectBlock implements SpecialBlock {
     return {
       type: "view",
       id: this.id,
+      viewName: this.viewName,
       parent: {
         blockId: this.inSocket.connectedLine?.a.block.id ?? NaN,
         socketName: this.inSocket.connectedLine?.a.label ?? "",
@@ -58,6 +59,7 @@ blockCtors["ViewBlock"] = ViewBlock;
 export interface ViewBlockOutput {
   type: "view";
   id: number;
+  viewName: string;
   parent: {
     blockId: number;
     socketName: string;
