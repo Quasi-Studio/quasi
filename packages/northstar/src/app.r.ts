@@ -56,8 +56,8 @@ app.use(FluentUI).use(Vf).use(Basics)(_ => {
             // );
           });
 
-          _.$cls`overflow-y-scroll h-full bg-gray-200 grid grid-cols-5`;
-          _.div(_ => _.embed(propertiesView));
+          _.$cls`overflow-y-scroll h-full bg-gray-200 grid grid-cols-3`;
+          _.div(propertiesView);
         });
       }
 

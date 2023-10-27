@@ -9,6 +9,8 @@ import {
   plugin,
   t,
   layer,
+  switchProp,
+  textProp,
 } from "../types";
 
 export const button = component(
@@ -18,6 +20,11 @@ export const button = component(
   [],
   [],
   event("click", "void"),
+  [],
+  [],
+  {
+    outline: switchProp(),
+  },
 );
 
 export const p = contentWrapper("Paragraph");
@@ -35,4 +42,7 @@ export const textInput = component(
   event("input", t.string),
   method("clear", [], (id) => `${id}.clear()`),
   plugin("validator", "#input-validator"),
+  {
+    placeholder: textProp(),
+  },
 );

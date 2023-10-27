@@ -10,14 +10,8 @@ export interface SwitchProp {
   getVal(): boolean;
   setVal(val: boolean): void;
 }
-export interface DropdownProp {
-  type: "dropdown";
-  options: string[];
-  getVal(): string;
-  setVal(val: string): void;
-}
 
-export type Prop = TextProp | SwitchProp | DropdownProp;
+export type Prop = TextProp | SwitchProp;
 
 export type Props = Record<string, Prop>;
 

@@ -15,14 +15,12 @@ export default view(_ => {
       },
       k,
     );
-    _.$cls`col-span-4 cursor-text h-8`;
+    _.$cls`col-span-2 cursor-text h-8`;
     _.$ref(r);
     if (v.type === "text") {
       _.fUnderlineTextInput(v.getVal(), false, "unset") && v.setVal(_.$ev);
     } else if (v.type === "switch") {
       _.fSwitch("", v.getVal()) && v.setVal(_.$ev);
-    } else if (v.type === "dropdown") {
-      _.fDropdown(v.getVal(), v.options) && v.setVal(_.$ev);
-    }
+    } 
   });
 });

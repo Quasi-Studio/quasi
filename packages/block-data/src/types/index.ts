@@ -158,6 +158,32 @@ export function plugin(
   };
 }
 
+export interface TextProp {
+  type: "text";
+  defaultVal: string;
+}
+
+export function textProp(defaultVal: string = ""): TextProp {
+  return {
+    type: "text",
+    defaultVal,
+  };
+}
+
+export interface SwitchProp {
+  type: "switch";
+  defaultVal: boolean;
+}
+
+export function switchProp(defaultVal: boolean = false): SwitchProp {
+  return {
+    type: "switch",
+    defaultVal,
+  };
+}
+
+export type Props = Record<string, TextProp | SwitchProp>;
+
 export interface ComponentInfo {
   /**
    * Display name
@@ -173,6 +199,8 @@ export interface ComponentInfo {
   events: EventInfo[];
   methods: MethodInfo[];
   plugins: PluginInfo[];
+
+  props: Props;
 }
 
 export function component(
@@ -184,6 +212,7 @@ export function component(
   events: EventInfo[] | EventInfo = [],
   methods: MethodInfo[] | MethodInfo = [],
   plugins: PluginInfo[] | PluginInfo = [],
+  props: Props = {},
 ): ComponentInfo {
   function toArray<T>(v: T[] | T) {
     return Array.isArray(v) ? v : [v];
@@ -197,6 +226,7 @@ export function component(
     events: toArray(events),
     methods: toArray(methods),
     plugins: toArray(plugins),
+    props,
   };
 }
 
