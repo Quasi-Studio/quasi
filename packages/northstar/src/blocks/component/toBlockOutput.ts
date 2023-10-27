@@ -12,6 +12,7 @@ type Callbacks = Record<
 type Props = Record<
   string,
   | string
+  | boolean
   | {
       blockId: number;
       name: string;
@@ -65,6 +66,9 @@ export function toBlockOutput(block: ComponentBlock) {
   }
 
   const props = {} as Props;
+  for (const [k, v] of Object.entries(block.info.props)) {
+    props[k] = block.props[k] ?? v.defaultVal;
+  }
   for (const input of block.info.inputs) {
     const socket = block.socketMap.get(input.name)?.allConnectedLines[0]?.a;
     if (!socket) continue;
