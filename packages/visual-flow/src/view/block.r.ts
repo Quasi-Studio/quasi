@@ -6,42 +6,40 @@ import styles from "./block.styles";
 @Vf.outputComponent("vfBlock")
 export class VfBlock extends OutputComponent {
   main(_: ComponentContext<this>, model: Block): void {
-    _.portal(_ => {
-      const { x: pageX, y: pageY } = model.pagePos;
+    const { x: pageX, y: pageY } = model.pagePos;
 
-      styles.root(model.selected, model.attached, model.predicting)(_);
-      _.$css`top:${pageY}px;left:${pageX}px;z-index:${model.attached ? model.zIndex : 10000}`;
-      _.$ref(model.ref) &&
-        _._div({}, _ => {
-          styles.svg(_);
-          _._svgSvg({}, _ => {
-            styles.bg(model.selected)(_);
-            _.$ref(model.bgRef) &&
-              _._svgPath({
-                d: model.backgroudPath,
-              });
-
-            _.for(model.allSockets, byIndex, socket => {
-              _.vfSocket(socket);
+    styles.root(model.selected, model.attached, model.predicting)(_);
+    _.$css`top:${pageY}px;left:${pageX}px;z-index:${model.attached ? model.zIndex : 10000}`;
+    _.$ref(model.ref) &&
+      _._div({}, _ => {
+        styles.svg(_);
+        _._svgSvg({}, _ => {
+          styles.bg(model.selected)(_);
+          _.$ref(model.bgRef) &&
+            _._svgPath({
+              d: model.backgroudPath,
             });
-          });
 
-          _._div(
-            {
-              onmousedown: ev => {
-                if (ev.defaultPrevented) ev.stopPropagation();
-              },
-              // onmousemove: (ev) => {
-              //   if (!model.dragging) ev.stopPropagation();
-              // },
-              onmouseup: ev => {
-                if (!model.selected) ev.stopPropagation();
-              },
-            },
-            model.contentMain,
-          );
+          _.for(model.allSockets, byIndex, socket => {
+            _.vfSocket(socket);
+          });
         });
-    });
+
+        _._div(
+          {
+            onmousedown: ev => {
+              if (ev.defaultPrevented) ev.stopPropagation();
+            },
+            // onmousemove: (ev) => {
+            //   if (!model.dragging) ev.stopPropagation();
+            // },
+            onmouseup: ev => {
+              if (!model.selected) ev.stopPropagation();
+            },
+          },
+          model.contentMain,
+        );
+      });
   }
 }
 
