@@ -40,6 +40,8 @@ const toolItem = view((_, tip: string, buttonContent: Content, disabled: boolean
 
 let buildOutput = "";
 
+let exportToPNGProgess = 0;
+
 export const graphElRef = ref<HTMLElementComponent<"div">>();
 
 export default view(_ => {
@@ -101,50 +103,68 @@ export default view(_ => {
     }
 
     if (!previewMode.value) {
-      _.embed(
-        toolItem,
-        "Screenshot",
-        _ => _.fiImageBorder20Regular(),
-        currentGraph.blocks.length === 0,
+      _.fDialog(
+        (_, open) =>
+          _.embed(
+            toolItem,
+            "Export to PNG",
+            _ => _.fiImageBorder20Regular(),
+            currentGraph.blocks.length === 0,
+            () => {
+              open();
+
+              const node = graphElRef.current!.node;
+
+              const { width, height } = currentGraph.fullView();
+              currentGraph.updatePosition();
+
+              setTimeout(() => {
+                const { x, y } = node.getBoundingClientRect();
+
+                domToBlob(node, {
+                  backgroundColor: "white",
+                  scale: 4 / currentGraph.boardScale,
+                  width: width,
+                  height: height,
+                  style: {
+                    transform: `translate(-${x}px, -${y}px)`,
+                  },
+                  timeout: 30000,
+                  progress: (current, total) => {
+                    exportToPNGProgess = current / total;
+                    _.$update();
+                  },
+                })
+                  .then(async blob => {
+                    const handle = await window.showSaveFilePicker({
+                      suggestedName: "quasi-graph.png",
+                      types: [
+                        {
+                          description: "PNG",
+                          accept: {
+                            "image/png": [".png"],
+                          },
+                        },
+                      ],
+                    });
+                    const writable = await handle.createWritable();
+                    await writable.write(await blob.arrayBuffer());
+                    await writable.close();
+
+                    open(false);
+                  })
+                  .catch(err => {
+                    open(false);
+                  });
+              }, 100);
+            },
+          ),
+        "Export to PNG",
         () => {
-          const node = graphElRef.current!.node;
-
-          const { width, height } = currentGraph.fullView();
-          currentGraph.updatePosition();
-
-          setTimeout(() => {
-            const { x, y } = node.getBoundingClientRect();
-
-            domToBlob(node, {
-              backgroundColor: "white",
-              scale: 4 / currentGraph.boardScale,
-              width: width,
-              height: height,
-              style: {
-                transform: `translate(-${x}px, -${y}px)`,
-              },
-              timeout: 30000,
-            })
-              .then(async blob => {
-                const handle = await window.showSaveFilePicker({
-                  suggestedName: "quasi-graph.png",
-                  types: [
-                    {
-                      description: "PNG",
-                      accept: {
-                        "image/png": [".png"],
-                      },
-                    },
-                  ],
-                });
-                const writable = await handle.createWritable();
-                await writable.write(await blob.arrayBuffer());
-                await writable.close();
-              })
-              .catch(console.error);
-          }, 100);
+          _.fField(_ => _.fProgressBar(exportToPNGProgess), "Progess");
         },
       );
+
       _.embed(
         toolItem,
         "Undo",
