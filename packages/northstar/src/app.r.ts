@@ -30,22 +30,22 @@ app.use(FluentUI).use(Vf).use(Basics)(_ => {
     _.div(_ => {
       const hasSelectedBlock = [...currentGraph.selectedBlocks].filter(block => !block.pendingClick).length > 0;
 
-      _.$cls`absolute left-0 top-8 w-80 ${hasSelectedBlock ? "bottom-[40%]" : "bottom-0"}
-   bg-gray-200 select-none z-[1000] border-r border-gray-400`;
+      _.$cls`absolute left-0 top-8 w-80 bottom-0
+   bg-gray-200 select-none z-[1000] border-r border-gray-400 flex flex-col`;
       _.div(_ => {
-        _.$cls`flex items-center w-full bg-gray-300 pl-2 leading-7`;
-        _.div("Blocks");
+        _.$cls`flex items-center w-full bg-gray-300 pl-2 leading-7 font-bold`;
+        _.div("BLOCKS");
 
-        _.$cls`overflow-y-scroll h-full pb-16`;
+        _.$cls`overflow-y-scroll flex-grow w-full pb-16`;
         _.div(_ => _.embed(blocksView));
-      });
 
-      if (hasSelectedBlock) {
-        _.$cls`absolute left-0 bottom-0 w-80 h-2/5 border-t-4 border-gray-400 border-r border-gray-400 z-[1000]`;
-        _.div(_ => {
+        if (hasSelectedBlock) {
+          // _.$cls`absolute left-0 bottom-0 w-80 h-2/5 border-t-4 border-gray-400 border-r border-gray-400 z-[1000]`;
+          // _.div(_ => {
           _.$cls`flex items-center w-full bg-gray-300 pl-2 leading-7`;
           _.div(_ => {
-            _.t`Properties`;
+            _.$cls`font-bold`;
+            _.span("PROPERTIES");
 
             // _.$cls`text-xs pl-3`;
             // _.span(
@@ -56,10 +56,11 @@ app.use(FluentUI).use(Vf).use(Basics)(_ => {
             // );
           });
 
-          _.$cls`overflow-y-scroll h-full bg-gray-200 grid grid-cols-3`;
+          _.$cls`overflow-y-scroll h-min min-h-[60px] bg-gray-200 grid grid-cols-3 pb-8`;
           _.div(propertiesView);
-        });
-      }
+          // });
+        }
+      });
 
       _.$cls`absolute left-80 top-8 right-0 bottom-0`;
       _._div({}, _ => _.vfGraph(currentGraph));

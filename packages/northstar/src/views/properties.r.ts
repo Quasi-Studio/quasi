@@ -3,7 +3,8 @@ import { getSelectedProps } from "../utils/props";
 
 export default view(_ => {
   const props = getSelectedProps();
-  _.for(Object.keys(props), bySelf, k => {
+  const keys = Object.keys(props);
+  _.for(keys, bySelf, k => {
     const v = props[k];
     const r = ref() as MainElRef;
     _.$cls`col-span-1 flex justify-center items-center border-b border-gray-500 cursor-text h-8`;
@@ -21,6 +22,11 @@ export default view(_ => {
       _.fUnderlineTextInput(v.getVal(), false, "unset") && v.setVal(_.$ev);
     } else if (v.type === "switch") {
       _.fSwitch("", v.getVal()) && v.setVal(_.$ev);
-    } 
+    }
   });
+
+  if(keys.length === 0){
+    _.$cls`italic ml-4 mt-1 whitespace-nowrap`
+    _.span("No properties");
+  }
 });
