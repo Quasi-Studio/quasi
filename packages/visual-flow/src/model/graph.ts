@@ -787,18 +787,23 @@ export class Graph {
         ...this.blocks.map((b) => b.boardPos.y + b.boundingRectBoardHeight),
       ) + FULL_VIEW_PADDING;
 
+    const boardWidth = rightmost - leftmost;
+    const boardHeight = bottommost - topmost;
+
     const { width: graphWidth, height: graphHeight } =
       this.el!.getBoundingClientRect();
 
-    const scale = Math.min(
-      graphWidth / (rightmost - leftmost),
-      graphHeight / (bottommost - topmost),
-    );
+    const scale = Math.min(graphWidth / boardWidth, graphHeight / boardHeight);
 
     this.boardScale = scale;
     this.boardOffsetX = leftmost;
     this.boardOffsetY = topmost;
     this.pushRecord();
+
+    return {
+      width: boardWidth * scale,
+      height: boardHeight * scale,
+    };
   }
 
   exportRecord(): GraphRecord {

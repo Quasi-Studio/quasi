@@ -13,17 +13,23 @@ export class VfBlock extends OutputComponent {
     _.$ref(model.ref) &&
       _._div({}, _ => {
         styles.svg(_);
-        _._svgSvg({}, _ => {
-          styles.bg(model.selected)(_);
-          _.$ref(model.bgRef) &&
-            _._svgPath({
-              d: model.backgroudPath,
-            });
+        _._svgSvg(
+          {
+            width: model.boundingRectBoardWidth * model.graph.boardScale + 30,
+            height: model.boundingRectBoardHeight * model.graph.boardScale + 30,
+          },
+          _ => {
+            styles.bg(model.selected)(_);
+            _.$ref(model.bgRef) &&
+              _._svgPath({
+                d: model.backgroudPath,
+              });
 
-          _.for(model.allSockets, byIndex, socket => {
-            _.vfSocket(socket);
-          });
-        });
+            _.for(model.allSockets, byIndex, socket => {
+              _.vfSocket(socket);
+            });
+          },
+        );
 
         _._div(
           {

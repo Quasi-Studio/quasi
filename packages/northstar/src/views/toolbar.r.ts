@@ -10,7 +10,7 @@ import "@refina/fluentui-icons/edit.r.ts";
 import "@refina/fluentui-icons/imageBorder.r.ts";
 import "@refina/fluentui-icons/resizeSmall.r.ts";
 import "@refina/fluentui-icons/resizeLarge.r.ts";
-import domtoimage from "dom-to-image";
+import { domToBlob } from "modern-screenshot";
 import { Content, HTMLElementComponent, d, ref, view } from "refina";
 import { currentGraph, currentViewId, setCurrentViewId } from "../store";
 import {
@@ -104,27 +104,42 @@ export default view(_ => {
       _.fTooltip(_ => {
         _.$cls`h-full flex items-center hover:bg-gray-300 px-2`;
         if (_.button(_ => _.fiImageBorder20Regular())) {
-          domtoimage
-            .toBlob(graphElRef.current!.node, {
-              width: 10000,
-              height: 10000,
+          const node = graphElRef.current!.node;
+
+          const { width, height } = currentGraph.fullView();
+          currentGraph.updatePosition();
+
+          setTimeout(() => {
+            const { x, y } = node.getBoundingClientRect();
+
+            domToBlob(node, {
+              backgroundColor: "white",
+              scale: 4 / currentGraph.boardScale,
+              width: width,
+              height: height,
+              style: {
+                transform: `translate(-${x}px, -${y}px)`,
+              },
+              timeout: 30000,
             })
-            .then(async blob => {
-              const handle = await window.showSaveFilePicker({
-                suggestedName: "quasi-graph.png",
-                types: [
-                  {
-                    description: "PNG",
-                    accept: {
-                      "image/png": [".png"],
+              .then(async blob => {
+                const handle = await window.showSaveFilePicker({
+                  suggestedName: "quasi-graph.png",
+                  types: [
+                    {
+                      description: "PNG",
+                      accept: {
+                        "image/png": [".png"],
+                      },
                     },
-                  },
-                ],
-              });
-              const writable = await handle.createWritable();
-              await writable.write(await blob.arrayBuffer());
-              await writable.close();
-            });
+                  ],
+                });
+                const writable = await handle.createWritable();
+                await writable.write(await blob.arrayBuffer());
+                await writable.close();
+              })
+              .catch(console.error);
+          }, 100);
         }
       }, "Screenshot");
 

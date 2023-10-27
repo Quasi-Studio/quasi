@@ -72,9 +72,9 @@ importers:
       '@refina/griffel':
         specifier: link:..\..\..\refina\packages\griffel
         version: link:../../../refina/packages/griffel
-      dom-to-image:
-        specifier: ^2.6.0
-        version: 2.6.0
+      modern-screenshot:
+        specifier: ^4.4.33
+        version: 4.4.33
       refina:
         specifier: link:..\..\..\refina\packages\core
         version: link:../../../refina/packages/core
@@ -85,9 +85,6 @@ importers:
       '@refina/tsconfig':
         specifier: link:..\..\..\refina\packages\tsconfig
         version: link:../../../refina/packages/tsconfig
-      '@types/dom-to-image':
-        specifier: ^2.6.6
-        version: 2.6.6
       '@types/wicg-file-system-access':
         specifier: ^2023.10.2
         version: 2023.10.2
@@ -479,10 +476,6 @@ packages:
     resolution: {integrity: sha512-vxhUy4J8lyeyinH7Azl1pdd43GJhZH/tP2weN8TntQblOY+A0XbT8DJk1/oCPuOOyg/Ja757rG0CgHcWC8OfMA==}
     dev: true
 
-  /@types/dom-to-image@2.6.6:
-    resolution: {integrity: sha512-cDasShTmSLdXLg7yRVlUYpm+14HMcv3KLmMqFkEowLC/HDXPZ/PwpZMdmDLYQx/1vUxB4lzHY2ydt/MswQnphA==}
-    dev: true
-
   /@types/estree@1.0.2:
     resolution: {integrity: sha512-VeiPZ9MMwXjO32/Xu7+OwflfmeoRwkE/qzndw42gGtgJwZopBnzy2gD//NN1+go1mADzkDcqf/KnFRSjTJ8xJA==}
     dev: true
@@ -758,10 +751,6 @@ packages:
   /dlv@1.1.3:
     resolution: {integrity: sha512-+HlytyjlPKnIG8XuRG8WvmBP8xs8P71y+SKKS6ZXWoEgLuePxtDoUEiH7WkdePWrQ5JBpE6aoVqfZfJUQkjXwA==}
     dev: true
-
-  /dom-to-image@2.6.0:
-    resolution: {integrity: sha512-Dt0QdaHmLpjURjU7Tnu3AgYSF2LuOmksSGsUcE6ItvJoCWTBEmiMXcqBdNSAm9+QbbwD7JMoVsuuKX6ZVQv1qA==}
-    dev: false
 
   /eastasianwidth@0.2.0:
     resolution: {integrity: sha512-I88TYZWc9XiYHRQ4/3c5rjjfgkjhLyW2luGIheGERbNQ6OY7yTybanSpDXZa8y7VUP9YmDcYa+eyq4ca7iLqWA==}
@@ -1165,6 +1154,10 @@ packages:
     dependencies:
       brace-expansion: 1.1.11
     dev: true
+
+  /modern-screenshot@4.4.33:
+    resolution: {integrity: sha512-uxxD4PdbIitXFlcNbO6kpRuxssfN+rJDfr8Pk2/eOx1dFz+LcaYDfbfeq7UxKuhsOVeN1tj996wEY3yJYwhnaQ==}
+    dev: false
 
   /mrmime@1.0.1:
     resolution: {integrity: sha512-hzzEagAgDyoU1Q6yg5uI+AorQgdvMCur3FcKf7NhMKWsaYg+RnbTyHRa/9IlLF9rf455MOCtcqqrQQ83pPP7Uw==}
