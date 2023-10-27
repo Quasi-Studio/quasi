@@ -81,9 +81,11 @@ export default view(_ => {
           _.$cls`block h-56 w-full border-2 overflow-y-scroll rounded shadow-inner border-gray-400 p-3 font-[Consolas]`;
           _._textarea(
             {
-              onwheel: e => {
-                e.stopPropagation();
-              },
+              onwheel: e => e.stopPropagation(),
+              onmousedown: e => e.stopPropagation(),
+              onmousemove: e => e.stopPropagation(),
+              onmouseup: e => e.stopPropagation(),
+              onkeydown: e => e.stopPropagation(),
             },
             buildOutput,
           );
