@@ -5,7 +5,7 @@ import { app } from "refina";
 import { currentGraph } from "./store";
 import blocksView from "./views/blocks.r";
 import propertiesView from "./views/properties.r";
-import toolbarView, { previewMode } from "./views/toolbar.r";
+import toolbarView, { graphElRef, previewMode } from "./views/toolbar.r";
 import { isComponentBlock } from "./blocks/component/block";
 import { duplicateBlocks, hasBlocksToDuplicate, hasBlocksToRemove, removeBlocks } from "./utils";
 import previewView from "./views/preview.r";
@@ -63,7 +63,7 @@ app.use(FluentUI).use(Vf).use(Basics)(_ => {
       });
 
       _.$cls`absolute left-80 top-8 right-0 bottom-0`;
-      _._div({}, _ => _.vfGraph(currentGraph));
+      _.$ref(graphElRef) && _._div({}, _ => _.vfGraph(currentGraph));
 
       _.$app.registerDocumentEventListener("keydown", ev => {
         if (ev.ctrlKey) {

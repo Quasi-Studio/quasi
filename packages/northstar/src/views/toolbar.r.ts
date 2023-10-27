@@ -8,7 +8,8 @@ import "@refina/fluentui-icons/documentBulletList.r.ts";
 import "@refina/fluentui-icons/drawerArrowDownload.r.ts";
 import "@refina/fluentui-icons/edit.r.ts";
 import "@refina/fluentui-icons/resizeLarge.r.ts";
-import { Content, d, view } from "refina";
+import "@refina/fluentui-icons/screenshot.r.ts";
+import { Content, HTMLElementComponent, d, ref, view } from "refina";
 import { currentGraph, currentViewId, setCurrentViewId } from "../store";
 import {
   alignBlocksToLeft,
@@ -22,6 +23,7 @@ import {
   saveAs,
 } from "../utils";
 import { toOutput } from "../utils/toOutpus";
+import domtoimage from "dom-to-image";
 
 export const previewMode = d(false);
 
@@ -36,6 +38,8 @@ const toolItem = view((_, tip: string, buttonContent: Content, disabled: boolean
 });
 
 let buildOutput = "";
+
+export const graphElRef = ref<HTMLElementComponent<"div">>();
 
 export default view(_ => {
   _.$cls`flex items-center h-full`;
@@ -94,6 +98,33 @@ export default view(_ => {
     ) {
       buildOutput = _.$ev ? JSON.stringify(toOutput(), undefined, 2) : "Building...";
     }
+
+    _.fTooltip(_ => {
+      _.$cls`h-full flex items-center hover:bg-gray-300 px-2`;
+      if (_.button(_ => _.fiScreenshot20Regular())) {
+        domtoimage
+          .toBlob(graphElRef.current!.node, {
+            width: 10000,
+            height: 10000,
+          })
+          .then(async blob => {
+            const handle = await window.showSaveFilePicker({
+              suggestedName: "quasi-graph.png",
+              types: [
+                {
+                  description: "PNG",
+                  accept: {
+                    "image/png": [".png"],
+                  },
+                },
+              ],
+            });
+            const writable = await handle.createWritable();
+            await writable.write(await blob.arrayBuffer());
+            await writable.close();
+          });
+      }
+    }, "Screenshot");
 
     if (!previewMode.value) {
       _.embed(
