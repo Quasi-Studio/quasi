@@ -271,15 +271,15 @@ export abstract class Block extends ModelBase {
   }
 
   onHover(): void {
-    this.el!.classList.add("hovered");
-    this.bgEl!.classList.add("hovered");
+    this.el?.classList.add("hovered");
+    this.bgEl?.classList.add("hovered");
     for (const [_d, b] of this.dockedByBlocks) {
       b.onHover();
     }
   }
   onUnhover(): void {
-    this.el!.classList.remove("hovered");
-    this.bgEl!.classList.remove("hovered");
+    this.el?.classList.remove("hovered");
+    this.bgEl?.classList.remove("hovered");
     for (const [_d, b] of this.dockedByBlocks) {
       b.onUnhover();
     }

@@ -62,10 +62,10 @@ export abstract class Socket extends ModelBase {
   abstract checkConnectable(line: Line): boolean;
 
   onHover() {
-    this.el!.classList.add("hovered");
+    this.el?.classList.add("hovered");
   }
   onUnhover() {
-    this.el!.classList.remove("hovered");
+    this.el?.classList.remove("hovered");
   }
 
   abstract onMouseDown(): void;

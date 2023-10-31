@@ -103,18 +103,18 @@ export abstract class Line extends ModelBase {
   }
 
   updatePosition() {
-    this.lineEl!.setAttribute("d", this.linePath);
+    this.lineEl?.setAttribute("d", this.linePath);
     this.arrowEl.setAttribute("d", this.arrowPath);
   }
 
   hover() {
-    this.lineEl!.classList.add("hovered");
-    this.arrowEl!.classList.add("hovered");
+    this.lineEl?.classList.add("hovered");
+    this.arrowEl?.classList.add("hovered");
   }
 
   unhover() {
-    this.lineEl!.classList.remove("hovered");
-    this.arrowEl!.classList.remove("hovered");
+    this.lineEl?.classList.remove("hovered");
+    this.arrowEl?.classList.remove("hovered");
   }
 
   disconnect(s: Socket) {
