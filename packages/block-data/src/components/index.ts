@@ -14,6 +14,18 @@ import {
   dropdownProp,
 } from "../types";
 
+export const textNode = component(
+  "TextNode",
+  null,
+  [],
+  input("text", "string", "as-primary-and-socket"),
+  [],
+  [],
+  [],
+  [],
+  {},
+);
+
 export const button = component(
   "Button",
   null,
