@@ -137,10 +137,10 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
       value: this.inputValue.value,
       inputs,
       output:
-        this.outputSocket.allConnectedLines?.map(l => ({
+        this.outputSocket.allConnectedLines.map(l => ({
           blockId: (l.b as Socket).block.id,
           name: (l.b as Socket).label,
-        })) ?? [],
+        })),
     };
   }
 }
