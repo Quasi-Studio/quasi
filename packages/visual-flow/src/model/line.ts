@@ -17,7 +17,7 @@ export type PointWithDirection = {
 };
 
 export abstract class Line extends ModelBase {
-  abstract ctor(): Line;
+  abstract clone(): Line;
 
   graph: Graph;
   type: string;
@@ -137,7 +137,7 @@ export abstract class Line extends ModelBase {
   abstract get arrowPath(): string;
 
   createPredictor(): Line {
-    const predictor = this.ctor();
+    const predictor = this.clone();
     predictor.graph = this.graph;
     predictor.a = this.a;
     predictor.b = this.b;
