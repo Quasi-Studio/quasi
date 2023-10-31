@@ -75,7 +75,7 @@ export class ComponentBlock extends RectBlock {
     updateSockets(this);
   }
 
-  ctor() {
+  clone() {
     const block = new ComponentBlock();
     block.initialize(this.componentType, this.info);
     return block;

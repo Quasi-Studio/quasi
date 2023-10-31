@@ -15,7 +15,7 @@ import { SpecialBlock } from "./base";
 import { Props } from "../../utils/props";
 
 export class IfElseBlock extends RectBlock implements SpecialBlock {
-  ctor() {
+  clone() {
     const block = new IfElseBlock();
     block.initialize();
     return block;

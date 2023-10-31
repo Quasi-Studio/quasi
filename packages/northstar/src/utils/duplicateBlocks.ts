@@ -14,7 +14,7 @@ export function duplicateBlocks() {
   const blocks = [...currentGraph.selectedBlocks].filter(isDuplicateable);
   currentGraph.clearSelectedBlocks();
   blocks.forEach((block) => {
-    const newBlock = block.ctor();
+    const newBlock = block.clone();
     newBlock.boardX = block.boardX + 90;
     newBlock.boardY = block.boardY + 90;
     newBlock.attached = true;

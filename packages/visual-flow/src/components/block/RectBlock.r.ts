@@ -8,7 +8,7 @@ import styles from "./RectBlock.styles";
 const SOCKET_PADDING_SCALE = -0.1;
 
 export class RectBlock extends Block {
-  ctor(): Block {
+  clone(): Block {
     return new RectBlock();
   }
 

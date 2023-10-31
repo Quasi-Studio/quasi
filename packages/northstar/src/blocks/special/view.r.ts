@@ -4,7 +4,7 @@ import { SpecialBlock } from "./base";
 import { Props } from "../../utils/props";
 
 export class ViewBlock extends RectBlock implements SpecialBlock {
-  ctor() {
+  clone() {
     const block = new ViewBlock();
     block.viewName = this.viewName;
     block.initialize();

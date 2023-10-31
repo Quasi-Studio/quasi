@@ -4,7 +4,7 @@ import { SpecialBlock } from "./base";
 import { Props } from "../../utils/props";
 
 export class RootBlock extends RectBlock implements SpecialBlock {
-  ctor() {
+  clone() {
     const block = new RootBlock();
     block.initialize();
     return block;

@@ -15,7 +15,7 @@ const MIN_OUTSIDE_DISTANCE_SQUARE = 40 * 40;
 const MIN_DOCKING_DISTANCE_SQUARE = 40 * 40;
 
 export abstract class Block extends ModelBase {
-  abstract ctor(): Block;
+  abstract clone(): Block;
 
   graph: Graph;
 
@@ -315,7 +315,7 @@ export abstract class Block extends ModelBase {
   abstract contentMain: (_: Context) => void;
 
   createPredictor(): Block {
-    const predictor = this.ctor();
+    const predictor = this.clone();
     predictor.graph = this.graph;
     predictor.attached = this.attached;
     predictor.selected = true;
