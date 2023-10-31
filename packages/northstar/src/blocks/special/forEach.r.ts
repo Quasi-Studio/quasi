@@ -15,11 +15,14 @@ import { Props } from "../../utils/props";
 import { SpecialBlock } from "./base";
 
 export class ForEachBlock extends RectBlock implements SpecialBlock {
-  duplicate() {
+  clone() {
     const block = new ForEachBlock();
     block.initialize();
     return block;
   }
+
+  removable = true;
+  duplicateable = true;
 
   parentSocket: InSocket;
   childrenSocket: MultiOutSocket;
