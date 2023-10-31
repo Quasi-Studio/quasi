@@ -35,6 +35,17 @@ export class RootBlock extends RectBlock implements SpecialBlock {
     return {};
   }
 
+  protected exportData() {
+    return {
+      ...super.exportData(),
+      outSocket: this.outSocket.id,
+    };
+  }
+  protected importData(data: any, sockets: any): void {
+    super.importData(data, sockets);
+    this.outSocket = sockets[data.outSocket];
+  }
+
   toOutput(): RootBlockOutput {
     return {
       type: "root",
