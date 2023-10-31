@@ -4,7 +4,7 @@ import { bySelf, view } from "refina";
 import { ComponentBlock } from "../blocks/component/block";
 import special from "../blocks/special";
 import { ViewBlock } from "../blocks/special/view.r";
-import { createNewView, currentGraph, setCurrentView, views } from "../store";
+import { createNewView, currentGraph, currentViewId, setCurrentView, views } from "../store";
 
 export default view(_ => {
   if (_.fAccordionDefaultOpen("Special")) {
@@ -65,6 +65,8 @@ export default view(_ => {
     _.$cls`grid grid-cols-3 justify-items-center`;
     _.div(_ => {
       _.for(views.keys(), bySelf, id => {
+        const editingThis = id === currentViewId;
+
         _.$cls`my-1`;
         _.vfCreator(
           currentGraph,
@@ -72,18 +74,23 @@ export default view(_ => {
             _.img("https://via.placeholder.com/80x80?text=" + id);
             _.$cls`text-center text-sm flex-nowrap`;
             _.div(_ => {
-              _.t(id);
-              _.$cls`float-right mr-1 hover:bg-gray-300`;
-              _._div(
-                {
-                  onmousedown: ev => ev.stopPropagation(),
-                  onclick: () => {
-                    setCurrentView(id);
-                    _.$update();
+              _.span(id);
+              if (editingThis) {
+                _.$cls`float-right mr-1 text-gray-500`;
+                _.div(_ => _.fiEdit20Filled());
+              } else {
+                _.$cls`float-right mr-1 hover:bg-gray-300`;
+                _._div(
+                  {
+                    onmousedown: ev => ev.stopPropagation(),
+                    onclick: () => {
+                      setCurrentView(id);
+                      _.$update();
+                    },
                   },
-                },
-                _ => _.fiEdit20Regular(),
-              );
+                  _ => _.fiEdit20Regular(),
+                );
+              }
             });
           },
           () => {
@@ -92,7 +99,7 @@ export default view(_ => {
             block.initialize();
             return block;
           },
-          id === "app",
+          id === "app" || editingThis,
         );
       });
       _.$cls`my-1 hover:border-2 hover:border-gray-400`;
