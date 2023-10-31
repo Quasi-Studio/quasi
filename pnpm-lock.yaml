@@ -107,6 +107,22 @@ importers:
         specifier: link:..\..\..\refina\packages\vite-plugin
         version: link:../../../refina/packages/vite-plugin
 
+  packages/runtime:
+    dependencies:
+      '@refina/mdui':
+        specifier: link:..\..\..\refina\packages\mdui
+        version: link:../../../refina/packages/mdui
+      refina:
+        specifier: link:..\..\..\refina\packages\core
+        version: link:../../../refina/packages/core
+    devDependencies:
+      '@refina/tsconfig':
+        specifier: link:..\..\..\refina\packages\tsconfig
+        version: link:../../../refina/packages/tsconfig
+      typescript:
+        specifier: ^5.0.2
+        version: 5.2.2
+
   packages/visual-flow:
     dependencies:
       '@fluentui/tokens':
