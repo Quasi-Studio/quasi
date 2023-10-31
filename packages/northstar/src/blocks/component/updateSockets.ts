@@ -15,21 +15,16 @@ export function updateSockets(block: ComponentBlock) {
 
   const { contents, events, inputs, outputs, plugins } = info;
 
-  block.updateSocket(
-    "parent",
-    InSocket,
-    Direction.LEFT,
-    {
-      type: "L",
-      path: PATH_IN_RECT,
-    },
-  )
+  block.updateSocket("parent", InSocket, Direction.LEFT, {
+    type: "L",
+    path: PATH_IN_RECT,
+  });
 
   for (const content of contents) {
     if (content.kind === "as-primary") {
       block.removeSocket(content.name);
     } else {
-      block.updateSocket(
+      const socket = block.updateSocket(
         content.name,
         MultiOutSocket,
         content.position ?? Direction.RIGHT,
@@ -40,6 +35,12 @@ export function updateSockets(block: ComponentBlock) {
             content.kind === "as-primary-and-socket" && block.primaryFilled,
         },
       );
+
+      if (content.kind === "as-primary-and-socket") {
+        block.getPrimaryDisabled = () => {
+          return socket.allConnectedLines.length > 0;
+        };
+      }
     }
   }
 
@@ -59,7 +60,7 @@ export function updateSockets(block: ComponentBlock) {
     if (input.kind === "as-primary") {
       block.removeSocket(input.name);
     } else {
-      block.updateSocket(
+      const socket = block.updateSocket(
         input.name,
         InSocket,
         input.position ?? Direction.UP,
@@ -70,6 +71,12 @@ export function updateSockets(block: ComponentBlock) {
             input.kind === "as-primary-and-socket" && block.primaryFilled,
         },
       );
+
+      if (input.kind === "as-primary-and-socket") {
+        block.getPrimaryDisabled = () => {
+          return socket.allConnectedLines.length > 0;
+        };
+      }
     }
   }
 

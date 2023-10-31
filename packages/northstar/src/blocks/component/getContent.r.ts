@@ -18,7 +18,7 @@ export function getContent(block: ComponentBlock) {
 
   if (!info) return title;
   return (_: Context) => {
-    _.$cls`text-gray-600`
+    _.$cls`text-gray-600`;
     title(_);
 
     _._span(
@@ -30,7 +30,7 @@ export function getContent(block: ComponentBlock) {
       },
       _ => {
         _.$css`font-family: Consolas; max-width: 108px; padding-left:4px` &&
-          _.fUnderlineTextInput(block.primaryValue, false, info.name) &&
+          _.fUnderlineTextInput(block.primaryValue, block.getPrimaryDisabled(), info.name) &&
           updateSockets(block);
       },
     );

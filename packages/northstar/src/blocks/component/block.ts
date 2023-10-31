@@ -31,6 +31,7 @@ export class ComponentBlock extends RectBlock {
   get primaryFilled() {
     return this.primaryValue.value !== "";
   }
+  getPrimaryDisabled = () => false;
 
   removeSocket(name: string) {
     const socket = this.socketMap.get(name);
@@ -66,6 +67,7 @@ export class ComponentBlock extends RectBlock {
       });
     }
     Object.assign(socket, data);
+    return socket;
   }
 
   initialize(componentType: string, info: ComponentInfo) {
