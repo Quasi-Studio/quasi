@@ -69,6 +69,23 @@ export class IfElseBlock extends RectBlock implements SpecialBlock {
     return {};
   }
 
+  protected exportData() {
+    return {
+      ...super.exportData(),
+      condSocket: this.condSocket.id,
+      inputSocket: this.inputSocket.id,
+      thenSocket: this.thenSocket.id,
+      elseSocket: this.elseSocket.id,
+    };
+  }
+  protected importData(data: any, sockets: any): void {
+    super.importData(data, sockets);
+    this.condSocket = sockets[data.condSocket];
+    this.inputSocket = sockets[data.inputSocket];
+    this.thenSocket = sockets[data.thenSocket];
+    this.elseSocket = sockets[data.elseSocket];
+  }
+
   toOutput(): IfBlockOutput {
     return {
       type: "if",
