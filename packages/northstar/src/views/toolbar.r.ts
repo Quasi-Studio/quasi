@@ -25,6 +25,7 @@ import {
   saveAs,
 } from "../utils";
 import { toOutput } from "../utils/toOutpus";
+import { Compiler } from "@quasi-dev/compiler";
 
 export const previewMode = d(false);
 
@@ -99,7 +100,15 @@ export default view(_ => {
         },
       )
     ) {
-      buildOutput = _.$ev ? JSON.stringify(toOutput(), undefined, 2) : "Building...";
+      if (_.$ev) {
+        const compiler = new Compiler(toOutput());
+        compiler.compile().then(v => {
+          buildOutput = v;
+          _.$update();
+        });
+      } else {
+        buildOutput = "Building...";
+      }
     }
 
     if (!previewMode.value) {
