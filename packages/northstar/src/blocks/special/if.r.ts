@@ -43,13 +43,13 @@ export class IfElseBlock extends RectBlock implements SpecialBlock {
     this.addSocket(Direction.UP, this.inputSocket);
 
     this.thenSocket = new SingleOutSocket();
-    this.thenSocket.type = "D";
+    this.thenSocket.type = "E";
     this.thenSocket.label = "then";
     this.thenSocket.path = PATH_OUT_TRIANGLE;
     this.addSocket(Direction.DOWN, this.thenSocket);
 
     this.elseSocket = new SingleOutSocket();
-    this.elseSocket.type = "D";
+    this.elseSocket.type = "E";
     this.elseSocket.label = "else";
     this.elseSocket.path = PATH_OUT_TRIANGLE;
     this.addSocket(Direction.DOWN, this.elseSocket);
