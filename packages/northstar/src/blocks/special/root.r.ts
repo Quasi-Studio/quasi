@@ -1,7 +1,8 @@
+import type { RootBlockOutput } from "@quasi-dev/compiler";
 import { Direction, MultiOutSocket, PATH_OUT_RECT, RectBlock, Socket, blockCtors } from "@quasi-dev/visual-flow";
 import { Context } from "refina";
-import { SpecialBlock } from "./base";
 import { Props } from "../../utils/props";
+import { SpecialBlock } from "./base";
 
 export class RootBlock extends RectBlock implements SpecialBlock {
   clone() {
@@ -59,12 +60,3 @@ export class RootBlock extends RectBlock implements SpecialBlock {
 }
 
 blockCtors["RootBlock"] = RootBlock;
-
-export interface RootBlockOutput {
-  type: "root";
-  id: number;
-  children: {
-    blockId: number;
-    socketName: string;
-  }[];
-}

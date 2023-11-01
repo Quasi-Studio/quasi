@@ -1,3 +1,4 @@
+import type { ForEachBlockOutput } from "@quasi-dev/compiler";
 import {
   Direction,
   InSocket,
@@ -107,24 +108,3 @@ export class ForEachBlock extends RectBlock implements SpecialBlock {
 }
 
 blockCtors["ForEachBlock"] = ForEachBlock;
-
-export interface ForEachBlockOutput {
-  type: "for-each";
-  id: number;
-  parent: {
-    blockId: number;
-    socketName: string;
-  };
-  children: {
-    blockId: number;
-    socketName: string;
-  }[];
-  input: {
-    blockId: number;
-    socketName: string;
-  };
-  output: {
-    blockId: number;
-    socketName: string;
-  }[];
-}

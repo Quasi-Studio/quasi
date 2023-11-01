@@ -1,14 +1,13 @@
+import type { FuncBlockTypes } from "@quasi-dev/compiler";
 import {
-  Block,
   Direction,
   InSocket,
-  MultiOutSocket,
   PATH_IN_TRIANGLE,
   PATH_OUT_TRIANGLE,
   SingleOutSocket,
   blockCtors,
 } from "@quasi-dev/visual-flow";
-import { FuncBlockBase, FuncBlockTypes } from "./FuncBlockBase.r";
+import { FuncBlockBase } from "./FuncBlockBase.r";
 
 export class ImpBlock extends FuncBlockBase {
   constructor() {

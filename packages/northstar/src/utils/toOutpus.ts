@@ -1,21 +1,7 @@
-import {
-  ComponentBlockOutput,
-  isComponentBlock,
-  toBlockOutput,
-} from "../blocks/component";
-import { SpecialBlockOutput } from "../blocks/special";
+import type { QuasiOutput } from "@quasi-dev/compiler";
+import { isComponentBlock, toBlockOutput } from "../blocks/component";
 import { SpecialBlock } from "../blocks/special/base";
 import { currentGraph } from "../store";
-
-export interface ViewOutput {
-  name: string;
-  components: ComponentBlockOutput[];
-  specialBlocks: SpecialBlockOutput[];
-}
-
-export interface QuasiOutput {
-  views: ViewOutput[];
-}
 
 export function toOutput() {
   return {

@@ -1,7 +1,8 @@
-import { Direction, InSocket, PATH_IN_RECT, RectBlock, Socket, blockCtors } from "@quasi-dev/visual-flow";
+import type { ViewBlockOutput } from "@quasi-dev/compiler";
+import { Direction, InSocket, PATH_IN_RECT, RectBlock, blockCtors } from "@quasi-dev/visual-flow";
 import { Context } from "refina";
-import { SpecialBlock } from "./base";
 import { Props } from "../../utils/props";
+import { SpecialBlock } from "./base";
 
 export class ViewBlock extends RectBlock implements SpecialBlock {
   clone() {
@@ -66,13 +67,3 @@ export class ViewBlock extends RectBlock implements SpecialBlock {
 }
 
 blockCtors["ViewBlock"] = ViewBlock;
-
-export interface ViewBlockOutput {
-  type: "view";
-  id: number;
-  viewName: string;
-  parent: {
-    blockId: number;
-    socketName: string;
-  };
-}

@@ -1,8 +1,8 @@
-import { Block, blockCtors } from "@quasi-dev/visual-flow";
-import { FuncBlockBase, FuncBlockTypes } from "./FuncBlockBase.r";
+import type { FuncBlockTypes } from "@quasi-dev/compiler";
+import { blockCtors } from "@quasi-dev/visual-flow";
+import { FuncBlockBase } from "./FuncBlockBase.r";
 
 export class StringBlock extends FuncBlockBase {
-
   name = "string template";
 
   getSlots() {
@@ -11,7 +11,7 @@ export class StringBlock extends FuncBlockBase {
     return [...matches].map((match) => match[0].slice(1, -1));
   }
 
-  type: FuncBlockTypes = "string"
+  type: FuncBlockTypes = "string";
 }
 
 blockCtors["StringBlock"] = StringBlock;

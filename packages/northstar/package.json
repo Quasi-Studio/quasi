@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@quasi-dev/block-data": "workspace:^",
+    "@quasi-dev/compiler": "workspace:^",
     "@quasi-dev/visual-flow": "workspace:^",
     "@refina/basic-components": "link:..\\..\\..\\refina\\packages\\basic-components",
     "@refina/fluentui": "link:..\\..\\..\\refina\\packages\\fluentui",

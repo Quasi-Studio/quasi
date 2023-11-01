@@ -1,3 +1,4 @@
+import type { FuncBlockOutput, FuncBlockTypes } from "@quasi-dev/compiler";
 import {
   Direction,
   InSocket,
@@ -8,8 +9,8 @@ import {
   Socket,
 } from "@quasi-dev/visual-flow";
 import { Context, d } from "refina";
-import { SpecialBlock } from "./base";
 import { Props } from "../../utils/props";
+import { SpecialBlock } from "./base";
 
 export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
   clone(): FuncBlockBase {
@@ -125,8 +126,8 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
       if (socket.connectedLine) {
         inputs.push({
           slot,
-          name: socket.connectedLine.a.label,
           blockId: socket.connectedLine.a.block.id,
+          socketName: socket.connectedLine.a.label,
         });
       }
     }
@@ -136,37 +137,10 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
       id: this.id,
       value: this.inputValue.value,
       inputs,
-      output:
-        this.outputSocket.allConnectedLines.map(l => ({
-          blockId: (l.b as Socket).block.id,
-          name: (l.b as Socket).label,
-        })),
+      output: this.outputSocket.allConnectedLines.map(l => ({
+        blockId: (l.b as Socket).block.id,
+        socketName: (l.b as Socket).label,
+      })),
     };
   }
-}
-
-export type FuncBlockTypes = "expr" | "imp" | "string";
-
-export interface FuncBlockOutput {
-  type: FuncBlockTypes;
-  id: number;
-  value: string;
-  inputs: {
-    /**
-     * connected block id
-     */
-    blockId: number;
-    /**
-     * connected line start end socket name
-     */
-    name: string;
-    /**
-     * slot name. i.e. function parameter name
-     */
-    slot: string;
-  }[];
-  output: {
-    blockId: number;
-    name: string;
-  }[];
 }

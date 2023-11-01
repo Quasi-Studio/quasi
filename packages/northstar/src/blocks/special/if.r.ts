@@ -1,5 +1,5 @@
+import type { IfBlockOutput } from "@quasi-dev/compiler";
 import {
-  Block,
   Direction,
   InSocket,
   PATH_IN_ELIPSE,
@@ -11,8 +11,8 @@ import {
   blockCtors,
 } from "@quasi-dev/visual-flow";
 import { Context } from "refina";
-import { SpecialBlock } from "./base";
 import { Props } from "../../utils/props";
+import { SpecialBlock } from "./base";
 
 export class IfElseBlock extends RectBlock implements SpecialBlock {
   clone() {
@@ -111,27 +111,3 @@ export class IfElseBlock extends RectBlock implements SpecialBlock {
 }
 
 blockCtors["IfElseBlock"] = IfElseBlock;
-
-export interface IfBlockOutput {
-  type: "if";
-  id: number;
-  condition: {
-    /**
-     * if the block is not connected, blockId will be `NaN`
-     */
-    blockId: number;
-    socketName: string;
-  };
-  when: {
-    blockId: number;
-    socketName: string;
-  };
-  then: {
-    blockId: number;
-    socketName: string;
-  };
-  else: {
-    blockId: number;
-    socketName: string;
-  };
-}

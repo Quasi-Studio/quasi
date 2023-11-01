@@ -1,9 +1,8 @@
-import { Block, blockCtors } from "@quasi-dev/visual-flow";
-import { FuncBlockBase, FuncBlockTypes } from "./FuncBlockBase.r";
+import type { FuncBlockTypes } from "@quasi-dev/compiler";
+import { blockCtors } from "@quasi-dev/visual-flow";
+import { FuncBlockBase } from "./FuncBlockBase.r";
 
 export class ExprBlock extends FuncBlockBase {
-
-
   name = "expression";
 
   getSlots() {
