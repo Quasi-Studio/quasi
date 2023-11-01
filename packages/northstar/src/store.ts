@@ -1,4 +1,5 @@
 import { Graph } from "@quasi-dev/visual-flow";
+import { RootBlock } from "./blocks/special/root.r";
 
 export const views = new Map<
   string,
@@ -9,17 +10,33 @@ export const views = new Map<
   [
     "app",
     {
-      graph: new Graph(),
+      graph: createViewGraph(),
     },
   ],
 ]);
 export let currentViewId = "app";
 export let currentGraph = views.get(currentViewId)!.graph;
 
+export function createViewGraph() {
+  const graph = new Graph();
+
+  const rootBlock = new RootBlock();
+  rootBlock.boardX = 100;
+  rootBlock.boardY = 100;
+  rootBlock.attached = true;
+  rootBlock.initialize();
+  graph.addBlock(rootBlock);
+
+  return graph;
+}
+
 let newViewId = 0;
 export function createNewView() {
   const id = `view${newViewId++}`;
-  views.set(id, { graph: new Graph() });
+
+  const graph = createViewGraph();
+
+  views.set(id, { graph });
   return id;
 }
 export function setCurrentView(id: string) {

@@ -2,11 +2,10 @@ import { ExprBlock } from "./expr";
 import { ForEachBlock } from "./forEach.r";
 import { IfElseBlock } from "./if.r";
 import { ImpBlock } from "./imp";
-import { RootBlock } from "./root.r";
 import { StringBlock } from "./string";
 
 export default Object.entries({
-  root: RootBlock,
+  // root: RootBlock,
   string: StringBlock,
   expr: ExprBlock,
   "if-else": IfElseBlock,
