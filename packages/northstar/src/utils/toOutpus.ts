@@ -8,10 +8,13 @@ export function toOutput() {
   views.forEach((view, name) => {
     viewsOutput.push({
       name,
-      components: view.graph.blocks.filter(isComponentBlock).map(toBlockOutput),
+      componentBlocks: view.graph.blocks.filter(isComponentBlock).map(toBlockOutput),
       specialBlocks: view.graph.blocks
         .filter((b) => !isComponentBlock(b))
         .map((b) => (b as unknown as SpecialBlock).toOutput()),
     });
   });
+  return {
+    views: viewsOutput,
+  };
 }

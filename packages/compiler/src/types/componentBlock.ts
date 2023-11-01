@@ -1,27 +1,18 @@
-export type BlockCallbacks = Record<
-  string,
-  {
-    blockId: number;
-    name: string;
-  }[]
->;
+import { ConnectTo } from "./base";
 
-export type BlockProps = Record<
-  string,
-  | string
-  | boolean
-  | {
-      blockId: number;
-      name: string;
-    }
->;
+export type ComponentBlockCallbacks = Record<string, ConnectTo[]>;
+
+export type ComponentBlockProps = Record<string, string | boolean | ConnectTo>;
+
+export type ComponentBlockChildren = number[];
 
 export interface ComponentBlockOutput {
+  type: "component";
   id: number;
   /**
    * `_.` + componentType，组件被调用的时候的名字
    */
-  type: string;
+  func: string;
   /**
    * 显示的名称，感觉编译的时候用不到
    */
@@ -34,13 +25,13 @@ export interface ComponentBlockOutput {
   /**
    * 事件回调，生成成函数后作为属性传入
    */
-  callbacks: BlockCallbacks;
+  callbacks: ComponentBlockCallbacks;
   /**
    * 属性，直接作为属性传入
    */
-  props: BlockProps;
+  props: ComponentBlockProps;
   /**
    * 子元素的block的id
    */
-  children: number[];
+  children: ComponentBlockChildren;
 }

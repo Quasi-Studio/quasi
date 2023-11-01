@@ -1,4 +1,4 @@
-import type { FuncBlockTypes } from "@quasi-dev/compiler";
+import type { FuncBlockTypes, ImpBlockOutput } from "@quasi-dev/compiler";
 import {
   Direction,
   InSocket,
@@ -10,24 +10,26 @@ import {
 import { FuncBlockBase } from "./FuncBlockBase.r";
 
 export class ImpBlock extends FuncBlockBase {
-  constructor() {
-    super();
-    this.boardHeight = 80;
+  whenSocket: InSocket;
+  thenSocket: SingleOutSocket;
+  initialize() {
+    super.initialize();
+    this.whenSocket = new InSocket();
+    this.whenSocket.type = "E";
+    this.whenSocket.label = "when";
+    this.whenSocket.path = PATH_IN_TRIANGLE;
+    this.addSocket(Direction.LEFT, this.whenSocket);
 
-    const inputSocket = new InSocket();
-    inputSocket.type = "E";
-    inputSocket.label = "when";
-    inputSocket.path = PATH_IN_TRIANGLE;
-    this.addSocket(Direction.LEFT, inputSocket);
-
-    const thenSocket = new SingleOutSocket();
-    thenSocket.type = "E";
-    thenSocket.label = "then";
-    thenSocket.path = PATH_OUT_TRIANGLE;
-    this.addSocket(Direction.RIGHT, thenSocket);
+    this.thenSocket = new SingleOutSocket();
+    this.thenSocket.type = "E";
+    this.thenSocket.label = "then";
+    this.thenSocket.path = PATH_OUT_TRIANGLE;
+    this.addSocket(Direction.RIGHT, this.thenSocket);
 
     this.updateSocketPosition();
   }
+
+  boardHeight = 80;
 
   name = "imperative code";
 
@@ -40,6 +42,33 @@ export class ImpBlock extends FuncBlockBase {
   }
 
   type: FuncBlockTypes = "imp";
+
+  protected exportData(): any {
+    return {
+      ...super.exportData(),
+      whenSocket: this.whenSocket.id,
+      thenSocket: this.thenSocket.id,
+    };
+  }
+  protected importData(data: any, sockets: any): void {
+    super.importData(data, sockets);
+    this.whenSocket = sockets[data.whenSocket];
+    this.thenSocket = sockets[data.thenSocket];
+  }
+
+  toOutput(): ImpBlockOutput {
+    return {
+      ...super.toOutput(),
+      when: {
+        blockId: this.whenSocket.connectedLine?.a.block.id ?? NaN,
+        socketName: this.whenSocket.connectedLine?.a.label ?? "",
+      },
+      then: {
+        blockId: this.thenSocket.connectedLine?.a.block.id ?? NaN,
+        socketName: this.thenSocket.connectedLine?.a.label ?? "",
+      },
+    };
+  }
 }
 
 blockCtors["ImpBlock"] = ImpBlock;

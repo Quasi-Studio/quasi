@@ -51,10 +51,7 @@ export class RootBlock extends RectBlock implements SpecialBlock {
     return {
       type: "root",
       id: this.id,
-      children: this.outSocket.connectedLines.map(line => ({
-        blockId: (line.b as Socket).block.id,
-        socketName: (line.b as Socket).label,
-      })),
+      children: this.outSocket.connectedLines.map(line => (line.b as Socket).block.id),
     };
   }
 }

@@ -1,18 +1,10 @@
-export interface ConnectTo {
-  /**
-   * if this socket is not connected, `blockId` will be `NaN`
-   */
-  blockId: number;
-  /**
-   * if this socket is not connected, `blockId` will be `""`
-   */
-  socketName: string;
-}
+import { ConnectTo } from "./base";
+import { ComponentBlockChildren } from "./componentBlock";
 
 export interface RootBlockOutput {
   type: "root";
   id: number;
-  children: ConnectTo[];
+  children: ComponentBlockChildren;
 }
 
 export interface IfBlockOutput {
@@ -29,6 +21,11 @@ export interface ViewBlockOutput {
   id: number;
   viewName: string;
   parent: ConnectTo;
+}
+
+export interface ImpBlockOutput extends FuncBlockOutput{
+  when: ConnectTo;
+  then: ConnectTo;
 }
 
 export type FuncBlockTypes = "expr" | "imp" | "string";
@@ -66,6 +63,7 @@ export interface ForEachBlockOutput {
 export type SpecialBlockOutput =
   | RootBlockOutput
   | FuncBlockOutput
+  | ImpBlockOutput
   | IfBlockOutput
   | ViewBlockOutput
   | ForEachBlockOutput;

@@ -123,13 +123,11 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
   toOutput(): FuncBlockOutput {
     const inputs = [];
     for (const [slot, socket] of Object.entries(this.inputSockets)) {
-      if (socket.connectedLine) {
-        inputs.push({
-          slot,
-          blockId: socket.connectedLine.a.block.id,
-          socketName: socket.connectedLine.a.label,
-        });
-      }
+      inputs.push({
+        slot,
+        blockId: socket.connectedLine?.a.block.id ?? NaN,
+        socketName: socket.connectedLine?.a.label ?? "",
+      });
     }
 
     return {

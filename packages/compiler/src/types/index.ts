@@ -6,7 +6,7 @@ export * from "./specialBlock";
 
 export interface ViewOutput {
   name: string;
-  components: ComponentBlockOutput[];
+  componentBlocks: ComponentBlockOutput[];
   specialBlocks: SpecialBlockOutput[];
 }
 
