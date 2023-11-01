@@ -1,20 +1,17 @@
-import type { QuasiOutput } from "@quasi-dev/compiler";
+import type { ViewOutput } from "@quasi-dev/compiler";
 import { isComponentBlock, toBlockOutput } from "../blocks/component";
 import { SpecialBlock } from "../blocks/special/base";
-import { currentGraph } from "../store";
+import { views } from "../store";
 
 export function toOutput() {
-  return {
-    views: [
-      {
-        name: "view1",
-        components: currentGraph.blocks
-          .filter(isComponentBlock)
-          .map(toBlockOutput),
-        specialBlocks: currentGraph.blocks
-          .filter((b) => !isComponentBlock(b))
-          .map((b) => (b as unknown as SpecialBlock).toOutput()),
-      },
-    ],
-  } satisfies QuasiOutput;
+  const viewsOutput: ViewOutput[] = [];
+  views.forEach((view, name) => {
+    viewsOutput.push({
+      name,
+      components: view.graph.blocks.filter(isComponentBlock).map(toBlockOutput),
+      specialBlocks: view.graph.blocks
+        .filter((b) => !isComponentBlock(b))
+        .map((b) => (b as unknown as SpecialBlock).toOutput()),
+    });
+  });
 }
