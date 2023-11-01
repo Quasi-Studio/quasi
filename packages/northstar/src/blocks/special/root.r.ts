@@ -3,6 +3,7 @@ import { Direction, MultiOutSocket, PATH_OUT_RECT, RectBlock, Socket, blockCtors
 import { Context } from "refina";
 import { Props } from "../../utils/props";
 import { SpecialBlock } from "./base";
+import { currentViewId } from "../../store";
 
 export class RootBlock extends RectBlock implements SpecialBlock {
   clone() {
@@ -26,10 +27,17 @@ export class RootBlock extends RectBlock implements SpecialBlock {
   boardHeight = 50;
 
   contentMain = (_: Context) => {
-    _.$cls`absolute flex items-center left-0 top-0 justify-around text-gray-600`;
+    _.$cls`absolute flex items-center left-0 top-0 justify-around text-gray-600 text-lg`;
     _.$css`width:${this.pageWidth}px;height:${this.pageHeight}px;`;
     _.$css`transform:scale(${this.graph.boardScale})`;
-    _.div("root");
+    _.div(_ => {
+      _.div(_ => {
+        _.$css`font-family: Consolas;`;
+        _.$cls`mr-1 font-semibold`;
+        _.span(currentViewId);
+        _.span("root");
+      });
+    });
   };
 
   getProps(): Props {
