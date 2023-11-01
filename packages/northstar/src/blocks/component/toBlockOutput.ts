@@ -3,7 +3,7 @@ import type {
   BlockProps,
   ComponentBlockOutput,
 } from "@quasi-dev/compiler";
-import { Socket } from "@quasi-dev/visual-flow";
+import { Block, Socket } from "@quasi-dev/visual-flow";
 import { ComponentBlock } from "./block";
 
 export function toBlockOutput(block: ComponentBlock) {
@@ -36,12 +36,14 @@ export function toBlockOutput(block: ComponentBlock) {
     };
   }
 
-  const children = [] as number[];
+  const children = [] as Block[];
   for (const content of block.info.contents) {
     const socket = block.socketMap.get(content.name)?.allConnectedLines[0]?.b;
     if (!socket) continue;
-    children.push((socket as Socket).block.id);
+    children.push((socket as Socket).block);
   }
+
+  children.sort((a, b) => a.boardY - b.boardY);
 
   return {
     type: block.componentType,
@@ -50,6 +52,6 @@ export function toBlockOutput(block: ComponentBlock) {
     modelAllocator: block.info.modelAllocator,
     callbacks,
     props,
-    children,
+    children: children.map((b) => b.id),
   } satisfies ComponentBlockOutput;
 }
