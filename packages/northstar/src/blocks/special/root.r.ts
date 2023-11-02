@@ -59,7 +59,10 @@ export class RootBlock extends RectBlock implements SpecialBlock {
     return {
       type: "root",
       id: this.id,
-      children: this.outSocket.connectedLines.map(line => (line.b as Socket).block.id),
+      children: this.outSocket.connectedLines
+        .map(line => (line.b as Socket).block)
+        .sort((a, b) => a.boardY - b.boardY)
+        .map(b => b.id),
     };
   }
 }
