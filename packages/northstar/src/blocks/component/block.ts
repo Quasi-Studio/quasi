@@ -104,6 +104,7 @@ export class ComponentBlock extends RectBlock {
     for (const socket of this.allSockets) {
       this.socketMap.set(socket.label, socket);
     }
+    updateSockets(this);
   }
 }
 
