@@ -15,8 +15,10 @@ export async function open() {
   const file = await handle.getFile();
   const json = await file.text();
   const proj = JSON.parse(json);
-  for (const { id, graph } of proj.views) {
-    importVf(graph, views.get(id)?.graph);
+  for (const { id, graph: graphRecord } of proj.views) {
+    const graph = importVf(graphRecord, views.get(id)?.graph);
+    graph.fullView();
+    views.set(id, { graph });
   }
 }
 
