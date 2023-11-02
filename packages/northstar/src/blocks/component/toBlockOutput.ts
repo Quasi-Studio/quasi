@@ -29,21 +29,25 @@ export function toBlockOutput(block: ComponentBlock) {
     props[k] = block.props[k] ?? v.defaultVal;
   }
   for (const input of block.info.inputs) {
-    const socket = block.socketMap.get(input.name)?.allConnectedLines[0]?.a;
-    if (!socket) continue;
-    props[input.name] = {
-      blockId: socket.block.id,
-      socketName: socket.label,
-    };
+    if (
+      input.kind === "as-primary" ||
+      (input.kind === "as-primary-and-socket" && block.primaryFilled)
+    ) {
+      props[input.name] = block.primaryValue.value;
+    } else {
+      const socket = block.socketMap.get(input.name)?.allConnectedLines[0]?.a;
+      props[input.name] = {
+        blockId: socket?.block.id ?? NaN,
+        socketName: socket?.label ?? "",
+      };
+    }
   }
 
   let children = {} as ComponentBlockChildren;
   for (const content of block.info.contents) {
-    if (content.kind === "as-primary") {
-      children[content.name] = block.primaryValue.value;
-    } else if (
-      content.kind === "as-primary-and-socket" &&
-      block.primaryFilled
+    if (
+      content.kind === "as-primary" ||
+      (content.kind === "as-primary-and-socket" && block.primaryFilled)
     ) {
       children[content.name] = block.primaryValue.value;
     } else {
