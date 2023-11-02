@@ -4,7 +4,10 @@ import { ComponentBlockChildren } from "./componentBlock";
 export interface RootBlockOutput {
   type: "root";
   id: number;
-  children: ComponentBlockChildren;
+  /**
+   * block id of children
+   */
+  children: number[];
 }
 
 export interface IfBlockOutput {

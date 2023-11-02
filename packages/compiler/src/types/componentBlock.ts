@@ -4,7 +4,10 @@ export type ComponentBlockCallbacks = Record<string, ConnectTo[]>;
 
 export type ComponentBlockProps = Record<string, string | boolean | ConnectTo>;
 
-export type ComponentBlockChildren = number[];
+/**
+ * Content text or child block id
+ */
+export type ComponentBlockChildren = Record<string, string | number[]>;
 
 export interface ComponentBlockOutput {
   type: "component";

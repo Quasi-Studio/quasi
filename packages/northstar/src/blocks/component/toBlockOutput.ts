@@ -1,5 +1,6 @@
 import type {
   ComponentBlockCallbacks,
+  ComponentBlockChildren,
   ComponentBlockOutput,
   ComponentBlockProps,
 } from "@quasi-dev/compiler";
@@ -36,18 +37,24 @@ export function toBlockOutput(block: ComponentBlock) {
     };
   }
 
-  let children = [] as Block[];
+  let children = {} as ComponentBlockChildren;
   for (const content of block.info.contents) {
-    children = children.concat(
-      block.socketMap
-        .get(content.name)
-        ?.allConnectedLines.map((l) => (l.b as Socket).block) ?? [],
-    );
+    if (content.kind === "as-primary") {
+      children[content.name] = block.primaryValue.value;
+    } else if (
+      content.kind === "as-primary-and-socket" &&
+      block.primaryFilled
+    ) {
+      children[content.name] = block.primaryValue.value;
+    } else {
+      children[content.name] =
+        block.socketMap
+          .get(content.name)
+          ?.allConnectedLines.map((l) => (l.b as Socket).block)
+          .sort((a, b) => a.boardY - b.boardY)
+          .map((b) => b.id) ?? [];
+    }
   }
-
-  children.sort((a, b) => a.boardY - b.boardY);
-
-  console.log(children);
 
   return {
     type: "component",
@@ -57,6 +64,6 @@ export function toBlockOutput(block: ComponentBlock) {
     modelAllocator: block.info.modelAllocator,
     callbacks,
     props,
-    children: children.map((b) => b.id),
+    children,
   } satisfies ComponentBlockOutput;
 }

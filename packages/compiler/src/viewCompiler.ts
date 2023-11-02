@@ -260,13 +260,25 @@ view(_ => {
       ]),
     );
   }
-
-  compileComponentChildren(children: ComponentBlockChildren): string {
-    return `_ => {
-      ${children
-        .map((c) => this.compileComponentBlock(this.getComponentBlockById(c)))
-        .join("\n")}
-    }`;
+  compileComponentChildren(children: ComponentBlockChildren) {
+    return Object.fromEntries(
+      Object.entries(children).map(([k, v]) => {
+        if (typeof v === "string") {
+          return [k, `"${v}"`];
+        } else {
+          return [
+            k,
+            `_ => {
+            ${v
+              .map((c) =>
+                this.compileComponentBlock(this.getComponentBlockById(c)),
+              )
+              .join("\n")}
+          }`,
+          ];
+        }
+      }),
+    );
   }
 
   compileComponentBlock(block: ComponentBlockOutput): string {
@@ -279,11 +291,10 @@ view(_ => {
     ${Object.entries({
       ...this.compileComponentProps(block.props),
       ...this.compileComponentCallbacks(block.callbacks),
+      ...this.compileComponentChildren(block.children),
     })
       .map(([k, v]) => `${k}:${v}`)
       .join(",\n")}
-  },
-  ${this.compileComponentChildren(block.children)}
-  );`;
+  });`;
   }
 }
