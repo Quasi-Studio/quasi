@@ -14,54 +14,56 @@ import {
   dropdownProp,
 } from "../types";
 
-export const textNode = component(
-  "TextNode",
-  null,
-  [],
-  input("text", "string", "as-primary-and-socket"),
-  [],
-  [],
-  [],
-  [],
-  {},
-);
+export default {
+  textNode: component(
+    "TextNode",
+    null,
+    [],
+    input("text", "string", "as-primary-and-socket"),
+    [],
+    [],
+    [],
+    [],
+    {},
+  ),
 
-export const button = component(
-  "Button",
-  null,
-  content("inner", "as-primary"),
-  [],
-  [],
-  event("onClick", "void"),
-  [],
-  [],
-  {
-    color: dropdownProp(["unset", "primary", "accent"], "unset"),
-    raised: switchProp(false),
-    ripple: switchProp(true),
-  },
-);
+  button: component(
+    "Button",
+    null,
+    content("inner", "as-primary"),
+    [],
+    [],
+    event("onClick", "void"),
+    [],
+    [],
+    {
+      color: dropdownProp(["unset", "primary", "accent"], "unset"),
+      raised: switchProp(false),
+      ripple: switchProp(true),
+    },
+  ),
 
-export const p = contentWrapper("Paragraph");
+  p: contentWrapper("Paragraph"),
 
-export const div = layer("Div");
+  div: layer("Div"),
 
-export const span = contentWrapper("Span");
+  span: contentWrapper("Span"),
 
-export const textInput = component(
-  "TextInput",
-  `new q.TextInput()`,
-  [],
-  input("label", "string", "as-primary"),
-  output("value", "string", (id) => id),
-  event("input", t.string),
-  method("clear", [], (id) => `${id}.clear()`),
-  plugin("validator", "validator"),
-  {
-    placeholder: textProp(),
-    appearance: dropdownProp(
-      ["outline", "underline", "filled-darker", "filled-lighter"],
-      "outline",
-    ),
-  },
-);
+  textInput: component(
+    "TextInput",
+    `new q.TextInput()`,
+    [],
+    input("label", "string", "as-primary"),
+    output("value", "string", (id) => id),
+    event("input", t.string),
+    method("clear", [], (id) => `${id}.clear()`),
+    plugin("validator", "validator"),
+    {
+      placeholder: textProp(),
+      appearance: dropdownProp(
+        ["outline", "underline", "filled-darker", "filled-lighter"],
+        "outline",
+      ),
+    },
+  ),
+};
