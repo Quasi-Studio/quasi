@@ -21,8 +21,8 @@ export function createViewGraph() {
   const graph = new Graph();
 
   const rootBlock = new RootBlock();
-  rootBlock.boardX = 100;
-  rootBlock.boardY = 100;
+  rootBlock.boardX = 120;
+  rootBlock.boardY = 300;
   rootBlock.attached = true;
   rootBlock.initialize();
   graph.addBlock(rootBlock);
