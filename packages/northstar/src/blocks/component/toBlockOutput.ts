@@ -12,7 +12,7 @@ export function toBlockOutput(block: ComponentBlock) {
   for (const event of block.info.events) {
     const sockets = block.socketMap
       .get(event.name)
-      ?.allConnectedLines?.map((l) => l.b as Socket);
+      ?.allConnectedLines.map((l) => l.b as Socket);
     if (!sockets) continue;
 
     callbacks[event.name] = [];

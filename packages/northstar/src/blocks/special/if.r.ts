@@ -99,12 +99,12 @@ export class IfElseBlock extends RectBlock implements SpecialBlock {
         socketName: this.inputSocket.connectedLine?.a.label ?? "",
       },
       then: {
-        blockId: (this.thenSocket.connectedLine?.b as Socket).block.id ?? NaN,
-        socketName: (this.thenSocket.connectedLine?.b as Socket).label ?? "",
+        blockId: (this.thenSocket.connectedLine?.b as Socket | undefined)?.block.id ?? NaN,
+        socketName: (this.thenSocket.connectedLine?.b as Socket | undefined)?.label ?? "",
       },
       else: {
-        blockId: (this.elseSocket.connectedLine?.b as Socket).block.id ?? NaN,
-        socketName: (this.elseSocket.connectedLine?.b as Socket).label ?? "",
+        blockId: (this.elseSocket.connectedLine?.b as Socket | undefined)?.block.id ?? NaN,
+        socketName: (this.elseSocket.connectedLine?.b as Socket | undefined)?.label ?? "",
       },
     };
   }
