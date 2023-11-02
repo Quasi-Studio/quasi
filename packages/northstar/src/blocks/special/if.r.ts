@@ -34,25 +34,25 @@ export class IfElseBlock extends RectBlock implements SpecialBlock {
     this.condSocket.type = "D";
     this.condSocket.label = "condition";
     this.condSocket.path = PATH_IN_ELIPSE;
-    this.addSocket(Direction.LEFT, this.condSocket);
+    this.addSocket(Direction.TOP, this.condSocket);
 
     this.inputSocket = new InSocket();
     this.inputSocket.type = "E";
     this.inputSocket.label = "when";
     this.inputSocket.path = PATH_IN_TRIANGLE;
-    this.addSocket(Direction.UP, this.inputSocket);
+    this.addSocket(Direction.LEFT, this.inputSocket);
 
     this.thenSocket = new SingleOutSocket();
     this.thenSocket.type = "E";
     this.thenSocket.label = "then";
     this.thenSocket.path = PATH_OUT_TRIANGLE;
-    this.addSocket(Direction.DOWN, this.thenSocket);
+    this.addSocket(Direction.BOTTOM, this.thenSocket);
 
     this.elseSocket = new SingleOutSocket();
     this.elseSocket.type = "E";
     this.elseSocket.label = "else";
     this.elseSocket.path = PATH_OUT_TRIANGLE;
-    this.addSocket(Direction.DOWN, this.elseSocket);
+    this.addSocket(Direction.BOTTOM, this.elseSocket);
   }
 
   boardWidth: number = 200;
