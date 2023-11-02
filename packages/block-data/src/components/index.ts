@@ -29,17 +29,16 @@ export const textNode = component(
 export const button = component(
   "Button",
   null,
-  content("inner", "as-primary-and-socket"),
+  content("inner", "as-primary"),
   [],
   [],
-  event("click", "void"),
+  event("onClick", "void"),
   [],
   [],
   {
-    appearance: dropdownProp(
-      ["primary", "outline", "subtle", "transparent"],
-      "secondary",
-    ),
+    color: dropdownProp(["unset", "primary", "accent"], "unset"),
+    raised: switchProp(false),
+    ripple: switchProp(true),
   },
 );
 
