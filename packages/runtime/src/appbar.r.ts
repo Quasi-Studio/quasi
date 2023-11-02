@@ -8,7 +8,7 @@ export interface AppbarProps {
   type: AppbarType;
 }
 
-@QuasiRuntime.outputComponent("qAppbar")
+@QuasiRuntime.outputComponent("appbar")
 export class QAppbar extends OutputComponent {
   main(_: ComponentContext<this>, props: AppbarProps): void {
     _.mdAppbar(props.type, props.inner);
@@ -17,6 +17,6 @@ export class QAppbar extends OutputComponent {
 
 declare module "refina" {
   interface OutputComponents {
-    qAppbar: QAppbar;
+    appbar: QAppbar;
   }
 }

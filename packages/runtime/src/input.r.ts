@@ -12,7 +12,7 @@ export class InputModel {
   value: string = "";
 }
 
-@QuasiRuntime.outputComponent("qInput")
+@QuasiRuntime.outputComponent("input")
 export class QInput extends OutputComponent {
   main(_: ComponentContext<this>, model: InputModel, props: InputProps): void {
     if (_.mdInput(fromProp(model, "value"), props.label, props.disabled)) {
@@ -23,6 +23,6 @@ export class QInput extends OutputComponent {
 
 declare module "refina" {
   interface OutputComponents {
-    qInput: QInput;
+    input: QInput;
   }
 }
