@@ -3,6 +3,7 @@ import { ForEachBlock } from "./forEach.r";
 import { IfElseBlock } from "./if.r";
 import { ImpBlock } from "./imp";
 import { StringBlock } from "./string";
+import { ValidatorBlock } from "./validator";
 
 export default Object.entries({
   // root: RootBlock,
@@ -11,4 +12,5 @@ export default Object.entries({
   "if-else": IfElseBlock,
   imperative: ImpBlock,
   "for-each": ForEachBlock,
+  validator: ValidatorBlock,
 });

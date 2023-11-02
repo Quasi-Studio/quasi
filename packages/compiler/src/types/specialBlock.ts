@@ -1,5 +1,4 @@
 import { ConnectTo } from "./base";
-import { ComponentBlockChildren } from "./componentBlock";
 
 export interface RootBlockOutput {
   type: "root";
@@ -26,15 +25,16 @@ export interface ViewBlockOutput {
   parent: ConnectTo;
 }
 
-export interface ImpBlockOutput extends FuncBlockOutput{
+export interface ImpBlockOutput extends Omit<FuncBlockOutput, "type"> {
+  type: "imp";
   when: ConnectTo;
   then: ConnectTo;
 }
 
-export type FuncBlockTypes = "expr" | "imp" | "string";
+export type FuncBlockTypes = "expr" | "imp" | "string" | "validator";
 
 export interface FuncBlockOutput {
-  type: FuncBlockTypes;
+  type: Exclude<FuncBlockTypes, "imp" | "validator">;
   id: number;
   value: string;
   inputs: {
@@ -63,10 +63,17 @@ export interface ForEachBlockOutput {
   output: ConnectTo[];
 }
 
+export interface ValidatorBlockOutput {
+  type: "validator";
+  id: number;
+  expr: string;
+}
+
 export type SpecialBlockOutput =
   | RootBlockOutput
   | FuncBlockOutput
   | ImpBlockOutput
+  | ValidatorBlockOutput
   | IfBlockOutput
   | ViewBlockOutput
   | ForEachBlockOutput;

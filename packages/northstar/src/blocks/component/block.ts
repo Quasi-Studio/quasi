@@ -6,11 +6,12 @@ import {
   blockCtors,
 } from "@quasi-dev/visual-flow";
 import "@refina/fluentui";
-import { updateSockets } from "./updateSockets";
 import { d } from "refina";
-import { getContent } from "./getContent.r";
 import { Props } from "../../utils/props";
-import { getProps } from ".";
+import { getContent } from "./getContent.r";
+import { getProps } from "./getProps";
+import { updateSockets } from "./updateSockets";
+import { updatePlugins } from "./updatePlugins";
 
 export class ComponentBlock extends RectBlock {
   isComponentBlock = true;
@@ -75,6 +76,7 @@ export class ComponentBlock extends RectBlock {
     this.info = info;
     this.content = getContent(this);
     updateSockets(this);
+    updatePlugins(this);
   }
 
   clone() {

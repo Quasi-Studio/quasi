@@ -57,7 +57,7 @@ export const textInput = component(
   output("value", "string", (id) => id),
   event("input", t.string),
   method("clear", [], (id) => `${id}.clear()`),
-  plugin("validator", "#input-validator"),
+  plugin("validator", "validator"),
   {
     placeholder: textProp(),
     appearance: dropdownProp(

@@ -1,6 +1,6 @@
 import { Context } from "refina";
 import { ComponentBlock } from "./block";
-import { updateSockets } from ".";
+import { updateSockets } from "./updateSockets";
 
 export function getContent(block: ComponentBlock) {
   const {
@@ -14,7 +14,7 @@ export function getContent(block: ComponentBlock) {
   const title = (_: Context) => {
     _.$cls`mx-2 text-sm`;
     _.span(name);
-  };
+  };  
 
   if (!info) return title;
   return (_: Context) => {

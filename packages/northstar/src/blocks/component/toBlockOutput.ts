@@ -2,10 +2,12 @@ import type {
   ComponentBlockCallbacks,
   ComponentBlockChildren,
   ComponentBlockOutput,
+  ComponentBlockPlugins,
   ComponentBlockProps,
 } from "@quasi-dev/compiler";
 import { Block, Socket } from "@quasi-dev/visual-flow";
 import { ComponentBlock } from "./block";
+import { ValidatorBlock } from "../special/validator";
 
 export function toBlockOutput(block: ComponentBlock) {
   const callbacks = {} as ComponentBlockCallbacks;
@@ -60,6 +62,38 @@ export function toBlockOutput(block: ComponentBlock) {
     }
   }
 
+  let plugins = {} as ComponentBlockPlugins;
+  for (const plugin of block.info.plugins) {
+    if (plugin.dataType !== "validator") throw new Error("Not implemented");
+
+    const validators: ValidatorBlock[] = [];
+    let currentPluginBlock: Block | undefined = block;
+    while (true) {
+      currentPluginBlock = currentPluginBlock.dockedByBlocks.find(
+        ([d, b]) => d === plugin.direction,
+      )?.[1];
+      if (!currentPluginBlock) {
+        break;
+      }
+      if ((currentPluginBlock as ValidatorBlock).type === "validator") {
+        validators.push(currentPluginBlock as ValidatorBlock);
+      } else {
+        throw new Error(`Invalid plugin block ${currentPluginBlock.id}`);
+      }
+    }
+
+    plugins[plugin.name] = `$ => {
+      ${validators
+        .map((v) => {
+          if (v.inputValue.value.length === 0)
+            throw new Error("Validator expression is empty");
+          return `if(!(${v.inputValue})) return "${v.errorMessages}";`;
+        })
+        .join("\n")}
+      return true;
+    }`;
+  }
+
   return {
     type: "component",
     func: block.componentType,
@@ -68,6 +102,7 @@ export function toBlockOutput(block: ComponentBlock) {
     modelAllocator: block.info.modelAllocator,
     callbacks,
     props,
+    plugins,
     children,
   } satisfies ComponentBlockOutput;
 }

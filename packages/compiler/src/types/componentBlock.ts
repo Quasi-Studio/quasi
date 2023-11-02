@@ -4,6 +4,8 @@ export type ComponentBlockCallbacks = Record<string, ConnectTo[]>;
 
 export type ComponentBlockProps = Record<string, string | boolean | ConnectTo>;
 
+export type ComponentBlockPlugins = Record<string, string>;
+
 /**
  * Content text or child block id
  */
@@ -33,6 +35,10 @@ export interface ComponentBlockOutput {
    * 属性，直接作为属性传入
    */
   props: ComponentBlockProps;
+  /**
+   * 插件，键为插件名，值直接作为代码输出
+   */
+  plugins: ComponentBlockPlugins;
   /**
    * 子元素的block的id
    */

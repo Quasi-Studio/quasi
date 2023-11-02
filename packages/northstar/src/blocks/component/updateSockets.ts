@@ -13,7 +13,7 @@ import { ComponentBlock } from "./block";
 export function updateSockets(block: ComponentBlock) {
   const { info } = block;
 
-  const { contents, events, inputs, outputs, plugins } = info;
+  const { contents, events, inputs, outputs } = info;
 
   block.updateSocket("parent", InSocket, Direction.LEFT, {
     type: "L",

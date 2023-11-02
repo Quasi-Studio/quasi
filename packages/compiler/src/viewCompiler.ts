@@ -8,6 +8,7 @@ import {
   FuncBlockOutput,
   ImpBlockOutput,
   IfBlockOutput,
+  ComponentBlockPlugins,
 } from "./types";
 import { Compiler } from "./compiler";
 import { ConnectTo } from "./types/base";
@@ -260,6 +261,11 @@ view(_ => {
       ]),
     );
   }
+  compileComponentPlugins(
+    plugins: ComponentBlockPlugins,
+  ): Record<string, string> {
+    return plugins;
+  }
   compileComponentChildren(children: ComponentBlockChildren) {
     return Object.fromEntries(
       Object.entries(children).map(([k, v]) => {
@@ -291,6 +297,7 @@ view(_ => {
     ${Object.entries({
       ...this.compileComponentProps(block.props),
       ...this.compileComponentCallbacks(block.callbacks),
+      ...this.compileComponentPlugins(block.plugins),
       ...this.compileComponentChildren(block.children),
     })
       .map(([k, v]) => `${k}:${v}`)
