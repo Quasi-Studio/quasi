@@ -70,6 +70,7 @@ export class Graph {
     return this.ref.current?.node;
   }
 
+  initialRecord: VfRecord;
   recordStack: VfRecord[] = [];
   recordIndex: number = -1;
   get canUndo() {
@@ -91,7 +92,7 @@ export class Graph {
   undo() {
     this.selectedBlocks.clear();
     if (this.recordIndex === 0) {
-      this.reset();
+      importVf(this.initialRecord, this);
       --this.recordIndex;
     } else {
       importVf(this.recordStack[--this.recordIndex], this);
@@ -102,6 +103,9 @@ export class Graph {
     importVf(this.recordStack[++this.recordIndex], this);
   }
 
+  captureInitialRecord() {
+    this.initialRecord = exportVf(this);
+  }
   pushRecord() {
     this.recordStack = this.recordStack.slice(0, this.recordIndex + 1);
     this.recordStack.push(exportVf(this));

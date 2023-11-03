@@ -27,6 +27,8 @@ export function createViewGraph() {
   rootBlock.initialize();
   graph.addBlock(rootBlock);
 
+  graph.captureInitialRecord();
+
   return graph;
 }
 
@@ -42,7 +44,7 @@ export function createNewView() {
 export function setCurrentView(id: string) {
   currentGraph.clearSelectedBlocks();
   currentViewId = id;
-  currentGraph = views.get(id)?.graph || new Graph();
+  currentGraph = views.get(id)!.graph;
   views.set(id, { graph: currentGraph });
 }
 export function setCurrentViewId(id: string) {
