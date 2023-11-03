@@ -26,6 +26,7 @@ import {
 } from "../utils";
 import { toOutput } from "../utils/toOutpus";
 import { Compiler } from "@quasi-dev/compiler";
+import { FieldValidationState, ProgressBarColor, ProgressBarValue } from "@refina/fluentui";
 
 export const previewMode = d(false);
 
@@ -41,7 +42,10 @@ const toolItem = view((_, tip: string, buttonContent: Content, disabled: boolean
 
 let buildOutput = "";
 
-let exportToPNGProgess = 0;
+let exportToPNGProgess: ProgressBarValue = 0;
+let exportToPNGColor: ProgressBarColor = "brand";
+let exportToPNGValidationState: FieldValidationState = "none";
+let exportToPNGMessage = `Click the "Export" button above to start`;
 
 export const graphElRef = ref<HTMLElementComponent<"div">>();
 
@@ -124,63 +128,89 @@ export default view(_ => {
     if (!previewMode.value) {
       _.fDialog(
         (_, open) =>
-          _.embed(
-            toolItem,
-            "Export to PNG",
-            _ => _.fiImageBorder20Regular(),
-            currentGraph.blocks.length === 0,
-            () => {
-              open();
-
-              const node = graphElRef.current!.node;
-
-              const { width, height } = currentGraph.fullView();
-              currentGraph.updatePosition();
-
-              setTimeout(() => {
-                const { x, y } = node.getBoundingClientRect();
-
-                domToBlob(node, {
-                  backgroundColor: "white",
-                  scale: 4 / currentGraph.boardScale,
-                  width: width,
-                  height: height,
-                  style: {
-                    transform: `translate(-${x}px, -${y}px)`,
-                  },
-                  timeout: 30000,
-                  progress: (current, total) => {
-                    exportToPNGProgess = current / total;
-                    _.$update();
-                  },
-                })
-                  .then(async blob => {
-                    const handle = await window.showSaveFilePicker({
-                      suggestedName: "quasi-graph.png",
-                      types: [
-                        {
-                          description: "PNG",
-                          accept: {
-                            "image/png": [".png"],
-                          },
-                        },
-                      ],
-                    });
-                    const writable = await handle.createWritable();
-                    await writable.write(await blob.arrayBuffer());
-                    await writable.close();
-
-                    open(false);
-                  })
-                  .catch(err => {
-                    open(false);
-                  });
-              }, 100);
-            },
-          ),
+          _.embed(toolItem, "Export to PNG", _ => _.fiImageBorder20Regular(), currentGraph.blocks.length === 0, open),
         "Export to PNG",
-        () => {
-          _.fField(_ => _.fProgressBar(exportToPNGProgess), "Progess");
+        (_, close) => {
+          _.$cls`mb-5`;
+          _._div();
+
+          if (_.fPrimaryButton("Export", exportToPNGProgess !== 0)) {
+            exportToPNGMessage = "Generating...";
+
+            const node = graphElRef.current!.node;
+
+            const { width, height } = currentGraph.fullView();
+            currentGraph.updatePosition();
+
+            setTimeout(() => {
+              const { x, y } = node.getBoundingClientRect();
+
+              domToBlob(node, {
+                backgroundColor: "white",
+                scale: 4 / currentGraph.boardScale,
+                width: width,
+                height: height,
+                style: {
+                  transform: `translate(-${x}px, -${y}px)`,
+                },
+                timeout: 30000,
+              })
+                .then(async blob => {
+                  exportToPNGProgess = 0.7;
+                  exportToPNGMessage = "Saving...";
+                  _.$update();
+
+                  const handle = await window.showSaveFilePicker({
+                    suggestedName: "quasi-graph.png",
+                    types: [
+                      {
+                        description: "PNG",
+                        accept: {
+                          "image/png": [".png"],
+                        },
+                      },
+                    ],
+                  });
+
+                  const writable = await handle.createWritable();
+                  exportToPNGProgess = 0.8;
+                  _.$update();
+
+                  await writable.write(await blob.arrayBuffer());
+                  exportToPNGProgess = 0.9;
+                  _.$update();
+
+                  await writable.close();
+                  exportToPNGProgess = 1;
+                  exportToPNGMessage = "Done";
+                  exportToPNGValidationState = "success";
+
+                  currentGraph.undo();
+                  _.$update();
+                })
+                .catch(err => {
+                  if (err instanceof Error && err.name === "AbortError") {
+                    currentGraph.undo();
+                    close();
+                    return;
+                  }
+                  exportToPNGProgess = 0;
+                  exportToPNGColor = "success";
+                  exportToPNGColor = "error";
+                  exportToPNGMessage = `${err}`;
+                  exportToPNGValidationState = "error";
+                  _.$update();
+                });
+            }, 100);
+          }
+          _.$cls`mt-5`;
+          _.fField(
+            _ => _.fProgressBar(exportToPNGProgess, exportToPNGColor),
+            "Progess",
+            false,
+            exportToPNGValidationState,
+            exportToPNGMessage,
+          );
         },
       );
 
