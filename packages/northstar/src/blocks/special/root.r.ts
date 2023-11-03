@@ -17,6 +17,8 @@ export class RootBlock extends RectBlock implements SpecialBlock {
   initialize(): void {
     this.outSocket = new MultiOutSocket();
 
+    this.outSocket.hideLabel = true;
+    this.outSocket.label = "inner"
     this.outSocket.type = "L";
     this.outSocket.path = PATH_OUT_RECT;
 
