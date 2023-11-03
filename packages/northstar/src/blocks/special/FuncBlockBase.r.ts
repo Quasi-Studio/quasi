@@ -49,13 +49,20 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
       },
       _ => {
         _.$css`--fontFamilyBase: Consolas,'Segoe UI', 'Segoe UI Web (West European)', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif`;
-        (this.useTextarea
-          ? _.$css`margin-top:4px;max-width:180px` && _.fTextarea(this.inputValue, false, this.placeholder, "none")
-          : _.$css`min-height:24px;margin-left:-4px` &&
-            _.fUnderlineTextInput(this.inputValue, false, this.placeholder)) && this.updateInputSockets();
+        if (
+          this.useTextarea
+            ? _.$css`margin-top:4px;max-width:180px` && _.fTextarea(this.inputValue, false, this.placeholder, "none")
+            : _.$css`min-height:24px;margin-left:-4px` &&
+              _.fUnderlineTextInput(this.inputValue, false, this.placeholder)
+        ) {
+          this.onInput();
+          this.updateInputSockets();
+        }
       },
     );
   };
+
+  onInput() {}
 
   abstract getSlots(): string[];
 

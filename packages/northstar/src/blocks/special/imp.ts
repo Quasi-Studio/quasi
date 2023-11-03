@@ -1,4 +1,8 @@
-import type { FuncBlockOutput, FuncBlockTypes, ImpBlockOutput } from "@quasi-dev/compiler";
+import type {
+  FuncBlockOutput,
+  FuncBlockTypes,
+  ImpBlockOutput,
+} from "@quasi-dev/compiler";
 import {
   Direction,
   InSocket,
@@ -27,6 +31,7 @@ export class ImpBlock extends FuncBlockBase {
     this.addSocket(Direction.RIGHT, this.thenSocket);
 
     this.updateSocketPosition();
+    this.updateOutputSocket();
   }
 
   boardHeight = 80;
@@ -34,6 +39,18 @@ export class ImpBlock extends FuncBlockBase {
   name = "imperative code";
 
   useTextarea = true;
+
+  onInput() {
+    this.updateOutputSocket();
+  }
+
+  updateOutputSocket() {
+    if (this.inputValue.value.match(/\breturn\b/g)) {
+      this.outputSocket.disabled = false;
+    } else {
+      this.outputSocket.disabled = true;
+    }
+  }
 
   getSlots() {
     const template = this.inputValue.value;
@@ -58,7 +75,7 @@ export class ImpBlock extends FuncBlockBase {
 
   toOutput(): ImpBlockOutput {
     return {
-      ...super.toOutput() as FuncBlockOutput,
+      ...(super.toOutput() as FuncBlockOutput),
       type: "imp",
       when: {
         blockId: this.whenSocket.connectedLine?.a.block.id ?? NaN,
