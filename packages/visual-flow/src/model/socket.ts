@@ -1,5 +1,5 @@
 import { SVGElementComponent, ref } from "refina";
-import { Point, Direction } from "../types";
+import { Direction, Point } from "../types";
 import { ModelBase } from "./base";
 import { Block } from "./block";
 import { Graph } from "./graph";
@@ -88,6 +88,7 @@ export abstract class Socket extends ModelBase {
       id: this.id,
       type: this.type,
       label: this.label,
+      hideLabel: this.hideLabel,
       disabled: this.disabled,
       blockId: this.block.id,
       path: this.path,
@@ -99,6 +100,7 @@ export abstract class Socket extends ModelBase {
     this.id = record.id;
     this.type = record.type;
     this.label = record.label;
+    this.hideLabel = record.hideLabel;
     this.disabled = record.disabled;
     this.path = record.path;
     this.importData(record.data);
@@ -109,13 +111,13 @@ export abstract class Socket extends ModelBase {
   get labelBoardPos() {
     switch (this.direction) {
       case Direction.LEFT:
-        return { x: -4, y: -5, "text-anchor": "end" } ;
+        return { x: -4, y: -5, "text-anchor": "end" };
       case Direction.TOP:
-        return { x: 5, y: 0 } ;
+        return { x: 5, y: 0 };
       case Direction.RIGHT:
-        return { x: 5, y: -5 } ;
+        return { x: 5, y: -5 };
       case Direction.BOTTOM:
-        return { x: 5, y: 15 } ;
+        return { x: 5, y: 15 };
     }
   }
 }
@@ -125,6 +127,7 @@ export interface SocketRecord {
   id: number;
   type: string;
   label: string;
+  hideLabel: boolean;
   disabled: boolean;
   blockId: number;
   path: string;
