@@ -21,6 +21,8 @@ export class ViewBlock extends RectBlock implements SpecialBlock {
     this.inSocket = new InSocket();
 
     this.inSocket.type = "L";
+    this.inSocket.label = "parent";
+    this.inSocket.hideLabel = true;
     this.inSocket.path = PATH_IN_RECT;
 
     this.addSocket(Direction.LEFT, this.inSocket);
