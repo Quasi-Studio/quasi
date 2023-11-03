@@ -10,6 +10,7 @@
   },
   "devDependencies": {
     "@refina/tsconfig": "link:..\\..\\..\\refina\\packages\\tsconfig",
+    "@types/deep-equal": "^1.0.3",
     "typescript": "^5.0.2"
   },
   "main": "./src/index.ts",
@@ -25,6 +26,7 @@
     "@fluentui/tokens": "1.0.0-alpha.11",
     "@refina/fluentui": "link:..\\..\\..\\refina\\packages\\fluentui",
     "@refina/griffel": "link:..\\..\\..\\refina\\packages\\griffel",
+    "deep-equal": "^2.2.2",
     "refina": "link:..\\..\\..\\refina\\packages\\core"
   }
 }
