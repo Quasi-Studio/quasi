@@ -101,11 +101,21 @@ export default view(_ => {
       )
     ) {
       if (_.$ev) {
-        const compiler = new Compiler(toOutput());
-        compiler.compile().then(v => {
-          buildOutput = v;
-          _.$update();
-        });
+        try {
+          const compiler = new Compiler(toOutput());
+          compiler
+            .compile()
+            .then(v => {
+              buildOutput = v;
+              _.$update();
+            })
+            .catch(err => {
+              buildOutput = `Compile ${err}`;
+              _.$update();
+            });
+        } catch (e) {
+          buildOutput = `${e}`;
+        }
       } else {
         buildOutput = "Building...";
       }
