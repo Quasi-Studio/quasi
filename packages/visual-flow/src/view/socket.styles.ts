@@ -8,10 +8,20 @@ const rootClassName = makeResetStyles({
 const rootStyles = makeStyles({
   disabled: { fill: tokens.colorNeutralForegroundDisabled },
   notDisabled: {
-    "&.hovered path": {
+    "&.hovered *": {
       fill: tokens.colorCompoundBrandBackgroundHover,
     },
   },
+});
+
+const labelClassName = makeResetStyles({
+  fontSize: tokens.fontSizeBase200,
+  fontWeight: tokens.fontWeightMedium,
+  alignmentBaseline: "text-after-edge",
+});
+
+const labelStyles = makeStyles({
+  disabled: { fill: tokens.colorNeutralForegroundDisabled },
 });
 
 export default {
@@ -20,4 +30,6 @@ export default {
       rootClassName,
       disabled ? rootStyles.disabled : rootStyles.notDisabled,
     ),
+  label: (disabled: boolean) =>
+    mergeClasses(labelClassName, disabled && labelStyles.disabled),
 };

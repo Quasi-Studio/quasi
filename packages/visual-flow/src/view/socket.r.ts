@@ -2,7 +2,7 @@ import { ComponentContext, OutputComponent } from "refina";
 import { Socket } from "../model";
 import Vf from "../plugin";
 import styles from "./socket.styles";
-import { Direction } from "../types";
+import { Direction, Point } from "../types";
 
 @Vf.outputComponent("vfSocket")
 export class VfSocket extends OutputComponent {
@@ -23,7 +23,10 @@ export class VfSocket extends OutputComponent {
           d: model.path,
         });
 
-        // _._svgText({}, model.label);
+        if (!model.hideLabel) {
+          styles.label(model.disabled)(_);
+          _._svgText(model.labelBoardPos, model.label);
+        }
       });
   }
 }

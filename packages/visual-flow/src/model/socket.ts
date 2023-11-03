@@ -1,5 +1,5 @@
 import { SVGElementComponent, ref } from "refina";
-import { Point, type Direction } from "../types";
+import { Point, Direction } from "../types";
 import { ModelBase } from "./base";
 import { Block } from "./block";
 import { Graph } from "./graph";
@@ -15,6 +15,7 @@ export abstract class Socket extends ModelBase {
    * label to be displayed
    */
   label: string;
+  hideLabel = false;
   disabled = false;
 
   ref = ref<SVGElementComponent<"g">>();
@@ -104,6 +105,19 @@ export abstract class Socket extends ModelBase {
   }
 
   path: string;
+
+  get labelBoardPos() {
+    switch (this.direction) {
+      case Direction.LEFT:
+        return { x: -4, y: -5, "text-anchor": "end" } ;
+      case Direction.TOP:
+        return { x: 5, y: 0 } ;
+      case Direction.RIGHT:
+        return { x: 5, y: -5 } ;
+      case Direction.BOTTOM:
+        return { x: 5, y: 15 } ;
+    }
+  }
 }
 
 export interface SocketRecord {
