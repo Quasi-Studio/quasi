@@ -1,3 +1,4 @@
+import deepEqual from "deep-equal";
 import { App, HTMLElementComponent, ref } from "refina";
 import { VfRecord, exportVf, importVf } from "../recorder";
 import { Direction, Point } from "../types";
@@ -107,8 +108,15 @@ export class Graph {
     this.initialRecord = exportVf(this);
   }
   pushRecord() {
+    const record = exportVf(this);
+    const lastRecord =
+      this.recordIndex === -1
+        ? this.initialRecord
+        : this.recordStack[this.recordIndex];
+    if (deepEqual(record, lastRecord)) return;
+
     this.recordStack = this.recordStack.slice(0, this.recordIndex + 1);
-    this.recordStack.push(exportVf(this));
+    this.recordStack.push(record);
     this.recordIndex++;
   }
   overwriteRecord() {
