@@ -12,6 +12,7 @@
   "devDependencies": {
     "@refina/transformer": "link:..\\..\\..\\refina\\packages\\transformer",
     "@refina/tsconfig": "link:..\\..\\..\\refina\\packages\\tsconfig",
+    "@types/lodash": "^4.14.200",
     "@types/wicg-file-system-access": "^2023.10.2",
     "autoprefixer": "^10.4.15",
     "postcss": "^8.4.27",
@@ -28,6 +29,7 @@
     "@refina/fluentui": "link:..\\..\\..\\refina\\packages\\fluentui",
     "@refina/fluentui-icons": "link:..\\..\\..\\refina\\packages\\fluentui-icons",
     "@refina/griffel": "link:..\\..\\..\\refina\\packages\\griffel",
+    "lodash": "^4.17.21",
     "modern-screenshot": "^4.4.33",
     "refina": "link:..\\..\\..\\refina\\packages\\core"
   }
