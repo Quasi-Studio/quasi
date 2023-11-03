@@ -1,4 +1,4 @@
-import type { FuncBlockOutput, FuncBlockTypes, ValidatorBlockOutput } from "@quasi-dev/compiler";
+import type { FuncBlockOutput, FuncBlockTypes, ImpBlockOutput, ValidatorBlockOutput } from "@quasi-dev/compiler";
 import {
   Direction,
   InSocket,
@@ -32,6 +32,7 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
   placeholder = "";
 
   noOutput = false;
+  outputLabel: string = "output";
 
   abstract name: string;
 
@@ -128,7 +129,7 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
     return {};
   }
 
-  toOutput(): FuncBlockOutput | ValidatorBlockOutput {
+  toOutput(): FuncBlockOutput | ValidatorBlockOutput | ImpBlockOutput {
     const inputs = [];
     for (const [slot, socket] of Object.entries(this.inputSockets)) {
       inputs.push({

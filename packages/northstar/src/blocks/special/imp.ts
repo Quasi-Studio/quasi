@@ -1,4 +1,4 @@
-import type { FuncBlockTypes, ImpBlockOutput } from "@quasi-dev/compiler";
+import type { FuncBlockOutput, FuncBlockTypes, ImpBlockOutput } from "@quasi-dev/compiler";
 import {
   Direction,
   InSocket,
@@ -58,7 +58,8 @@ export class ImpBlock extends FuncBlockBase {
 
   toOutput(): ImpBlockOutput {
     return {
-      ...super.toOutput(),
+      ...super.toOutput() as FuncBlockOutput,
+      type: "imp",
       when: {
         blockId: this.whenSocket.connectedLine?.a.block.id ?? NaN,
         socketName: this.whenSocket.connectedLine?.a.label ?? "",
