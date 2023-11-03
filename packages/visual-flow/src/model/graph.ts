@@ -774,7 +774,6 @@ export class Graph {
     this.boardOffsetX = 0;
     this.boardOffsetY = 0;
     this.boardScale = 1;
-    this.pushRecord();
   }
 
   fullView() {
@@ -807,7 +806,6 @@ export class Graph {
     this.boardScale = scale;
     this.boardOffsetX = leftmost;
     this.boardOffsetY = topmost;
-    this.pushRecord();
 
     return {
       width: boardWidth * scale,

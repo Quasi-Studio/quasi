@@ -139,6 +139,12 @@ export default view(_ => {
 
             const node = graphElRef.current!.node;
 
+            const { boardOffsetX, boardOffsetY, boardScale } = currentGraph;
+            const restoreBoard = () => {
+              currentGraph.boardOffsetX = boardOffsetX;
+              currentGraph.boardOffsetY = boardOffsetY;
+              currentGraph.boardScale = boardScale;
+            };
             const { width, height } = currentGraph.fullView();
             currentGraph.updatePosition();
 
@@ -185,12 +191,10 @@ export default view(_ => {
                   exportToPNGMessage = "Done";
                   exportToPNGValidationState = "success";
 
-                  currentGraph.undo();
                   _.$update();
                 })
                 .catch(err => {
                   if (err instanceof Error && err.name === "AbortError") {
-                    currentGraph.undo();
                     close();
                     return;
                   }
@@ -200,6 +204,13 @@ export default view(_ => {
                   exportToPNGMessage = `${err}`;
                   exportToPNGValidationState = "error";
                   _.$update();
+                })
+                .finally(() => {
+                  restoreBoard();
+                  exportToPNGProgess = 0;
+                  exportToPNGColor = "brand";
+                  exportToPNGValidationState = "none";
+                  exportToPNGMessage = `Click the "Export" button above to start`;
                 });
             }, 100);
           }
@@ -235,6 +246,7 @@ export default view(_ => {
         false,
         () => {
           currentGraph.resetViewport();
+          currentGraph.pushRecord();
         },
       );
       _.embed(
@@ -244,6 +256,7 @@ export default view(_ => {
         false,
         () => {
           currentGraph.fullView();
+          currentGraph.pushRecord();
         },
       );
 
