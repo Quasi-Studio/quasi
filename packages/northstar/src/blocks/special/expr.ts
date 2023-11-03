@@ -5,6 +5,8 @@ import { FuncBlockBase } from "./FuncBlockBase.r";
 export class ExprBlock extends FuncBlockBase {
   name = "expression";
 
+  outputLabel = "value"
+
   getSlots() {
     const template = this.inputValue.value;
     const matches = template.matchAll(/\$[a-zA-Z0-9]+/g);
