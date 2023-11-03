@@ -18,6 +18,7 @@ export function updateSockets(block: ComponentBlock) {
   block.updateSocket("parent", InSocket, Direction.LEFT, {
     type: "L",
     path: PATH_IN_RECT,
+    hideLabel: true,
   });
 
   for (const content of contents) {
@@ -31,6 +32,7 @@ export function updateSockets(block: ComponentBlock) {
         {
           type: "L",
           path: PATH_OUT_RECT,
+          hideLabel: contents.length === 1,
           disabled:
             content.kind === "as-primary-and-socket" && block.primaryFilled,
         },
