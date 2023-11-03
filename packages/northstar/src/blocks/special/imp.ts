@@ -38,6 +38,8 @@ export class ImpBlock extends FuncBlockBase {
 
   name = "imperative code";
 
+  outputLabel = "retVal"
+
   useTextarea = true;
 
   onInput() {
