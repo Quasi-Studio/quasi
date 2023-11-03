@@ -39,7 +39,7 @@ export default {
     {
       color: dropdownProp(["unset", "primary", "accent"], "unset"),
       raised: switchProp(false),
-      ripple: switchProp(true),
+      ripple: switchProp(false),
     },
   ),
 

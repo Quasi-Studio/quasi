@@ -1,23 +1,30 @@
-import { ComponentContext, Content, OutputComponent, fromProp } from "refina";
+import { ComponentContext, Content, OutputComponent } from "refina";
 import QuasiRuntime from "./plugin";
-import "@refina/mdui";
-import { Color } from "@refina/mdui";
 
 export interface ButtonProps {
   inner: Content;
-  color?: Color;
-  raised?: boolean;
-  disabled?: boolean;
-  ripple?: boolean;
-  icon?: boolean;
-  onClick?: () => void;
+  color: "primary" | "accent" | "unset";
+  raised: boolean;
+  disabled: boolean;
+  ripple: boolean;
+  icon: boolean;
+  onClick: () => void;
 }
 
 @QuasiRuntime.outputComponent("button")
 export class QButton extends OutputComponent {
   main(_: ComponentContext<this>, props: ButtonProps): void {
-    if (_.mdIntrinsicButton(props.inner, props.color, props.raised, props.disabled, props.ripple, props.icon)) {
-      props.onClick?.();
+    if (
+      _.mdIntrinsicButton(
+        props.inner,
+        props.color === "unset" ? undefined : props.color,
+        props.raised,
+        props.disabled,
+        props.ripple,
+        props.icon,
+      )
+    ) {
+      props.onClick();
     }
   }
 }
