@@ -32,21 +32,26 @@ export class ForEachBlock extends RectBlock implements SpecialBlock {
 
   initialize(): void {
     this.parentSocket = new InSocket();
+    this.parentSocket.label = "parent";
+    this.parentSocket.hideLabel = true;
     this.parentSocket.type = "L";
     this.parentSocket.path = PATH_IN_RECT;
     this.addSocket(Direction.LEFT, this.parentSocket);
 
     this.childrenSocket = new MultiOutSocket();
+    this.childrenSocket.label = "children";
     this.childrenSocket.type = "L";
     this.childrenSocket.path = PATH_OUT_RECT;
     this.addSocket(Direction.BOTTOM, this.childrenSocket);
 
     this.inputSocket = new InSocket();
+    this.inputSocket.label = "iterable";
     this.inputSocket.type = "D";
     this.inputSocket.path = PATH_IN_ELIPSE;
     this.addSocket(Direction.TOP, this.inputSocket);
 
     this.outputSocket = new MultiOutSocket();
+    this.outputSocket.label = "current";
     this.outputSocket.type = "D";
     this.outputSocket.path = PATH_OUT_ELIPSE;
     this.addSocket(Direction.RIGHT, this.outputSocket);
