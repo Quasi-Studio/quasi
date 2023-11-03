@@ -31,6 +31,8 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
   inputValue = d("");
   placeholder = "";
 
+  noOutput = false;
+
   abstract name: string;
 
   content = (_: Context) => {
@@ -91,26 +93,32 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
 
   outputSocket: MultiOutSocket;
   initialize() {
-    this.outputSocket = new MultiOutSocket();
-    this.outputSocket.type = "D";
-    this.outputSocket.label = "output";
-    this.outputSocket.path = PATH_OUT_ELIPSE;
-    this.addSocket(Direction.DOWN, this.outputSocket);
+    if (!this.noOutput) {
+      this.outputSocket = new MultiOutSocket();
+      this.outputSocket.type = "D";
+      this.outputSocket.label = "output";
+      this.outputSocket.path = PATH_OUT_ELIPSE;
+      this.addSocket(Direction.DOWN, this.outputSocket);
+    }
   }
 
   protected exportData(): any {
     return {
       ...super.exportData(),
+      noOutput: this.noOutput,
       inputValue: this.inputValue.value,
       inputSockets: Object.fromEntries(Object.entries(this.inputSockets).map(([n, s]) => [n, s.id])),
-      outputSocket: this.outputSocket.id,
+      outputSocket: this.noOutput ? NaN : this.outputSocket.id,
     };
   }
   protected importData(data: any, sockets: any): void {
     super.importData(data, sockets);
+    this.noOutput = data.noOutput;
     this.inputValue.value = data.inputValue;
     this.inputSockets = Object.fromEntries(Object.entries(data.inputSockets).map(([n, s]: any) => [n, sockets[s]]));
-    this.outputSocket = sockets[data.outputSocket];
+    if (!this.noOutput) {
+      this.outputSocket = sockets[data.outputSocket];
+    }
     // this.updateSockets();
   }
 

@@ -6,6 +6,7 @@ export class ValidatorBlock extends FuncBlockBase {
   name = "validator";
   type: FuncBlockTypes = "validator";
   placeholder = "expression";
+  noOutput = true;
 
   errorMessages: string = "Invalid input";
 
