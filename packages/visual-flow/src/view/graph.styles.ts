@@ -20,8 +20,17 @@ const svgStyles = makeStyles({
   },
 });
 
+const canvasClassName = makeResetStyles({
+  position: "absolute",
+  right: "10px",
+  bottom: "10px",
+  zIndex: 1000,
+  backgroundColor:"#eeeeee"
+});
+
 export default {
   root: mergeClasses(rootClassName),
   bgSvg: mergeClasses(svgClassName),
   fgSvg: mergeClasses(svgClassName, svgStyles.fg),
+  canvas: mergeClasses(canvasClassName),
 };

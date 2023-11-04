@@ -105,6 +105,10 @@ export class VfGraph extends OutputComponent {
     _.for(model.blocks, "id", block => {
       _.vfBlock(block);
     });
+  
+    _.$ref(model.canvasRef) &&
+    styles.canvas(_);
+    _._canvas()
   }
 }
 

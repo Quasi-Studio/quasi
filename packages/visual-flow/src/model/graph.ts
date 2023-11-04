@@ -71,6 +71,14 @@ export class Graph {
     return this.ref.current?.node;
   }
 
+  canvasRef = ref<HTMLElementComponent<"canvas">>();
+  get canvasEl() {
+    return this.canvasRef.current?.node;
+  }
+  getCanvasCtx() {
+    return this.canvasRef.current!.node.getContext("2d")!;
+  }
+
   initialRecord: VfRecord;
   recordStack: VfRecord[] = [];
   recordIndex: number = -1;
@@ -307,6 +315,7 @@ export class Graph {
   updatePosition() {
     this.blocks.forEach((b) => b.updatePosition());
     this.lines.forEach((l) => l.updatePosition());
+    this.redrawCanvas();
   }
   protected updateDraggingBlockPosition({
     block,
@@ -343,6 +352,64 @@ export class Graph {
     line.updatePosition();
     predictor.setBoardPosB(this.mouseBoardPos);
     predictor.updatePosition();
+  }
+
+  protected redrawCanvas() {
+    const ctx = this.getCanvasCtx();
+    const {
+      left: fullviewLeft,
+      top: fullviewTop,
+      right: fullviewRight,
+      bottom: fullviewBottom,
+    } = this.fullViewRect;
+    const { width: graphWidth, height: graphHeight } =
+      this.el!.getBoundingClientRect();
+
+    const left = Math.min(fullviewLeft, this.boardOffsetX);
+    const top = Math.min(fullviewTop, this.boardOffsetY);
+    const right = Math.max(
+      fullviewRight,
+      this.boardOffsetX + graphWidth / this.boardScale,
+    );
+    const bottom = Math.max(
+      fullviewBottom,
+      this.boardOffsetY + graphHeight / this.boardScale,
+    );
+
+    const width = right - left;
+    const height = bottom - top;
+
+    const scale = Math.sqrt((width * height) / 30000);
+    if (this.canvasEl) {
+      this.canvasEl.style.width = width / scale + "px";
+      this.canvasEl.style.height = height / scale + "px";
+      this.canvasEl.width = width / scale;
+      this.canvasEl.height = height / scale;
+    }
+
+    for (const block of this.blockZIndex) {
+      if (block?.attached) {
+        ctx.fillStyle = block.selected ? "rgb(17,94,163)" : "rgb(71,158,245)";
+        ctx.fillRect(
+          (block.boardPos.x - left) / scale,
+          (block.boardPos.y - top) / scale,
+          block.boundingRectBoardWidth / scale,
+          block.boundingRectBoardHeight / scale,
+        );
+      }
+    }
+
+    ctx.strokeStyle = "#555555";
+    ctx.lineWidth = 2;
+    ctx.strokeRect(
+      (this.boardOffsetX - left) / scale - 1,
+      (this.boardOffsetY - top) / scale - 1,
+      graphWidth / this.boardScale / scale + 2,
+      graphHeight / this.boardScale / scale + 2,
+    );
+
+    // ctx.fillStyle = "rgb(200,0,0)";
+    // ctx.fillRect(10, 10, 55, 50);
   }
 
   protected boardMoveSpeed: Point = { x: 0, y: 0 };
@@ -574,6 +641,8 @@ export class Graph {
       }
       line.updatePosition();
       predictor.updatePosition();
+
+      this.redrawCanvas();
       return false;
     }
     if (this.state.type === GraphStateType.DRAGGING_BLOCK) {
@@ -603,6 +672,7 @@ export class Graph {
       }
       predictor.updatePosition();
 
+      this.redrawCanvas();
       return false;
     }
     if (this.state.type === GraphStateType.DRAGGING_MULTI_BLOCK) {
@@ -624,6 +694,7 @@ export class Graph {
         // this.setHoveredItem(null);
       }
 
+      this.redrawCanvas();
       return false;
     }
     if (this.state.type === GraphStateType.DRAGGING_BOARD) {
@@ -784,40 +855,47 @@ export class Graph {
     this.boardScale = 1;
   }
 
+  get fullViewRect() {
+    const blocks = this.blocks.filter((b) => b.attached);
+    const left =
+      Math.min(...blocks.map((b) => b.boardPos.x)) - FULL_VIEW_PADDING;
+    const top =
+      Math.min(...blocks.map((b) => b.boardPos.y)) - FULL_VIEW_PADDING;
+    const right =
+      Math.max(...blocks.map((b) => b.boardPos.x + b.boundingRectBoardWidth)) +
+      FULL_VIEW_PADDING;
+    const bottom =
+      Math.max(...blocks.map((b) => b.boardPos.y + b.boundingRectBoardHeight)) +
+      FULL_VIEW_PADDING;
+    return {
+      left,
+      top,
+      right,
+      bottom,
+      width: right - left,
+      height: bottom - top,
+    };
+  }
   fullView() {
     if (this.blocks.length === 0) {
       this.resetViewport();
       return { width: NaN, height: NaN };
     }
 
-    const leftmost =
-      Math.min(...this.blocks.map((b) => b.boardPos.x)) - FULL_VIEW_PADDING;
-    const topmost =
-      Math.min(...this.blocks.map((b) => b.boardPos.y)) - FULL_VIEW_PADDING;
-    const rightmost =
-      Math.max(
-        ...this.blocks.map((b) => b.boardPos.x + b.boundingRectBoardWidth),
-      ) + FULL_VIEW_PADDING;
-    const bottommost =
-      Math.max(
-        ...this.blocks.map((b) => b.boardPos.y + b.boundingRectBoardHeight),
-      ) + FULL_VIEW_PADDING;
-
-    const boardWidth = rightmost - leftmost;
-    const boardHeight = bottommost - topmost;
+    const { left, top, width, height } = this.fullViewRect;
 
     const { width: graphWidth, height: graphHeight } =
       this.el!.getBoundingClientRect();
 
-    const scale = Math.min(graphWidth / boardWidth, graphHeight / boardHeight);
+    const scale = Math.min(graphWidth / width, graphHeight / height);
 
     this.boardScale = scale;
-    this.boardOffsetX = leftmost;
-    this.boardOffsetY = topmost;
+    this.boardOffsetX = left;
+    this.boardOffsetY = top;
 
     return {
-      width: boardWidth * scale,
-      height: boardHeight * scale,
+      width: width * scale,
+      height: height * scale,
     };
   }
 
