@@ -388,7 +388,7 @@ export class Graph {
     }
 
     for (const block of this.blockZIndex) {
-      if (block?.attached) {
+      if (block) {
         ctx.fillStyle = block.selected ? "rgb(17,94,163)" : "rgb(71,158,245)";
         ctx.fillRect(
           (block.boardPos.x - left) / scale,
