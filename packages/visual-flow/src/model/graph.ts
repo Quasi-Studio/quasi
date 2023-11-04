@@ -347,6 +347,7 @@ export class Graph {
 
   protected boardMoveSpeed: Point = { x: 0, y: 0 };
   protected boardMovingInterval = setInterval(() => {
+    this.updateBoardMoveSpeed();
     if (this.boardMoveSpeed.x === 0 && this.boardMoveSpeed.y === 0) return;
     this.boardOffsetX += this.boardMoveSpeed.x / this.boardScale;
     this.boardOffsetY += this.boardMoveSpeed.y / this.boardScale;
@@ -544,7 +545,6 @@ export class Graph {
       return this.onMouseUp(false);
     }
 
-    this.updateBoardMoveSpeed();
     if (this.state.type === GraphStateType.IDLE) {
       const draggingSource = this.getDraggingSource(shiftKey);
       if (draggingSource) {
