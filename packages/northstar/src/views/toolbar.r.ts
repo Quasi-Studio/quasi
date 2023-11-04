@@ -159,6 +159,7 @@ export default view(_ => {
                 style: {
                   transform: `translate(-${x}px, -${y}px)`,
                 },
+                filter: node => (node as Element).id !== "vf-thumbnail",
                 timeout: 30000,
               })
                 .then(async blob => {
