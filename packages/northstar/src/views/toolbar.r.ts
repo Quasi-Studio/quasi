@@ -193,6 +193,9 @@ export default view(_ => {
                   exportToPNGValidationState = "success";
 
                   _.$update();
+
+                  await new Promise(resolve => setTimeout(resolve, 500));
+                  close();
                 })
                 .catch(err => {
                   if (err instanceof Error && err.name === "AbortError") {
