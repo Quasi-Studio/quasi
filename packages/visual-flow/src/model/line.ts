@@ -136,6 +136,13 @@ export abstract class Line extends ModelBase {
 
   abstract get arrowPath(): string;
 
+  abstract drawThumbnail(
+    ctx: CanvasRenderingContext2D,
+    left: number,
+    top: number,
+    scale: number,
+  ): void;
+
   createPredictor(): Line {
     const predictor = this.clone();
     predictor.graph = this.graph;

@@ -379,33 +379,43 @@ export class Graph {
     const width = right - left;
     const height = bottom - top;
 
-    const scale = Math.sqrt((width * height) / 30000);
+    const scale = Math.sqrt(30000 / (width * height));
     if (this.canvasEl) {
-      this.canvasEl.style.width = width / scale + "px";
-      this.canvasEl.style.height = height / scale + "px";
-      this.canvasEl.width = width / scale;
-      this.canvasEl.height = height / scale;
+      this.canvasEl.style.width = width * scale + "px";
+      this.canvasEl.style.height = height * scale + "px";
+      this.canvasEl.width = width * scale;
+      this.canvasEl.height = height * scale;
+    }
+
+    const { fg: fgLines, bg: bgLines } = this.displayLines;
+
+    for (const line of bgLines) {
+      line.drawThumbnail(ctx, left, top, scale);
     }
 
     for (const block of this.blockZIndex) {
       if (block) {
         ctx.fillStyle = block.selected ? "rgb(17,94,163)" : "rgb(71,158,245)";
         ctx.fillRect(
-          (block.boardPos.x - left) / scale,
-          (block.boardPos.y - top) / scale,
-          block.boundingRectBoardWidth / scale,
-          block.boundingRectBoardHeight / scale,
+          (block.boardPos.x - left) * scale,
+          (block.boardPos.y - top) * scale,
+          block.boundingRectBoardWidth * scale,
+          block.boundingRectBoardHeight * scale,
         );
       }
+    }
+
+    for (const line of fgLines) {
+      line.drawThumbnail(ctx, left, top, scale);
     }
 
     ctx.strokeStyle = "#555555";
     ctx.lineWidth = 2;
     ctx.strokeRect(
-      (this.boardOffsetX - left) / scale - 1,
-      (this.boardOffsetY - top) / scale - 1,
-      graphWidth / this.boardScale / scale + 2,
-      graphHeight / this.boardScale / scale + 2,
+      (this.boardOffsetX - left) * scale - 1,
+      (this.boardOffsetY - top) * scale - 1,
+      (graphWidth / this.boardScale) * scale + 2,
+      (graphHeight / this.boardScale) * scale + 2,
     );
 
     // ctx.fillStyle = "rgb(200,0,0)";

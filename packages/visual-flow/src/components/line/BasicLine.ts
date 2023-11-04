@@ -21,12 +21,7 @@ export class BasicLine extends Line {
     return new BasicLine();
   }
 
-  get linePath() {
-    let point1 = this.boardPosA;
-    let point2 = this.boardPosB;
-
-    point2 = Point.moveFarther(point2, this.b.direction, LINE_END_OFFSET);
-
+  calcCtrlPoint(point1: Point, point2: Point) {
     const delta = Point.minus(point2, point1);
 
     const delta1 = Point.getComponentByDirection(delta, this.a.direction);
@@ -37,6 +32,17 @@ export class BasicLine extends Line {
     const offset2 = getCtrlPointOffset(delta2);
     const controlPoint2 = Point.moveFarther(point2, this.b.direction, offset2);
 
+    return [controlPoint1, controlPoint2];
+  }
+
+  get linePath() {
+    let point1 = this.boardPosA;
+    let point2 = this.boardPosB;
+
+    point2 = Point.moveFarther(point2, this.b.direction, LINE_END_OFFSET);
+
+    const [controlPoint1, controlPoint2] = this.calcCtrlPoint(point1, point2);
+
     const graphPos1 = this.graphPosA;
     const graphPos2 = this.graph.boardPos2GraphPos(point2);
     const graphCtrl1 = this.graph.boardPos2GraphPos(controlPoint1);
@@ -45,7 +51,7 @@ export class BasicLine extends Line {
     return `M${graphPos1.x} ${graphPos1.y} C${graphCtrl1.x} ${graphCtrl1.y}, ${graphCtrl2.x} ${graphCtrl2.y}, ${graphPos2.x} ${graphPos2.y}`;
   }
 
-  get arrowPath() {
+  calcArrowPoint() {
     const p0 = this.boardPosB;
     const p1 = Point.moveFarther(p0, this.b.direction, ARROW_BOARD_LENGTH);
     const p2 = Point.moveFarther(
@@ -58,12 +64,57 @@ export class BasicLine extends Line {
       rotate(this.b.direction),
       -ARROW_BOARD_WIDTH,
     );
+    return { p2, p3 };
+  }
+
+  get arrowPath() {
+    const { p2, p3 } = this.calcArrowPoint();
 
     const gp0 = this.graphPosB;
     const gp2 = this.graph.boardPos2GraphPos(p2);
     const gp3 = this.graph.boardPos2GraphPos(p3);
 
     return `M${gp0.x} ${gp0.y} L${gp2.x} ${gp2.y} L${gp3.x} ${gp3.y} Z`;
+  }
+
+  drawThumbnail(
+    ctx: CanvasRenderingContext2D,
+    left: number,
+    top: number,
+    scale: number,
+  ): void {
+    if (this.predicting) return;
+
+    ctx.lineWidth = 1 * Math.min(this.graph.boardScale, 1);
+    ctx.strokeStyle = this.dragging ? "rgb(15,84,140)" : "rgb(15,108,189)";
+    ctx.fillStyle = ctx.strokeStyle;
+
+    let point1 = this.boardPosA;
+    let point2 = Point.moveFarther(
+      this.boardPosB,
+      this.b.direction,
+      LINE_END_OFFSET,
+    );
+    const [controlPoint1, controlPoint2] = this.calcCtrlPoint(point1, point2);
+    ctx.beginPath();
+    ctx.moveTo((point1.x - left) * scale, (point1.y - top) * scale);
+    ctx.bezierCurveTo(
+      (controlPoint1.x - left) * scale,
+      (controlPoint1.y - top) * scale,
+      (controlPoint2.x - left) * scale,
+      (controlPoint2.y - top) * scale,
+      (point2.x - left) * scale,
+      (point2.y - top) * scale,
+    );
+    ctx.stroke();
+
+    const p0 = this.boardPosB;
+    const { p2, p3 } = this.calcArrowPoint();
+    ctx.beginPath();
+    ctx.moveTo((p0.x - left) * scale, (p0.y - top) * scale);
+    ctx.lineTo((p2.x - left) * scale, (p2.y - top) * scale);
+    ctx.lineTo((p3.x - left) * scale, (p3.y - top) * scale);
+    ctx.fill();
   }
 
   protected exportData(): any {
