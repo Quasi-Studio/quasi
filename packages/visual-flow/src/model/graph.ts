@@ -517,6 +517,7 @@ export class Graph {
   }
 
   updateBlockZIndex() {
+    this.blockZIndex = this.blockZIndex.filter((b) => b !== null);
     for (let i = 0; i < this.blockZIndex.length; i++) {
       const block = this.blockZIndex[i];
       if (block) {
