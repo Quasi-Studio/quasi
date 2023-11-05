@@ -85,7 +85,7 @@ export class BasicLine extends Line {
   ): void {
     if (this.predicting) return;
 
-    ctx.lineWidth = 1 * Math.min(this.graph.boardScale, 1);
+    ctx.lineWidth = Math.max(0.05, Math.min(2 * scale, 1));
     ctx.strokeStyle = this.dragging ? "rgb(15,84,140)" : "rgb(15,108,189)";
     ctx.fillStyle = ctx.strokeStyle;
 
