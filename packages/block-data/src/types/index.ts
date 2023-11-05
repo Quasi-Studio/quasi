@@ -65,12 +65,9 @@ export function input(
 
 type OutputDisplay = "as-socket";
 
-type CodeProcessor = (value: string) => string;
-
 export interface OutputInfo {
   name: string;
   dataType: TypeInfo;
-  getter: CodeProcessor;
   kind: OutputDisplay;
   position: PositionInfo;
 }
@@ -78,14 +75,12 @@ export interface OutputInfo {
 export function output(
   name: string,
   dataType: TypeInfo,
-  getter: CodeProcessor,
   kind: OutputDisplay = "as-socket",
   position: PositionInfo = null,
 ): OutputInfo {
   return {
     name,
     dataType,
-    getter,
     kind,
     position,
   };
@@ -121,13 +116,11 @@ export interface MethodInfo {
   argTypes: TypeInfo[];
   kind: MethodDisplay;
   position: PositionInfo;
-  call: CodeProcessor;
 }
 
 export function method(
   name: string,
   argTypes: TypeInfo[],
-  call: CodeProcessor,
   kind: MethodDisplay = "as-socket",
   position: PositionInfo = null,
 ): MethodInfo {
@@ -136,7 +129,6 @@ export function method(
     argTypes: argTypes,
     kind,
     position,
-    call,
   };
 }
 

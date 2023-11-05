@@ -3,9 +3,10 @@ import QuasiRuntime from "./plugin";
 import "@refina/mdui";
 
 export interface InputProps {
-  label?: string;
-  disabled?: boolean;
-  onInput?: (newVal: string) => void;
+  label: string;
+  disabled: boolean;
+  onInput: (newVal: string) => void;
+  validator: (value: string) => string | true;
 }
 
 export class InputModel {

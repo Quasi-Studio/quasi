@@ -1,17 +1,16 @@
 import {
   component,
   content,
+  contentWrapper,
+  dropdownProp,
   event,
   input,
-  method,
-  output,
-  contentWrapper,
-  plugin,
-  t,
   layer,
+  output,
+  plugin,
   switchProp,
+  t,
   textProp,
-  dropdownProp,
 } from "../types";
 
 export default {
@@ -49,22 +48,16 @@ export default {
 
   span: contentWrapper("Span"),
 
-  textInput: component(
+  input: component(
     "TextInput",
-    "TextInput",
+    "InputModel",
     [],
     input("label", "string", "as-primary"),
-    output("value", "string", (id) => id),
-    event("input", t.string),
-    method("clear", [], (id) => `${id}.clear()`),
+    output("value", "string"),
+    event("onInput", t.string),
+    [],
     plugin("validator", "validator"),
-    {
-      placeholder: textProp(),
-      appearance: dropdownProp(
-        ["outline", "underline", "filled-darker", "filled-lighter"],
-        "outline",
-      ),
-    },
+    {},
   ),
 
   appbar: component(
