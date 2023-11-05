@@ -31,12 +31,12 @@ export abstract class Line extends ModelBase {
 
   lineRef = ref<SVGElementComponent>();
   get lineEl() {
-    return this.lineRef.current?.node as SVGElement;
+    return this.lineRef.current?.node;
   }
 
   arrowRef = ref<SVGElementComponent>();
   get arrowEl() {
-    return this.arrowRef.current?.node as SVGElement;
+    return this.arrowRef.current?.node;
   }
 
   a: Socket;
@@ -104,7 +104,7 @@ export abstract class Line extends ModelBase {
 
   updatePosition() {
     this.lineEl?.setAttribute("d", this.linePath);
-    this.arrowEl.setAttribute("d", this.arrowPath);
+    this.arrowEl?.setAttribute("d", this.arrowPath);
   }
 
   hover() {
