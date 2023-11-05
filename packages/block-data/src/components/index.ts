@@ -38,7 +38,7 @@ export default {
     [],
     {
       color: dropdownProp(["unset", "primary", "accent"], "unset"),
-      raised: switchProp(false),
+      raised: switchProp(true),
       ripple: switchProp(false),
     },
   ),
@@ -51,7 +51,7 @@ export default {
 
   textInput: component(
     "TextInput",
-    `new q.TextInput()`,
+    "TextInput",
     [],
     input("label", "string", "as-primary"),
     output("value", "string", (id) => id),

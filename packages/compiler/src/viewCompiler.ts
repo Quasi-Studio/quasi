@@ -1,16 +1,17 @@
+import { Compiler } from "./compiler";
 import {
-  ComponentBlockProps,
-  ComponentBlockOutput,
-  RootBlockOutput,
-  ViewOutput,
   ComponentBlockCallbacks,
   ComponentBlockChildren,
-  FuncBlockOutput,
-  ImpBlockOutput,
-  IfBlockOutput,
+  ComponentBlockOutput,
   ComponentBlockPlugins,
+  ComponentBlockProps,
+  FuncBlockOutput,
+  IfBlockOutput,
+  ImpBlockOutput,
+  RootBlockOutput,
+  ViewBlockOutput,
+  ViewOutput,
 } from "./types";
-import { Compiler } from "./compiler";
 import { ConnectTo } from "./types/base";
 
 export class ViewCompiler {
@@ -33,12 +34,11 @@ export class ViewCompiler {
     return this.view.specialBlocks[first] as RootBlockOutput;
   }
 
-  getComponentBlockById(id: number) {
-    const block = this.view.componentBlocks.find((b) => b.id === id);
-    if (!block) {
-      throw new Error(`Block ${id} not found`);
-    }
-    return block;
+  getComponentOrViewBlockById(id: number) {
+    return (
+      this.view.componentBlocks.find((b) => b.id === id) ??
+      (this.view.specialBlocks.find((b) => b.id === id) as ViewBlockOutput)
+    );
   }
 
   getBlockById(id: number) {
@@ -55,12 +55,14 @@ export class ViewCompiler {
     const root = this.getViewRoot();
 
     const mainFunc = root.children
-      .map((c) => this.compileComponentBlock(this.getComponentBlockById(c)))
+      .map((c) =>
+        this.compileComponentOrViewBlock(this.getComponentOrViewBlockById(c)),
+      )
       .join("\n");
 
     const modelsDef = [...this.modelAllocators.entries()]
       .map(([k, v]) => {
-        return `const ${k} = ${v};`;
+        return `const ${k} = new $quasi.${v}();`;
       })
       .join("\n");
 
@@ -69,15 +71,13 @@ export class ViewCompiler {
     const impsDef = this.impDefs.join("\n");
 
     return `
-import { view } from "refina";
-
 ${modelsDef}
 
 ${linesDef}
 
 ${impsDef}
 
-view(_ => {
+const ${this.view.name}View = ${this.view.name === "app" ? "app.use(QuasiRuntime)" : "view"}(_ => {
   ${mainFunc}
 });
 `;
@@ -107,7 +107,7 @@ view(_ => {
   compileDataLineEnd({ blockId, socketName }: ConnectTo): string {
     if (Number.isNaN(blockId)) return "null";
 
-    const lineId = `line${this.lineDefs.length}`;
+    const lineId = `${this.view.name}_line${this.lineDefs.length}`;
 
     const block = this.getBlockById(blockId);
     switch (block.type) {
@@ -177,7 +177,7 @@ view(_ => {
   compileEventLineStart({ blockId, socketName }: ConnectTo): string {
     if (Number.isNaN(blockId)) return "";
 
-    const impId = `imp${this.impDefs.length}`;
+    const impId = `${this.view.name}_imp${this.impDefs.length}`;
     const block = this.getBlockById(blockId);
     switch (block.type) {
       case "string":
@@ -231,7 +231,7 @@ view(_ => {
   compileModel(blockId: number, allocator: string): string {
     if (this.blockModelMap.has(blockId))
       return this.blockModelMap.get(blockId)!;
-    const modelId = `model${this.modelAllocators.size}`;
+    const modelId = `${this.view.name}_model${this.modelAllocators.size}`;
     this.blockModelMap.set(blockId, modelId);
     this.modelAllocators.set(modelId, allocator);
     return modelId;
@@ -277,7 +277,9 @@ view(_ => {
             `_ => {
             ${v
               .map((c) =>
-                this.compileComponentBlock(this.getComponentBlockById(c)),
+                this.compileComponentOrViewBlock(
+                  this.getComponentOrViewBlockById(c),
+                ),
               )
               .join("\n")}
           }`,
@@ -287,7 +289,11 @@ view(_ => {
     );
   }
 
-  compileComponentBlock(block: ComponentBlockOutput): string {
+  compileComponentOrViewBlock(
+    block: ComponentBlockOutput | ViewBlockOutput,
+  ): string {
+    if (block.type === "view") return `_.embed(${block.viewName}View);`;
+
     return `_.${block.func}(
   ${
     block.modelAllocator

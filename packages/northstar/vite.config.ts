@@ -3,4 +3,9 @@ import Refina from "vite-plugin-refina";
 
 export default defineConfig({
   plugins: [Refina()],
+  server: {
+    fs: {
+      allow: ["../../.."],
+    },
+  },
 });

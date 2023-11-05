@@ -27,6 +27,7 @@ import {
 import { toOutput } from "../utils/toOutpus";
 import { Compiler } from "@quasi-dev/compiler";
 import { FieldValidationState, ProgressBarColor, ProgressBarValue } from "@refina/fluentui";
+import { startPreview } from "./preview.r";
 
 export const previewMode = d(false);
 
@@ -295,6 +296,10 @@ export default view(_ => {
   _.$cls`absolute flex items-center h-full right-0`;
   _.div(_ => {
     _.span("Preview mode");
-    _.fSwitch("", previewMode);
+    if(_.fSwitch("", previewMode)){
+      if(_.$ev){
+        startPreview();
+      }
+    }
   });
 });

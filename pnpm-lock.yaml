@@ -55,6 +55,9 @@ importers:
       '@quasi-dev/compiler':
         specifier: workspace:^
         version: link:../compiler
+      '@quasi-dev/runtime':
+        specifier: workspace:^
+        version: link:../runtime
       '@quasi-dev/visual-flow':
         specifier: workspace:^
         version: link:../visual-flow

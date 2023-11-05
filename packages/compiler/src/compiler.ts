@@ -8,13 +8,22 @@ import EsTreePlugin from "prettier/plugins/estree";
 export class Compiler {
   constructor(public input: QuasiOutput) {}
 
-  async compile() {
-    const appViewCompiler = new ViewCompiler(
-      this,
-      this.input.views.find((v) => v.name === "app")!,
-    );
+  refinaModuleURL = "refina";
+  runtimeModuleURL = "@quasi-dev/runtime";
 
-    return await prettier.format(appViewCompiler.compile(), {
+  async compile() {
+    const code = `
+import { app } from "${this.refinaModuleURL}";
+import QuasiRuntime, * as $quasi from "${this.runtimeModuleURL}";
+
+${this.input.views
+  .map((v) => {
+    const viewCompiler = new ViewCompiler(this, v);
+    return viewCompiler.compile();
+  })
+  .join("\n\n")}
+`;
+    return await prettier.format(code, {
       parser: "babel",
       plugins: [BabelPlugin, EsTreePlugin],
       printWidth: 120,
