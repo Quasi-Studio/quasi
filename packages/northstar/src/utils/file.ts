@@ -25,7 +25,7 @@ export async function open() {
 
 export async function saveAs() {
   const handle = await window.showSaveFilePicker({
-    suggestedName: "Untitled.json",
+    suggestedName: "Untitled.q.json",
     types: [
       {
         description: "Quasi Studio Project",
