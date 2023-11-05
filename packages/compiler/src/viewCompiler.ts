@@ -77,7 +77,7 @@ ${linesDef}
 
 ${impsDef}
 
-const ${this.view.name}View = ${this.view.name === "app" ? "app.use(QuasiRuntime)" : "view"}(_ => {
+const ${this.view.name}_view = ${this.view.name === "app" ? "app.use(QuasiRuntime)" : "view"}(_ => {
   ${mainFunc}
 });
 `;
@@ -292,7 +292,7 @@ const ${this.view.name}View = ${this.view.name === "app" ? "app.use(QuasiRuntime
   compileComponentOrViewBlock(
     block: ComponentBlockOutput | ViewBlockOutput,
   ): string {
-    if (block.type === "view") return `_.embed(${block.viewName}View);`;
+    if (block.type === "view") return `_.embed(${block.viewName}_view);`;
 
     return `_.${block.func}(
   ${
