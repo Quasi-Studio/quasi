@@ -66,4 +66,19 @@ export default {
       ),
     },
   ),
+
+  appbar: component(
+    "Appbar",
+    null,
+    content("inner", "as-socket"),
+    [],
+    [],
+    [],
+    [],
+    [],
+    {
+      type: dropdownProp(["toolbar", "tab", "both", "neither"], "toolbar"),
+      colored: switchProp(true),
+    },
+  ),
 };
