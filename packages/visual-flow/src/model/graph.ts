@@ -412,10 +412,10 @@ export class Graph {
     ctx.strokeStyle = "#555555";
     ctx.lineWidth = 2;
     ctx.strokeRect(
-      (this.boardOffsetX - left) * scale - 1,
-      (this.boardOffsetY - top) * scale - 1,
-      (graphWidth / this.boardScale) * scale + 2,
-      (graphHeight / this.boardScale) * scale + 2,
+      (this.boardOffsetX - left) * scale,
+      (this.boardOffsetY - top) * scale,
+      (graphWidth / this.boardScale) * scale - 1,
+      (graphHeight / this.boardScale) * scale - 1,
     );
 
     // ctx.fillStyle = "rgb(200,0,0)";
