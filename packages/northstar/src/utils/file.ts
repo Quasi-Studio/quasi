@@ -1,5 +1,5 @@
 import { exportVf, importVf } from "@quasi-dev/visual-flow";
-import { currentGraph, views } from "../store";
+import { currentViewId, setCurrentView, views } from "../store";
 
 export async function open() {
   const [handle] = await window.showOpenFilePicker({
@@ -15,11 +15,12 @@ export async function open() {
   const file = await handle.getFile();
   const json = await file.text();
   const proj = JSON.parse(json);
+  views.clear();
   for (const { id, graph: graphRecord } of proj.views) {
-    const graph = importVf(graphRecord, views.get(id)?.graph);
-    graph.fullView();
+    const graph = importVf(graphRecord);
     views.set(id, { graph });
   }
+  setCurrentView(proj.currentViewId);
 }
 
 export async function saveAs() {
@@ -40,6 +41,7 @@ export async function saveAs() {
       id,
       graph: exportVf(view.graph),
     })),
+    currentViewId,
   };
   await writable.write(JSON.stringify(proj, null, 2));
   await writable.close();
