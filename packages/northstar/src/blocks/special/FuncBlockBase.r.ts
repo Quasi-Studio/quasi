@@ -8,7 +8,9 @@ import {
   RectBlock,
   Socket,
 } from "@quasi-dev/visual-flow";
-import { Context, d } from "refina";
+import { FTextarea, FUnderlineTextInput } from "@refina/fluentui";
+import { Context, d, ref } from "refina";
+import { currentGraph } from "../../store";
 import { Props } from "../../utils/props";
 import { SpecialBlock } from "./base";
 
@@ -48,16 +50,21 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
         onkeydown: ev => ev.stopPropagation(),
       },
       _ => {
+        const inputRef = ref<FTextarea | FUnderlineTextInput>();
         _.$css`--fontFamilyBase: Consolas,'Segoe UI', 'Segoe UI Web (West European)', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif`;
         if (
-          this.useTextarea
+          _.$ref(inputRef) &&
+          (this.useTextarea
             ? _.$css`margin-top:4px;max-width:180px` && _.fTextarea(this.inputValue, false, this.placeholder, "none")
             : _.$css`min-height:24px;margin-left:-4px` &&
-              _.fUnderlineTextInput(this.inputValue, false, this.placeholder)
+              _.fUnderlineTextInput(this.inputValue, false, this.placeholder))
         ) {
           this.onInput();
           this.updateInputSockets();
         }
+        inputRef.current!.inputRef.current!.node.onchange = () => {
+          currentGraph.pushRecord();
+        };
       },
     );
   };

@@ -1,6 +1,8 @@
-import { Context } from "refina";
+import { Context, ref } from "refina";
 import { ComponentBlock } from "./block";
 import { updateSockets } from "./updateSockets";
+import { FUnderlineTextInput } from "@refina/fluentui";
+import { currentGraph } from "../../store";
 
 export function getContent(block: ComponentBlock) {
   const {
@@ -14,7 +16,7 @@ export function getContent(block: ComponentBlock) {
   const title = (_: Context) => {
     _.$cls`mx-2 text-sm`;
     _.span(name);
-  };  
+  };
 
   if (!info) return title;
   return (_: Context) => {
@@ -29,9 +31,14 @@ export function getContent(block: ComponentBlock) {
         onkeydown: ev => ev.stopPropagation(),
       },
       _ => {
-        _.$css`font-family: Consolas; max-width: 108px; padding-left:4px` &&
+        const inputRef = ref<FUnderlineTextInput>();
+        _.$css`font-family: Consolas; max-width: 108px; padding-left:4px`;
+        _.$ref(inputRef) &&
           _.fUnderlineTextInput(block.primaryValue, block.getPrimaryDisabled(), info.name) &&
           updateSockets(block);
+        inputRef.current!.inputRef.current!.node.onchange = () => {
+          currentGraph.pushRecord();
+        };
       },
     );
   };
