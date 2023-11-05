@@ -104,10 +104,11 @@ const ${this.view.name}_view = ${this.view.name === "app" ? "app.use(QuasiRuntim
   }
 
   lineDefs: string[] = [];
+  currentLineId = 0;
   compileDataLineEnd({ blockId, socketName }: ConnectTo): string {
     if (Number.isNaN(blockId)) return "null";
 
-    const lineId = `${this.view.name}_line${this.lineDefs.length}`;
+    const lineId = `${this.view.name}_line${this.currentLineId++}`;
 
     const block = this.getBlockById(blockId);
     switch (block.type) {
@@ -174,10 +175,11 @@ const ${this.view.name}_view = ${this.view.name === "app" ? "app.use(QuasiRuntim
   }
 
   impDefs: string[] = [];
+  currentImpId = 0;
   compileEventLineStart({ blockId, socketName }: ConnectTo): string {
     if (Number.isNaN(blockId)) return "";
 
-    const impId = `${this.view.name}_imp${this.impDefs.length}`;
+    const impId = `${this.view.name}_imp${this.currentImpId++}`;
     const block = this.getBlockById(blockId);
     switch (block.type) {
       case "string":
