@@ -13,7 +13,7 @@ export class Compiler {
 
   async compile() {
     const code = `
-import { app } from "${this.refinaModuleURL}";
+import { app, view } from "${this.refinaModuleURL}";
 import QuasiRuntime, * as $quasi from "${this.runtimeModuleURL}";
 
 ${this.input.views
