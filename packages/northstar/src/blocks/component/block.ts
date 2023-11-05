@@ -95,6 +95,7 @@ export class ComponentBlock extends RectBlock {
       componentType: this.componentType,
       info: this.info,
       props: this.props,
+      primaryValue: this.primaryValue.value,
     };
   }
   protected importData(data: any, sockets: Record<number, Socket>): void {
@@ -102,6 +103,7 @@ export class ComponentBlock extends RectBlock {
     this.componentType = data.componentType;
     this.info = data.info;
     this.props = data.props;
+    this.primaryValue.value = data.primaryValue;
     this.content = getContent(this);
     for (const socket of this.allSockets) {
       this.socketMap.set(socket.label, socket);
