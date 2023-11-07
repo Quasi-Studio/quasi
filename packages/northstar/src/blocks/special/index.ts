@@ -1,6 +1,7 @@
 import { ExprBlock } from "./expr";
 import { IfElseBlock } from "./if.r";
 import { ImpBlock } from "./imp";
+import { StateBlock } from "./state";
 import { StringBlock } from "./string";
 import { ValidatorBlock } from "./validator";
 
@@ -11,4 +12,5 @@ export default Object.entries({
   "if-else": IfElseBlock,
   imperative: ImpBlock,
   validator: ValidatorBlock,
+  state: StateBlock,
 });

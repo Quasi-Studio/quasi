@@ -1,4 +1,4 @@
-import type { FuncBlockOutput, FuncBlockTypes, ImpBlockOutput, ValidatorBlockOutput } from "@quasi-dev/compiler";
+import type { FuncBlockOutput, FuncBlockTypes, ImpBlockOutput, StateBlockOutput, ValidatorBlockOutput } from "@quasi-dev/compiler";
 import {
   Direction,
   InSocket,
@@ -115,6 +115,8 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
       this.outputSocket.path = PATH_OUT_ELIPSE;
       this.addSocket(Direction.DOWN, this.outputSocket);
     }
+    
+    this.updateInputSockets();
   }
 
   protected exportData(): any {
@@ -143,7 +145,7 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
     return [];
   }
 
-  toOutput(): FuncBlockOutput | ValidatorBlockOutput | ImpBlockOutput {
+  toOutput(): FuncBlockOutput | ValidatorBlockOutput | ImpBlockOutput | StateBlockOutput {
     const inputs = [];
     for (const [slot, socket] of Object.entries(this.inputSockets)) {
       inputs.push({

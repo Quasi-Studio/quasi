@@ -31,7 +31,7 @@ export interface ImpBlockOutput extends Omit<FuncBlockOutput, "type"> {
   then: ConnectTo;
 }
 
-export type FuncBlockTypes = "expr" | "imp" | "string" | "validator";
+export type FuncBlockTypes = "expr" | "imp" | "string" | "validator" | "state";
 
 export interface FuncBlockOutput {
   type: Exclude<FuncBlockTypes, "imp" | "validator">;
@@ -60,10 +60,20 @@ export interface ValidatorBlockOutput {
   expr: string;
 }
 
+export interface StateBlockOutput {
+  type: "state";
+  id: number;
+  initExpr: string;
+  set: ConnectTo;
+  input: ConnectTo;
+  output: ConnectTo[];
+}
+
 export type SpecialBlockOutput =
   | RootBlockOutput
   | FuncBlockOutput
   | ImpBlockOutput
   | ValidatorBlockOutput
   | IfBlockOutput
-  | ViewBlockOutput;
+  | ViewBlockOutput
+  | StateBlockOutput;

@@ -9,6 +9,7 @@ import {
   IfBlockOutput,
   ImpBlockOutput,
   RootBlockOutput,
+  StateBlockOutput,
   ViewBlockOutput,
   ViewOutput,
 } from "./types";
@@ -60,6 +61,18 @@ export class ViewCompiler {
       )
       .join("\n");
 
+    const stateInitExprsDef = [...this.stateInitExprs.entries()]
+      .map(([k, v]) => {
+        return `let ${k} = ${v};`;
+      })
+      .join("\n");
+
+    const stateInputsDef = [...this.stateInputs.entries()]
+      .map(([k, v]) => {
+        return `const ${k}_update = () => { ${k} = ${v}; }`;
+      })
+      .join("\n");
+
     const modelsDef = [...this.modelAllocators.entries()]
       .map(([k, v]) => {
         return `const ${k} = new $quasi.${v}();`;
@@ -71,6 +84,10 @@ export class ViewCompiler {
     const impsDef = this.impDefs.join("\n");
 
     return `
+${stateInitExprsDef}
+
+${stateInputsDef}
+
 ${modelsDef}
 
 ${linesDef}
@@ -127,8 +144,10 @@ const ${this.view.name}_view = ${
       case "root":
         throw new Error("Not implemented");
       case "component":
-        if (!block.modelAllocator)
+        if (!block.modelAllocator) {
+          console.warn(block);
           throw new Error("This component block has no data output");
+        }
         this.lineDefs.push(
           `const ${lineId} = () => ${this.compileModel(
             blockId,
@@ -152,6 +171,18 @@ const ${this.view.name}_view = ${
         throw new Error("If-else block has no data output");
       case "view":
         throw new Error("view block has no data output");
+      case "state":
+        if (socketName !== "output") {
+          throw new Error(
+            `Cannot find socket ${socketName} in block ${blockId}`,
+          );
+        }
+        this.lineDefs.push(
+          `const ${lineId} = () => ${this.compileStateBlock(
+            block as StateBlockOutput,
+          )};`,
+        );
+        break;
     }
     return `${lineId}()`;
   }
@@ -172,6 +203,18 @@ const ${this.view.name}_view = ${
   } else {
     ${this.compileEventLineStart(block.else)}
   }`;
+  }
+
+  stateIdMap = new Map<number, string>();
+  stateInitExprs = new Map<string, string>();
+  stateInputs = new Map<string, string>();
+  compileStateBlock(block: StateBlockOutput): string {
+    if (this.stateIdMap.has(block.id)) return this.stateIdMap.get(block.id)!;
+    const modelId = `${this.view.name}_state${this.stateIdMap.size}`;
+    this.stateIdMap.set(block.id, modelId);
+    this.stateInitExprs.set(modelId, block.initExpr);
+    this.stateInputs.set(modelId, this.compileDataLineEnd(block.input));
+    return modelId;
   }
 
   impDefs: string[] = [];
@@ -222,6 +265,18 @@ const ${this.view.name}_view = ${
         break;
       case "view":
         throw new Error("Expr block is not callable");
+      case "state":
+        if (socketName !== "set") {
+          throw new Error(
+            `Cannot find socket ${socketName} in block ${blockId}`,
+          );
+        }
+        this.impDefs.push(
+          `const ${impId} = ${this.compileStateBlock(
+            block as StateBlockOutput,
+          )}_update;`,
+        );
+        break;
     }
     return `${impId}()`;
   }
