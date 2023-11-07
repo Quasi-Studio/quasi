@@ -1,13 +1,12 @@
+import { FuncBlockTypes, StateBlockOutput } from "@quasi-dev/compiler";
 import {
   Direction,
-  SingleInSocket,
-  MultiOutSocket,
+  MultiInSocket,
   PATH_IN_TRIANGLE,
   Socket,
   blockCtors,
 } from "@quasi-dev/visual-flow";
 import { FuncBlockBase } from "./FuncBlockBase.r";
-import { FuncBlockTypes, StateBlockOutput } from "@quasi-dev/compiler";
 
 export class StateBlock extends FuncBlockBase {
   name = "state";
@@ -20,16 +19,16 @@ export class StateBlock extends FuncBlockBase {
     return block;
   }
 
-  setSocket: SingleInSocket;
+  onsetSocket: MultiInSocket;
 
   initialize(): void {
     super.initialize();
 
-    this.setSocket = new SingleInSocket();
-    this.setSocket.label = "set";
-    this.setSocket.type = "E";
-    this.setSocket.path = PATH_IN_TRIANGLE;
-    this.addSocket(Direction.LEFT, this.setSocket);
+    this.onsetSocket = new MultiInSocket();
+    this.onsetSocket.label = "set";
+    this.onsetSocket.type = "E";
+    this.onsetSocket.path = PATH_IN_TRIANGLE;
+    this.addSocket(Direction.LEFT, this.onsetSocket);
   }
 
   getSlots(): string[] {
@@ -41,10 +40,10 @@ export class StateBlock extends FuncBlockBase {
       type: "state",
       id: this.id,
       initExpr: this.inputValue.value,
-      set: {
-        blockId: this.setSocket.connectedLine?.a.block.id ?? NaN,
-        socketName: this.setSocket.connectedLine?.a.label ?? "",
-      },
+      onset: this.onsetSocket.allConnectedLines.map((l) => ({
+        blockId: l.a.block.id,
+        socketName: l.a.label,
+      })),
       input: {
         blockId: this.inputSockets["input"].connectedLine?.a.block.id ?? NaN,
         socketName: this.inputSockets["input"].connectedLine?.a.label ?? "",
@@ -59,12 +58,12 @@ export class StateBlock extends FuncBlockBase {
   protected exportData() {
     return {
       ...super.exportData(),
-      setSocket: this.setSocket.id,
+      setSocket: this.onsetSocket.id,
     };
   }
   protected importData(data: any, sockets: any): void {
     super.importData(data, sockets);
-    this.setSocket = sockets[data.setSocket];
+    this.onsetSocket = sockets[data.setSocket];
   }
 }
 

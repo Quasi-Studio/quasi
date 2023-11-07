@@ -64,7 +64,7 @@ export interface StateBlockOutput {
   type: "state";
   id: number;
   initExpr: string;
-  set: ConnectTo;
+  onset: ConnectTo[];
   input: ConnectTo;
   output: ConnectTo[];
 }
