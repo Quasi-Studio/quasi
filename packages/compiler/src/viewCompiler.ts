@@ -145,7 +145,6 @@ const ${this.view.name}_view = ${
         throw new Error("Not implemented");
       case "component":
         if (!block.modelAllocator) {
-          console.warn(block);
           throw new Error("This component block has no data output");
         }
         this.lineDefs.push(
