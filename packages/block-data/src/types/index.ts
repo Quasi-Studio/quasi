@@ -202,7 +202,20 @@ export function dropdownProp(
   };
 }
 
-export type Prop = TextProp | SwitchProp | DropdownProp;
+export interface ReadonlyProp extends PropBase {
+  type: "readonly";
+  value: string;
+}
+
+export function readonlyProp(name: string, value: string): ReadonlyProp {
+  return {
+    name,
+    type: "readonly",
+    value,
+  };
+}
+
+export type Prop = TextProp | SwitchProp | DropdownProp | ReadonlyProp;
 export type Props = Prop[];
 
 export interface ComponentInfo {

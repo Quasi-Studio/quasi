@@ -24,6 +24,9 @@ export default view(_ => {
       if (_.fUnderlineDropdown(p.getVal(), p.options)) {
         p.setVal(_.$ev);
       }
+    } else if (p.type === "readonly") {
+      _.$cls`w-full border-b border-gray-500 flex items-center pl-2`;
+      _.div(p.getVal());
     }
   });
 

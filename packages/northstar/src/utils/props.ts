@@ -20,8 +20,16 @@ export interface DropdownPropData extends PropDataBase {
   getVal(): string;
   setVal(val: string): void;
 }
+export interface ReadonlyPropData extends PropDataBase {
+  type: "readonly";
+  getVal(): string;
+  /**
+   * @deprecated
+   */
+  setVal(val: string): void;
+}
 
-export type PropData = TextPropData | SwitchPropData | DropdownPropData;
+export type PropData = TextPropData | SwitchPropData | DropdownPropData | ReadonlyPropData;
 export type PropsData = PropData[];
 
 export function mergeProps([props0, ...propsRest]: PropsData[]) {

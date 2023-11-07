@@ -8,9 +8,12 @@ export function getProps(block: ComponentBlock): PropsData {
     (v) =>
       ({
         ...v,
-        getVal: () => {
-          return block.props[v.name] ?? v.defaultVal;
-        },
+        getVal:
+          v.type === "readonly"
+            ? () => v.value
+            : () => {
+                return block.props[v.name] ?? v.defaultVal;
+              },
         setVal: (val: any) => {
           block.props[v.name] = val;
         },
