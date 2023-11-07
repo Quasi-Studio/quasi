@@ -1,4 +1,5 @@
-export * from "./InSocket";
+export * from "./MultiInSocket";
 export * from "./MultiOutSocket";
+export * from "./SingleInSocket";
 export * from "./SingleOutSocket";
 export * from "./constants";

@@ -1,7 +1,7 @@
 import type { FuncBlockOutput, FuncBlockTypes, ImpBlockOutput, StateBlockOutput, ValidatorBlockOutput } from "@quasi-dev/compiler";
 import {
   Direction,
-  InSocket,
+  SingleInSocket,
   MultiOutSocket,
   PATH_IN_ELIPSE,
   PATH_OUT_ELIPSE,
@@ -73,15 +73,15 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
 
   abstract getSlots(): string[];
 
-  inputSockets: Record<string, InSocket> = {};
+  inputSockets: Record<string, SingleInSocket> = {};
   updateInputSockets() {
     const slots = this.getSlots();
-    const newSockets: Record<string, InSocket> = {};
+    const newSockets: Record<string, SingleInSocket> = {};
     for (const slot of slots) {
       if (this.inputSockets[slot]) {
         newSockets[slot] = this.inputSockets[slot];
       } else {
-        const socket = new InSocket();
+        const socket = new SingleInSocket();
         socket.type = "D";
         socket.label = slot;
         socket.path = PATH_IN_ELIPSE;

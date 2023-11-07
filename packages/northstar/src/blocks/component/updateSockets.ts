@@ -1,6 +1,6 @@
 import {
   Direction,
-  InSocket,
+  SingleInSocket,
   MultiOutSocket,
   PATH_IN_ELIPSE,
   PATH_IN_RECT,
@@ -15,7 +15,7 @@ export function updateSockets(block: ComponentBlock) {
 
   const { contents, events, inputs, outputs } = info;
 
-  block.updateSocket("parent", InSocket, Direction.LEFT, {
+  block.updateSocket("parent", SingleInSocket, Direction.LEFT, {
     type: "L",
     path: PATH_IN_RECT,
     hideLabel: true,
@@ -64,7 +64,7 @@ export function updateSockets(block: ComponentBlock) {
     } else {
       const socket = block.updateSocket(
         input.name,
-        InSocket,
+        SingleInSocket,
         input.position ?? Direction.UP,
         {
           type: "D",

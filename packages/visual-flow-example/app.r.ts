@@ -74,12 +74,12 @@ app.use(FluentUI).use(Vf)(_ => {
         block.boardWidth = 200;
         blockName.value = "";
 
-        const socket1 = new InSocket();
+        const socket1 = new SingleInSocket();
         socket1.label = "in(L)";
         socket1.type = "L";
         socket1.path = PATH_IN_RECT;
 
-        const socket2 = new InSocket();
+        const socket2 = new SingleInSocket();
         socket2.label = "in(D)";
         socket2.type = "D";
         socket2.path = PATH_IN_ELIPSE;
@@ -135,7 +135,7 @@ app.use(FluentUI).use(Vf)(_ => {
         blockName.value = "";
         block.dockableDirections = [Direction.LEFT, Direction.UP];
 
-        const socket1 = new InSocket();
+        const socket1 = new SingleInSocket();
         socket1.type = "L";
 
         const socket2 = new MultiOutSocket();

@@ -1,6 +1,6 @@
 import {
   Direction,
-  InSocket,
+  SingleInSocket,
   MultiOutSocket,
   PATH_IN_TRIANGLE,
   Socket,
@@ -20,12 +20,12 @@ export class StateBlock extends FuncBlockBase {
     return block;
   }
 
-  setSocket: InSocket;
+  setSocket: SingleInSocket;
 
   initialize(): void {
     super.initialize();
 
-    this.setSocket = new InSocket();
+    this.setSocket = new SingleInSocket();
     this.setSocket.label = "set";
     this.setSocket.type = "E";
     this.setSocket.path = PATH_IN_TRIANGLE;

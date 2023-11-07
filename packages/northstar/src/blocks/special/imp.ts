@@ -5,20 +5,20 @@ import type {
 } from "@quasi-dev/compiler";
 import {
   Direction,
-  InSocket,
   PATH_IN_TRIANGLE,
   PATH_OUT_TRIANGLE,
+  SingleInSocket,
   SingleOutSocket,
   blockCtors,
 } from "@quasi-dev/visual-flow";
 import { FuncBlockBase } from "./FuncBlockBase.r";
 
 export class ImpBlock extends FuncBlockBase {
-  whenSocket: InSocket;
+  whenSocket: SingleInSocket;
   thenSocket: SingleOutSocket;
   initialize() {
     super.initialize();
-    this.whenSocket = new InSocket();
+    this.whenSocket = new SingleInSocket();
     this.whenSocket.type = "E";
     this.whenSocket.label = "when";
     this.whenSocket.path = PATH_IN_TRIANGLE;
@@ -38,7 +38,7 @@ export class ImpBlock extends FuncBlockBase {
 
   name = "imperative code";
 
-  outputLabel = "retVal"
+  outputLabel = "retVal";
 
   useTextarea = true;
 

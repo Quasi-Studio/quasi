@@ -1,5 +1,5 @@
 import type { ViewBlockOutput } from "@quasi-dev/compiler";
-import { Direction, InSocket, PATH_IN_RECT, RectBlock, blockCtors } from "@quasi-dev/visual-flow";
+import { Direction, SingleInSocket, PATH_IN_RECT, RectBlock, blockCtors } from "@quasi-dev/visual-flow";
 import { Context } from "refina";
 import { PropsData } from "../../utils/props";
 import { SpecialBlock } from "./base";
@@ -15,10 +15,10 @@ export class ViewBlock extends RectBlock implements SpecialBlock {
   removable = true;
   duplicateable = true;
 
-  inSocket: InSocket;
+  inSocket: SingleInSocket;
 
   initialize(): void {
-    this.inSocket = new InSocket();
+    this.inSocket = new SingleInSocket();
 
     this.inSocket.type = "L";
     this.inSocket.label = "parent";

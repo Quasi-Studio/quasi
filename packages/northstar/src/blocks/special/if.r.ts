@@ -1,7 +1,7 @@
 import type { IfBlockOutput } from "@quasi-dev/compiler";
 import {
   Direction,
-  InSocket,
+  SingleInSocket,
   PATH_IN_ELIPSE,
   PATH_IN_TRIANGLE,
   PATH_OUT_TRIANGLE,
@@ -24,19 +24,19 @@ export class IfElseBlock extends RectBlock implements SpecialBlock {
   removable = true;
   duplicateable = true;
 
-  condSocket: InSocket;
-  inputSocket: InSocket;
+  condSocket: SingleInSocket;
+  inputSocket: SingleInSocket;
   thenSocket: SingleOutSocket;
   elseSocket: SingleOutSocket;
 
   initialize(): void {
-    this.condSocket = new InSocket();
+    this.condSocket = new SingleInSocket();
     this.condSocket.type = "D";
     this.condSocket.label = "condition";
     this.condSocket.path = PATH_IN_ELIPSE;
     this.addSocket(Direction.TOP, this.condSocket);
 
-    this.inputSocket = new InSocket();
+    this.inputSocket = new SingleInSocket();
     this.inputSocket.type = "E";
     this.inputSocket.label = "when";
     this.inputSocket.path = PATH_IN_TRIANGLE;
