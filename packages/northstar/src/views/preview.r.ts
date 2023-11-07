@@ -82,7 +82,7 @@ error: ${error}`;
       };
 
       const scriptNode = iframeNode.contentDocument!.getElementById("app-script")!;
-      const transfomedCode = transformer.transform("0", code);
+      const transfomedCode = transformer.transform("$", code);
 
       scriptNode.innerHTML = transfomedCode;
     };
