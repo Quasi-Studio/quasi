@@ -9,6 +9,7 @@ import {
   SingleOutSocket,
   Socket,
   blockCtors,
+  MultiInSocket,
 } from "@quasi-dev/visual-flow";
 import { Context } from "refina";
 import { PropsData } from "../../utils/props";
@@ -25,7 +26,7 @@ export class IfElseBlock extends RectBlock implements SpecialBlock {
   duplicateable = true;
 
   condSocket: SingleInSocket;
-  inputSocket: SingleInSocket;
+  inputSocket: MultiInSocket;
   thenSocket: SingleOutSocket;
   elseSocket: SingleOutSocket;
 
@@ -36,7 +37,7 @@ export class IfElseBlock extends RectBlock implements SpecialBlock {
     this.condSocket.path = PATH_IN_ELIPSE;
     this.addSocket(Direction.TOP, this.condSocket);
 
-    this.inputSocket = new SingleInSocket();
+    this.inputSocket = new MultiInSocket();
     this.inputSocket.type = "E";
     this.inputSocket.label = "when";
     this.inputSocket.path = PATH_IN_TRIANGLE;
@@ -94,10 +95,10 @@ export class IfElseBlock extends RectBlock implements SpecialBlock {
         blockId: this.condSocket.connectedLine?.a.block.id ?? NaN,
         socketName: this.condSocket.connectedLine?.a.label ?? "",
       },
-      when: {
-        blockId: this.inputSocket.connectedLine?.a.block.id ?? NaN,
-        socketName: this.inputSocket.connectedLine?.a.label ?? "",
-      },
+      when: this.inputSocket.allConnectedLines.map(l => ({
+        blockId: l.a.block.id,
+        socketName: l.a.label,
+      })),
       then: {
         blockId: (this.thenSocket.connectedLine?.b as Socket | undefined)?.block.id ?? NaN,
         socketName: (this.thenSocket.connectedLine?.b as Socket | undefined)?.label ?? "",

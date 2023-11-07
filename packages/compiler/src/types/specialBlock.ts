@@ -13,7 +13,7 @@ export interface IfBlockOutput {
   type: "if";
   id: number;
   condition: ConnectTo;
-  when: ConnectTo;
+  when: ConnectTo[];
   then: ConnectTo;
   else: ConnectTo;
 }
