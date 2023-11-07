@@ -5,7 +5,7 @@ export default view(_ => {
   const props = getSelectedProps();
   _.for(props, byProp("name"), p => {
     const r = ref() as MainElRef;
-    _.$cls`col-span-1 flex justify-center items-center border-b border-gray-500 cursor-text h-8`;
+    _.$cls`col-span-1 flex justify-center items-center border-b border-gray-500 h-8`;
     _._div(
       {
         onclick: () => {
@@ -14,7 +14,7 @@ export default view(_ => {
       },
       p.name,
     );
-    _.$cls`col-span-2 cursor-text h-8`;
+    _.$cls`col-span-2 h-8`;
     _.$ref(r);
     if (p.type === "text") {
       _.fUnderlineTextInput(p.getVal(), false, "unset") && p.setVal(_.$ev);

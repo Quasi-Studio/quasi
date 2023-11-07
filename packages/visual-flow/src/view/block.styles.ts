@@ -11,6 +11,7 @@ const rootClassName = makeResetStyles({
   width: 0,
   height: 0,
   filter: `drop-shadow(0 4px 8px rgba(0,0,0,0.14))`,
+  cursor: "default",
   ...shorthands.overflow("visible"),
 
   "&.animated": {

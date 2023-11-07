@@ -14,6 +14,7 @@ export default view(_ => {
         special,
         ([k]: any) => k,
         ([k, v]) => {
+          _.$cls`cursor-pointer`;
           _.vfCreator(
             currentGraph,
             _ => {
@@ -41,6 +42,7 @@ export default view(_ => {
         blocks,
         ([k]: any) => k,
         ([k, v]) => {
+          _.$cls`cursor-pointer`;
           _.vfCreator(
             currentGraph,
             _ => {
@@ -67,7 +69,7 @@ export default view(_ => {
       _.for(views.keys(), bySelf, id => {
         const editingThis = id === currentViewId;
 
-        _.$cls`my-1`;
+        _.$cls`my-1 cursor-pointer`;
         _.vfCreator(
           currentGraph,
           _ => {
@@ -102,7 +104,7 @@ export default view(_ => {
           id === "app" || editingThis,
         );
       });
-      _.$cls`my-1 hover:border-2 hover:border-gray-400`;
+      _.$cls`my-1 hover:border-2 hover:border-gray-400 cursor-pointer`;
       _._div(
         {
           onclick: () => {
