@@ -54,15 +54,6 @@ export interface FuncBlockOutput {
   output: ConnectTo[];
 }
 
-export interface ForEachBlockOutput {
-  type: "for-each";
-  id: number;
-  parent: ConnectTo;
-  children: ConnectTo[];
-  input: ConnectTo;
-  output: ConnectTo[];
-}
-
 export interface ValidatorBlockOutput {
   type: "validator";
   id: number;
@@ -75,5 +66,4 @@ export type SpecialBlockOutput =
   | ImpBlockOutput
   | ValidatorBlockOutput
   | IfBlockOutput
-  | ViewBlockOutput
-  | ForEachBlockOutput;
+  | ViewBlockOutput;

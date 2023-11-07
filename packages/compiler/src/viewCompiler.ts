@@ -77,7 +77,9 @@ ${linesDef}
 
 ${impsDef}
 
-const ${this.view.name}_view = ${this.view.name === "app" ? "app.use(QuasiRuntime)" : "view"}(_ => {
+const ${this.view.name}_view = ${
+      this.view.name === "app" ? "app.use(QuasiRuntime)" : "view"
+    }(_ => {
   ${mainFunc}
 });
 `;
@@ -150,8 +152,6 @@ const ${this.view.name}_view = ${this.view.name === "app" ? "app.use(QuasiRuntim
         throw new Error("If-else block has no data output");
       case "view":
         throw new Error("view block has no data output");
-      case "for-each":
-        throw new Error("Not implemented");
     }
     return `${lineId}()`;
   }
@@ -222,8 +222,6 @@ const ${this.view.name}_view = ${this.view.name === "app" ? "app.use(QuasiRuntim
         break;
       case "view":
         throw new Error("Expr block is not callable");
-      case "for-each":
-        throw new Error("Not implemented");
     }
     return `${impId}()`;
   }

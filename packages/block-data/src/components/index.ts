@@ -1,3 +1,4 @@
+import { Direction } from "@quasi-dev/visual-flow";
 import {
   component,
   content,
@@ -67,5 +68,13 @@ export default {
       dropdownProp("type", ["toolbar", "tab", "both", "neither"], "toolbar"),
       switchProp("colored", true),
     ],
+  ),
+
+  forEach: component(
+    "For each",
+    "ForEachModel",
+    content("inner", "as-socket", Direction.BOTTOM),
+    input("iterable", "iterable"),
+    output("current", "unknown", "as-socket", Direction.RIGHT),
   ),
 };
