@@ -27,8 +27,10 @@ export function toBlockOutput(block: ComponentBlock) {
   }
 
   const props = {} as ComponentBlockProps;
-  for (const [k, v] of Object.entries(block.info.props)) {
-    props[k] = block.props[k] ?? v.defaultVal;
+  for (const v of block.info.props) {
+    if (v.type !== "readonly") {
+      props[v.name] = block.props[v.name] ?? v.defaultVal;
+    }
   }
   for (const input of block.info.inputs) {
     if (
