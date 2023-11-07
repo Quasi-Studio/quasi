@@ -9,9 +9,12 @@ import {
   PATH_IN_TRIANGLE,
   PATH_OUT_TRIANGLE,
   SingleOutSocket,
-  Socket,
   blockCtors,
 } from "@quasi-dev/visual-flow";
+import {
+  multiInSocketToOutput,
+  singleOutSocketToOutput,
+} from "../../utils/toOutpus";
 import { FuncBlockBase } from "./FuncBlockBase.r";
 
 export class ImpBlock extends FuncBlockBase {
@@ -80,14 +83,8 @@ export class ImpBlock extends FuncBlockBase {
     return {
       ...(super.toOutput() as FuncBlockOutput),
       type: "imp",
-      when: this.whenSocket.allConnectedLines.map((l) => ({
-        blockId: l.a.block.id,
-        socketName: l.a.label,
-      })),
-      then: {
-        blockId: (this.thenSocket.connectedLine?.b as Socket)?.block.id ?? NaN,
-        socketName: (this.thenSocket.connectedLine?.b as Socket)?.label ?? "",
-      },
+      when: multiInSocketToOutput(this.whenSocket),
+      then: singleOutSocketToOutput(this.thenSocket),
     };
   }
 }

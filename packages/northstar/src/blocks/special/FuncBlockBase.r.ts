@@ -1,17 +1,24 @@
-import type { FuncBlockOutput, FuncBlockTypes, ImpBlockOutput, StateBlockOutput, ValidatorBlockOutput } from "@quasi-dev/compiler";
+import type {
+  FuncBlockOutput,
+  FuncBlockTypes,
+  ImpBlockOutput,
+  StateBlockOutput,
+  ValidatorBlockOutput,
+} from "@quasi-dev/compiler";
 import {
   Direction,
-  SingleInSocket,
   MultiOutSocket,
   PATH_IN_ELIPSE,
   PATH_OUT_ELIPSE,
   RectBlock,
+  SingleInSocket,
   Socket,
 } from "@quasi-dev/visual-flow";
 import { FTextarea, FUnderlineTextInput } from "@refina/fluentui";
 import { Context, d, ref } from "refina";
 import { currentGraph } from "../../store";
 import { PropsData } from "../../utils/props";
+import { multiOutSocketToOutput } from "../../utils/toOutpus";
 import { SpecialBlock } from "./base";
 
 export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
@@ -115,7 +122,7 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
       this.outputSocket.path = PATH_OUT_ELIPSE;
       this.addSocket(Direction.DOWN, this.outputSocket);
     }
-    
+
     this.updateInputSockets();
   }
 
@@ -160,10 +167,7 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
       id: this.id,
       value: this.inputValue.value,
       inputs,
-      output: this.outputSocket.allConnectedLines.map(l => ({
-        blockId: (l.b as Socket).block.id,
-        socketName: (l.b as Socket).label,
-      })),
+      output: multiOutSocketToOutput(this.outputSocket),
     };
   }
 }

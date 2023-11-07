@@ -1,6 +1,7 @@
 import { ComponentBlockOutput } from "./componentBlock";
 import { SpecialBlockOutput } from "./specialBlock";
 
+export * from "./base";
 export * from "./componentBlock";
 export * from "./specialBlock";
 

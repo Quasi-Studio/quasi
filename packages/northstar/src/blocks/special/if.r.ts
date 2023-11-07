@@ -1,18 +1,18 @@
 import type { IfBlockOutput } from "@quasi-dev/compiler";
 import {
   Direction,
-  SingleInSocket,
+  MultiInSocket,
   PATH_IN_ELIPSE,
   PATH_IN_TRIANGLE,
   PATH_OUT_TRIANGLE,
   RectBlock,
+  SingleInSocket,
   SingleOutSocket,
-  Socket,
   blockCtors,
-  MultiInSocket,
 } from "@quasi-dev/visual-flow";
 import { Context } from "refina";
 import { PropsData } from "../../utils/props";
+import { multiInSocketToOutput, singleInSocketToOutput, singleOutSocketToOutput } from "../../utils/toOutpus";
 import { SpecialBlock } from "./base";
 
 export class IfElseBlock extends RectBlock implements SpecialBlock {
@@ -26,7 +26,7 @@ export class IfElseBlock extends RectBlock implements SpecialBlock {
   duplicateable = true;
 
   condSocket: SingleInSocket;
-  inputSocket: MultiInSocket;
+  whenSocket: MultiInSocket;
   thenSocket: SingleOutSocket;
   elseSocket: SingleOutSocket;
 
@@ -37,11 +37,11 @@ export class IfElseBlock extends RectBlock implements SpecialBlock {
     this.condSocket.path = PATH_IN_ELIPSE;
     this.addSocket(Direction.TOP, this.condSocket);
 
-    this.inputSocket = new MultiInSocket();
-    this.inputSocket.type = "E";
-    this.inputSocket.label = "when";
-    this.inputSocket.path = PATH_IN_TRIANGLE;
-    this.addSocket(Direction.LEFT, this.inputSocket);
+    this.whenSocket = new MultiInSocket();
+    this.whenSocket.type = "E";
+    this.whenSocket.label = "when";
+    this.whenSocket.path = PATH_IN_TRIANGLE;
+    this.addSocket(Direction.LEFT, this.whenSocket);
 
     this.thenSocket = new SingleOutSocket();
     this.thenSocket.type = "E";
@@ -74,7 +74,7 @@ export class IfElseBlock extends RectBlock implements SpecialBlock {
     return {
       ...super.exportData(),
       condSocket: this.condSocket.id,
-      inputSocket: this.inputSocket.id,
+      inputSocket: this.whenSocket.id,
       thenSocket: this.thenSocket.id,
       elseSocket: this.elseSocket.id,
     };
@@ -82,7 +82,7 @@ export class IfElseBlock extends RectBlock implements SpecialBlock {
   protected importData(data: any, sockets: any): void {
     super.importData(data, sockets);
     this.condSocket = sockets[data.condSocket];
-    this.inputSocket = sockets[data.inputSocket];
+    this.whenSocket = sockets[data.inputSocket];
     this.thenSocket = sockets[data.thenSocket];
     this.elseSocket = sockets[data.elseSocket];
   }
@@ -91,22 +91,10 @@ export class IfElseBlock extends RectBlock implements SpecialBlock {
     return {
       type: "if",
       id: this.id,
-      condition: {
-        blockId: this.condSocket.connectedLine?.a.block.id ?? NaN,
-        socketName: this.condSocket.connectedLine?.a.label ?? "",
-      },
-      when: this.inputSocket.allConnectedLines.map(l => ({
-        blockId: l.a.block.id,
-        socketName: l.a.label,
-      })),
-      then: {
-        blockId: (this.thenSocket.connectedLine?.b as Socket | undefined)?.block.id ?? NaN,
-        socketName: (this.thenSocket.connectedLine?.b as Socket | undefined)?.label ?? "",
-      },
-      else: {
-        blockId: (this.elseSocket.connectedLine?.b as Socket | undefined)?.block.id ?? NaN,
-        socketName: (this.elseSocket.connectedLine?.b as Socket | undefined)?.label ?? "",
-      },
+      condition: singleInSocketToOutput(this.condSocket),
+      when: multiInSocketToOutput(this.whenSocket),
+      then: singleOutSocketToOutput(this.thenSocket),
+      else: singleOutSocketToOutput(this.elseSocket),
     };
   }
 }

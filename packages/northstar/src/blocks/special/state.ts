@@ -3,9 +3,13 @@ import {
   Direction,
   MultiInSocket,
   PATH_IN_TRIANGLE,
-  Socket,
   blockCtors,
 } from "@quasi-dev/visual-flow";
+import {
+  multiInSocketToOutput,
+  multiOutSocketToOutput,
+  singleInSocketToOutput,
+} from "../../utils/toOutpus";
 import { FuncBlockBase } from "./FuncBlockBase.r";
 
 export class StateBlock extends FuncBlockBase {
@@ -40,18 +44,9 @@ export class StateBlock extends FuncBlockBase {
       type: "state",
       id: this.id,
       initExpr: this.inputValue.value,
-      onset: this.onsetSocket.allConnectedLines.map((l) => ({
-        blockId: l.a.block.id,
-        socketName: l.a.label,
-      })),
-      input: {
-        blockId: this.inputSockets["input"].connectedLine?.a.block.id ?? NaN,
-        socketName: this.inputSockets["input"].connectedLine?.a.label ?? "",
-      },
-      output: this.outputSocket.allConnectedLines.map((l) => ({
-        blockId: (l.b as Socket).block.id,
-        socketName: (l.b as Socket).label,
-      })),
+      onset: multiInSocketToOutput(this.onsetSocket),
+      input: singleInSocketToOutput(this.inputSockets["input"]),
+      output: multiOutSocketToOutput(this.outputSocket),
     };
   }
 

@@ -1,7 +1,8 @@
 import type { ViewBlockOutput } from "@quasi-dev/compiler";
-import { Direction, SingleInSocket, PATH_IN_RECT, RectBlock, blockCtors } from "@quasi-dev/visual-flow";
+import { Direction, PATH_IN_RECT, RectBlock, SingleInSocket, blockCtors } from "@quasi-dev/visual-flow";
 import { Context } from "refina";
 import { PropsData } from "../../utils/props";
+import { singleInSocketToOutput } from "../../utils/toOutpus";
 import { SpecialBlock } from "./base";
 
 export class ViewBlock extends RectBlock implements SpecialBlock {
@@ -15,17 +16,17 @@ export class ViewBlock extends RectBlock implements SpecialBlock {
   removable = true;
   duplicateable = true;
 
-  inSocket: SingleInSocket;
+  parentSocket: SingleInSocket;
 
   initialize(): void {
-    this.inSocket = new SingleInSocket();
+    this.parentSocket = new SingleInSocket();
 
-    this.inSocket.type = "L";
-    this.inSocket.label = "parent";
-    this.inSocket.hideLabel = true;
-    this.inSocket.path = PATH_IN_RECT;
+    this.parentSocket.type = "L";
+    this.parentSocket.label = "parent";
+    this.parentSocket.hideLabel = true;
+    this.parentSocket.path = PATH_IN_RECT;
 
-    this.addSocket(Direction.LEFT, this.inSocket);
+    this.addSocket(Direction.LEFT, this.parentSocket);
   }
 
   boardWidth = 200;
@@ -47,12 +48,12 @@ export class ViewBlock extends RectBlock implements SpecialBlock {
   protected exportData() {
     return {
       ...super.exportData(),
-      inSocket: this.inSocket.id,
+      inSocket: this.parentSocket.id,
     };
   }
   protected importData(data: any, sockets: any): void {
     super.importData(data, sockets);
-    this.inSocket = sockets[data.inSocket];
+    this.parentSocket = sockets[data.inSocket];
   }
 
   toOutput(): ViewBlockOutput {
@@ -60,10 +61,7 @@ export class ViewBlock extends RectBlock implements SpecialBlock {
       type: "view",
       id: this.id,
       viewName: this.viewName,
-      parent: {
-        blockId: this.inSocket.connectedLine?.a.block.id ?? NaN,
-        socketName: this.inSocket.connectedLine?.a.label ?? "",
-      },
+      parent: singleInSocketToOutput(this.parentSocket),
     };
   }
 }
