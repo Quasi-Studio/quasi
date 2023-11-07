@@ -81,7 +81,11 @@ export class ViewCompiler {
 
     const linesDef = this.lineDefs.join("\n");
 
-    const impsDef = this.impDefs.join("\n");
+    const impsDef = [...this.impDefs.entries()]
+      .map(([k, v]) => {
+        return `const ${k} = ${v};`;
+      })
+      .join("\n");
 
     return `
 ${stateInitExprsDef}
@@ -216,12 +220,19 @@ const ${this.view.name}_view = ${
     return modelId;
   }
 
-  impDefs: string[] = [];
-  currentImpId = 0;
+  impIdMap = new Map<string, string>();
+  impDefs = new Map<string, string>();
   compileEventLineStart({ blockId, socketName }: ConnectTo): string {
     if (Number.isNaN(blockId)) return "";
 
-    const impId = `${this.view.name}_imp${this.currentImpId++}`;
+    const serializedInfo = `${blockId}|${socketName}`;
+    if (!this.impIdMap.has(serializedInfo)) {
+      this.impIdMap.set(
+        serializedInfo,
+        `${this.view.name}_imp${this.impIdMap.size}`,
+      );
+    }
+    const impId = this.impIdMap.get(serializedInfo)!;
     const block = this.getBlockById(blockId);
     switch (block.type) {
       case "string":
@@ -231,11 +242,12 @@ const ${this.view.name}_view = ${
       case "component":
         if (!block.modelAllocator)
           throw new Error("This component block has no event input");
-        this.impDefs.push(
-          `const ${impId} = () => ${this.compileModel(
+        this.impDefs.set(
+          impId,
+          `() => ${this.compileModel(
             blockId,
             block.modelAllocator,
-          )}["${socketName}"]();`,
+          )}["${socketName}"]()`,
         );
         break;
       case "expr":
@@ -246,10 +258,9 @@ const ${this.view.name}_view = ${
             `Cannot find socket ${socketName} in block ${blockId}`,
           );
         }
-        this.impDefs.push(
-          `const ${impId} = () => {${this.compileImpBlock(
-            block as ImpBlockOutput,
-          )}};`,
+        this.impDefs.set(
+          impId,
+          `() => {${this.compileImpBlock(block as ImpBlockOutput)}}`,
         );
         break;
       case "if":
@@ -258,9 +269,7 @@ const ${this.view.name}_view = ${
             `Cannot find socket ${socketName} in block ${blockId}`,
           );
         }
-        this.impDefs.push(
-          `const ${impId} = () => {${this.compileIfElseBlock(block)}};`,
-        );
+        this.impDefs.set(impId, `() => {${this.compileIfElseBlock(block)}}`);
         break;
       case "view":
         throw new Error("Expr block is not callable");
@@ -270,10 +279,9 @@ const ${this.view.name}_view = ${
             `Cannot find socket ${socketName} in block ${blockId}`,
           );
         }
-        this.impDefs.push(
-          `const ${impId} = ${this.compileStateBlock(
-            block as StateBlockOutput,
-          )}_update;`,
+        this.impDefs.set(
+          impId,
+          `${this.compileStateBlock(block as StateBlockOutput)}_update`,
         );
         break;
     }

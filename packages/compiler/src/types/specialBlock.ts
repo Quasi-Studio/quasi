@@ -27,7 +27,7 @@ export interface ViewBlockOutput {
 
 export interface ImpBlockOutput extends Omit<FuncBlockOutput, "type"> {
   type: "imp";
-  when: ConnectTo;
+  when: ConnectTo[];
   then: ConnectTo;
 }
 

@@ -5,20 +5,20 @@ import type {
 } from "@quasi-dev/compiler";
 import {
   Direction,
+  MultiInSocket,
   PATH_IN_TRIANGLE,
   PATH_OUT_TRIANGLE,
-  SingleInSocket,
   SingleOutSocket,
   blockCtors,
 } from "@quasi-dev/visual-flow";
 import { FuncBlockBase } from "./FuncBlockBase.r";
 
 export class ImpBlock extends FuncBlockBase {
-  whenSocket: SingleInSocket;
+  whenSocket: MultiInSocket;
   thenSocket: SingleOutSocket;
   initialize() {
     super.initialize();
-    this.whenSocket = new SingleInSocket();
+    this.whenSocket = new MultiInSocket();
     this.whenSocket.type = "E";
     this.whenSocket.label = "when";
     this.whenSocket.path = PATH_IN_TRIANGLE;
@@ -79,10 +79,10 @@ export class ImpBlock extends FuncBlockBase {
     return {
       ...(super.toOutput() as FuncBlockOutput),
       type: "imp",
-      when: {
-        blockId: this.whenSocket.connectedLine?.a.block.id ?? NaN,
-        socketName: this.whenSocket.connectedLine?.a.label ?? "",
-      },
+      when: this.whenSocket.allConnectedLines.map((l) => ({
+        blockId: l.a.block.id,
+        socketName: l.a.label,
+      })),
       then: {
         blockId: this.thenSocket.connectedLine?.a.block.id ?? NaN,
         socketName: this.thenSocket.connectedLine?.a.label ?? "",
