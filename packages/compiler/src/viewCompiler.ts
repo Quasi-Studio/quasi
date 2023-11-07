@@ -191,13 +191,20 @@ const ${this.view.name}_view = ${
   }
 
   compileImpBlock(block: ImpBlockOutput): string {
-    return block.value.replace(/\$([a-zA-Z0-9]+)/g, (_, name) => {
-      const input = block.inputs.find((i) => i.slot === name);
-      if (!input) {
-        throw new Error(`Cannot find input ${name} in block ${block.id}`);
-      }
-      return `(${this.compileDataLineEnd(input)})`;
-    });
+    return `() => {
+      const result = (() => {${block.value.replace(
+        /\$([a-zA-Z0-9]+)/g,
+        (_, name) => {
+          const input = block.inputs.find((i) => i.slot === name);
+          if (!input) {
+            throw new Error(`Cannot find input ${name} in block ${block.id}`);
+          }
+          return `(${this.compileDataLineEnd(input)})`;
+        },
+      )}})();
+      ${this.compileEventLineStart(block.then)};
+      return result;
+    }`;
   }
 
   compileIfElseBlock(block: IfBlockOutput): string {
@@ -258,10 +265,7 @@ const ${this.view.name}_view = ${
             `Cannot find socket ${socketName} in block ${blockId}`,
           );
         }
-        this.impDefs.set(
-          impId,
-          `() => {${this.compileImpBlock(block as ImpBlockOutput)}}`,
-        );
+        this.impDefs.set(impId, this.compileImpBlock(block as ImpBlockOutput));
         break;
       case "if":
         if (socketName !== "when") {
