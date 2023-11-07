@@ -1,7 +1,7 @@
-import { Props } from "../../utils/props";
+import { PropsData } from "../../utils/props";
 
 export interface SpecialBlock {
-  getProps(): Props;
+  getProps(): PropsData;
   toOutput(): any;
   initialize(): void;
 }

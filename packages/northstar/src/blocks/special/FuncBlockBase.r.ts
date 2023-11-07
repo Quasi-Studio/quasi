@@ -11,7 +11,7 @@ import {
 import { FTextarea, FUnderlineTextInput } from "@refina/fluentui";
 import { Context, d, ref } from "refina";
 import { currentGraph } from "../../store";
-import { Props } from "../../utils/props";
+import { PropsData } from "../../utils/props";
 import { SpecialBlock } from "./base";
 
 export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
@@ -139,8 +139,8 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
 
   abstract type: FuncBlockTypes;
 
-  getProps(): Props {
-    return {};
+  getProps(): PropsData {
+    return [];
   }
 
   toOutput(): FuncBlockOutput | ValidatorBlockOutput | ImpBlockOutput {

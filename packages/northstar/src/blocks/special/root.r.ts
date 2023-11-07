@@ -1,7 +1,7 @@
 import type { RootBlockOutput } from "@quasi-dev/compiler";
 import { Direction, MultiOutSocket, PATH_OUT_RECT, RectBlock, Socket, blockCtors } from "@quasi-dev/visual-flow";
 import { Context } from "refina";
-import { Props } from "../../utils/props";
+import { PropsData } from "../../utils/props";
 import { SpecialBlock } from "./base";
 import { currentViewId } from "../../store";
 
@@ -42,8 +42,8 @@ export class RootBlock extends RectBlock implements SpecialBlock {
     });
   };
 
-  getProps(): Props {
-    return {};
+  getProps(): PropsData {
+    return [];
   }
 
   protected exportData() {

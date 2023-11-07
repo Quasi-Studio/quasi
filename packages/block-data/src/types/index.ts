@@ -150,48 +150,60 @@ export function plugin(
   };
 }
 
-export interface TextProp {
+export interface PropBase {
+  name: string;
+}
+
+export interface TextProp extends PropBase {
   type: "text";
   defaultVal: string;
 }
 
-export function textProp(defaultVal: string = ""): TextProp {
+export function textProp(name: string, defaultVal: string = ""): TextProp {
   return {
+    name,
     type: "text",
     defaultVal,
   };
 }
 
-export interface SwitchProp {
+export interface SwitchProp extends PropBase {
   type: "switch";
   defaultVal: boolean;
 }
 
-export function switchProp(defaultVal: boolean = false): SwitchProp {
+export function switchProp(
+  name: string,
+  defaultVal: boolean = false,
+): SwitchProp {
   return {
+    name,
     type: "switch",
     defaultVal,
   };
 }
 
-export interface DropdownProp {
+export interface DropdownProp extends PropBase {
   type: "dropdown";
   options: string[];
   defaultVal: string;
 }
 
 export function dropdownProp(
+  name: string,
   options: string[],
   defaultVal: string,
 ): DropdownProp {
   return {
+    name,
     type: "dropdown",
     options,
     defaultVal,
   };
 }
 
-export type Props = Record<string, TextProp | SwitchProp | DropdownProp>;
+export type Prop = TextProp | SwitchProp | DropdownProp;
+export type Props = Prop[];
 
 export interface ComponentInfo {
   /**
@@ -221,7 +233,7 @@ export function component(
   events: EventInfo[] | EventInfo = [],
   methods: MethodInfo[] | MethodInfo = [],
   plugins: PluginInfo[] | PluginInfo = [],
-  props: Props = {},
+  props: Props = [],
 ): ComponentInfo {
   function toArray<T>(v: T[] | T) {
     return Array.isArray(v) ? v : [v];

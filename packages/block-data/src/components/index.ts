@@ -19,11 +19,6 @@ export default {
     null,
     [],
     input("text", "string", "as-primary-and-socket"),
-    [],
-    [],
-    [],
-    [],
-    {},
   ),
 
   button: component(
@@ -35,11 +30,11 @@ export default {
     event("onClick", "void"),
     [],
     [],
-    {
-      color: dropdownProp(["unset", "primary", "accent"], "unset"),
-      raised: switchProp(true),
-      ripple: switchProp(false),
-    },
+    [
+      dropdownProp("color", ["unset", "primary", "accent"], "unset"),
+      switchProp("raised", true),
+      switchProp("ripple", false),
+    ],
   ),
 
   p: contentWrapper("Paragraph"),
@@ -57,7 +52,6 @@ export default {
     event("onInput", t.string),
     [],
     plugin("validator", "validator"),
-    {},
   ),
 
   appbar: component(
@@ -69,9 +63,9 @@ export default {
     [],
     [],
     [],
-    {
-      type: dropdownProp(["toolbar", "tab", "both", "neither"], "toolbar"),
-      colored: switchProp(true),
-    },
+    [
+      dropdownProp("type", ["toolbar", "tab", "both", "neither"], "toolbar"),
+      switchProp("colored", true),
+    ],
   ),
 };

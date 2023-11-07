@@ -1,23 +1,19 @@
-import { Prop, Props } from "../../utils/props";
+import { PropData, PropsData } from "../../utils/props";
 import { ComponentBlock } from "./block";
 
-let v = "";
-
-export function getProps(block: ComponentBlock): Props {
+export function getProps(block: ComponentBlock): PropsData {
   const { info } = block;
 
-  return Object.fromEntries(
-    Object.entries(info.props).map(([k, v]) => [
-      k,
-      {
+  return info.props.map(
+    (v) =>
+      ({
         ...v,
         getVal: () => {
-          return block.props[k] ?? v.defaultVal;
+          return block.props[v.name] ?? v.defaultVal;
         },
         setVal: (val: any) => {
-          block.props[k] = val;
+          block.props[v.name] = val;
         },
-      } as Prop,
-    ]),
+      }) as PropData,
   );
 }

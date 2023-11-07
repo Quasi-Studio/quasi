@@ -12,7 +12,7 @@ import {
   blockCtors,
 } from "@quasi-dev/visual-flow";
 import { Context } from "refina";
-import { Props } from "../../utils/props";
+import { PropsData } from "../../utils/props";
 import { SpecialBlock } from "./base";
 
 export class ForEachBlock extends RectBlock implements SpecialBlock {
@@ -67,8 +67,8 @@ export class ForEachBlock extends RectBlock implements SpecialBlock {
     _.div("for each");
   };
 
-  getProps(): Props {
-    return {};
+  getProps(): PropsData {
+    return [];
   }
 
   protected exportData() {

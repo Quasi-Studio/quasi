@@ -1,46 +1,45 @@
 import { currentGraph } from "../store";
 
-export interface TextProp {
+export interface PropDataBase {
+  name: string;
+}
+
+export interface TextPropData extends PropDataBase {
   type: "text";
   getVal(): string;
   setVal(val: string): void;
 }
-export interface SwitchProp {
+export interface SwitchPropData extends PropDataBase {
   type: "switch";
   getVal(): boolean;
   setVal(val: boolean): void;
 }
-export interface DropdownProp {
+export interface DropdownPropData extends PropDataBase {
   type: "dropdown";
   options: string[];
   getVal(): string;
   setVal(val: string): void;
 }
 
-export type Prop = TextProp | SwitchProp | DropdownProp;
+export type PropData = TextPropData | SwitchPropData | DropdownPropData;
+export type PropsData = PropData[];
 
-export type Props = Record<string, Prop>;
-
-export function mergeProps([props0, ...propsRest]: Props[]) {
-  const mergedProps: Props = {};
-  for (const [k, v] of Object.entries(props0)) {
-    for (const props of propsRest) {
-      if (!(k in props && props[k].type === v.type)) {
-        break;
-      }
+export function mergeProps([props0, ...propsRest]: PropsData[]) {
+  const mergedProps: PropsData = [];
+  for (const v of props0) {
+    if (
+      propsRest.every((ps) =>
+        ps.some((p) => p.name === v.name && p.type === v.type),
+      )
+    ) {
+      mergedProps.push(v);
     }
-    mergedProps[k] = v;
   }
   return mergedProps;
 }
 
-export function getSelectedProps(): Props {
+export function getSelectedProps(): PropsData {
   return mergeProps(
-    [...currentGraph.selectedBlocks]
-      .filter(
-        // @ts-ignore
-        (b) => typeof b["getProps"] === "function",
-      )
-      .map((b) => (b as any).getProps()),
+    [...currentGraph.selectedBlocks].map((b) => (b as any).getProps?.() ?? []),
   );
 }

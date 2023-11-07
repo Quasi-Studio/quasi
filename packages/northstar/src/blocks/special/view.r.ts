@@ -1,7 +1,7 @@
 import type { ViewBlockOutput } from "@quasi-dev/compiler";
 import { Direction, InSocket, PATH_IN_RECT, RectBlock, blockCtors } from "@quasi-dev/visual-flow";
 import { Context } from "refina";
-import { Props } from "../../utils/props";
+import { PropsData } from "../../utils/props";
 import { SpecialBlock } from "./base";
 
 export class ViewBlock extends RectBlock implements SpecialBlock {
@@ -40,8 +40,8 @@ export class ViewBlock extends RectBlock implements SpecialBlock {
     _.div(this.viewName);
   };
 
-  getProps(): Props {
-    return {};
+  getProps(): PropsData {
+    return [];
   }
 
   protected exportData() {

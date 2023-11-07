@@ -7,7 +7,7 @@ import {
 } from "@quasi-dev/visual-flow";
 import "@refina/fluentui";
 import { d } from "refina";
-import { Props } from "../../utils/props";
+import { PropsData } from "../../utils/props";
 import { getContent } from "./getContent.r";
 import { getProps } from "./getProps";
 import { updateSockets } from "./updateSockets";
@@ -85,7 +85,7 @@ export class ComponentBlock extends RectBlock {
     return block;
   }
 
-  getProps(): Props {
+  getProps(): PropsData {
     return getProps(this);
   }
 

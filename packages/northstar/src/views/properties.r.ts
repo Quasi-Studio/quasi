@@ -1,11 +1,9 @@
-import { MainElRef, bySelf, ref, view } from "refina";
+import { MainElRef, byProp, bySelf, ref, view } from "refina";
 import { getSelectedProps } from "../utils/props";
 
 export default view(_ => {
   const props = getSelectedProps();
-  const keys = Object.keys(props);
-  _.for(keys, bySelf, k => {
-    const v = props[k];
+  _.for(props, byProp("name"), p => {
     const r = ref() as MainElRef;
     _.$cls`col-span-1 flex justify-center items-center border-b border-gray-500 cursor-text h-8`;
     _._div(
@@ -14,22 +12,22 @@ export default view(_ => {
           (r.current!.$mainEl!.firstChild! as HTMLInputElement).focus();
         },
       },
-      k,
+      p.name,
     );
     _.$cls`col-span-2 cursor-text h-8`;
     _.$ref(r);
-    if (v.type === "text") {
-      _.fUnderlineTextInput(v.getVal(), false, "unset") && v.setVal(_.$ev);
-    } else if (v.type === "switch") {
-      _.fSwitch("", v.getVal()) && v.setVal(_.$ev);
-    } else if (v.type === "dropdown") {
-      if (_.fUnderlineDropdown(v.getVal(), v.options)) {
-        v.setVal(_.$ev);
+    if (p.type === "text") {
+      _.fUnderlineTextInput(p.getVal(), false, "unset") && p.setVal(_.$ev);
+    } else if (p.type === "switch") {
+      _.fSwitch("", p.getVal()) && p.setVal(_.$ev);
+    } else if (p.type === "dropdown") {
+      if (_.fUnderlineDropdown(p.getVal(), p.options)) {
+        p.setVal(_.$ev);
       }
     }
   });
 
-  if (keys.length === 0) {
+  if (props.length === 0) {
     _.$cls`italic ml-4 mt-1 whitespace-nowrap`;
     _.span("No properties");
   }
