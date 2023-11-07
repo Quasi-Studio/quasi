@@ -77,4 +77,14 @@ export default {
     input("iterable", "iterable"),
     output("current", "unknown", "as-socket", Direction.RIGHT),
   ),
+
+  ifElse: component(
+    "If else",
+    null,
+    [
+      content("then", "as-socket", Direction.RIGHT),
+      content("else", "as-socket", Direction.BOTTOM),
+    ],
+    input("condition", t.boolean),
+  ),
 };

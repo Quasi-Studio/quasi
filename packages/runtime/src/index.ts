@@ -2,6 +2,7 @@ export * from "./appbar.r";
 export * from "./button.r";
 export * from "./div.r";
 export * from "./forEach.r";
+export * from "./ifElse.r";
 export * from "./input.r";
 export * from "./paragraph.r";
 export * from "./span.r";

@@ -268,6 +268,7 @@ export const t = {
   void: "void",
   string: "string",
   number: "number",
+  boolean: "boolean",
   union: (a: TypeInfo, b: TypeInfo) => a + "|" + b,
 };
 
