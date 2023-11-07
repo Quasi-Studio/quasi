@@ -9,6 +9,7 @@ import {
   PATH_IN_TRIANGLE,
   PATH_OUT_TRIANGLE,
   SingleOutSocket,
+  Socket,
   blockCtors,
 } from "@quasi-dev/visual-flow";
 import { FuncBlockBase } from "./FuncBlockBase.r";
@@ -84,8 +85,8 @@ export class ImpBlock extends FuncBlockBase {
         socketName: l.a.label,
       })),
       then: {
-        blockId: this.thenSocket.connectedLine?.a.block.id ?? NaN,
-        socketName: this.thenSocket.connectedLine?.a.label ?? "",
+        blockId: (this.thenSocket.connectedLine?.b as Socket)?.block.id ?? NaN,
+        socketName: (this.thenSocket.connectedLine?.b as Socket)?.label ?? "",
       },
     };
   }
