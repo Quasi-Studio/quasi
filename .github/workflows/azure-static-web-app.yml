@@ -32,6 +32,12 @@ jobs:
       - name: Build Refina
         run: pnpm build
         working-directory: ../refina
+      - name: Install dependencies in Quasi
+        run: pnpm i
+        working-directory: ./
+      - name: Build Quasi
+        run: pnpm build
+        working-directory: ./
       - name: Deploy
         id: deploy
         uses: Azure/static-web-apps-deploy@v1
@@ -45,8 +51,8 @@ jobs:
           output_location: "dist" # Built app content directory - optional 
           skip_api_build: true
         env:
-          PRE_BUILD_COMMAND: pnpm install
-          CUSTOM_BUILD_COMMAND: pnpm run build
+          PRE_BUILD_COMMAND: echo "do nothing"
+          CUSTOM_BUILD_COMMAND: echo "do nothing"
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
