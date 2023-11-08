@@ -7,7 +7,6 @@
     "build": "pnpm -r run build",
     "dev": "pnpm dev:northstar",
     "dev:northstar": "pnpm -r --parallel --filter \"@quasi-dev/northstar...\" run dev",
-    "dev:compiler": "pnpm -r --parallel --filter \"@quasi-dev/compiler...\" run dev",
     "check": "pnpm -r --parallel run check",
     "prettier": "prettier --write .",
     "prepare": "husky install"
