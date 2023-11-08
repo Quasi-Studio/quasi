@@ -4,7 +4,7 @@ import { HTMLElementComponent, ref, view } from "refina";
 import refinaURL from "refina/src/index.ts?url";
 import runtimeURL from "@quasi-dev/runtime/src/index.ts?url";
 import iframeURL from "./iframe/index.html?url";
-import mduiStyleContent from "@quasi-dev/runtime/styles.css?raw"; // Used in production
+import mduiStyleContent from "@quasi-dev/runtime/styles.min.css?raw"; // Used in production
 import mduiStyleUrl from "@quasi-dev/runtime/styles.css?url"; // Used in development
 
 import { Compiler } from "@quasi-dev/compiler";
