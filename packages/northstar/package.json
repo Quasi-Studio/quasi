@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "check": "tsc --noEmit"
   },
+  "packageManager": "pnpm@8.10.2",
   "devDependencies": {
     "@refina/transformer": "link:..\\..\\..\\refina\\packages\\transformer",
     "@refina/tsconfig": "link:..\\..\\..\\refina\\packages\\tsconfig",
