@@ -44,6 +44,9 @@ jobs:
           app_location: "packages/northstar" # App source code path
           output_location: "dist" # Built app content directory - optional 
           skip_api_build: true
+        env:
+          PRE_BUILD_COMMAND: pnpm install
+          CUSTOM_BUILD_COMMAND: pnpm run build
           ###### End of Repository/Build Configurations ######
 
   close_pull_request_job:
