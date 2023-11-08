@@ -1,14 +1,14 @@
-import { HTMLElementComponent, d, ref, view } from "refina";
 /// <reference types="vite/client" />
-//@ts-ignore
-import refinaURL from "refina/src/index.ts?url";
-//@ts-ignore
-import runtimeURL from "@quasi-dev/runtime/src/index.ts?url";
-//@ts-ignore
-import iframeURL from "./iframe.html?url";
+import { HTMLElementComponent, ref, view } from "refina";
 
-import { RefinaTransformer } from "@refina/transformer";
+import refinaURL from "refina/src/index.ts?url";
+import runtimeURL from "@quasi-dev/runtime/src/index.ts?url";
+import iframeURL from "./iframe/index.html?url";
+import mduiStyleContent from "@quasi-dev/runtime/styles.css?raw"; // Used in production
+import mduiStyleUrl from "@quasi-dev/runtime/styles.css?url"; // Used in development
+
 import { Compiler } from "@quasi-dev/compiler";
+import { RefinaTransformer } from "@refina/transformer";
 import { toOutput } from "../utils/toOutpus";
 
 const transformer = new RefinaTransformer();
@@ -83,8 +83,15 @@ error: ${error}`;
 
       const scriptNode = iframeNode.contentDocument!.getElementById("app-script")!;
       const transfomedCode = transformer.transform("$", code);
-
       scriptNode.innerHTML = transfomedCode;
+
+      if (import.meta.env.DEV) {
+        const styleNode = iframeNode.contentDocument!.getElementById("app-style-dev") as HTMLLinkElement;
+        styleNode.href = mduiStyleUrl;
+      } else {
+        const styleNode = iframeNode.contentDocument!.getElementById("app-style") as HTMLStyleElement;
+        styleNode.innerHTML = mduiStyleContent;
+      }
     };
   });
 });

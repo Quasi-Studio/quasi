@@ -19,6 +19,7 @@
   ],
   "exports": {
     ".": "./src/index.ts",
+    "./styles.css": "./node_modules/@refina/mdui/node_modules/mdui/dist/css/mdui.css",
     "./*": "./*"
   },
   "dependencies": {
