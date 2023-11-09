@@ -10,6 +10,7 @@ import {
   ImpBlockOutput,
   RootBlockOutput,
   StateBlockOutput,
+  StateSetterBlockOutput,
   ViewBlockOutput,
   ViewOutput,
 } from "./types";
@@ -67,11 +68,7 @@ export class ViewCompiler {
       })
       .join("\n");
 
-    const stateInputsDef = [...this.stateInputs.entries()]
-      .map(([k, v]) => {
-        return `const ${k}_update = () => { ${k} = ${v}; }`;
-      })
-      .join("\n");
+    const stateInputsDef = this.stateUpdators.join("\n");
 
     const modelsDef = [...this.modelAllocators.entries()]
       .map(([k, v]) => {
@@ -186,6 +183,8 @@ const ${this.view.name}_view = ${
           )};`,
         );
         break;
+      case "state-setter":
+        throw new Error("State setter block has no data output");
     }
     return `${lineId}()`;
   }
@@ -217,13 +216,19 @@ const ${this.view.name}_view = ${
 
   stateIdMap = new Map<number, string>();
   stateInitExprs = new Map<string, string>();
-  stateInputs = new Map<string, string>();
+  stateUpdators: string[] = [];
   compileStateBlock(block: StateBlockOutput): string {
     if (this.stateIdMap.has(block.id)) return this.stateIdMap.get(block.id)!;
     const modelId = `${this.view.name}_state${this.stateIdMap.size}`;
     this.stateIdMap.set(block.id, modelId);
     this.stateInitExprs.set(modelId, block.initExpr);
-    this.stateInputs.set(modelId, this.compileDataLineEnd(block.input));
+    for (const setterId of block.setters) {
+      this.stateUpdators.push(
+        `const ${modelId}_update_${setterId} = () => { ${modelId} = ${this.compileDataLineEnd(
+          (this.getBlockById(setterId) as StateSetterBlockOutput).input,
+        )}; };`,
+      );
+    }
     return modelId;
   }
 
@@ -278,6 +283,8 @@ const ${this.view.name}_view = ${
       case "view":
         throw new Error("Expr block is not callable");
       case "state":
+        throw new Error("State block is not callable");
+      case "state-setter":
         if (socketName !== "set") {
           throw new Error(
             `Cannot find socket ${socketName} in block ${blockId}`,
@@ -285,7 +292,9 @@ const ${this.view.name}_view = ${
         }
         this.impDefs.set(
           impId,
-          `${this.compileStateBlock(block as StateBlockOutput)}_update`,
+          `${this.compileStateBlock(
+            this.getBlockById(block.state) as StateBlockOutput,
+          )}_update_${blockId}`,
         );
         break;
     }

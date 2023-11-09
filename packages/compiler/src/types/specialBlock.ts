@@ -64,9 +64,16 @@ export interface StateBlockOutput {
   type: "state";
   id: number;
   initExpr: string;
+  output: ConnectTo[];
+  setters: number[];
+}
+
+export interface StateSetterBlockOutput {
+  type: "state-setter";
+  id: number;
   onset: ConnectTo[];
   input: ConnectTo;
-  output: ConnectTo[];
+  state: number;
 }
 
 export type SpecialBlockOutput =
@@ -76,4 +83,5 @@ export type SpecialBlockOutput =
   | ValidatorBlockOutput
   | IfBlockOutput
   | ViewBlockOutput
-  | StateBlockOutput;
+  | StateBlockOutput
+  | StateSetterBlockOutput;

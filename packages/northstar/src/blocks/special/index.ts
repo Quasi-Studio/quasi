@@ -4,6 +4,7 @@ import { ImpBlock } from "./imp";
 import { StateBlock } from "./state";
 import { StringBlock } from "./string";
 import { ValidatorBlock } from "./validator";
+import { StateSetterBlock } from "./stateSetter.r";
 
 export default Object.entries({
   // root: RootBlock,
@@ -13,4 +14,5 @@ export default Object.entries({
   imperative: ImpBlock,
   validator: ValidatorBlock,
   state: StateBlock,
+  stateSetter: StateSetterBlock,
 });
