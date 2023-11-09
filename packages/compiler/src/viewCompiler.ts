@@ -332,7 +332,7 @@ const ${this.view.name}_view = ${
     return Object.fromEntries(
       Object.entries(callbacks).map(([k, v]) => [
         k,
-        `()=>{${v.map((e) => this.compileEventLineStart(e) + ";").join("")}}`,
+        `()=>{${this.compileEventLineStart(v)}}`,
       ]),
     );
   }

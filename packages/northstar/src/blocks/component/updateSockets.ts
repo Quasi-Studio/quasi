@@ -1,14 +1,15 @@
 import {
   Direction,
-  SingleInSocket,
+  MultiInSocket,
   MultiOutSocket,
   PATH_IN_ELIPSE,
   PATH_IN_RECT,
+  PATH_IN_TRIANGLE,
   PATH_OUT_ELIPSE,
   PATH_OUT_RECT,
   PATH_OUT_TRIANGLE,
-  MultiInSocket,
-  PATH_IN_TRIANGLE,
+  SingleInSocket,
+  SingleOutSocket,
 } from "@quasi-dev/visual-flow";
 import { ComponentBlock } from "./block";
 
@@ -51,7 +52,7 @@ export function updateSockets(block: ComponentBlock) {
   for (const event of events) {
     block.updateSocket(
       event.name,
-      MultiOutSocket,
+      SingleOutSocket,
       event.position ?? Direction.BOTTOM,
       {
         type: "E",

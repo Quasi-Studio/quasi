@@ -5,25 +5,17 @@ import type {
   ComponentBlockPlugins,
   ComponentBlockProps,
 } from "@quasi-dev/compiler";
-import { Block, Socket } from "@quasi-dev/visual-flow";
-import { ComponentBlock } from "./block";
+import { Block, SingleOutSocket, Socket } from "@quasi-dev/visual-flow";
+import { singleOutSocketToOutput } from "../../utils/toOutpus";
 import { ValidatorBlock } from "../special/validator";
+import { ComponentBlock } from "./block";
 
 export function toBlockOutput(block: ComponentBlock) {
   const callbacks = {} as ComponentBlockCallbacks;
   for (const event of block.info.events) {
-    const sockets = block.socketMap
-      .get(event.name)
-      ?.allConnectedLines.map((l) => l.b as Socket);
-    if (!sockets) continue;
-
-    callbacks[event.name] = [];
-    for (const socket of sockets) {
-      callbacks[event.name].push({
-        blockId: socket.block.id,
-        socketName: socket.label,
-      });
-    }
+    callbacks[event.name] = singleOutSocketToOutput(
+      block.socketMap.get(event.name) as SingleOutSocket,
+    );
   }
 
   const props = {} as ComponentBlockProps;
