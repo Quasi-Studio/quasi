@@ -76,6 +76,13 @@ export interface StateSetterBlockOutput {
   state: number;
 }
 
+export interface DoBlockOutput {
+  type: "do";
+  id: number;
+  when: ConnectTo[];
+  then: ConnectTo[];
+}
+
 export type SpecialBlockOutput =
   | RootBlockOutput
   | FuncBlockOutput
@@ -84,4 +91,5 @@ export type SpecialBlockOutput =
   | IfBlockOutput
   | ViewBlockOutput
   | StateBlockOutput
-  | StateSetterBlockOutput;
+  | StateSetterBlockOutput
+  | DoBlockOutput;

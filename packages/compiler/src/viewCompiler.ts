@@ -185,6 +185,8 @@ const ${this.view.name}_view = ${
         break;
       case "state-setter":
         throw new Error("State setter block has no data output");
+      case "do":
+        throw new Error("State setter block has no data output");
     }
     return `${lineId}()`;
   }
@@ -295,6 +297,19 @@ const ${this.view.name}_view = ${
           `${this.compileStateBlock(
             this.getBlockById(block.state) as StateBlockOutput,
           )}_update_${blockId}`,
+        );
+        break;
+      case "do":
+        if (socketName !== "when") {
+          throw new Error(
+            `Cannot find socket ${socketName} in block ${blockId}`,
+          );
+        }
+        this.impDefs.set(
+          impId,
+          `() => {${block.then
+            .map((v) => this.compileEventLineStart(v))
+            .join(";\n")}}`,
         );
         break;
     }
