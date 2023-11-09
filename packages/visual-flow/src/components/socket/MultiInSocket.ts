@@ -1,4 +1,4 @@
-import { Direction, Point } from "../..";
+import { Direction, LINE_END_OFFSET, Point } from "../..";
 import { Line, Socket } from "../../model";
 import { socketCtors } from "../../recorder";
 
@@ -38,33 +38,30 @@ export class MultiInSocket extends Socket {
 
   getHoveredLine() {
     if (this.connectedLines.length > 0) {
-      const { x: mouseDx, y: mouseDy } = Point.minus(
-        this.graph.mouseBoardPos,
+      const normalizeDelta = {
+        [Direction.LEFT]: (p: Point) => ({ x: -Math.abs(p.x), y: p.y }),
+        [Direction.RIGHT]: (p: Point) => ({ x: Math.abs(p.x), y: p.y }),
+        [Direction.TOP]: (p: Point) => ({ x: p.x, y: -Math.abs(p.y) }),
+        [Direction.BOTTOM]: (p: Point) => ({ x: p.x, y: Math.abs(p.y) }),
+      }[this.direction];
+
+      const basePoint = Point.moveFarther(
         this.boardPos,
+        this.direction,
+        LINE_END_OFFSET,
+      );
+
+      const { x: mouseDx, y: mouseDy } = normalizeDelta(
+        Point.minus(this.graph.mouseBoardPos, basePoint),
       );
       const theta0 = Math.atan2(mouseDy, mouseDx);
 
       let nearestLineDeltaTheta = Infinity;
       let nearestLine = this.connectedLines[0];
       for (const line of this.connectedLines) {
-        let { x: lineDx, y: lineDy } = Point.minus(
-          line.a.boardPos,
-          this.boardPos,
+        const { x: lineDx, y: lineDy } = normalizeDelta(
+          Point.minus(line.a.boardPos, basePoint),
         );
-        switch (this.direction) {
-          case Direction.LEFT:
-            lineDx = -Math.abs(lineDx);
-            break;
-          case Direction.RIGHT:
-            lineDx = Math.abs(lineDx);
-            break;
-          case Direction.TOP:
-            lineDy = -Math.abs(lineDy);
-            break;
-          case Direction.BOTTOM:
-            lineDy = Math.abs(lineDy);
-            break;
-        }
 
         const theta = Math.atan2(lineDy, lineDx);
         const deltaTheta = Math.abs(theta - theta0);

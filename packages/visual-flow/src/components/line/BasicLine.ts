@@ -7,7 +7,7 @@ const CTRL_POINT_OFFSET_MIN = 30;
 
 const ARROW_BOARD_LENGTH = 25;
 const ARROW_BOARD_WIDTH = 7;
-const LINE_END_OFFSET = ARROW_BOARD_LENGTH * 0.99;
+export const LINE_END_OFFSET = ARROW_BOARD_LENGTH * 0.99;
 
 function getCtrlPointOffset(delta: number) {
   return Math.max(
