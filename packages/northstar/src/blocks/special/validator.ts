@@ -19,6 +19,7 @@ export class ValidatorBlock extends FuncBlockBase {
   initialize(): void {
     super.initialize();
     this.dockingDirections = [Direction.LEFT];
+    this.dockableDirections = [Direction.LEFT];
   }
 
   getSlots(): string[] {
