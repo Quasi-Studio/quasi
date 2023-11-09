@@ -31,6 +31,10 @@ export class SingleOutSocket extends Socket {
     return false;
   }
 
+  getHoveredLine(): Line | null {
+    return this.connectedLine;
+  }
+
   onMouseDown(): void {
     if (this.connectedLine) {
       // do nothing

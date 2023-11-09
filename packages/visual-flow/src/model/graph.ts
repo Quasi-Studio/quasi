@@ -251,7 +251,7 @@ export class Graph {
   state: State = idelState;
   protected mouseDown: boolean = false;
   protected scaleEndTimeout: number = NaN;
-  protected hoveredItem: Block | Socket | null = null;
+  protected hoveredItem: Block | [Socket, Line | null] | null = null;
   mousePagePos: Point;
   mouseGraphPos: Point;
   mouseBoardPos: Point;
@@ -271,10 +271,21 @@ export class Graph {
     block.selected = true;
   }
 
-  setHoveredItem(hoveredItem: Block | Socket | null) {
+  setHoveredItem(hoveredItem: Block | [Socket, Line | null] | null) {
     if (this.hoveredItem !== hoveredItem) {
-      this.hoveredItem?.onUnhover();
-      hoveredItem?.onHover();
+      if (Array.isArray(this.hoveredItem)) {
+        this.hoveredItem[0].onUnhover();
+        this.hoveredItem[1]?.onUnhover();
+      } else {
+        this.hoveredItem?.onUnhover();
+      }
+
+      if (Array.isArray(hoveredItem)) {
+        hoveredItem[0].onHover();
+        hoveredItem[1]?.onHover();
+      } else {
+        hoveredItem?.onHover();
+      }
       this.hoveredItem = hoveredItem;
     }
   }
@@ -626,7 +637,14 @@ export class Graph {
     if (this.state.type === GraphStateType.IDLE) {
       const draggingSource = this.getDraggingSource(shiftKey);
       if (draggingSource) {
-        this.setHoveredItem(draggingSource[1] ?? draggingSource[0]);
+        if (draggingSource[1]) {
+          this.setHoveredItem([
+            draggingSource[1],
+            draggingSource[1].getHoveredLine(),
+          ]);
+        } else {
+          this.setHoveredItem(draggingSource[0]);
+        }
       } else {
         this.setHoveredItem(null);
       }
@@ -639,7 +657,7 @@ export class Graph {
       const { line, predictor } = this.state;
       const targetSocket = this.getDraggingTarget(line);
       if (targetSocket) {
-        this.setHoveredItem(targetSocket);
+        this.setHoveredItem([targetSocket, targetSocket.getHoveredLine()]);
         line.setBoardPosB(this.mouseBoardPos, targetSocket.direction);
         predictor.setBoardPosB(
           line.neverLeaves ? this.mouseBoardPos : targetSocket.boardPos,

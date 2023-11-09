@@ -30,6 +30,10 @@ export class MultiOutSocket extends Socket {
     return this.connectedLines;
   }
 
+  getHoveredLine(): Line | null {
+    return null;
+  }
+
   onMouseDown(): void {
     const line = this.connectToNewLine(new BasicLine());
     this.graph.startDraggingLine(line);

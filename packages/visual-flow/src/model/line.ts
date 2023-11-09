@@ -107,12 +107,12 @@ export abstract class Line extends ModelBase {
     this.arrowEl?.setAttribute("d", this.arrowPath);
   }
 
-  hover() {
+  onHover() {
     this.lineEl?.classList.add("hovered");
     this.arrowEl?.classList.add("hovered");
   }
 
-  unhover() {
+  onUnhover() {
     this.lineEl?.classList.remove("hovered");
     this.arrowEl?.classList.remove("hovered");
   }

@@ -46,6 +46,10 @@ export class SingleInSocket extends Socket {
     }
   }
 
+  getHoveredLine(): Line | null {
+    return this.connectedLine;
+  }
+
   protected exportData(): any {
     return {};
   }

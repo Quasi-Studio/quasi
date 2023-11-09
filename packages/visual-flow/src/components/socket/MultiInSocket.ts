@@ -36,7 +36,7 @@ export class MultiInSocket extends Socket {
     );
   }
 
-  onMouseDown(): void {
+  getHoveredLine() {
     if (this.connectedLines.length > 0) {
       const { x: mouseDx, y: mouseDy } = Point.minus(
         this.graph.mouseBoardPos,
@@ -73,10 +73,18 @@ export class MultiInSocket extends Socket {
           nearestLine = line;
         }
       }
+      return nearestLine;
+    } else {
+      return this.connectedLines[0] ?? null;
+    }
+  }
 
-      this.disconnectTo(nearestLine);
-      nearestLine.neverLeaves = this;
-      this.graph.startDraggingLine(nearestLine);
+  onMouseDown(): void {
+    if (this.connectedLines.length > 0) {
+      const hoveredLine = this.getHoveredLine();
+      this.disconnectTo(hoveredLine);
+      hoveredLine.neverLeaves = this;
+      this.graph.startDraggingLine(hoveredLine);
     } else {
       // do nothing
     }

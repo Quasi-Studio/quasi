@@ -81,6 +81,8 @@ export abstract class Socket extends ModelBase {
     return line;
   }
 
+  abstract getHoveredLine(): Line | null;
+
   protected abstract exportData(): any;
   exportRecord(): SocketRecord {
     return {
