@@ -1,4 +1,4 @@
-import { ComponentInfo } from "@quasi-dev/block-data";
+import { ComponentInfo, blocksObj } from "@quasi-dev/block-data";
 import {
   Direction,
   RectBlock,
@@ -93,7 +93,6 @@ export class ComponentBlock extends RectBlock {
     return {
       ...super.exportData(),
       componentType: this.componentType,
-      info: this.info,
       props: this.props,
       primaryValue: this.primaryValue.value,
     };
@@ -101,7 +100,7 @@ export class ComponentBlock extends RectBlock {
   protected importData(data: any, sockets: Record<number, Socket>): void {
     super.importData(data, sockets);
     this.componentType = data.componentType;
-    this.info = data.info;
+    this.info = blocksObj[data.componentType as keyof typeof blocksObj];
     this.props = data.props;
     this.primaryValue.value = data.primaryValue;
     this.content = getContent(this);
