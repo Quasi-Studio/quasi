@@ -1,6 +1,6 @@
 import { SVGElementComponent, ref } from "refina";
 import { Direction, Point } from "../types";
-import { allocateId, calcLineEndDirection } from "../utils";
+import { calcLineEndDirection } from "../utils";
 import { ModelBase } from "./base";
 import { Graph } from "./graph";
 import { Socket } from "./socket";
@@ -16,15 +16,44 @@ export type PointWithDirection = {
   [pointWithDirectionSym]: true;
 };
 
+export interface LineColors {
+  default: string;
+  hovered: string;
+  dragging: string;
+}
+
+const defaultColors: Record<string, LineColors> = {
+  L: {
+    default: "#CE9178",
+    hovered: "#AE7158",
+    dragging: "#8E5138",
+  },
+  D: {
+    default: "#4FC1FF",
+    hovered: "#2EA0E5",
+    dragging: "#0E80CB",
+  },
+  E: {
+    default: "#DCDCAA",
+    hovered: "#BCBC8B",
+    dragging: "#9C9C6B",
+  },
+};
+
 export abstract class Line extends ModelBase {
   abstract clone(): Line;
 
   graph: Graph;
   type: string;
 
+  get colors(): LineColors {
+    return defaultColors[this.type];
+  }
+
   hasArrow: boolean = true;
 
   dragging: boolean = false;
+  hovered: boolean = false;
   predicting: boolean = false;
 
   neverLeaves: Socket | null = null;
@@ -108,13 +137,15 @@ export abstract class Line extends ModelBase {
   }
 
   onHover() {
-    this.lineEl?.classList.add("hovered");
-    this.arrowEl?.classList.add("hovered");
+    this.hovered = true;
+    if (this.lineEl) this.lineEl.style.stroke = this.colors.hovered;
+    if (this.arrowEl) this.arrowEl.style.fill = this.colors.hovered;
   }
 
   onUnhover() {
-    this.lineEl?.classList.remove("hovered");
-    this.arrowEl?.classList.remove("hovered");
+    this.hovered = false;
+    if (this.lineEl) this.lineEl.style.stroke = this.colors.default;
+    if (this.arrowEl) this.arrowEl.style.fill = this.colors.default;
   }
 
   disconnect(s: Socket) {

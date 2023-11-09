@@ -18,7 +18,9 @@ function getCtrlPointOffset(delta: number) {
 
 export class BasicLine extends Line {
   clone(): Line {
-    return new BasicLine();
+    const line = new BasicLine();
+    line.type = this.type;
+    return line;
   }
 
   calcCtrlPoint(point1: Point, point2: Point) {
