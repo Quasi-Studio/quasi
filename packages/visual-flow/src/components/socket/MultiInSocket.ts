@@ -1,4 +1,4 @@
-import { Point } from "../..";
+import { Direction, Point } from "../..";
 import { Line, Socket } from "../../model";
 import { socketCtors } from "../../recorder";
 
@@ -47,10 +47,25 @@ export class MultiInSocket extends Socket {
       let nearestLineDeltaTheta = Infinity;
       let nearestLine = this.connectedLines[0];
       for (const line of this.connectedLines) {
-        const { x: lineDx, y: lineDy } = Point.minus(
+        let { x: lineDx, y: lineDy } = Point.minus(
           line.a.boardPos,
           this.boardPos,
         );
+        switch (this.direction) {
+          case Direction.LEFT:
+            lineDx = -Math.abs(lineDx);
+            break;
+          case Direction.RIGHT:
+            lineDx = Math.abs(lineDx);
+            break;
+          case Direction.TOP:
+            lineDy = -Math.abs(lineDy);
+            break;
+          case Direction.BOTTOM:
+            lineDy = Math.abs(lineDy);
+            break;
+        }
+
         const theta = Math.atan2(lineDy, lineDx);
         const deltaTheta = Math.abs(theta - theta0);
         if (deltaTheta < nearestLineDeltaTheta) {
