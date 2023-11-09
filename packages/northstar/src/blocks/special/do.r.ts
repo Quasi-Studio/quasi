@@ -25,14 +25,14 @@ export class DoBlock extends RectBlock {
 
   clone() {
     const block = new DoBlock();
-    block.initialize();
+    block.initialize(this.thenSockets.length);
     return block;
   }
 
   whenSocket: MultiInSocket;
   thenSockets: SingleOutSocket[] = [];
 
-  initialize(): void {
+  initialize(num = 2): void {
     this.whenSocket = new MultiInSocket();
     this.whenSocket.label = "when";
     this.whenSocket.hideLabel = true;
@@ -40,7 +40,7 @@ export class DoBlock extends RectBlock {
     this.whenSocket.path = PATH_IN_TRIANGLE;
     this.addSocket(Direction.TOP, this.whenSocket);
 
-    this.updateSockets(2);
+    this.updateSockets(num);
   }
 
   updateSockets(length: number): void {
