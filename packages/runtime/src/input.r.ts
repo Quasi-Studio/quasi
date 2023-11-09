@@ -11,6 +11,9 @@ export interface InputProps {
 
 export class InputModel {
   value: string = "";
+  clear() {
+    this.value = "";
+  }
 }
 
 @QuasiRuntime.outputComponent("input")

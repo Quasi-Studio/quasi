@@ -7,6 +7,7 @@ import {
   event,
   input,
   layer,
+  method,
   output,
   plugin,
   switchProp,
@@ -51,7 +52,7 @@ export default {
     input("label", "string", "as-primary"),
     output("value", "string"),
     event("onInput", t.string),
-    [],
+    method("clear", []),
     plugin("validator", "validator"),
   ),
 
