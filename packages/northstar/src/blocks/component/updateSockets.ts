@@ -7,13 +7,15 @@ import {
   PATH_OUT_ELIPSE,
   PATH_OUT_RECT,
   PATH_OUT_TRIANGLE,
+  MultiInSocket,
+  PATH_IN_TRIANGLE,
 } from "@quasi-dev/visual-flow";
 import { ComponentBlock } from "./block";
 
 export function updateSockets(block: ComponentBlock) {
   const { info } = block;
 
-  const { contents, events, inputs, outputs } = info;
+  const { contents, events, inputs, outputs, methods } = info;
 
   block.updateSocket("parent", SingleInSocket, Direction.LEFT, {
     type: "L",
@@ -90,6 +92,18 @@ export function updateSockets(block: ComponentBlock) {
       {
         type: "D",
         path: PATH_OUT_ELIPSE,
+      },
+    );
+  }
+
+  for (const method of methods) {
+    block.updateSocket(
+      method.name,
+      MultiInSocket,
+      method.position ?? Direction.TOP,
+      {
+        type: "E",
+        path: PATH_IN_TRIANGLE,
       },
     );
   }
