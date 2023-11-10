@@ -21,6 +21,7 @@ export class DoBlock extends RectBlock {
   cloneTo(target: this): this {
     super.cloneTo(target);
     target.socketNum = this.socketNum;
+    target.rotate = this.rotate;
     return target;
   }
 
