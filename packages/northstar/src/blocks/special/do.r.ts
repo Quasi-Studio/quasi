@@ -7,13 +7,15 @@ import {
   PATH_OUT_TRIANGLE,
   RectBlock,
   SingleOutSocket,
-  Socket,
   UseSocket,
   blockCtors,
 } from "@quasi-dev/visual-flow";
 import { Context } from "refina";
 import { PropsData } from "../../utils/props";
 import { multiInSocketToOutput, singleOutSocketToOutput } from "../../utils/toOutpus";
+
+const WIDTH = 70;
+const HEIGHT = 30;
 
 export class DoBlock extends RectBlock {
   cloneTo(target: this): this {
@@ -24,8 +26,8 @@ export class DoBlock extends RectBlock {
 
   type = "state-setter";
 
-  boardWidth = 70;
-  boardHeight = 30;
+  boardWidth = WIDTH;
+  boardHeight = HEIGHT;
 
   removable = true;
   duplicateable = true;
@@ -38,13 +40,14 @@ export class DoBlock extends RectBlock {
   }
 
   socketNum: number = 2;
+  rotate: boolean = false;
 
   socketUpdater(useSocket: UseSocket): void {
     useSocket("when", MultiInSocket, {
       hideLabel: true,
       type: "E",
       path: PATH_IN_TRIANGLE,
-      direction: Direction.TOP,
+      direction: this.rotate ? Direction.LEFT : Direction.TOP,
     });
 
     for (let i = 0; i < this.socketNum; i++) {
@@ -52,7 +55,7 @@ export class DoBlock extends RectBlock {
         hideLabel: true,
         type: "E",
         path: PATH_OUT_TRIANGLE,
-        direction: Direction.BOTTOM,
+        direction: this.rotate ? Direction.RIGHT : Direction.BOTTOM,
       });
     }
   }
@@ -68,6 +71,23 @@ export class DoBlock extends RectBlock {
         setVal: val => {
           const length = parseInt(val);
           this.socketNum = isNaN(length) ? 0 : length;
+        },
+      },
+      {
+        name: "rotate",
+        type: "switch",
+        getVal: () => {
+          return this.rotate;
+        },
+        setVal: val => {
+          this.rotate = val;
+          if (val) {
+            this.boardWidth = HEIGHT;
+            this.boardHeight = WIDTH;
+          } else {
+            this.boardWidth = WIDTH;
+            this.boardHeight = HEIGHT;
+          }
         },
       },
     ];
