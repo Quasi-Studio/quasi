@@ -78,8 +78,7 @@ export class DoBlock extends RectBlock {
         },
         setVal: val => {
           const length = parseInt(val);
-          if (isNaN(length)) return;
-          this.updateSockets(length);
+          this.updateSockets(isNaN(length) ? 0 : length);
         },
       },
     ];
