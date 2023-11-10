@@ -67,9 +67,18 @@ export class ComponentBlock extends RectBlock {
       direction: Direction.LEFT,
     });
 
+    const shouldHideSocket = (socketInfo: { kind: string; name: string }) => {
+      const prop = this.props[`display ${socketInfo.name}`];
+      return (
+        (socketInfo.kind === "as-hided-socket" && prop !== true) ||
+        (socketInfo.kind === "as-hidable-socket" && prop === false)
+      );
+    };
+
     for (const content of contents) {
       if (content.kind === "as-primary") {
       } else {
+        if (shouldHideSocket(content)) continue;
         const socket = useSocket(content.name, MultiOutSocket, {
           type: "L",
           path: PATH_OUT_RECT,
@@ -88,6 +97,7 @@ export class ComponentBlock extends RectBlock {
     }
 
     for (const event of events) {
+      if (shouldHideSocket(event)) continue;
       useSocket(event.name, SingleOutSocket, {
         type: "E",
         path: PATH_OUT_TRIANGLE,
@@ -98,6 +108,7 @@ export class ComponentBlock extends RectBlock {
     for (const input of inputs) {
       if (input.kind === "as-primary") {
       } else {
+        if (shouldHideSocket(input)) continue;
         const socket = useSocket(input.name, SingleInSocket, {
           type: "D",
           path: PATH_IN_ELIPSE,
@@ -115,6 +126,7 @@ export class ComponentBlock extends RectBlock {
     }
 
     for (const output of outputs) {
+      if (shouldHideSocket(output)) continue;
       useSocket(output.name, MultiOutSocket, {
         type: "D",
         path: PATH_OUT_ELIPSE,
@@ -123,6 +135,7 @@ export class ComponentBlock extends RectBlock {
     }
 
     for (const method of methods) {
+      if (shouldHideSocket(method)) continue;
       useSocket(method.name, MultiInSocket, {
         type: "E",
         path: PATH_IN_TRIANGLE,
