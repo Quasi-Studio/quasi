@@ -15,11 +15,13 @@ import {
   SingleInSocket,
   UseSocket,
   UsedSockets,
+  directionMap,
+  directionNameMap,
 } from "@quasi-dev/visual-flow";
 import { FTextarea, FUnderlineTextInput } from "@refina/fluentui";
 import { Context, d, ref } from "refina";
 import { currentGraph } from "../../store";
-import { PropsData } from "../../utils/props";
+import { PropData, PropsData } from "../../utils/props";
 import { multiOutSocketToOutput } from "../../utils/toOutpus";
 import { SpecialBlock } from "./base";
 
@@ -39,12 +41,13 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
   boardHeight: number = 50;
 
   useTextarea: boolean = false;
-  inputValue = d("");
+  outputLabel: string = "output";
+  abstract label: string;
   placeholder = "";
 
-  outputLabel: string = "output";
-
-  abstract label: string;
+  inputValue = d("");
+  slotsDirection = Direction.TOP;
+  outputDirection = Direction.BOTTOM;
 
   content = (_: Context) => {
     _.$cls`text-xs ml-1 mt-[5px] leading-3 text-gray-600`;
@@ -90,7 +93,7 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
         label: slot,
         type: "D",
         path: PATH_IN_ELIPSE,
-        direction: Direction.TOP,
+        direction: this.slotsDirection,
       });
     }
     if (!this.noOutput) {
@@ -98,7 +101,7 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
         label: this.outputLabel,
         type: "D",
         path: PATH_OUT_ELIPSE,
-        direction: Direction.BOTTOM,
+        direction: this.outputDirection,
       });
     }
   }
@@ -107,15 +110,42 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
     return {
       ...super.exportData(),
       inputValue: this.inputValue.value,
+      outputDirection: this.outputDirection,
+      slotsDirection: this.slotsDirection,
     };
   }
   protected importData(data: any, sockets: any): void {
     super.importData(data, sockets);
     this.inputValue.value = data.inputValue;
+    this.outputDirection = data.outputDirection;
+    this.slotsDirection = data.slotsDirection;
   }
 
   getProps(): PropsData {
-    return [];
+    return [
+      {
+        name: "slots pos",
+        type: "dropdown",
+        options: ["TOP", "BOTTOM"],
+        getVal: () => {
+          return directionNameMap[this.slotsDirection];
+        },
+        setVal: val => {
+          this.slotsDirection = directionMap[val];
+        },
+      } satisfies PropData,
+      {
+        name: "output pos",
+        type: "dropdown",
+        options: ["BOTTOM", "TOP"],
+        getVal: () => {
+          return directionNameMap[this.outputDirection];
+        },
+        setVal: val => {
+          this.outputDirection = directionMap[val];
+        },
+      } satisfies PropData,
+    ].slice(0, this.noOutput ? 1 : 2);
   }
 
   toOutput(): FuncBlockOutput | ValidatorBlockOutput | ImpBlockOutput | StateBlockOutput | StateSetterBlockOutput {

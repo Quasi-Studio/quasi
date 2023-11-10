@@ -87,3 +87,16 @@ export function futherDis(dire: Direction, p1: Point, p2: Point): number {
       return Math.max(p1.y, p2.y);
   }
 }
+
+export const directionNameMap = {
+  [Direction.LEFT]: "LEFT",
+  [Direction.RIGHT]: "RIGHT",
+  [Direction.TOP]: "TOP",
+  [Direction.BOTTOM]: "BOTTOM",
+};
+export const directionMap = {
+  LEFT: Direction.LEFT,
+  RIGHT: Direction.RIGHT,
+  TOP: Direction.TOP,
+  BOTTOM: Direction.BOTTOM,
+} as Record<string, Direction>;
