@@ -9,8 +9,10 @@ export class ValidatorBlock extends FuncBlockBase {
 
   errorMessages: string = "Invalid input";
 
-  dockingDirections = [Direction.LEFT];
-  dockableDirections = [Direction.LEFT];
+  dockingDirections: [Direction, string][] = [[Direction.LEFT, "input-plugin"]];
+  dockableDirections: [Direction, string][] = [
+    [Direction.LEFT, "input-plugin"],
+  ];
 
   get slots(): string[] {
     return [];

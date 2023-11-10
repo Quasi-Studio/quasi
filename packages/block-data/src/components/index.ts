@@ -53,7 +53,7 @@ export default {
     output("value", "string"),
     event("onInput", t.string),
     method("clear", []),
-    plugin("validator", "validator"),
+    plugin("validator", "input-plugin"),
   ),
 
   appbar: component(

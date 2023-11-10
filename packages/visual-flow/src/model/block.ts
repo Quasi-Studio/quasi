@@ -95,8 +95,8 @@ export abstract class Block extends ModelBase {
    */
   attached = false;
 
-  dockableDirections: Direction[] = [];
-  dockingDirections: Direction[] = [];
+  dockableDirections: [Direction, string][] = [];
+  dockingDirections: [Direction, string][] = [];
   dockedToBlock: Block | null = null;
   dockedByBlocks: [Direction, Block][] = [];
 
@@ -322,10 +322,12 @@ export abstract class Block extends ModelBase {
     if (this === block || this.predicting) return null;
     let minDockingDistanceSquare = MIN_DOCKING_DISTANCE_SQUARE;
     let dockingInfo: [Direction, Point] | null = null;
-    for (const direction of this.dockableDirections) {
+    for (const [direction, type] of this.dockableDirections) {
       if (
-        block.dockingDirections.includes(direction) &&
-        !this.dockedByBlocks.some(([d, _b]) => d === direction)
+        block.dockingDirections.some(
+          (d) => d[0] == direction && d[1] == type,
+        ) &&
+        this.dockedByBlocks.every(([d, _b]) => d !== direction)
       ) {
         const p1 = this.getDockedBenchmarkBoardPos(direction);
         const p2 = block.getDockingBenchmarkBoardPos(direction);
@@ -465,8 +467,8 @@ export interface BlockRecord {
   id: number;
   boardX: number;
   boardY: number;
-  dockableDirections: Direction[];
-  dockingDirection: Direction[];
+  dockableDirections: [Direction, string][];
+  dockingDirection: [Direction, string][];
   dockedToBlock: number | null;
   dockedByBlocks: [Direction, number][];
   sockets: [string, number][];

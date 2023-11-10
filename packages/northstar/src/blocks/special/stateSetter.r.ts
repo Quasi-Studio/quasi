@@ -22,8 +22,8 @@ export class StateSetterBlock extends RectBlock {
   removable = true;
   duplicateable = true;
 
-  dockingDirections: Direction[] = [Direction.LEFT];
-  dockableDirections: Direction[] = [Direction.LEFT];
+  dockingDirections: [Direction, string][] = [[Direction.LEFT, "state-plugin"]];
+  dockableDirections: [Direction, string][] = [[Direction.LEFT, "state-plugin"]];
 
   get onsetSocket() {
     return this.getSocketByName("set") as MultiInSocket;

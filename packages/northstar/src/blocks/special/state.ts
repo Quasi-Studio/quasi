@@ -10,7 +10,9 @@ export class StateBlock extends FuncBlockBase {
   placeholder = "initial value";
   outputLabel = "current";
 
-  dockableDirections: Direction[] = [Direction.LEFT];
+  dockableDirections: [Direction, string][] = [
+    [Direction.LEFT, "state-plugin"],
+  ];
 
   get slots(): string[] {
     return [];
