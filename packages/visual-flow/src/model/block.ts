@@ -364,7 +364,7 @@ export abstract class Block extends ModelBase {
       this.graph.clearSelectedBlocks();
       targetSocket.onMouseDown();
     } else {
-      if (this.selected) {
+      if (this.selected && this.graph.selectedBlocks.size > 1) {
         for (const block of this.graph.selectedBlocks) {
           if (block.dockedToBlock) {
             block.undockFrom();

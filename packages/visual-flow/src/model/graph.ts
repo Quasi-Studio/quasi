@@ -818,7 +818,6 @@ export class Graph {
         this.addSelectedBlock(block, shiftKey);
         this.overwriteRecord();
       } else {
-        if (!shiftKey) this.clearSelectedBlocks();
         this.pushRecord();
       }
       block.pendingClick = false;
