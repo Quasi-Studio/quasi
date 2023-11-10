@@ -79,7 +79,7 @@ export class IfElseBlock extends RectBlock implements SpecialBlock {
   getProps(): PropsData {
     return [
       {
-        name: "has else",
+        name: "[else]",
         type: "switch",
         getVal: () => {
           return this.hasElse;

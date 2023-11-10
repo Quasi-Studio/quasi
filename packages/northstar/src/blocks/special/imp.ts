@@ -11,7 +11,7 @@ import {
   SingleOutSocket,
   UseSocket,
   UsedSockets,
-  blockCtors
+  blockCtors,
 } from "@quasi-dev/visual-flow";
 import { PropsData } from "../../utils/props";
 import {
@@ -70,7 +70,7 @@ export class ImpBlock extends FuncBlockBase {
   getProps(): PropsData {
     return [
       {
-        name: "has then",
+        name: "[then]",
         type: "switch",
         getVal: () => {
           return this.hasThen;
