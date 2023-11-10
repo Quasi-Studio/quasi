@@ -17,11 +17,19 @@ import { multiInSocketToOutput, singleInSocketToOutput, singleOutSocketToOutput 
 import { SpecialBlock } from "./base";
 
 export class IfElseBlock extends RectBlock implements SpecialBlock {
+  cloneTo(target: this): this {
+    super.cloneTo(target);
+    target.hasElse = this.hasElse;
+    return target;
+  }
+
   removable = true;
   duplicateable = true;
 
   boardWidth: number = 200;
   boardHeight: number = 50;
+
+  hasElse: boolean = false;
 
   get condSocket() {
     return this.getSocketByName("cond") as SingleInSocket;
@@ -52,22 +60,35 @@ export class IfElseBlock extends RectBlock implements SpecialBlock {
       path: PATH_OUT_TRIANGLE,
       direction: Direction.BOTTOM,
     });
-    useSocket("else", SingleOutSocket, {
-      type: "E",
-      path: PATH_OUT_TRIANGLE,
-      direction: Direction.BOTTOM,
-    });
+    if (this.hasElse) {
+      useSocket("else", SingleOutSocket, {
+        type: "E",
+        path: PATH_OUT_TRIANGLE,
+        direction: Direction.BOTTOM,
+      });
+    }
   }
 
   contentMain = (_: Context) => {
     _.$cls`absolute flex items-center left-0 top-0 justify-around text-gray-600`;
     _.$css`width:${this.pageWidth}px;height:${this.pageHeight}px;`;
     _.$css`transform:scale(${this.graph.boardScale})`;
-    _.div("if-else");
+    _.div(this.hasElse ? "if-else" : "if");
   };
 
   getProps(): PropsData {
-    return [];
+    return [
+      {
+        name: "has else",
+        type: "switch",
+        getVal: () => {
+          return this.hasElse;
+        },
+        setVal: val => {
+          this.hasElse = val;
+        },
+      },
+    ];
   }
 
   toOutput(): IfBlockOutput {
