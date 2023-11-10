@@ -52,11 +52,9 @@ export class DoBlock extends RectBlock {
           (l.b as Socket).disconnectTo(l);
           this.graph.removeLine(l);
         });
-        const sockets = this.getSocketsByDirection(socket.direction);
-        const index = sockets.indexOf(socket);
-        sockets.splice(index, 1);
       }
       this.thenSockets = this.thenSockets.slice(0, length);
+      this.bottomSockets = this.bottomSockets.slice(0, length);
     } else if (length > this.thenSockets.length) {
       for (let i = this.thenSockets.length; i < length; i++) {
         const socket = new SingleOutSocket();
