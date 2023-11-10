@@ -9,11 +9,11 @@ import {
   PATH_IN_TRIANGLE,
   PATH_OUT_TRIANGLE,
   SingleOutSocket,
-  Socket,
   UseSocket,
   UsedSockets,
-  blockCtors,
+  blockCtors
 } from "@quasi-dev/visual-flow";
+import { PropsData } from "../../utils/props";
 import {
   multiInSocketToOutput,
   singleOutSocketToOutput,
@@ -21,6 +21,11 @@ import {
 import { FuncBlockBase } from "./FuncBlockBase.r";
 
 export class ImpBlock extends FuncBlockBase {
+  cloneTo(target: this): this {
+    super.cloneTo(target);
+    target.hasThen = this.hasThen;
+    return target;
+  }
   type: FuncBlockTypes = "imp";
 
   boardHeight = 80;
@@ -29,11 +34,13 @@ export class ImpBlock extends FuncBlockBase {
   outputLabel = "retVal";
   useTextarea = true;
 
+  hasThen = false;
+
   get whenSocket() {
     return this.getSocketByName("when") as MultiInSocket;
   }
   get thenSocket() {
-    return this.getSocketByName("then") as SingleOutSocket;
+    return this.getSocketByName("then") as SingleOutSocket | undefined;
   }
 
   socketUpdater(useSocket: UseSocket, usedSockets: UsedSockets): void {
@@ -43,11 +50,13 @@ export class ImpBlock extends FuncBlockBase {
       path: PATH_IN_TRIANGLE,
       direction: Direction.LEFT,
     });
-    useSocket("then", SingleOutSocket, {
-      type: "E",
-      path: PATH_OUT_TRIANGLE,
-      direction: Direction.RIGHT,
-    });
+    if (this.hasThen) {
+      useSocket("then", SingleOutSocket, {
+        type: "E",
+        path: PATH_OUT_TRIANGLE,
+        direction: Direction.RIGHT,
+      });
+    }
     usedSockets.find(([n]) => n === "output")![1].disabled =
       this.inputValue.value.match(/\breturn\b/g) === null;
   }
@@ -56,6 +65,21 @@ export class ImpBlock extends FuncBlockBase {
     const template = this.inputValue.value;
     const matches = template.matchAll(/\$[a-zA-Z0-9]+/g);
     return [...matches].map((match) => match[0].slice(1));
+  }
+
+  getProps(): PropsData {
+    return [
+      {
+        name: "has then",
+        type: "switch",
+        getVal: () => {
+          return this.hasThen;
+        },
+        setVal: (val) => {
+          this.hasThen = val;
+        },
+      },
+    ];
   }
 
   toOutput(): ImpBlockOutput {
