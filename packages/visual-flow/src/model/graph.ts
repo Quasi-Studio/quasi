@@ -517,7 +517,6 @@ export class Graph {
     for (let i = this.blockZIndex.length - 1; i >= 0; i--) {
       const target = this.blockZIndex[i];
       if (!target) continue;
-      if (target === block) continue;
       const result = target.isDockableBy(block);
       if (result !== null) {
         const [distanceSquare, ...dockingInfo] = result;

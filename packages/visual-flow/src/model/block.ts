@@ -319,6 +319,7 @@ export abstract class Block extends ModelBase {
   }
 
   isDockableBy(block: Block): null | [number, Direction, Point] {
+    if (this === block || this.predicting) return null;
     let minDockingDistanceSquare = MIN_DOCKING_DISTANCE_SQUARE;
     let dockingInfo: [Direction, Point] | null = null;
     for (const direction of this.dockableDirections) {
