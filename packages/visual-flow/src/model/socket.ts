@@ -89,6 +89,7 @@ export abstract class Socket extends ModelBase {
       ctor: this.constructor.name,
       id: this.id,
       type: this.type,
+      direction: this.direction,
       label: this.label,
       hideLabel: this.hideLabel,
       disabled: this.disabled,
@@ -101,6 +102,7 @@ export abstract class Socket extends ModelBase {
   importRecord(record: SocketRecord) {
     this.id = record.id;
     this.type = record.type;
+    this.direction = record.direction;
     this.label = record.label;
     this.hideLabel = record.hideLabel;
     this.disabled = record.disabled;
@@ -128,6 +130,7 @@ export interface SocketRecord {
   ctor: string;
   id: number;
   type: string;
+  direction: Direction;
   label: string;
   hideLabel: boolean;
   disabled: boolean;
