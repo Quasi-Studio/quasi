@@ -113,7 +113,9 @@ const ${this.view.name}_view = ${
     })}\``;
   }
 
-  compileExprBlock(block: FuncBlockOutput): string {
+  compileExprBlock(
+    block: FuncBlockOutput | StateBlockOutput | StateSetterBlockOutput,
+  ): string {
     return block.value.replace(/\$([a-zA-Z0-9]+)/g, (_, name) => {
       const input = block.inputs.find((i) => i.slot === name);
       if (!input) {
@@ -172,7 +174,7 @@ const ${this.view.name}_view = ${
       case "view":
         throw new Error("view block has no data output");
       case "state":
-        if (socketName !== "output") {
+        if (socketName !== "current") {
           throw new Error(
             `Cannot find socket ${socketName} in block ${blockId}`,
           );
@@ -221,17 +223,19 @@ const ${this.view.name}_view = ${
   stateUpdators: string[] = [];
   compileStateBlock(block: StateBlockOutput): string {
     if (this.stateIdMap.has(block.id)) return this.stateIdMap.get(block.id)!;
-    const modelId = `${this.view.name}_state${this.stateIdMap.size}`;
-    this.stateIdMap.set(block.id, modelId);
-    this.stateInitExprs.set(modelId, block.initExpr);
+    const stateId = `${this.view.name}_state${this.stateIdMap.size}`;
+    this.stateIdMap.set(block.id, stateId);
+    this.stateInitExprs.set(stateId, this.compileExprBlock(block));
     for (const setterId of block.setters) {
       this.stateUpdators.push(
-        `const ${modelId}_update_${setterId} = () => { ${modelId} = ${this.compileDataLineEnd(
-          (this.getBlockById(setterId) as StateSetterBlockOutput).input,
-        )}; };`,
+        `const ${stateId}_update_${setterId} = () => { 
+          const $ = ${stateId};
+          ${stateId} = ${this.compileExprBlock(
+            this.getBlockById(setterId) as StateSetterBlockOutput,
+          )}; };`,
       );
     }
-    return modelId;
+    return stateId;
   }
 
   impIdMap = new Map<string, string>();

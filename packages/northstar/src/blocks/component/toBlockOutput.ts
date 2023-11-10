@@ -58,7 +58,7 @@ export function toBlockOutput(block: ComponentBlock) {
 
   let plugins = {} as ComponentBlockPlugins;
   for (const plugin of block.info.plugins) {
-    if (plugin.dataType !== "validator") throw new Error("Not implemented");
+    if (plugin.dataType !== "input-plugin") continue;
 
     const validators: ValidatorBlock[] = [];
     let currentPluginBlock: Block | undefined = block;

@@ -3,6 +3,7 @@ import type {
   FuncBlockTypes,
   ImpBlockOutput,
   StateBlockOutput,
+  StateSetterBlockOutput,
   ValidatorBlockOutput,
 } from "@quasi-dev/compiler";
 import {
@@ -117,7 +118,7 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
     return [];
   }
 
-  toOutput(): FuncBlockOutput | ValidatorBlockOutput | ImpBlockOutput | StateBlockOutput {
+  toOutput(): FuncBlockOutput | ValidatorBlockOutput | ImpBlockOutput | StateBlockOutput | StateSetterBlockOutput {
     const inputs = [];
     for (const socket of this.inputSockets) {
       inputs.push({

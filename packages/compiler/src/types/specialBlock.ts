@@ -31,10 +31,16 @@ export interface ImpBlockOutput extends Omit<FuncBlockOutput, "type"> {
   then: ConnectTo;
 }
 
-export type FuncBlockTypes = "expr" | "imp" | "string" | "validator" | "state";
+export type FuncBlockTypes =
+  | "expr"
+  | "imp"
+  | "string"
+  | "validator"
+  | "state"
+  | "state-setter";
 
 export interface FuncBlockOutput {
-  type: Exclude<FuncBlockTypes, "imp" | "validator">;
+  type: Exclude<FuncBlockTypes, "imp" | "validator" | "state" | "state-setter">;
   id: number;
   value: string;
   inputs: {
@@ -60,19 +66,14 @@ export interface ValidatorBlockOutput {
   expr: string;
 }
 
-export interface StateBlockOutput {
+export interface StateBlockOutput extends Omit<FuncBlockOutput, "type"> {
   type: "state";
-  id: number;
-  initExpr: string;
-  output: ConnectTo[];
   setters: number[];
 }
 
-export interface StateSetterBlockOutput {
+export interface StateSetterBlockOutput extends Omit<FuncBlockOutput, "type"> {
   type: "state-setter";
-  id: number;
   onset: ConnectTo[];
-  input: ConnectTo;
   state: number;
 }
 

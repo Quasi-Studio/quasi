@@ -1,23 +1,20 @@
-import { StateSetterBlockOutput } from "@quasi-dev/compiler";
+import { FuncBlockTypes, StateBlockOutput, StateSetterBlockOutput } from "@quasi-dev/compiler";
 import {
   Block,
   Direction,
   MultiInSocket,
-  PATH_IN_ELIPSE,
   PATH_IN_TRIANGLE,
-  RectBlock,
-  SingleInSocket,
   UseSocket,
+  UsedSockets,
   blockCtors,
 } from "@quasi-dev/visual-flow";
-import { Context } from "refina";
-import { multiInSocketToOutput, singleInSocketToOutput } from "../../utils/toOutpus";
+import { multiInSocketToOutput } from "../../utils/toOutpus";
+import { ExprBlock } from "./expr";
 
-export class StateSetterBlock extends RectBlock {
-  type = "state-setter";
-
-  boardWidth = 50;
-  boardHeight = 50;
+export class StateSetterBlock extends ExprBlock {
+  type: FuncBlockTypes = "state-setter";
+  label = "state setter";
+  placeholder = "expr";
 
   removable = true;
   duplicateable = true;
@@ -28,32 +25,19 @@ export class StateSetterBlock extends RectBlock {
   get onsetSocket() {
     return this.getSocketByName("set") as MultiInSocket;
   }
-  get inputSocket() {
-    return this.getSocketByName("input") as SingleInSocket;
-  }
-  socketUpdater(useSocket: UseSocket): void {
+  socketUpdater(useSocket: UseSocket, usedSockets: UsedSockets): void {
+    super.socketUpdater(useSocket, usedSockets);
     useSocket("set", MultiInSocket, {
       hideLabel: true,
       type: "E",
       path: PATH_IN_TRIANGLE,
       direction: Direction.TOP,
     });
-    useSocket("input", SingleInSocket, {
-      hideLabel: true,
-      type: "D",
-      path: PATH_IN_ELIPSE,
-      direction: Direction.TOP,
-    });
   }
 
-  contentMain = (_: Context) => {
-    _.$cls`absolute flex items-center left-0 top-0 justify-around text-gray-600`;
-    _.$css`width:${this.pageWidth}px;height:${this.pageHeight}px;`;
-    _.$css`transform:scale(${this.graph.boardScale})`;
-    _.div(_ => {
-      _.span("setter");
-    });
-  };
+  get noOutput(): boolean {
+    return true;
+  }
 
   toOutput(): StateSetterBlockOutput {
     let stateBlock: Block = this;
@@ -61,10 +45,9 @@ export class StateSetterBlock extends RectBlock {
       stateBlock = stateBlock.dockedToBlock;
     }
     return {
+      ...(super.toOutput() as StateBlockOutput),
       type: "state-setter",
-      id: this.id,
       onset: multiInSocketToOutput(this.onsetSocket),
-      input: singleInSocketToOutput(this.inputSocket),
       state: stateBlock.id,
     };
   }

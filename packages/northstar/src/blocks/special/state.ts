@@ -1,10 +1,9 @@
 import { FuncBlockTypes, StateBlockOutput } from "@quasi-dev/compiler";
 import { Block, Direction, blockCtors } from "@quasi-dev/visual-flow";
-import { multiOutSocketToOutput } from "../../utils/toOutpus";
-import { FuncBlockBase } from "./FuncBlockBase.r";
+import { ExprBlock } from "./expr";
 import { StateSetterBlock } from "./stateSetter.r";
 
-export class StateBlock extends FuncBlockBase {
+export class StateBlock extends ExprBlock {
   label = "state";
   type: FuncBlockTypes = "state";
   placeholder = "initial value";
@@ -13,10 +12,6 @@ export class StateBlock extends FuncBlockBase {
   dockableDirections: [Direction, string][] = [
     [Direction.LEFT, "state-plugin"],
   ];
-
-  get slots(): string[] {
-    return [];
-  }
 
   toOutput(): StateBlockOutput {
     const setters: number[] = [];
@@ -34,10 +29,8 @@ export class StateBlock extends FuncBlockBase {
     }
 
     return {
+      ...(super.toOutput() as StateBlockOutput),
       type: "state",
-      id: this.id,
-      initExpr: this.inputValue.value,
-      output: multiOutSocketToOutput(this.outputSocket),
       setters,
     };
   }
