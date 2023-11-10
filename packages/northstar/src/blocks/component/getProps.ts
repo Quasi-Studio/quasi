@@ -33,16 +33,16 @@ export function getProps(block: ComponentBlock): PropsData {
       .map(
         (v) =>
           ({
-            name: `display ${v.name}`,
+            name: `[${v.name}]`,
             type: "switch",
             getVal: () => {
               return (
-                block.props[`display ${v.name}`] ??
+                block.props[`[${v.name}]`] ??
                 v.kind === "as-hidable-socket"
               );
             },
             setVal: (val: any) => {
-              block.props[`display ${v.name}`] = val;
+              block.props[`[${v.name}]`] = val;
             },
           }) as PropData,
       ),
