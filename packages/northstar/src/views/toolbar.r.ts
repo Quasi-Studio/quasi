@@ -295,7 +295,7 @@ export default view(_ => {
 
   _.$cls`absolute flex items-center h-full right-0`;
   _.div(_ => {
-    _.span("Preview mode");
+    _.span("Preview");
     if(_.fSwitch("", previewMode)){
       if(_.$ev){
         startPreview();
