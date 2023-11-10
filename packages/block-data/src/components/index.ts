@@ -51,8 +51,8 @@ export default {
     [],
     input("label", "string", "as-primary"),
     output("value", "string"),
-    event("onInput", t.string),
-    method("clear", []),
+    event("onInput", t.string, "as-hided-socket"),
+    method("clear", [], "as-hided-socket"),
     plugin("validator", "input-plugin"),
   ),
 
