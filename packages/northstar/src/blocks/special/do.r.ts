@@ -7,6 +7,7 @@ import {
   PATH_OUT_TRIANGLE,
   RectBlock,
   SingleOutSocket,
+  Socket,
   UseSocket,
   blockCtors,
 } from "@quasi-dev/visual-flow";
@@ -20,7 +21,7 @@ const HEIGHT = 30;
 export class DoBlock extends RectBlock {
   cloneTo(target: this): this {
     super.cloneTo(target);
-    target.socketNum = this.socketNum;
+    target.thenNum = this.thenNum;
     target.rotate = this.rotate;
     return target;
   }
@@ -40,7 +41,7 @@ export class DoBlock extends RectBlock {
     return this.getSocketsByPrefix("then") as SingleOutSocket[];
   }
 
-  socketNum: number = 2;
+  thenNum: number = 2;
   rotate: boolean = false;
 
   socketUpdater(useSocket: UseSocket): void {
@@ -51,7 +52,7 @@ export class DoBlock extends RectBlock {
       direction: this.rotate ? Direction.LEFT : Direction.TOP,
     });
 
-    for (let i = 0; i < this.socketNum; i++) {
+    for (let i = 0; i < this.thenNum; i++) {
       useSocket(`then-${i}`, SingleOutSocket, {
         hideLabel: true,
         type: "E",
@@ -67,11 +68,11 @@ export class DoBlock extends RectBlock {
         name: "number",
         type: "text",
         getVal: () => {
-          return this.socketNum.toString();
+          return this.thenNum.toString();
         },
         setVal: val => {
           const length = parseInt(val);
-          this.socketNum = isNaN(length) ? 0 : length;
+          this.thenNum = isNaN(length) ? 0 : length;
         },
       },
       {
@@ -102,6 +103,19 @@ export class DoBlock extends RectBlock {
       _.span("do");
     });
   };
+
+  protected exportData() {
+    return {
+      ...super.exportData(),
+      thenNum: this.thenNum,
+      rotate: this.rotate,
+    };
+  }
+  protected importData(data: any, sockets: Record<number, Socket>): void {
+    super.importData(data, sockets);
+    this.thenNum = data.thenNum;
+    this.rotate = data.rotate;
+  }
 
   toOutput(): DoBlockOutput {
     let stateBlock: Block = this;
