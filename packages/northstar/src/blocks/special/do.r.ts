@@ -54,7 +54,7 @@ export class DoBlock extends RectBlock {
 
     for (let i = 0; i < this.thenNum; i++) {
       useSocket(`then-${i}`, SingleOutSocket, {
-        hideLabel: true,
+        label: `${i + 1}`,
         type: "E",
         path: PATH_OUT_TRIANGLE,
         direction: this.rotate ? Direction.RIGHT : Direction.BOTTOM,
