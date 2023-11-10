@@ -27,7 +27,6 @@ export default view(_ => {
             },
             () => {
               const block = new v();
-              block.initialize();
               return block;
             },
           );
@@ -55,7 +54,7 @@ export default view(_ => {
             },
             () => {
               const block = new ComponentBlock();
-              block.initialize(k, v);
+              block.setComponentType(k, v);
               return block;
             },
           );
@@ -98,7 +97,6 @@ export default view(_ => {
           () => {
             const block = new ViewBlock();
             block.viewName = id;
-            block.initialize();
             return block;
           },
           id === "app" || editingThis,

@@ -14,8 +14,19 @@ const MIN_INSIDE_DISTANCE_SQUARE = 25 * 25;
 const MIN_OUTSIDE_DISTANCE_SQUARE = 40 * 40;
 const MIN_DOCKING_DISTANCE_SQUARE = 40 * 40;
 
+export type UseSocket = <T extends Socket>(
+  name: string,
+  ctor: new () => T,
+  data: Partial<T>,
+) => T;
+
+export type UsedSockets = [string, Socket][];
+
 export abstract class Block extends ModelBase {
-  abstract clone(): Block;
+  abstract cloneTo(target: this): this;
+  clone() {
+    return this.cloneTo(new (this.constructor as any)());
+  }
 
   graph: Graph;
 
@@ -83,8 +94,6 @@ export abstract class Block extends ModelBase {
    * When dragging from the panel, it is not attached until the mouse is released inside the graph.
    */
   attached = false;
-
-  abstract get allSockets(): Socket[];
 
   dockableDirections: Direction[] = [];
   dockingDirections: Direction[] = [];
@@ -158,6 +167,68 @@ export abstract class Block extends ModelBase {
   }
   protected undockBy(block: Block) {
     this.dockedByBlocks = this.dockedByBlocks.filter(([_d, b]) => b !== block);
+  }
+
+  sockets: [string, Socket][] = [];
+
+  get allSockets(): Socket[] {
+    return this.sockets.map(([_, socket]) => socket);
+  }
+
+  getSocketByName(name: string) {
+    return this.sockets.find(([n, _]) => n === name)?.[1];
+  }
+  getSocketsByPrefix(prefix: string) {
+    prefix += "-";
+    return this.sockets
+      .filter(([n, _]) => n.startsWith(prefix))
+      .map(([_, s]) => s);
+  }
+
+  abstract socketUpdater(
+    useSocket: UseSocket,
+    usedSockets: [string, Socket][],
+  ): void;
+
+  updateSockets() {
+    const socketsToRemove = new Map(this.sockets);
+    const newSockets: [string, Socket][] = [];
+
+    this.socketUpdater(
+      <T extends Socket>(name: string, ctor: new () => T, data: Partial<T>) => {
+        let socket = socketsToRemove.get(name);
+        if (socket) {
+          socketsToRemove.delete(name);
+        } else {
+          socket = new ctor();
+          socket.block = this;
+        }
+        socket.label = name;
+        if (data.disabled) {
+          socket.allConnectedLines.forEach((l) => {
+            l.a.disconnectTo(l);
+            (l.b as Socket).disconnectTo(l);
+            this.graph.removeLine(l);
+          });
+        }
+        Object.assign(socket, data);
+        newSockets.push([name, socket]);
+
+        return socket as T;
+      },
+      newSockets,
+    );
+
+    for (const socket of socketsToRemove.values()) {
+      socket.allConnectedLines.forEach((l) => {
+        l.a.disconnectTo(l);
+        (l.b as Socket).disconnectTo(l);
+        this.graph.removeLine(l);
+      });
+    }
+    this.sockets = newSockets;
+
+    this.updateSocketPosition();
   }
 
   updatePosition() {
@@ -336,6 +407,7 @@ export abstract class Block extends ModelBase {
       dockingDirection: this.dockingDirections,
       dockedToBlock: this.dockedToBlock?.id ?? null,
       dockedByBlocks: this.dockedByBlocks.map(([d, b]) => [d, b.id]),
+      sockets: this.sockets.map(([name, socket]) => [name, socket.id]),
       data: this.exportData(),
     };
   }
@@ -358,6 +430,14 @@ export abstract class Block extends ModelBase {
       ? blocks[record.dockedToBlock]
       : null;
     this.dockedByBlocks = record.dockedByBlocks.map(([d, b]) => [d, blocks[b]]);
+
+    for (const [name, socketId] of record.sockets) {
+      const socket = sockets[socketId];
+      socket.block = this;
+      this.sockets.push([name, socket]);
+    }
+    this.updateSocketPosition();
+
     this.importData(record.data, sockets);
   }
 }
@@ -388,5 +468,6 @@ export interface BlockRecord {
   dockingDirection: Direction[];
   dockedToBlock: number | null;
   dockedByBlocks: [Direction, number][];
+  sockets: [string, number][];
   data: any;
 }

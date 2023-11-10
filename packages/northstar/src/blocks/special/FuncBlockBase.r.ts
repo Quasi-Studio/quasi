@@ -12,7 +12,8 @@ import {
   PATH_OUT_ELIPSE,
   RectBlock,
   SingleInSocket,
-  Socket,
+  UseSocket,
+  UsedSockets,
 } from "@quasi-dev/visual-flow";
 import { FTextarea, FUnderlineTextInput } from "@refina/fluentui";
 import { Context, d, ref } from "refina";
@@ -22,13 +23,13 @@ import { multiOutSocketToOutput } from "../../utils/toOutpus";
 import { SpecialBlock } from "./base";
 
 export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
-  clone(): FuncBlockBase {
-    const block = new (this.constructor as any)() as FuncBlockBase;
-    block.inputValue.value = this.inputValue.value;
-    block.initialize();
-    block.updateInputSockets();
-    return block;
+  cloneTo(target: this): this {
+    super.cloneTo(target);
+    target.inputValue.value = this.inputValue.value;
+    return target;
   }
+
+  abstract type: FuncBlockTypes;
 
   removable = true;
   duplicateable = true;
@@ -40,14 +41,13 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
   inputValue = d("");
   placeholder = "";
 
-  noOutput = false;
   outputLabel: string = "output";
 
-  abstract name: string;
+  abstract label: string;
 
   content = (_: Context) => {
     _.$cls`text-xs ml-1 mt-[5px] leading-3 text-gray-600`;
-    _.div(this.name);
+    _.div(this.label);
 
     _._div(
       {
@@ -59,16 +59,11 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
       _ => {
         const inputRef = ref<FTextarea | FUnderlineTextInput>();
         _.$css`--fontFamilyBase: Consolas,'Segoe UI', 'Segoe UI Web (West European)', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif`;
-        if (
-          _.$ref(inputRef) &&
+        _.$ref(inputRef) &&
           (this.useTextarea
             ? _.$css`margin-top:4px;max-width:180px` && _.fTextarea(this.inputValue, false, this.placeholder, "none")
             : _.$css`min-height:24px;margin-left:-4px` &&
-              _.fUnderlineTextInput(this.inputValue, false, this.placeholder))
-        ) {
-          this.onInput();
-          this.updateInputSockets();
-        }
+              _.fUnderlineTextInput(this.inputValue, false, this.placeholder));
         inputRef.current!.inputRef.current!.node.onchange = () => {
           currentGraph.pushRecord();
         };
@@ -76,77 +71,47 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
     );
   };
 
-  onInput() {}
-
-  abstract getSlots(): string[];
-
-  inputSockets: Record<string, SingleInSocket> = {};
-  updateInputSockets() {
-    const slots = this.getSlots();
-    const newSockets: Record<string, SingleInSocket> = {};
-    for (const slot of slots) {
-      if (this.inputSockets[slot]) {
-        newSockets[slot] = this.inputSockets[slot];
-      } else {
-        const socket = new SingleInSocket();
-        socket.type = "D";
-        socket.label = slot;
-        socket.path = PATH_IN_ELIPSE;
-        newSockets[slot] = socket;
-        this.addSocket(Direction.UP, socket);
-      }
-    }
-    for (const key in this.inputSockets) {
-      if (!newSockets[key]) {
-        const socket = this.inputSockets[key];
-        socket.allConnectedLines.forEach(line => {
-          line.a.disconnectTo(line);
-          (line.b as Socket).disconnectTo(line);
-          this.graph.removeLine(line);
-        });
-        const sockets = this.getSocketsByDirection(socket.direction);
-        const index = sockets.indexOf(socket);
-        sockets.splice(index, 1);
-      }
-    }
-    this.inputSockets = newSockets;
-    this.updateSocketPosition();
+  abstract get slots(): string[];
+  get noOutput() {
+    return false;
   }
 
-  outputSocket: MultiOutSocket;
-  initialize() {
-    if (!this.noOutput) {
-      this.outputSocket = new MultiOutSocket();
-      this.outputSocket.type = "D";
-      this.outputSocket.label = "output";
-      this.outputSocket.path = PATH_OUT_ELIPSE;
-      this.addSocket(Direction.DOWN, this.outputSocket);
-    }
+  get inputSockets() {
+    return this.getSocketsByPrefix("input") as SingleInSocket[];
+  }
+  get outputSocket() {
+    return this.getSocketByName("output") as MultiOutSocket;
+  }
 
-    this.updateInputSockets();
+  socketUpdater(useSocket: UseSocket, _usedSockets: UsedSockets): void {
+    for (const slot of this.slots) {
+      useSocket(`input-${slot}`, SingleInSocket, {
+        label: slot,
+        type: "D",
+        path: PATH_IN_ELIPSE,
+        direction: Direction.TOP,
+      });
+    }
+    if (!this.noOutput) {
+      useSocket("output", MultiOutSocket, {
+        label: this.outputLabel,
+        type: "D",
+        path: PATH_OUT_ELIPSE,
+        direction: Direction.BOTTOM,
+      });
+    }
   }
 
   protected exportData(): any {
     return {
       ...super.exportData(),
-      noOutput: this.noOutput,
       inputValue: this.inputValue.value,
-      inputSockets: Object.fromEntries(Object.entries(this.inputSockets).map(([n, s]) => [n, s.id])),
-      outputSocket: this.noOutput ? NaN : this.outputSocket.id,
     };
   }
   protected importData(data: any, sockets: any): void {
     super.importData(data, sockets);
-    this.noOutput = data.noOutput;
     this.inputValue.value = data.inputValue;
-    this.inputSockets = Object.fromEntries(Object.entries(data.inputSockets).map(([n, s]: any) => [n, sockets[s]]));
-    if (!this.noOutput) {
-      this.outputSocket = sockets[data.outputSocket];
-    }
-    // this.updateSockets();
   }
-
-  abstract type: FuncBlockTypes;
 
   getProps(): PropsData {
     return [];
@@ -154,9 +119,9 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
 
   toOutput(): FuncBlockOutput | ValidatorBlockOutput | ImpBlockOutput | StateBlockOutput {
     const inputs = [];
-    for (const [slot, socket] of Object.entries(this.inputSockets)) {
+    for (const socket of this.inputSockets) {
       inputs.push({
-        slot,
+        slot: socket.label,
         blockId: socket.connectedLine?.a.block.id ?? NaN,
         socketName: socket.connectedLine?.a.label ?? "",
       });

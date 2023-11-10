@@ -24,7 +24,6 @@ export function createViewGraph() {
   rootBlock.boardX = 120;
   rootBlock.boardY = 300;
   rootBlock.attached = true;
-  rootBlock.initialize();
   graph.addBlock(rootBlock);
 
   graph.captureInitialRecord();

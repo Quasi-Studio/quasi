@@ -3,27 +3,20 @@ import { FuncBlockBase } from "./FuncBlockBase.r";
 import { FuncBlockTypes, ValidatorBlockOutput } from "@quasi-dev/compiler";
 
 export class ValidatorBlock extends FuncBlockBase {
-  name = "validator";
+  label = "validator";
   type: FuncBlockTypes = "validator";
   placeholder = "expression";
-  noOutput = true;
 
   errorMessages: string = "Invalid input";
 
-  clone(): FuncBlockBase {
-    const block = new ValidatorBlock();
-    block.initialize();
-    return block;
-  }
+  dockingDirections = [Direction.LEFT];
+  dockableDirections = [Direction.LEFT];
 
-  initialize(): void {
-    super.initialize();
-    this.dockingDirections = [Direction.LEFT];
-    this.dockableDirections = [Direction.LEFT];
-  }
-
-  getSlots(): string[] {
+  get slots(): string[] {
     return [];
+  }
+  get noOutput() {
+    return true;
   }
 
   toOutput(): ValidatorBlockOutput {

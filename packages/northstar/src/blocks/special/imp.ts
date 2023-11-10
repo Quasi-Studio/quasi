@@ -9,6 +9,9 @@ import {
   PATH_IN_TRIANGLE,
   PATH_OUT_TRIANGLE,
   SingleOutSocket,
+  Socket,
+  UseSocket,
+  UsedSockets,
   blockCtors,
 } from "@quasi-dev/visual-flow";
 import {
@@ -18,65 +21,41 @@ import {
 import { FuncBlockBase } from "./FuncBlockBase.r";
 
 export class ImpBlock extends FuncBlockBase {
-  whenSocket: MultiInSocket;
-  thenSocket: SingleOutSocket;
-  initialize() {
-    super.initialize();
-    this.whenSocket = new MultiInSocket();
-    this.whenSocket.type = "E";
-    this.whenSocket.label = "when";
-    this.whenSocket.path = PATH_IN_TRIANGLE;
-    this.addSocket(Direction.LEFT, this.whenSocket);
-
-    this.thenSocket = new SingleOutSocket();
-    this.thenSocket.type = "E";
-    this.thenSocket.label = "then";
-    this.thenSocket.path = PATH_OUT_TRIANGLE;
-    this.addSocket(Direction.RIGHT, this.thenSocket);
-
-    this.updateSocketPosition();
-    this.updateOutputSocket();
-  }
+  type: FuncBlockTypes = "imp";
 
   boardHeight = 80;
 
-  name = "imperative code";
-
+  label = "imperative code";
   outputLabel = "retVal";
-
   useTextarea = true;
 
-  onInput() {
-    this.updateOutputSocket();
+  get whenSocket() {
+    return this.getSocketByName("when") as MultiInSocket;
+  }
+  get thenSocket() {
+    return this.getSocketByName("then") as SingleOutSocket;
   }
 
-  updateOutputSocket() {
-    if (this.inputValue.value.match(/\breturn\b/g)) {
-      this.outputSocket.disabled = false;
-    } else {
-      this.outputSocket.disabled = true;
-    }
+  socketUpdater(useSocket: UseSocket, usedSockets: UsedSockets): void {
+    super.socketUpdater(useSocket, usedSockets);
+    useSocket("when", MultiInSocket, {
+      type: "E",
+      path: PATH_IN_TRIANGLE,
+      direction: Direction.LEFT,
+    });
+    useSocket("then", SingleOutSocket, {
+      type: "E",
+      path: PATH_OUT_TRIANGLE,
+      direction: Direction.RIGHT,
+    });
+    usedSockets.find(([n]) => n === "output")![1].disabled =
+      this.inputValue.value.match(/\breturn\b/g) === null;
   }
 
-  getSlots() {
+  get slots() {
     const template = this.inputValue.value;
     const matches = template.matchAll(/\$[a-zA-Z0-9]+/g);
     return [...matches].map((match) => match[0].slice(1));
-  }
-
-  type: FuncBlockTypes = "imp";
-
-  protected exportData(): any {
-    return {
-      ...super.exportData(),
-      whenSocket: this.whenSocket.id,
-      thenSocket: this.thenSocket.id,
-    };
-  }
-  protected importData(data: any, sockets: any): void {
-    super.importData(data, sockets);
-    this.whenSocket = sockets[data.whenSocket];
-    this.thenSocket = sockets[data.thenSocket];
   }
 
   toOutput(): ImpBlockOutput {

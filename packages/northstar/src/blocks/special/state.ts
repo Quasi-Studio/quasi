@@ -5,23 +5,14 @@ import { FuncBlockBase } from "./FuncBlockBase.r";
 import { StateSetterBlock } from "./stateSetter.r";
 
 export class StateBlock extends FuncBlockBase {
-  name = "state";
+  label = "state";
   type: FuncBlockTypes = "state";
   placeholder = "initial value";
-
-  clone(): FuncBlockBase {
-    const block = new StateBlock();
-    block.initialize();
-    return block;
-  }
+  outputLabel = "current";
 
   dockableDirections: Direction[] = [Direction.LEFT];
 
-  initialize(): void {
-    super.initialize();
-  }
-
-  getSlots(): string[] {
+  get slots(): string[] {
     return [];
   }
 

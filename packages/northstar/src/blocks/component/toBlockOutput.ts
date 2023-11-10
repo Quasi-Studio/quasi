@@ -14,7 +14,7 @@ export function toBlockOutput(block: ComponentBlock) {
   const callbacks = {} as ComponentBlockCallbacks;
   for (const event of block.info.events) {
     callbacks[event.name] = singleOutSocketToOutput(
-      block.socketMap.get(event.name) as SingleOutSocket,
+      block.getSocketByName(event.name) as SingleOutSocket,
     );
   }
 
@@ -31,7 +31,7 @@ export function toBlockOutput(block: ComponentBlock) {
     ) {
       props[input.name] = block.primaryValue.value;
     } else {
-      const socket = block.socketMap.get(input.name)?.allConnectedLines[0]?.a;
+      const socket = block.getSocketByName(input.name)?.allConnectedLines[0]?.a;
       props[input.name] = {
         blockId: socket?.block.id ?? NaN,
         socketName: socket?.label ?? "",
@@ -48,8 +48,8 @@ export function toBlockOutput(block: ComponentBlock) {
       children[content.name] = block.primaryValue.value;
     } else {
       children[content.name] =
-        block.socketMap
-          .get(content.name)
+        block
+          .getSocketByName(content.name)
           ?.allConnectedLines.map((l) => (l.b as Socket).block)
           .sort((a, b) => a.boardY - b.boardY)
           .map((b) => b.id) ?? [];

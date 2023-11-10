@@ -8,6 +8,7 @@ import {
   RectBlock,
   SingleOutSocket,
   Socket,
+  UseSocket,
   blockCtors,
 } from "@quasi-dev/visual-flow";
 import { Context } from "refina";
@@ -15,6 +16,12 @@ import { PropsData } from "../../utils/props";
 import { multiInSocketToOutput, singleOutSocketToOutput } from "../../utils/toOutpus";
 
 export class DoBlock extends RectBlock {
+  cloneTo(target: this): this {
+    super.cloneTo(target);
+    target.socketNum = this.socketNum;
+    return target;
+  }
+
   type = "state-setter";
 
   boardWidth = 70;
@@ -23,48 +30,30 @@ export class DoBlock extends RectBlock {
   removable = true;
   duplicateable = true;
 
-  clone() {
-    const block = new DoBlock();
-    block.initialize(this.thenSockets.length);
-    return block;
+  get whenSocket() {
+    return this.getSocketByName("when") as MultiInSocket;
+  }
+  get thenSockets() {
+    return this.getSocketsByPrefix("then") as SingleOutSocket[];
   }
 
-  whenSocket: MultiInSocket;
-  thenSockets: SingleOutSocket[] = [];
+  socketNum: number = 2;
 
-  initialize(num = 2): void {
-    this.whenSocket = new MultiInSocket();
-    this.whenSocket.label = "when";
-    this.whenSocket.hideLabel = true;
-    this.whenSocket.type = "E";
-    this.whenSocket.path = PATH_IN_TRIANGLE;
-    this.addSocket(Direction.TOP, this.whenSocket);
+  socketUpdater(useSocket: UseSocket): void {
+    useSocket("when", MultiInSocket, {
+      hideLabel: true,
+      type: "E",
+      path: PATH_IN_TRIANGLE,
+      direction: Direction.TOP,
+    });
 
-    this.updateSockets(num);
-  }
-
-  updateSockets(length: number): void {
-    if (length < this.thenSockets.length) {
-      for (let i = length; i < this.thenSockets.length; i++) {
-        const socket = this.thenSockets[i];
-        socket.allConnectedLines.forEach(l => {
-          l.a.disconnectTo(l);
-          (l.b as Socket).disconnectTo(l);
-          this.graph.removeLine(l);
-        });
-      }
-      this.thenSockets = this.thenSockets.slice(0, length);
-      this.bottomSockets = this.bottomSockets.slice(0, length);
-    } else if (length > this.thenSockets.length) {
-      for (let i = this.thenSockets.length; i < length; i++) {
-        const socket = new SingleOutSocket();
-        socket.label = `then${i}`;
-        socket.hideLabel = true;
-        socket.type = "E";
-        socket.path = PATH_OUT_TRIANGLE;
-        this.addSocket(Direction.BOTTOM, socket);
-        this.thenSockets.push(socket);
-      }
+    for (let i = 0; i < this.socketNum; i++) {
+      useSocket(`then-${i}`, SingleOutSocket, {
+        hideLabel: true,
+        type: "E",
+        path: PATH_OUT_TRIANGLE,
+        direction: Direction.BOTTOM,
+      });
     }
   }
 
@@ -74,11 +63,11 @@ export class DoBlock extends RectBlock {
         name: "number",
         type: "text",
         getVal: () => {
-          return this.thenSockets.length.toString();
+          return this.socketNum.toString();
         },
         setVal: val => {
           const length = parseInt(val);
-          this.updateSockets(isNaN(length) ? 0 : length);
+          this.socketNum = isNaN(length) ? 0 : length;
         },
       },
     ];
@@ -104,19 +93,6 @@ export class DoBlock extends RectBlock {
       when: multiInSocketToOutput(this.whenSocket),
       then: this.thenSockets.map(singleOutSocketToOutput),
     };
-  }
-
-  protected exportData() {
-    return {
-      ...super.exportData(),
-      whenSocket: this.whenSocket.id,
-      thenSockets: this.thenSockets.map(s => s.id),
-    };
-  }
-  protected importData(data: any, sockets: any): void {
-    super.importData(data, sockets);
-    this.whenSocket = sockets[data.whenSocket];
-    this.thenSockets = data.thenSockets.map((id: number) => sockets[id]);
   }
 }
 

@@ -1,15 +1,17 @@
 import { Context } from "refina";
 import { Block, Socket } from "../../model";
-import { blockCtors } from "../../recorder";
 import { Direction, Point } from "../../types";
 import { spreadItems } from "../../utils";
 import styles from "./RectBlock.styles";
 
 const SOCKET_PADDING_SCALE = -0.1;
 
-export class RectBlock extends Block {
-  clone(): Block {
-    return new RectBlock();
+export abstract class RectBlock extends Block {
+  cloneTo(target: this): this {
+    target.boardWidth = this.boardWidth;
+    target.boardHeight = this.boardHeight;
+    target.boardBorderRadius = this.boardBorderRadius;
+    return target;
   }
 
   boardWidth: number;
@@ -56,47 +58,27 @@ export class RectBlock extends Block {
     }
   }
 
-  leftSockets: Socket[] = [];
-  rightSockets: Socket[] = [];
-  topSockets: Socket[] = [];
-  bottomSockets: Socket[] = [];
-
-  get allSockets(): Socket[] {
-    return [...this.leftSockets, ...this.rightSockets, ...this.topSockets, ...this.bottomSockets];
-  }
-
-  addSocket(direction: Direction, socket: Socket) {
-    socket.block = this;
-    socket.direction = direction;
-    this.getSocketsByDirection(direction).push(socket);
-    this.updateSocketPosition();
-  }
-
-  getSocketsByDirection(direction: Direction) {
-    return {
-      [Direction.LEFT]: this.leftSockets,
-      [Direction.RIGHT]: this.rightSockets,
-      [Direction.TOP]: this.topSockets,
-      [Direction.BOTTOM]: this.bottomSockets,
-    }[direction];
-  }
-
   updateSocketPosition() {
-    spreadItems(this.boardHeight, this.leftSockets.length, SOCKET_PADDING_SCALE).forEach((offset, i) => {
-      this.leftSockets[i].blockX = 0;
-      this.leftSockets[i].blockY = offset;
+    const leftSockets = this.allSockets.filter(s => s.direction === Direction.LEFT);
+    const rightSockets = this.allSockets.filter(s => s.direction === Direction.RIGHT);
+    const topSockets = this.allSockets.filter(s => s.direction === Direction.TOP);
+    const bottomSockets = this.allSockets.filter(s => s.direction === Direction.BOTTOM);
+
+    spreadItems(this.boardHeight, leftSockets.length, SOCKET_PADDING_SCALE).forEach((offset, i) => {
+      leftSockets[i].blockX = 0;
+      leftSockets[i].blockY = offset;
     });
-    spreadItems(this.boardHeight, this.rightSockets.length, SOCKET_PADDING_SCALE).forEach((offset, i) => {
-      this.rightSockets[i].blockX = this.boardWidth;
-      this.rightSockets[i].blockY = offset;
+    spreadItems(this.boardHeight, rightSockets.length, SOCKET_PADDING_SCALE).forEach((offset, i) => {
+      rightSockets[i].blockX = this.boardWidth;
+      rightSockets[i].blockY = offset;
     });
-    spreadItems(this.boardWidth, this.topSockets.length, SOCKET_PADDING_SCALE).forEach((offset, i) => {
-      this.topSockets[i].blockX = offset;
-      this.topSockets[i].blockY = 0;
+    spreadItems(this.boardWidth, topSockets.length, SOCKET_PADDING_SCALE).forEach((offset, i) => {
+      topSockets[i].blockX = offset;
+      topSockets[i].blockY = 0;
     });
-    spreadItems(this.boardWidth, this.bottomSockets.length, SOCKET_PADDING_SCALE).forEach((offset, i) => {
-      this.bottomSockets[i].blockX = offset;
-      this.bottomSockets[i].blockY = this.boardHeight;
+    spreadItems(this.boardWidth, bottomSockets.length, SOCKET_PADDING_SCALE).forEach((offset, i) => {
+      bottomSockets[i].blockX = offset;
+      bottomSockets[i].blockY = this.boardHeight;
     });
   }
 
@@ -144,26 +126,12 @@ export class RectBlock extends Block {
       boardHeight: this.boardHeight,
       boardWidth: this.boardWidth,
       boardBorderRadius: this.boardBorderRadius,
-      leftSockets: this.leftSockets.map(s => s.id),
-      rightSockets: this.rightSockets.map(s => s.id),
-      topSockets: this.topSockets.map(s => s.id),
-      bottomSockets: this.bottomSockets.map(s => s.id),
     } satisfies RectBlockRecordData;
-  }
-  protected importSocket(direction: Direction, array: Socket[], socket: Socket) {
-    socket.block = this;
-    socket.direction = direction;
-    array.push(socket);
   }
   protected importData(data: RectBlockRecordData, sockets: Record<number, Socket>): void {
     this.boardHeight = data.boardHeight;
     this.boardWidth = data.boardWidth;
     this.boardBorderRadius = data.boardBorderRadius;
-    data.leftSockets.forEach(id => this.importSocket(Direction.LEFT, this.leftSockets, sockets[id]));
-    data.rightSockets.forEach(id => this.importSocket(Direction.RIGHT, this.rightSockets, sockets[id]));
-    data.topSockets.forEach(id => this.importSocket(Direction.TOP, this.topSockets, sockets[id]));
-    data.bottomSockets.forEach(id => this.importSocket(Direction.BOTTOM, this.bottomSockets, sockets[id]));
-    this.updateSocketPosition();
   }
 }
 
@@ -171,10 +139,4 @@ interface RectBlockRecordData {
   boardHeight: number;
   boardWidth: number;
   boardBorderRadius: number;
-  leftSockets: number[];
-  rightSockets: number[];
-  topSockets: number[];
-  bottomSockets: number[];
 }
-
-blockCtors["RectBlock"] = RectBlock;

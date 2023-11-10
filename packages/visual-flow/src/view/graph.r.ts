@@ -82,6 +82,10 @@ export class VfGraph extends OutputComponent {
       },
     );
 
+    if (_.$updating) {
+      model.blocks.forEach(block => block.updateSockets());
+    }
+
     styles.root(_);
     _.$ref(model.ref) &&
       _._div({}, _ => {

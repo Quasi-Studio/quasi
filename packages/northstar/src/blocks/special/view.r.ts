@@ -1,38 +1,36 @@
 import type { ViewBlockOutput } from "@quasi-dev/compiler";
-import { Direction, PATH_IN_RECT, RectBlock, SingleInSocket, blockCtors } from "@quasi-dev/visual-flow";
+import { Direction, PATH_IN_RECT, RectBlock, SingleInSocket, UseSocket, blockCtors } from "@quasi-dev/visual-flow";
 import { Context } from "refina";
 import { PropsData } from "../../utils/props";
 import { singleInSocketToOutput } from "../../utils/toOutpus";
 import { SpecialBlock } from "./base";
 
 export class ViewBlock extends RectBlock implements SpecialBlock {
-  clone() {
-    const block = new ViewBlock();
-    block.viewName = this.viewName;
-    block.initialize();
-    return block;
+  cloneTo(target: this): this {
+    super.cloneTo(target);
+    target.viewName = this.viewName;
+    return target;
   }
 
   removable = true;
   duplicateable = true;
 
-  parentSocket: SingleInSocket;
-
-  initialize(): void {
-    this.parentSocket = new SingleInSocket();
-
-    this.parentSocket.type = "L";
-    this.parentSocket.label = "parent";
-    this.parentSocket.hideLabel = true;
-    this.parentSocket.path = PATH_IN_RECT;
-
-    this.addSocket(Direction.LEFT, this.parentSocket);
-  }
-
   boardWidth = 200;
   boardHeight = 50;
 
   viewName: string;
+
+  get parentSocket() {
+    return this.getSocketByName("parent") as SingleInSocket;
+  }
+  socketUpdater(useSocket: UseSocket): void {
+    useSocket("parent", SingleInSocket, {
+      hideLabel: true,
+      type: "D",
+      path: PATH_IN_RECT,
+      direction: Direction.LEFT,
+    });
+  }
 
   contentMain = (_: Context) => {
     _.$cls`absolute flex items-center left-0 top-0 justify-around text-gray-600`;
@@ -43,17 +41,6 @@ export class ViewBlock extends RectBlock implements SpecialBlock {
 
   getProps(): PropsData {
     return [];
-  }
-
-  protected exportData() {
-    return {
-      ...super.exportData(),
-      inSocket: this.parentSocket.id,
-    };
-  }
-  protected importData(data: any, sockets: any): void {
-    super.importData(data, sockets);
-    this.parentSocket = sockets[data.inSocket];
   }
 
   toOutput(): ViewBlockOutput {

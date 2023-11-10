@@ -7,6 +7,7 @@ import {
   PATH_IN_TRIANGLE,
   RectBlock,
   SingleInSocket,
+  UseSocket,
   blockCtors,
 } from "@quasi-dev/visual-flow";
 import { Context } from "refina";
@@ -24,29 +25,25 @@ export class StateSetterBlock extends RectBlock {
   dockingDirections: Direction[] = [Direction.LEFT];
   dockableDirections: Direction[] = [Direction.LEFT];
 
-  clone() {
-    const block = new StateSetterBlock();
-    block.initialize();
-    return block;
+  get onsetSocket() {
+    return this.getSocketByName("set") as MultiInSocket;
   }
-
-  onsetSocket: MultiInSocket;
-  inputSocket: SingleInSocket;
-
-  initialize(): void {
-    this.onsetSocket = new MultiInSocket();
-    this.onsetSocket.label = "set";
-    this.onsetSocket.hideLabel = true;
-    this.onsetSocket.type = "E";
-    this.onsetSocket.path = PATH_IN_TRIANGLE;
-    this.addSocket(Direction.TOP, this.onsetSocket);
-
-    this.inputSocket = new SingleInSocket();
-    this.inputSocket.label = "input";
-    this.inputSocket.hideLabel = true;
-    this.inputSocket.type = "D";
-    this.inputSocket.path = PATH_IN_ELIPSE;
-    this.addSocket(Direction.TOP, this.inputSocket);
+  get inputSocket() {
+    return this.getSocketByName("input") as SingleInSocket;
+  }
+  socketUpdater(useSocket: UseSocket): void {
+    useSocket("set", MultiInSocket, {
+      hideLabel: true,
+      type: "E",
+      path: PATH_IN_TRIANGLE,
+      direction: Direction.TOP,
+    });
+    useSocket("input", SingleInSocket, {
+      hideLabel: true,
+      type: "D",
+      path: PATH_IN_ELIPSE,
+      direction: Direction.TOP,
+    });
   }
 
   contentMain = (_: Context) => {
@@ -70,19 +67,6 @@ export class StateSetterBlock extends RectBlock {
       input: singleInSocketToOutput(this.inputSocket),
       state: stateBlock.id,
     };
-  }
-
-  protected exportData() {
-    return {
-      ...super.exportData(),
-      setSocket: this.onsetSocket.id,
-      inputSocket: this.inputSocket.id,
-    };
-  }
-  protected importData(data: any, sockets: any): void {
-    super.importData(data, sockets);
-    this.onsetSocket = sockets[data.setSocket];
-    this.inputSocket = sockets[data.inputSocket];
   }
 }
 

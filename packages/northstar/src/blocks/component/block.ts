@@ -1,8 +1,19 @@
 import { ComponentInfo, blocksObj } from "@quasi-dev/block-data";
 import {
   Direction,
+  MultiInSocket,
+  MultiOutSocket,
+  PATH_IN_ELIPSE,
+  PATH_IN_RECT,
+  PATH_IN_TRIANGLE,
+  PATH_OUT_ELIPSE,
+  PATH_OUT_RECT,
+  PATH_OUT_TRIANGLE,
   RectBlock,
+  SingleInSocket,
+  SingleOutSocket,
   Socket,
+  UseSocket,
   blockCtors,
 } from "@quasi-dev/visual-flow";
 import "@refina/fluentui";
@@ -10,23 +21,35 @@ import { d } from "refina";
 import { PropsData } from "../../utils/props";
 import { getContent } from "./getContent.r";
 import { getProps } from "./getProps";
-import { updateSockets } from "./updateSockets";
 import { updatePlugins } from "./updatePlugins";
 
 export class ComponentBlock extends RectBlock {
+  cloneTo(target: this): this {
+    super.cloneTo(target);
+    target.setComponentType(this.componentType, this.info);
+    target.props = { ...this.props };
+    target.primaryValue.value = this.primaryValue.value;
+    return target;
+  }
+
+  setComponentType(componentType: string, info: ComponentInfo) {
+    this.componentType = componentType;
+    this.info = info;
+    this.content = getContent(this);
+    updatePlugins(this);
+  }
+
   isComponentBlock = true;
 
   removable = true;
   duplicateable = true;
 
+  boardWidth = 200;
+  boardHeight = 50;
+
   componentType: string;
   info: ComponentInfo;
   props: Record<string, string | boolean> = {};
-
-  socketMap = new Map<string, Socket>();
-
-  boardWidth = 200;
-  boardHeight = 50;
 
   primaryValue = d("");
   get primaryFilled() {
@@ -34,55 +57,78 @@ export class ComponentBlock extends RectBlock {
   }
   getPrimaryDisabled = () => false;
 
-  removeSocket(name: string) {
-    const socket = this.socketMap.get(name);
-    if (!socket) return;
-    socket.allConnectedLines.forEach((l) => {
-      l.a.disconnectTo(l);
-      (l.b as Socket).disconnectTo(l);
-      this.graph.removeLine(l);
-    });
-    const sockets = this.getSocketsByDirection(socket.direction);
-    const index = sockets.indexOf(socket);
-    sockets.splice(index, 1);
-  }
+  socketUpdater(useSocket: UseSocket): void {
+    const { contents, events, inputs, outputs, methods } = this.info;
 
-  updateSocket<T extends Socket>(
-    name: string,
-    ctor: new () => T,
-    direction: Direction,
-    data: Partial<T>,
-  ) {
-    let socket = this.socketMap.get(name);
-    if (!socket) {
-      socket = new ctor();
-      socket.label = name;
-      this.addSocket(direction, socket);
-      this.socketMap.set(name, socket);
+    useSocket("parent", SingleInSocket, {
+      type: "L",
+      path: PATH_IN_RECT,
+      hideLabel: true,
+      direction: Direction.LEFT,
+    });
+
+    for (const content of contents) {
+      if (content.kind === "as-primary") {
+      } else {
+        const socket = useSocket(content.name, MultiOutSocket, {
+          type: "L",
+          path: PATH_OUT_RECT,
+          hideLabel: contents.length === 1,
+          disabled:
+            content.kind === "as-primary-and-socket" && this.primaryFilled,
+          direction: content.position ?? Direction.RIGHT,
+        });
+
+        if (content.kind === "as-primary-and-socket") {
+          this.getPrimaryDisabled = () => {
+            return socket.allConnectedLines.length > 0;
+          };
+        }
+      }
     }
-    if (data.disabled) {
-      socket.allConnectedLines.forEach((l) => {
-        l.a.disconnectTo(l);
-        (l.b as Socket).disconnectTo(l);
-        this.graph.removeLine(l);
+
+    for (const event of events) {
+      useSocket(event.name, SingleOutSocket, {
+        type: "E",
+        path: PATH_OUT_TRIANGLE,
+        direction: event.position ?? Direction.BOTTOM,
       });
     }
-    Object.assign(socket, data);
-    return socket;
-  }
 
-  initialize(componentType: string, info: ComponentInfo) {
-    this.componentType = componentType;
-    this.info = info;
-    this.content = getContent(this);
-    updateSockets(this);
-    updatePlugins(this);
-  }
+    for (const input of inputs) {
+      if (input.kind === "as-primary") {
+      } else {
+        const socket = useSocket(input.name, SingleInSocket, {
+          type: "D",
+          path: PATH_IN_ELIPSE,
+          disabled:
+            input.kind === "as-primary-and-socket" && this.primaryFilled,
+          direction: input.position ?? Direction.UP,
+        });
 
-  clone() {
-    const block = new ComponentBlock();
-    block.initialize(this.componentType, this.info);
-    return block;
+        if (input.kind === "as-primary-and-socket") {
+          this.getPrimaryDisabled = () => {
+            return socket.allConnectedLines.length > 0;
+          };
+        }
+      }
+    }
+
+    for (const output of outputs) {
+      useSocket(output.name, MultiOutSocket, {
+        type: "D",
+        path: PATH_OUT_ELIPSE,
+        direction: output.position ?? Direction.BOTTOM,
+      });
+    }
+
+    for (const method of methods) {
+      useSocket(method.name, MultiInSocket, {
+        type: "E",
+        path: PATH_IN_TRIANGLE,
+        direction: method.position ?? Direction.TOP,
+      });
+    }
   }
 
   getProps(): PropsData {
@@ -104,10 +150,6 @@ export class ComponentBlock extends RectBlock {
     this.props = data.props;
     this.primaryValue.value = data.primaryValue;
     this.content = getContent(this);
-    for (const socket of this.allSockets) {
-      this.socketMap.set(socket.label, socket);
-    }
-    updateSockets(this);
   }
 }
 

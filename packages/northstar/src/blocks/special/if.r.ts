@@ -8,6 +8,7 @@ import {
   RectBlock,
   SingleInSocket,
   SingleOutSocket,
+  UseSocket,
   blockCtors,
 } from "@quasi-dev/visual-flow";
 import { Context } from "refina";
@@ -16,48 +17,47 @@ import { multiInSocketToOutput, singleInSocketToOutput, singleOutSocketToOutput 
 import { SpecialBlock } from "./base";
 
 export class IfElseBlock extends RectBlock implements SpecialBlock {
-  clone() {
-    const block = new IfElseBlock();
-    block.initialize();
-    return block;
-  }
-
   removable = true;
   duplicateable = true;
 
-  condSocket: SingleInSocket;
-  whenSocket: MultiInSocket;
-  thenSocket: SingleOutSocket;
-  elseSocket: SingleOutSocket;
-
-  initialize(): void {
-    this.condSocket = new SingleInSocket();
-    this.condSocket.type = "D";
-    this.condSocket.label = "condition";
-    this.condSocket.path = PATH_IN_ELIPSE;
-    this.addSocket(Direction.TOP, this.condSocket);
-
-    this.whenSocket = new MultiInSocket();
-    this.whenSocket.type = "E";
-    this.whenSocket.label = "when";
-    this.whenSocket.path = PATH_IN_TRIANGLE;
-    this.addSocket(Direction.LEFT, this.whenSocket);
-
-    this.thenSocket = new SingleOutSocket();
-    this.thenSocket.type = "E";
-    this.thenSocket.label = "then";
-    this.thenSocket.path = PATH_OUT_TRIANGLE;
-    this.addSocket(Direction.BOTTOM, this.thenSocket);
-
-    this.elseSocket = new SingleOutSocket();
-    this.elseSocket.type = "E";
-    this.elseSocket.label = "else";
-    this.elseSocket.path = PATH_OUT_TRIANGLE;
-    this.addSocket(Direction.BOTTOM, this.elseSocket);
-  }
-
   boardWidth: number = 200;
   boardHeight: number = 50;
+
+  get condSocket() {
+    return this.getSocketByName("cond") as SingleInSocket;
+  }
+  get whenSocket() {
+    return this.getSocketByName("when") as MultiInSocket;
+  }
+  get thenSocket() {
+    return this.getSocketByName("then") as SingleOutSocket;
+  }
+  get elseSocket() {
+    return this.getSocketByName("else") as SingleOutSocket;
+  }
+
+  socketUpdater(useSocket: UseSocket): void {
+    useSocket("cond", SingleInSocket, {
+      type: "D",
+      path: PATH_IN_ELIPSE,
+      direction: Direction.TOP,
+    });
+    useSocket("when", MultiInSocket, {
+      type: "E",
+      path: PATH_IN_TRIANGLE,
+      direction: Direction.LEFT,
+    });
+    useSocket("then", SingleOutSocket, {
+      type: "E",
+      path: PATH_OUT_TRIANGLE,
+      direction: Direction.BOTTOM,
+    });
+    useSocket("else", SingleOutSocket, {
+      type: "E",
+      path: PATH_OUT_TRIANGLE,
+      direction: Direction.BOTTOM,
+    });
+  }
 
   contentMain = (_: Context) => {
     _.$cls`absolute flex items-center left-0 top-0 justify-around text-gray-600`;
@@ -68,23 +68,6 @@ export class IfElseBlock extends RectBlock implements SpecialBlock {
 
   getProps(): PropsData {
     return [];
-  }
-
-  protected exportData() {
-    return {
-      ...super.exportData(),
-      condSocket: this.condSocket.id,
-      inputSocket: this.whenSocket.id,
-      thenSocket: this.thenSocket.id,
-      elseSocket: this.elseSocket.id,
-    };
-  }
-  protected importData(data: any, sockets: any): void {
-    super.importData(data, sockets);
-    this.condSocket = sockets[data.condSocket];
-    this.whenSocket = sockets[data.inputSocket];
-    this.thenSocket = sockets[data.thenSocket];
-    this.elseSocket = sockets[data.elseSocket];
   }
 
   toOutput(): IfBlockOutput {
