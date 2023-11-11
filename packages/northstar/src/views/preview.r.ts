@@ -2,17 +2,21 @@
 import { HTMLElementComponent, ref, view } from "refina";
 
 import runtimeURL from "@quasi-dev/runtime/src/index.ts?url";
-import iframeURL from "./iframe/index.html?url";
-import mduiStyleContent from "@quasi-dev/runtime/styles.min.css?raw"; // Used in production
 import mduiStyleUrl from "@quasi-dev/runtime/styles.css?url"; // Used in development
+import mduiStyleContent from "@quasi-dev/runtime/styles.min.css?raw"; // Used in production
+import iframeURL from "./iframe/index.html?url";
 
+import { compileTailwindCSS } from "@quasi-dev/browser-tailwind";
 import { Compiler } from "@quasi-dev/compiler";
 import { RefinaTransformer } from "@refina/transformer";
 import { toOutput } from "../utils/toOutpus";
 
 const transformer = new RefinaTransformer();
 
-let code = "";
+let code = {
+  js: "",
+  css: "",
+};
 let codeModified = true;
 let errorReported = false;
 const iframe = ref<HTMLElementComponent<"iframe">>();
@@ -21,7 +25,16 @@ let errorMsg = "";
 export async function startPreview() {
   const compiler = new Compiler(toOutput());
   compiler.runtimeModuleURL = runtimeURL;
-  code = await compiler.compile();
+  code.js = transformer.transform("$", await compiler.compile());
+  code.css = (
+    await compileTailwindCSS(
+      `@tailwind base;
+  @tailwind components;
+  @tailwind utilities;`,
+      code.js,
+      "js",
+    )
+  ).css;
   codeModified = true;
   errorReported = false;
   errorMsg = "";
@@ -79,15 +92,17 @@ error: ${error}`;
         _.$update();
       };
 
-      const scriptNode = iframeNode.contentDocument!.getElementById("app-script")!;
-      const transfomedCode = transformer.transform("$", code);
-      scriptNode.innerHTML = transfomedCode;
+      const scriptNode = iframeNode.contentDocument!.getElementById("app-script") as HTMLScriptElement;
+      scriptNode.innerHTML = code.js;
+
+      const styleNode = iframeNode.contentDocument!.getElementById("app-style") as HTMLStyleElement;
+      styleNode.innerHTML = code.css;
 
       if (import.meta.env.DEV) {
-        const styleNode = iframeNode.contentDocument!.getElementById("app-style-dev") as HTMLLinkElement;
+        const styleNode = iframeNode.contentDocument!.getElementById("mdui-style-dev") as HTMLLinkElement;
         styleNode.href = mduiStyleUrl;
       } else {
-        const styleNode = iframeNode.contentDocument!.getElementById("app-style") as HTMLStyleElement;
+        const styleNode = iframeNode.contentDocument!.getElementById("mdui-style") as HTMLStyleElement;
         styleNode.innerHTML = mduiStyleContent;
       }
     };

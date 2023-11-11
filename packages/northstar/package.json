@@ -24,6 +24,7 @@
   },
   "dependencies": {
     "@quasi-dev/block-data": "workspace:^",
+    "@quasi-dev/browser-tailwind": "workspace:^",
     "@quasi-dev/compiler": "workspace:^",
     "@quasi-dev/runtime": "workspace:^",
     "@quasi-dev/visual-flow": "workspace:^",
