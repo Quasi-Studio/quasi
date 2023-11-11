@@ -1,7 +1,8 @@
 import postcss from "postcss";
 import tailwindcss, { Config } from "tailwindcss";
 import {
-  VIRTUAL_HTML_FILENAME,
+  VIRTUAL_CONTENT_EXTNAME,
+  VIRTUAL_CONTENT_FILENAME,
   VIRTUAL_SOURCE_PATH,
 } from "./polyfill/constants";
 
@@ -12,14 +13,16 @@ self.process = {
 
 export async function compileTailwindCSS(
   cssInput: string,
-  htmlInput: string,
+  contentInput: string,
+  extname: string,
   config: Config | {} = {},
   plugins = [],
 ) {
+  self[VIRTUAL_CONTENT_EXTNAME] = extname;
   // Tailwind scans the config.content for files to parse classNames -> set a virtual file here
-  if ("content" in config) {
-    self[VIRTUAL_HTML_FILENAME] = htmlInput;
-    config.content = [VIRTUAL_HTML_FILENAME];
+  if (!("content" in config)) {
+    self[VIRTUAL_CONTENT_FILENAME] = contentInput;
+    (config as Config).content = [VIRTUAL_CONTENT_FILENAME];
   }
   return await postcss([
     tailwindcss(config as Config),
