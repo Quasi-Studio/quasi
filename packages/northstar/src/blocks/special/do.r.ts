@@ -66,13 +66,14 @@ export class DoBlock extends RectBlock {
     return [
       {
         name: "number",
-        type: "text",
+        type: "number",
+        min: 2,
+        max: 5,
         getVal: () => {
-          return this.thenNum.toString();
+          return this.thenNum;
         },
         setVal: val => {
-          const length = parseInt(val);
-          this.thenNum = isNaN(length) ? 0 : length;
+          this.thenNum = val;
         },
       },
       {
