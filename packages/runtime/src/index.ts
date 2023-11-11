@@ -10,3 +10,6 @@ export * from "./textNode.r";
 
 import QuasiRuntime from "./plugin";
 export default QuasiRuntime;
+
+import * as refina from "refina";
+export { refina };

@@ -8,13 +8,13 @@ import EsTreePlugin from "prettier/plugins/estree";
 export class Compiler {
   constructor(public input: QuasiOutput) {}
 
-  refinaModuleURL = "refina";
   runtimeModuleURL = "@quasi-dev/runtime";
 
   async compile() {
     const code = `
-import { app, view } from "${this.refinaModuleURL}";
 import QuasiRuntime, * as $quasi from "${this.runtimeModuleURL}";
+
+const { app, view } = $quasi.refina;
 
 ${this.input.views
   .map((v) => {

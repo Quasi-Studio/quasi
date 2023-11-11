@@ -1,7 +1,6 @@
 /// <reference types="vite/client" />
 import { HTMLElementComponent, ref, view } from "refina";
 
-import refinaURL from "refina/src/index.ts?url";
 import runtimeURL from "@quasi-dev/runtime/src/index.ts?url";
 import iframeURL from "./iframe/index.html?url";
 import mduiStyleContent from "@quasi-dev/runtime/styles.min.css?raw"; // Used in production
@@ -21,7 +20,6 @@ let errorMsg = "";
 
 export async function startPreview() {
   const compiler = new Compiler(toOutput());
-  compiler.refinaModuleURL = refinaURL;
   compiler.runtimeModuleURL = runtimeURL;
   code = await compiler.compile();
   codeModified = true;
