@@ -1,0 +1,30 @@
+{
+  "name": "@quasi-dev/browser-tailwind",
+  "version": "0.0.0",
+  "description": "Compile Tailwind CSS in the browser",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "check": "tsc --noEmit",
+    "build": "vite build"
+  },
+  "main": "./dist/browser-tailwind.js",
+  "types": "./src/index.ts",
+  "exports": {
+    ".": {
+      "default": "./dist/browser-tailwind.js",
+      "import": "./dist/browser-tailwind.js",
+      "types": "./src/index.ts"
+    }
+  },
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^25.0.7",
+    "@rollup/plugin-node-resolve": "^15.2.3",
+    "typescript": "^5.1.6",
+    "vite": "^4.4.8"
+  },
+  "dependencies": {
+    "postcss": "^8.4.31",
+    "tailwindcss": "^3.3.5"
+  }
+}
