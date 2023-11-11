@@ -28,8 +28,20 @@ export interface ReadonlyPropData extends PropDataBase {
    */
   setVal(val: string): void;
 }
+export interface NumberPropData extends PropDataBase {
+  type: "number";
+  min: number;
+  max: number;
+  getVal(): number;
+  setVal(val: number): void;
+}
 
-export type PropData = TextPropData | SwitchPropData | DropdownPropData | ReadonlyPropData;
+export type PropData =
+  | TextPropData
+  | SwitchPropData
+  | DropdownPropData
+  | ReadonlyPropData
+  | NumberPropData;
 export type PropsData = PropData[];
 
 export function mergeProps([props0, ...propsRest]: PropsData[]) {

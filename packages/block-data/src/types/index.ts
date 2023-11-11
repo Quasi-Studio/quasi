@@ -225,7 +225,34 @@ export function readonlyProp(name: string, value: string): ReadonlyProp {
   };
 }
 
-export type Prop = TextProp | SwitchProp | DropdownProp | ReadonlyProp;
+export interface NumberProp extends PropBase {
+  type: "number";
+  defaultVal: number;
+  min: number;
+  max: number;
+}
+
+export function numberProp(
+  name: string,
+  defaultVal: number,
+  min: number = -Infinity,
+  max: number = Infinity,
+): NumberProp {
+  return {
+    name,
+    type: "number",
+    defaultVal,
+    min,
+    max,
+  };
+}
+
+export type Prop =
+  | TextProp
+  | SwitchProp
+  | DropdownProp
+  | ReadonlyProp
+  | NumberProp;
 export type Props = Prop[];
 
 export interface ComponentInfo {
