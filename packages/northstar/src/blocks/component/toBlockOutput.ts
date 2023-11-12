@@ -92,7 +92,7 @@ export function toBlockOutput(block: ComponentBlock) {
     type: "component",
     func: block.componentType,
     id: block.id,
-    name: block.info.name,
+    name: block.info.name(block.props),
     modelAllocator: block.info.modelAllocator,
     callbacks,
     props,

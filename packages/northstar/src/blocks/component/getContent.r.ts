@@ -6,6 +6,7 @@ import { currentGraph } from "../../store";
 export function getContent(block: ComponentBlock) {
   const {
     info: { inputs, contents, name },
+    props,
   } = block;
 
   const info =
@@ -14,7 +15,7 @@ export function getContent(block: ComponentBlock) {
 
   const title = (_: Context) => {
     _.$cls`mx-2 text-sm`;
-    _.span(name);
+    _.span(name(props));
   };
 
   if (!info) return title;

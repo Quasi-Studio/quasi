@@ -49,7 +49,7 @@ export default view(_ => {
               _.div(_ => {
                 _.img("https://via.placeholder.com/80x80?text=" + k);
                 _.$cls`text-center text-sm overflow-hidden`;
-                _.div(v.name);
+                _.div(v.name({}));
               });
             },
             () => {

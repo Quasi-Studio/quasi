@@ -259,7 +259,7 @@ export interface ComponentInfo {
   /**
    * Display name
    */
-  name: string;
+  name: (props: Record<string, any>) => string;
 
   modelAllocator: string | null;
 
@@ -275,7 +275,7 @@ export interface ComponentInfo {
 }
 
 export function component(
-  name: string,
+  name: string | ((props: Record<string, any>) => string),
   modelAllocator: string | null,
   contents: ContentInfo[] | ContentInfo = [],
   inputs: InputInfo[] | InputInfo = [],
@@ -289,7 +289,7 @@ export function component(
     return Array.isArray(v) ? v : [v];
   }
   return {
-    name,
+    name: typeof name === "string" ? () => name : name,
     modelAllocator,
     contents: toArray(contents),
     inputs: toArray(inputs),
