@@ -55,9 +55,7 @@ export default {
     event("onInput", t.string, "as-hided-socket"),
     method("clear", [], "as-hided-socket"),
     plugin("validator", "input-plugin"),
-    [
-      textProp("class"),
-    ],
+    [textProp("class"), textProp("initial")],
   ),
 
   appbar: component(
