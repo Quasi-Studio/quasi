@@ -120,6 +120,7 @@ export default view(_ => {
             });
         } catch (e) {
           buildOutput = `${e}`;
+          console.error(e);
         }
       } else {
         buildOutput = "Building...";
