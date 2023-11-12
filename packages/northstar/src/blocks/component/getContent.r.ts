@@ -23,28 +23,27 @@ export function getContent(block: ComponentBlock) {
     _.$cls`text-gray-600`;
     title(_);
 
-    if (!block.getPrimaryDisabled()) {
-      const propagationStopper = (ev: Event) => ev.stopPropagation();
-      _._span(
-        {
-          onmousedown: propagationStopper,
-          onmouseup: propagationStopper,
-          onclick: propagationStopper,
-          onkeydown: propagationStopper,
-        },
-        _ => {
-          const inputRef = ref<FUnderlineTextInput>();
-          _.$css`font-family: Consolas; max-width: 108px; padding-left:4px`;
-          _.$ref(inputRef) && _.fUnderlineTextInput(block.primaryValue, false, info.name);
-          inputRef.current!.inputRef.current!.node.onchange = () => {
-            currentGraph.pushRecord();
-          };
-          inputRef.current!.inputRef.current!.node.onfocus = () => {
-            currentGraph.addSelectedBlock(block, false);
-            _.$update();
-          };
-        },
-      );
-    }
+    const propagationStopper = (ev: Event) => ev.stopPropagation();
+    block.getPrimaryDisabled() && _.$cls`invisible`;
+    _._span(
+      {
+        onmousedown: propagationStopper,
+        onmouseup: propagationStopper,
+        onclick: propagationStopper,
+        onkeydown: propagationStopper,
+      },
+      _ => {
+        const inputRef = ref<FUnderlineTextInput>();
+        _.$css`font-family: Consolas; max-width: 108px; padding-left:4px`;
+        _.$ref(inputRef) && _.fUnderlineTextInput(block.primaryValue, false, info.name);
+        inputRef.current!.inputRef.current!.node.onchange = () => {
+          currentGraph.pushRecord();
+        };
+        inputRef.current!.inputRef.current!.node.onfocus = () => {
+          currentGraph.addSelectedBlock(block, false);
+          _.$update();
+        };
+      },
+    );
   };
 }
