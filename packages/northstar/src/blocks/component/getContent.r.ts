@@ -36,6 +36,10 @@ export function getContent(block: ComponentBlock) {
         inputRef.current!.inputRef.current!.node.onchange = () => {
           currentGraph.pushRecord();
         };
+        inputRef.current!.inputRef.current!.node.onfocus = () => {
+          currentGraph.addSelectedBlock(block, false);
+          _.$update();
+        };
       },
     );
   };
