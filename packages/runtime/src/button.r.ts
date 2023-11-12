@@ -3,6 +3,7 @@ import QuasiRuntime from "./plugin";
 
 export interface ButtonProps {
   inner: Content;
+  class: string;
   color: "primary" | "accent" | "unset";
   raised: boolean;
   disabled: boolean;
@@ -14,6 +15,7 @@ export interface ButtonProps {
 @QuasiRuntime.outputComponent("button")
 export class QButton extends OutputComponent {
   main(_: ComponentContext<this>, props: ButtonProps): void {
+    _.$cls(props.class);
     if (
       _.mdIntrinsicButton(
         props.inner,

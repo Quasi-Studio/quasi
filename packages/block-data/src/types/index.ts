@@ -310,9 +310,29 @@ export const t = {
 };
 
 export function contentWrapper(name: string) {
-  return component(name, null, content("inner", "as-primary-and-socket"));
+  return component(
+    name,
+    null,
+    content("inner", "as-primary-and-socket"),
+    [],
+    [],
+    [],
+    [],
+    [],
+    [textProp("class")],
+  );
 }
 
 export function layer(name: string) {
-  return component(name, null, content("inner", "as-socket"));
+  return component(
+    name,
+    null,
+    content("inner", "as-socket"),
+    [],
+    [],
+    [],
+    [],
+    [],
+    [textProp("class")],
+  );
 }
