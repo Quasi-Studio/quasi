@@ -73,6 +73,18 @@ export default {
     ],
   ),
 
+  list: component(
+    "List",
+    "ListModel",
+    content("inner", "as-socket", Direction.BOTTOM),
+    input("data", "iterable"),
+    output("current", "unknown", "as-socket", Direction.RIGHT),
+    [],
+    [],
+    [],
+    [textProp("class"), textProp("key", "$index")],
+  ),
+
   forEach: component(
     "For each",
     "ForEachModel",

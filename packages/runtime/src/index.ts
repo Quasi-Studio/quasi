@@ -4,6 +4,7 @@ export * from "./div.r";
 export * from "./forEach.r";
 export * from "./ifElse.r";
 export * from "./input.r";
+export * from "./list.r";
 export * from "./paragraph.r";
 export * from "./span.r";
 export * from "./textNode.r";
@@ -11,5 +12,4 @@ export * from "./textNode.r";
 import QuasiRuntime from "./plugin";
 export default QuasiRuntime;
 
-import * as refina from "refina";
-export { refina };
+export * as refina from "refina";
