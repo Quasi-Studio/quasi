@@ -85,6 +85,37 @@ export default {
     [textProp("class"), textProp("key", "$index")],
   ),
 
+  table: component(
+    "Table",
+    "TableModel",
+    content("inner", "as-socket", Direction.BOTTOM),
+    input("data", "iterable"),
+    [
+      output("current", "unknown", "as-hidable-socket", Direction.RIGHT),
+      output("renderingState", "unknown", "as-hided-socket", Direction.RIGHT),
+    ],
+    [],
+    [],
+    [],
+    [textProp("class"), textProp("key", "$index")],
+  ),
+
+  tableCol: component(
+    "Table Col",
+    "TableColModel",
+    content("inner"),
+    input("prop", "string", "as-primary"),
+    output("value", "unknown", "as-hidable-socket", Direction.TOP),
+    [],
+    [],
+    [],
+    [
+      textProp("head class"),
+      textProp("cell class"),
+      textProp("header", "$prop"),
+    ],
+  ),
+
   forEach: component(
     "For each",
     "ForEachModel",

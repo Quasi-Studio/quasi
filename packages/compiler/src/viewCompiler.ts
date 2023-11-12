@@ -400,7 +400,7 @@ const ${this.view.name}_view = ${
       ...this.compileComponentPlugins(block.plugins),
       ...this.compileComponentChildren(block.children),
     })
-      .map(([k, v]) => `${k}:${v}`)
+      .map(([k, v]) => `"${k}":${v}`)
       .join(",\n")}
   });`;
   }

@@ -7,6 +7,8 @@ export * from "./input.r";
 export * from "./list.r";
 export * from "./paragraph.r";
 export * from "./span.r";
+export * from "./table.r";
+export * from "./tableItem.r";
 export * from "./textNode.r";
 
 import QuasiRuntime from "./plugin";
