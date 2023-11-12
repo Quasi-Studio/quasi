@@ -28,7 +28,7 @@ app.use(FluentUI).use(Vf).use(Basics)(_ => {
 
   if (!previewMode.value)
     _.div(_ => {
-      const hasSelectedBlock = [...currentGraph.selectedBlocks].filter(block => !block.pendingClick).length > 0;
+      const hasSelectedBlock = currentGraph.selectedBlocks.size > 0;
 
       _.$cls`absolute left-0 top-8 w-80 bottom-0
    bg-gray-200 select-none z-[1000] border-r border-gray-400 flex flex-col`;
