@@ -82,11 +82,11 @@ export default {
   ),
 
   ifElse: component(
-    "If else",
+    (props) => (props["[else]"] ? "If else" : "If"),
     null,
     [
       content("then", "as-socket", Direction.RIGHT),
-      content("else", "as-socket", Direction.BOTTOM),
+      content("else", "as-hided-socket", Direction.BOTTOM),
     ],
     input("condition", t.boolean),
   ),
