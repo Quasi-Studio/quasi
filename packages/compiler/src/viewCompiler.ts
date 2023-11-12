@@ -4,6 +4,7 @@ import {
   ComponentBlockChildren,
   ComponentBlockOutput,
   ComponentBlockPlugins,
+  ComponentBlockPrimaryInput,
   ComponentBlockProps,
   FuncBlockOutput,
   IfBlockOutput,
@@ -103,13 +104,15 @@ const ${this.view.name}_view = ${
 `;
   }
 
-  compileStringBlock(block: FuncBlockOutput): string {
+  compileStringBlock(
+    block: FuncBlockOutput | Exclude<ComponentBlockPrimaryInput, null>,
+  ): string {
     return `\`${block.value.replace(/\{([a-zA-Z0-9]+)\}/g, (_, name) => {
-      const input = block.inputs.find((i) => i.slot === name);
-      if (!input) {
-        throw new Error(`Cannot find input ${name} in block ${block.id}`);
+      const slot = Object.entries(block.slots).find(([k]) => k === name);
+      if (!slot) {
+        throw new Error(`Cannot find input ${name}`);
       }
-      return `\${${this.compileDataLineEnd(input)}}`;
+      return `\${${this.compileDataLineEnd(slot[1])}}`;
     })}\``;
   }
 
@@ -117,11 +120,11 @@ const ${this.view.name}_view = ${
     block: FuncBlockOutput | StateBlockOutput | StateSetterBlockOutput,
   ): string {
     return block.value.replace(/\$([a-zA-Z0-9]+)/g, (_, name) => {
-      const input = block.inputs.find((i) => i.slot === name);
-      if (!input) {
+      const slot = Object.entries(block.slots).find(([k]) => k === name);
+      if (!slot) {
         throw new Error(`Cannot find input ${name} in block ${block.id}`);
       }
-      return `(${this.compileDataLineEnd(input)})`;
+      return `(${this.compileDataLineEnd(slot[1])})`;
     });
   }
 
@@ -198,11 +201,11 @@ const ${this.view.name}_view = ${
       const result = (() => {${block.value.replace(
         /\$([a-zA-Z0-9]+)/g,
         (_, name) => {
-          const input = block.inputs.find((i) => i.slot === name);
-          if (!input) {
+          const slot = Object.entries(block.slots).find(([k]) => k === name);
+          if (!slot) {
             throw new Error(`Cannot find input ${name} in block ${block.id}`);
           }
-          return `(${this.compileDataLineEnd(input)})`;
+          return `(${this.compileDataLineEnd(slot[1])})`;
         },
       )}})();
       ${this.compileEventLineStart(block.then)};
@@ -331,6 +334,13 @@ const ${this.view.name}_view = ${
     return modelId;
   }
 
+  compileComponentPrimaryInput(
+    primaryInput: ComponentBlockPrimaryInput,
+  ): Record<string, string> {
+    if (!primaryInput) return {};
+    return { [primaryInput.name]: this.compileStringBlock(primaryInput) };
+  }
+
   compileComponentProps(props: ComponentBlockProps): Record<string, string> {
     return Object.fromEntries(
       Object.entries(props).map(([k, v]) => {
@@ -395,6 +405,7 @@ const ${this.view.name}_view = ${
       : ""
   }{
     ${Object.entries({
+      ...this.compileComponentPrimaryInput(block.primaryInput),
       ...this.compileComponentProps(block.props),
       ...this.compileComponentCallbacks(block.callbacks),
       ...this.compileComponentPlugins(block.plugins),

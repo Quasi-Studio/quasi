@@ -11,6 +11,12 @@ export type ComponentBlockPlugins = Record<string, string>;
  */
 export type ComponentBlockChildren = Record<string, string | number[]>;
 
+export type ComponentBlockPrimaryInput = {
+  name: string;
+  value: string;
+  slots: Record<string, ConnectTo>;
+} | null;
+
 export interface ComponentBlockOutput {
   type: "component";
   id: number;
@@ -43,4 +49,8 @@ export interface ComponentBlockOutput {
    * 子元素的block的id
    */
   children: ComponentBlockChildren;
+  /**
+   * Primary input的信息
+   */
+  primaryInput: ComponentBlockPrimaryInput;
 }

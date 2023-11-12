@@ -1,4 +1,5 @@
 import type {
+  ConnectTo,
   FuncBlockOutput,
   FuncBlockTypes,
   ImpBlockOutput,
@@ -149,20 +150,19 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
   }
 
   toOutput(): FuncBlockOutput | ValidatorBlockOutput | ImpBlockOutput | StateBlockOutput | StateSetterBlockOutput {
-    const inputs = [];
+    const slots: Record<string, ConnectTo> = {};
     for (const socket of this.inputSockets) {
-      inputs.push({
-        slot: socket.label,
+      slots[socket.label] = {
         blockId: socket.connectedLine?.a.block.id ?? NaN,
         socketName: socket.connectedLine?.a.label ?? "",
-      });
+      };
     }
 
     return {
       type: this.type as any,
       id: this.id,
       value: this.inputValue.value,
-      inputs,
+      slots,
       output: multiOutSocketToOutput(this.outputSocket),
     };
   }

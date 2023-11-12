@@ -43,20 +43,7 @@ export interface FuncBlockOutput {
   type: Exclude<FuncBlockTypes, "imp" | "validator" | "state" | "state-setter">;
   id: number;
   value: string;
-  inputs: {
-    /**
-     * slot name. i.e. function parameter name
-     */
-    slot: string;
-    /**
-     * connected block id
-     */
-    blockId: number;
-    /**
-     * connected line start end socket name
-     */
-    socketName: string;
-  }[];
+  slots: Record<string, ConnectTo>;
   output: ConnectTo[];
 }
 

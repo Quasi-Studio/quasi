@@ -1,10 +1,28 @@
+import { directionNameMap, directionMap } from "@quasi-dev/visual-flow";
 import { PropData, PropsData } from "../../utils/props";
 import { ComponentBlock } from "./block";
 
 export function getProps(block: ComponentBlock): PropsData {
   const { info } = block;
 
+  const slotPos: PropData[] = [];
+  const primaryInputInfo = block.primaryInputInfo;
+  if (primaryInputInfo) {
+    slotPos.push({
+      name: "slots pos",
+      type: "dropdown",
+      options: ["TOP", "BOTTOM"],
+      getVal: () => {
+        return directionNameMap[block.slotsDirection];
+      },
+      setVal: (val) => {
+        block.slotsDirection = directionMap[val];
+      },
+    });
+  }
+
   return [
+    ...slotPos,
     ...info.props.map(
       (v) =>
         ({
@@ -37,8 +55,7 @@ export function getProps(block: ComponentBlock): PropsData {
             type: "switch",
             getVal: () => {
               return (
-                block.props[`[${v.name}]`] ??
-                v.kind === "as-hidable-socket"
+                block.props[`[${v.name}]`] ?? v.kind === "as-hidable-socket"
               );
             },
             setVal: (val: any) => {

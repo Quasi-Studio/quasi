@@ -51,11 +51,36 @@ export class ComponentBlock extends RectBlock {
   info: ComponentInfo;
   props: Record<string, string | boolean> = {};
 
+  get primaryInputInfo() {
+    return (
+      this.info.inputs.find(
+        (input) =>
+          input.kind === "as-primary" || input.kind === "as-primary-and-socket",
+      ) ??
+      this.info.contents.find(
+        (content) =>
+          content.kind === "as-primary" ||
+          content.kind === "as-primary-and-socket",
+      )
+    );
+  }
+
   primaryValue = d("");
   get primaryFilled() {
     return this.primaryValue.value !== "";
   }
   getPrimaryDisabled = () => false;
+
+  slotsDirection = Direction.TOP;
+  get slots() {
+    const template = this.primaryValue.value;
+    const matches = template.matchAll(/\{[a-zA-Z0-9_]+\}/g);
+    return [...matches].map((match) => match[0].slice(1, -1));
+  }
+
+  get slotSockets() {
+    return this.getSocketsByPrefix("slot") as SingleInSocket[];
+  }
 
   socketUpdater(useSocket: UseSocket): void {
     const { contents, events, inputs, outputs, methods } = this.info;
@@ -66,6 +91,17 @@ export class ComponentBlock extends RectBlock {
       hideLabel: true,
       direction: Direction.LEFT,
     });
+
+    if (this.primaryInputInfo) {
+      for (const slot of this.slots) {
+        useSocket(`slot-${slot}`, SingleInSocket, {
+          label: slot,
+          type: "D",
+          path: PATH_IN_ELIPSE,
+          direction: this.slotsDirection,
+        });
+      }
+    }
 
     const shouldHideSocket = (socketInfo: { kind: string; name: string }) => {
       const prop = this.props[`[${socketInfo.name}]`];
@@ -145,6 +181,7 @@ export class ComponentBlock extends RectBlock {
       componentType: this.componentType,
       props: this.props,
       primaryValue: this.primaryValue.value,
+      slotsDirection: this.slotsDirection,
     };
   }
   protected importData(data: any, sockets: Record<number, Socket>): void {
@@ -153,6 +190,7 @@ export class ComponentBlock extends RectBlock {
     this.info = blocksObj[data.componentType as keyof typeof blocksObj];
     this.props = data.props;
     this.primaryValue.value = data.primaryValue;
+    this.slotsDirection = data.slotsDirection;
     this.content = getContent(this);
   }
 }
