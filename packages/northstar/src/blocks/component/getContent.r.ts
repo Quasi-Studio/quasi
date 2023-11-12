@@ -1,7 +1,7 @@
-import { Context, ref } from "refina";
-import { ComponentBlock } from "./block";
 import { FUnderlineTextInput } from "@refina/fluentui";
+import { Context, ref } from "refina";
 import { currentGraph } from "../../store";
+import { ComponentBlock } from "./block";
 
 export function getContent(block: ComponentBlock) {
   const {
@@ -23,25 +23,28 @@ export function getContent(block: ComponentBlock) {
     _.$cls`text-gray-600`;
     title(_);
 
-    _._span(
-      {
-        onmousedown: ev => ev.stopPropagation(),
-        onmouseup: ev => ev.stopPropagation(),
-        onclick: ev => ev.stopPropagation(),
-        onkeydown: ev => ev.stopPropagation(),
-      },
-      _ => {
-        const inputRef = ref<FUnderlineTextInput>();
-        _.$css`font-family: Consolas; max-width: 108px; padding-left:4px`;
-        _.$ref(inputRef) && _.fUnderlineTextInput(block.primaryValue, block.getPrimaryDisabled(), info.name);
-        inputRef.current!.inputRef.current!.node.onchange = () => {
-          currentGraph.pushRecord();
-        };
-        inputRef.current!.inputRef.current!.node.onfocus = () => {
-          currentGraph.addSelectedBlock(block, false);
-          _.$update();
-        };
-      },
-    );
+    if (!block.getPrimaryDisabled()) {
+      const propagationStopper = (ev: Event) => ev.stopPropagation();
+      _._span(
+        {
+          onmousedown: propagationStopper,
+          onmouseup: propagationStopper,
+          onclick: propagationStopper,
+          onkeydown: propagationStopper,
+        },
+        _ => {
+          const inputRef = ref<FUnderlineTextInput>();
+          _.$css`font-family: Consolas; max-width: 108px; padding-left:4px`;
+          _.$ref(inputRef) && _.fUnderlineTextInput(block.primaryValue, false, info.name);
+          inputRef.current!.inputRef.current!.node.onchange = () => {
+            currentGraph.pushRecord();
+          };
+          inputRef.current!.inputRef.current!.node.onfocus = () => {
+            currentGraph.addSelectedBlock(block, false);
+            _.$update();
+          };
+        },
+      );
+    }
   };
 }
