@@ -24,7 +24,7 @@ type ContentDisplay =
   | "as-socket"
   | "as-primary"
   | "as-primary-and-socket"
-  | "as-hided-socket"
+  | "as-hidden-socket"
   | "as-hidable-socket";
 
 export interface ContentInfo {
@@ -49,7 +49,7 @@ type InputDisplay =
   | "as-socket"
   | "as-primary"
   | "as-primary-and-socket"
-  | "as-hided-socket"
+  | "as-hidden-socket"
   | "as-hidable-socket";
 
 export interface InputInfo {
@@ -73,7 +73,7 @@ export function input(
   };
 }
 
-type OutputDisplay = "as-socket" | "as-hided-socket" | "as-hidable-socket";
+type OutputDisplay = "as-socket" | "as-hidden-socket" | "as-hidable-socket";
 
 export interface OutputInfo {
   name: string;
@@ -96,7 +96,7 @@ export function output(
   };
 }
 
-type EventDisplay = "as-socket" | "as-hided-socket" | "as-hidable-socket";
+type EventDisplay = "as-socket" | "as-hidden-socket" | "as-hidable-socket";
 
 export interface EventInfo {
   name: string;
@@ -119,7 +119,7 @@ export function event(
   };
 }
 
-type MethodDisplay = "as-socket" | "as-hided-socket" | "as-hidable-socket";
+type MethodDisplay = "as-socket" | "as-hidden-socket" | "as-hidable-socket";
 
 export interface MethodInfo {
   name: string;

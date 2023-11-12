@@ -52,8 +52,8 @@ export default {
     [],
     input("label", "string", "as-primary"),
     output("value", "string"),
-    event("onInput", t.string, "as-hided-socket"),
-    method("clear", [], "as-hided-socket"),
+    event("onInput", t.string, "as-hidden-socket"),
+    method("clear", [], "as-hidden-socket"),
     plugin("validator", "input-plugin"),
     [textProp("class"), textProp("initial")],
   ),
@@ -92,7 +92,7 @@ export default {
     input("data", "iterable"),
     [
       output("current", "unknown", "as-hidable-socket", Direction.RIGHT),
-      output("renderingState", "unknown", "as-hided-socket", Direction.RIGHT),
+      output("renderingState", "unknown", "as-hidden-socket", Direction.RIGHT),
     ],
     [],
     [],
@@ -129,7 +129,7 @@ export default {
     null,
     [
       content("then", "as-socket", Direction.RIGHT),
-      content("else", "as-hided-socket", Direction.BOTTOM),
+      content("else", "as-hidden-socket", Direction.BOTTOM),
     ],
     input("condition", t.boolean),
   ),

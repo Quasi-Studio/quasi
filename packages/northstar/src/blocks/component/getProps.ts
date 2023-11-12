@@ -28,7 +28,7 @@ export function getProps(block: ComponentBlock): PropsData {
       ...info.methods,
     ]
       .filter(
-        (v) => v.kind === "as-hidable-socket" || v.kind === "as-hided-socket",
+        (v) => v.kind === "as-hidable-socket" || v.kind === "as-hidden-socket",
       )
       .map(
         (v) =>

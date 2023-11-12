@@ -70,7 +70,7 @@ export class ComponentBlock extends RectBlock {
     const shouldHideSocket = (socketInfo: { kind: string; name: string }) => {
       const prop = this.props[`[${socketInfo.name}]`];
       return (
-        (socketInfo.kind === "as-hided-socket" && prop !== true) ||
+        (socketInfo.kind === "as-hidden-socket" && prop !== true) ||
         (socketInfo.kind === "as-hidable-socket" && prop === false) ||
         (socketInfo.kind === "as-primary-and-socket" && this.primaryFilled)
       );
