@@ -1,4 +1,5 @@
-import postcss from "postcss";
+//@ts-nocheck
+import postcss, { Plugin } from "postcss";
 import tailwindcss, { Config } from "tailwindcss";
 import {
   VIRTUAL_CONTENT_EXTNAME,
@@ -16,7 +17,7 @@ export async function compileTailwindCSS(
   contentInput: string,
   extname: string,
   config: Config | {} = {},
-  plugins = [],
+  plugins: Plugin[] = [],
 ) {
   self[VIRTUAL_CONTENT_EXTNAME] = extname;
   // Tailwind scans the config.content for files to parse classNames -> set a virtual file here
