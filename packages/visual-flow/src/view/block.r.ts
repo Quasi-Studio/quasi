@@ -1,33 +1,42 @@
 import { ComponentContext, OutputComponent, byIndex, byProp } from "refina";
 import { Block } from "../model";
 import Vf from "../plugin";
-import styles from "./block.styles";
+import styles, { PADDING_FOR_SOCKETS } from "./block.styles";
 
 @Vf.outputComponent("vfBlock")
 export class VfBlock extends OutputComponent {
   main(_: ComponentContext<this>, model: Block): void {
     const { x, y } = model.attached ? model.graphPos : model.pagePos;
+    const padding = PADDING_FOR_SOCKETS * model.graph.boardScale;
 
     styles.root(model.selected, model.attached, model.predicting)(_);
     _.$css`left:${x}px;top:${y}px;z-index:${model.attached ? model.zIndex : 10000}`;
     _.$ref(model.ref) &&
       _._div({}, _ => {
         styles.svg(_);
+        _.$css`left:${-padding}px; top:${-padding}px`;
         _._svgSvg(
           {
-            width: model.boundingRectBoardWidth * model.graph.boardScale + 30,
-            height: model.boundingRectBoardHeight * model.graph.boardScale + 30,
+            width: model.boundingRectBoardWidth * model.graph.boardScale + 2 * padding,
+            height: model.boundingRectBoardHeight * model.graph.boardScale + 2 * padding,
           },
           _ => {
-            styles.bg(model.selected)(_);
-            _.$ref(model.bgRef) &&
-              _._svgPath({
-                d: model.backgroudPath,
-              });
+            _._svgG(
+              {
+                transform: `translate(${padding}, ${padding})`,
+              },
+              _ => {
+                styles.bg(model.selected)(_);
+                _.$ref(model.bgRef) &&
+                  _._svgPath({
+                    d: model.backgroudPath,
+                  });
 
-            _.for(model.allSockets, byProp("id"), socket => {
-              _.vfSocket(socket);
-            });
+                _.for(model.allSockets, byProp("id"), socket => {
+                  _.vfSocket(socket);
+                });
+              },
+            );
           },
         );
 

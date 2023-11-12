@@ -6,6 +6,8 @@ import {
   shorthands,
 } from "@refina/griffel";
 
+export const PADDING_FOR_SOCKETS = 100;
+
 const rootClassName = makeResetStyles({
   position: "absolute",
   width: 0,
@@ -36,8 +38,6 @@ const rootStyles = makeStyles({
 
 const svgClassName = makeResetStyles({
   position: "absolute",
-  top: 0,
-  left: 0,
   ...shorthands.overflow("visible"),
 });
 
