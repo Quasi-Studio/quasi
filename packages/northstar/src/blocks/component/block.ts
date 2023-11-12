@@ -71,28 +71,24 @@ export class ComponentBlock extends RectBlock {
       const prop = this.props[`[${socketInfo.name}]`];
       return (
         (socketInfo.kind === "as-hided-socket" && prop !== true) ||
-        (socketInfo.kind === "as-hidable-socket" && prop === false)
+        (socketInfo.kind === "as-hidable-socket" && prop === false) ||
+        (socketInfo.kind === "as-primary-and-socket" && this.primaryFilled)
       );
     };
 
     for (const content of contents) {
-      if (content.kind === "as-primary") {
-      } else {
-        if (shouldHideSocket(content)) continue;
-        const socket = useSocket(content.name, MultiOutSocket, {
-          type: "L",
-          path: PATH_OUT_RECT,
-          hideLabel: contents.length === 1,
-          disabled:
-            content.kind === "as-primary-and-socket" && this.primaryFilled,
-          direction: content.position ?? Direction.RIGHT,
-        });
+      if (content.kind === "as-primary" || shouldHideSocket(content)) continue;
+      const socket = useSocket(content.name, MultiOutSocket, {
+        type: "L",
+        path: PATH_OUT_RECT,
+        hideLabel: contents.length === 1,
+        direction: content.position ?? Direction.RIGHT,
+      });
 
-        if (content.kind === "as-primary-and-socket") {
-          this.getPrimaryDisabled = () => {
-            return socket.allConnectedLines.length > 0;
-          };
-        }
+      if (content.kind === "as-primary-and-socket") {
+        this.getPrimaryDisabled = () => {
+          return socket.allConnectedLines.length > 0;
+        };
       }
     }
 
@@ -106,22 +102,17 @@ export class ComponentBlock extends RectBlock {
     }
 
     for (const input of inputs) {
-      if (input.kind === "as-primary") {
-      } else {
-        if (shouldHideSocket(input)) continue;
-        const socket = useSocket(input.name, SingleInSocket, {
-          type: "D",
-          path: PATH_IN_ELIPSE,
-          disabled:
-            input.kind === "as-primary-and-socket" && this.primaryFilled,
-          direction: input.position ?? Direction.UP,
-        });
+      if (input.kind === "as-primary" || shouldHideSocket(input)) continue;
+      const socket = useSocket(input.name, SingleInSocket, {
+        type: "D",
+        path: PATH_IN_ELIPSE,
+        direction: input.position ?? Direction.UP,
+      });
 
-        if (input.kind === "as-primary-and-socket") {
-          this.getPrimaryDisabled = () => {
-            return socket.allConnectedLines.length > 0;
-          };
-        }
+      if (input.kind === "as-primary-and-socket") {
+        this.getPrimaryDisabled = () => {
+          return socket.allConnectedLines.length > 0;
+        };
       }
     }
 
