@@ -158,7 +158,7 @@ const ${this.view.name}_view = ${
         );
         break;
       case "expr":
-        if (socketName !== "output") {
+        if (socketName !== "value") {
           throw new Error(
             `Cannot find socket ${socketName} in block ${blockId}`,
           );
