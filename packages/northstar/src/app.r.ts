@@ -1,18 +1,18 @@
+import Monaco from "@quasi-dev/monaco-editor";
 import Vf from "@quasi-dev/visual-flow";
 import Basics from "@refina/basic-components";
 import FluentUI from "@refina/fluentui";
 import { app } from "refina";
 import { currentGraph } from "./store";
+import { duplicateBlocks, hasBlocksToDuplicate, hasBlocksToRemove, removeBlocks } from "./utils";
 import blocksView from "./views/blocks.r";
+import previewView from "./views/preview.r";
 import propertiesView from "./views/properties.r";
 import toolbarView, { graphElRef, previewMode } from "./views/toolbar.r";
-import { isComponentBlock } from "./blocks/component/block";
-import { duplicateBlocks, hasBlocksToDuplicate, hasBlocksToRemove, removeBlocks } from "./utils";
-import previewView from "./views/preview.r";
 
 document.body.spellcheck = false;
 
-app.use(FluentUI).use(Vf).use(Basics)(_ => {
+app.use(FluentUI).use(Vf).use(Basics).use(Monaco)(_ => {
   _.$rootCls`fixed top-0 left-0 right-0 bottom-0`;
 
   _.documentTitle("Quasi Studio");

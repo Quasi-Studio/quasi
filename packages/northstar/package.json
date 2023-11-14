@@ -19,6 +19,7 @@
     "tailwindcss": "^3.3.3",
     "typescript": "^5.1.6",
     "vite": "^4.4.8",
+    "vite-plugin-monaco-editor": "^1.1.0",
     "vite-plugin-refina": "link:..\\..\\..\\refina\\packages\\vite-plugin",
     "vite-plugin-static-copy": "^0.17.0"
   },
@@ -26,6 +27,7 @@
     "@quasi-dev/block-data": "workspace:^",
     "@quasi-dev/browser-tailwind": "workspace:^",
     "@quasi-dev/compiler": "workspace:^",
+    "@quasi-dev/monaco-editor": "workspace:^",
     "@quasi-dev/runtime": "workspace:^",
     "@quasi-dev/visual-flow": "workspace:^",
     "@refina/basic-components": "link:..\\..\\..\\refina\\packages\\basic-components",
