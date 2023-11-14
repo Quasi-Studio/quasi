@@ -8,7 +8,7 @@ export class MonacoEditor extends TriggerComponent<string> {
   // overflowRef = ref<HTMLElementComponent<"div">>();
   editor: monaco.editor.IStandaloneCodeEditor | null = null;
   main(
-    _: ComponentContext<this>,
+    _: ComponentContext,
     initialValue: string,
     language: string,
     options: Omit<

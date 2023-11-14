@@ -6,7 +6,7 @@ import { Direction, Point } from "../types";
 
 @Vf.outputComponent("vfSocket")
 export class VfSocket extends OutputComponent {
-  main(_: ComponentContext<this>, model: Socket): void {
+  main(_: ComponentContext, model: Socket): void {
     styles.root(model.disabled)(_);
     _.$css`transform: translate(${model.blockDisplayX}px, ${model.blockDisplayY}px) scale(${model.graph.boardScale})`;
     _.$ref(model.ref) &&

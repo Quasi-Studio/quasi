@@ -12,7 +12,7 @@ export class ForEachModel {
 
 @QuasiRuntime.outputComponent("forEach")
 export class QForEach extends OutputComponent {
-  main(_: ComponentContext<this>, model: ForEachModel, props: ForEachProps): void {
+  main(_: ComponentContext, model: ForEachModel, props: ForEachProps): void {
     let index = 0;
     for (const v of props.iterable) {
       model.current = v;

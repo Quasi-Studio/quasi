@@ -17,7 +17,7 @@ export class TableModel {
 
 @QuasiRuntime.outputComponent("table")
 export class QTable extends OutputComponent {
-  main(_: ComponentContext<this>, model: TableModel, props: TableProps): void {
+  main(_: ComponentContext, model: TableModel, props: TableProps): void {
     _.provide(currentTableSymbol, model, _ => {
       _.$cls(props.class);
       _.mdTable(

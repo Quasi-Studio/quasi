@@ -14,7 +14,7 @@ export class ListModel {
 
 @QuasiRuntime.outputComponent("list")
 export class QList extends OutputComponent {
-  main(_: ComponentContext<this>, model: ListModel, props: ListProps): void {
+  main(_: ComponentContext, model: ListModel, props: ListProps): void {
     _.$cls(props.class);
     _.mdList(props.data, props.key === "$index" ? byIndex : props.key === "$self" ? bySelf : byProp(props.key), v => {
       model.current = v;

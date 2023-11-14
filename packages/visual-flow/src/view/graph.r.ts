@@ -5,7 +5,7 @@ import styles from "./graph.styles";
 
 @Vf.outputComponent("vfGraph")
 export class VfGraph extends OutputComponent {
-  main(_: ComponentContext<this>, model: Graph): void {
+  main(_: ComponentContext, model: Graph): void {
     model.app = _.$app;
     _.$app.registerWindowEventListener(
       "resize",

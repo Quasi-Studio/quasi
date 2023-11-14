@@ -11,7 +11,7 @@ export interface AppbarProps {
 
 @QuasiRuntime.outputComponent("appbar")
 export class QAppbar extends OutputComponent {
-  main(_: ComponentContext<this>, props: AppbarProps): void {
+  main(_: ComponentContext, props: AppbarProps): void {
     _.mdAppbar(props.type, _ => {
       _.mdToolbar(props.inner, props.colored);
     });

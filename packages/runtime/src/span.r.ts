@@ -8,7 +8,7 @@ export interface SpanProps {
 
 @QuasiRuntime.outputComponent("span")
 export class QSpan extends OutputComponent {
-  main(_: ComponentContext<this>, props: SpanProps): void {
+  main(_: ComponentContext, props: SpanProps): void {
     _.$cls(props.class);
     _._span({}, props.inner);
   }

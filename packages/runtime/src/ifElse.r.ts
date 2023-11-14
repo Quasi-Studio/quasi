@@ -9,7 +9,7 @@ export interface IfElseProps {
 
 @QuasiRuntime.outputComponent("ifElse")
 export class QIfElse extends OutputComponent {
-  main(_: ComponentContext<this>, props: IfElseProps): void {
+  main(_: ComponentContext, props: IfElseProps): void {
     if (props.condition) {
       _.embed(props.then);
     } else {

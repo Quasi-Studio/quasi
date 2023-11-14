@@ -19,7 +19,7 @@ export class InputModel {
 
 @QuasiRuntime.outputComponent("input")
 export class QInput extends OutputComponent {
-  main(_: ComponentContext<this>, model: InputModel, props: InputProps): void {
+  main(_: ComponentContext, model: InputModel, props: InputProps): void {
     model.value ??= props.initial;
     _.$cls(props.class);
     if (_.mdInput(fromProp(model, "value"), props.label, props.disabled)) {

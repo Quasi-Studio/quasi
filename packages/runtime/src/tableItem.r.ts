@@ -16,7 +16,7 @@ export class TableColModel {
 
 @QuasiRuntime.outputComponent("tableCol")
 export class QTableCol extends OutputComponent {
-  main(_: ComponentContext<this>, model: TableColModel, props: TableColProps): void {
+  main(_: ComponentContext, model: TableColModel, props: TableColProps): void {
     const currentTable = _.$runtimeData[currentTableSymbol] as TableModel;
     if (currentTable.renderingState === "head") {
       _.$cls(props["head class"]);

@@ -8,7 +8,7 @@ export interface ParagraphProps {
 
 @QuasiRuntime.outputComponent("p")
 export class QParagraph extends OutputComponent {
-  main(_: ComponentContext<this>, props: ParagraphProps): void {
+  main(_: ComponentContext, props: ParagraphProps): void {
     _.$cls(props.class);
     _._p({}, props.inner);
   }

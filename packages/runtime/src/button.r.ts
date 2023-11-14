@@ -14,7 +14,7 @@ export interface ButtonProps {
 
 @QuasiRuntime.outputComponent("button")
 export class QButton extends OutputComponent {
-  main(_: ComponentContext<this>, props: ButtonProps): void {
+  main(_: ComponentContext, props: ButtonProps): void {
     _.$cls(props.class);
     if (
       _.mdIntrinsicButton(

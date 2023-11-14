@@ -5,7 +5,7 @@ import styles, { PADDING_FOR_SOCKETS } from "./block.styles";
 
 @Vf.outputComponent("vfBlock")
 export class VfBlock extends OutputComponent {
-  main(_: ComponentContext<this>, model: Block): void {
+  main(_: ComponentContext, model: Block): void {
     const { x, y } = model.attached ? model.graphPos : model.pagePos;
     const padding = PADDING_FOR_SOCKETS * model.graph.boardScale;
 

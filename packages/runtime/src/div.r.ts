@@ -8,7 +8,7 @@ export interface DivProps {
 
 @QuasiRuntime.outputComponent("div")
 export class QDiv extends OutputComponent {
-  main(_: ComponentContext<this>, props: DivProps): void {
+  main(_: ComponentContext, props: DivProps): void {
     _.$cls(props.class);
     _._div({}, props.inner);
   }

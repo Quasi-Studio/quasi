@@ -7,7 +7,7 @@ export interface TextNodeProps {
 
 @QuasiRuntime.outputComponent("textNode")
 export class QTextNode extends OutputComponent {
-  main(_: ComponentContext<this>, props: TextNodeProps): void {
+  main(_: ComponentContext, props: TextNodeProps): void {
     _.t(props.text ?? "");
   }
 }
