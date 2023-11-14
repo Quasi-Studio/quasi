@@ -20,6 +20,7 @@ import {
   directionNameMap,
 } from "@quasi-dev/visual-flow";
 import { FTextarea, FUnderlineTextInput } from "@refina/fluentui";
+import "@refina/fluentui-icons/expandUpLeft.r.ts";
 import { Context, d, ref } from "refina";
 import { currentGraph } from "../../store";
 import { PropData, PropsData } from "../../utils/props";
@@ -72,6 +73,39 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
         inputRef.current!.inputRef.current!.node.onchange = () => {
           currentGraph.pushRecord();
         };
+
+        if (this.useTextarea) {
+          _.$cls`monaco-dialog`;
+          _.fDialog(
+            (_, open) => {
+              _.$cls`absolute right-0 top-0 text-gray-600`;
+              _.button(_ => _.fiExpandUpLeft20Regular()) && open();
+            },
+            this.label,
+            _ => {
+              const propagationStopper = (ev: Event) => ev.stopPropagation();
+              _.$cls`h-[80vh] overflow-visible`;
+              _._div(
+                {
+                  onclick: propagationStopper,
+                  onmousedown: propagationStopper,
+                  onmouseup: propagationStopper,
+                  onmousemove: propagationStopper,
+                  onkeydown: propagationStopper,
+                },
+                _ => {
+                  if (
+                    _.monacoEditor(this.inputValue.value, "javascript", {
+                      tabSize: 2,
+                    })
+                  ) {
+                    this.inputValue.value = _.$ev;
+                  }
+                },
+              );
+            },
+          );
+        }
       },
     );
   };

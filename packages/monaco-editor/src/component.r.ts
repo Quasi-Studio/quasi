@@ -5,7 +5,6 @@ import Monaco from "./plugin";
 @Monaco.triggerComponent("monacoEditor")
 export class MonacoEditor extends TriggerComponent<string> {
   containerRef = ref<HTMLElementComponent<"div">>();
-  // overflowRef = ref<HTMLElementComponent<"div">>();
   editor: monaco.editor.IStandaloneCodeEditor | null = null;
   main(
     _: ComponentContext,
@@ -13,15 +12,11 @@ export class MonacoEditor extends TriggerComponent<string> {
     language: string,
     options: Omit<
       monaco.editor.IStandaloneEditorConstructionOptions,
-      "value" | "language" | "overflowWidgetsDomNode"
+      "value" | "language"
     > = {},
   ): void {
     _.$css`height:100%`;
     _.$ref(this.containerRef) && _._div();
-
-    // _.portal(_ => {
-    //   _.$ref(this.overflowRef) && _._div();
-    // });
 
     if (_.$updating) {
       _.$app.pushHook("afterModifyDOM", () => {
@@ -33,7 +28,6 @@ export class MonacoEditor extends TriggerComponent<string> {
               ...options,
               value: initialValue,
               language,
-              // overflowWidgetsDomNode: this.overflowRef.current!.node,
             });
 
             this.editor.getModel()?.onDidChangeContent(ev => {

@@ -13,6 +13,19 @@
       img {
         -webkit-user-drag: none;
       }
+
+      .monaco-dialog .fui-DialogSurface,
+      .monaco-dialog .fui-DialogBody,
+      .monaco-dialog .fui-DialogContent {
+        overflow: visible;
+      }
+
+      .monaco-dialog .fui-DialogSurface {
+        contain: unset;
+        max-width: unset;
+        margin: 5vh;
+        height: 90vh;
+      }
     </style>
     <script type="module" src="./src/app.r.ts"></script>
   </head>
