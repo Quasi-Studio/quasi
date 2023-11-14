@@ -621,6 +621,8 @@ export class Graph {
 
     this.boardScale = newScale;
 
+    this.syncGraphAndBoardMousePos();
+    this.onMouseMove(this.mouseDown, false);
     this.updatePosition();
     return true;
   }
@@ -862,12 +864,16 @@ export class Graph {
 
   onHorizontalScroll(delta: number) {
     this.boardOffsetX += delta / this.boardScale;
+    this.syncGraphAndBoardMousePos();
+    this.onMouseMove(this.mouseDown, false);
     this.updatePosition();
     return true;
   }
 
   onVerticalScroll(delta: number) {
     this.boardOffsetY += delta / this.boardScale;
+    this.syncGraphAndBoardMousePos();
+    this.onMouseMove(this.mouseDown, false);
     this.updatePosition();
     return true;
   }
