@@ -21,7 +21,7 @@ import {
 } from "@quasi-dev/visual-flow";
 import { FTextarea, FUnderlineTextInput } from "@refina/fluentui";
 import "@refina/fluentui-icons/expandUpLeft.r.ts";
-import { Context, d, ref } from "refina";
+import { Context, bySelf, d, ref } from "refina";
 import { currentGraph } from "../../store";
 import { setExtraLib } from "../../utils";
 import { PropData, PropsData } from "../../utils/props";
@@ -76,13 +76,38 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
         };
 
         if (this.useTextarea) {
+          const slots = this.slots;
+
           _.$cls`monaco-dialog`;
           _.fDialog(
             (_, open) => {
               _.$cls`absolute right-0 top-0 text-gray-600`;
               _.button(_ => _.fiExpandUpLeft20Regular()) && open();
             },
-            this.label,
+            _ => {
+              _.span(this.label);
+
+              _.$cls`ml-10 inline-block text-base text-gray-500`;
+              _.div(_ => {
+                _.span("Params:");
+
+                if (slots.length === 0) {
+                  _.$cls`ml-2`;
+                  _.span("none");
+                }
+
+                _.$cls`font-[Consolas]`;
+                _.span(_ =>
+                  _.for(this.slots, bySelf, (slot, i) => {
+                    if (i !== 0) {
+                      _.span(", ");
+                    }
+                    _.$cls`text-black`;
+                    _.span(slot);
+                  }),
+                );
+              });
+            },
             _ => {
               const propagationStopper = (ev: Event) => ev.stopPropagation();
               _.$cls`h-[80vh] overflow-visible`;
