@@ -26,6 +26,7 @@ import { currentGraph } from "../../store";
 import { PropData, PropsData } from "../../utils/props";
 import { multiOutSocketToOutput } from "../../utils/toOutpus";
 import { SpecialBlock } from "./base";
+import { setExtraLib } from "../../utils";
 
 export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
   cloneTo(target: this): this {
@@ -100,6 +101,7 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
                     })
                   ) {
                     this.inputValue.value = _.$ev;
+                    setExtraLib(this.slots.map(slot => `/** param */ declare const $${slot}: any;`).join("\n"));
                   }
                 },
               );

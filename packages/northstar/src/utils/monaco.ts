@@ -34,3 +34,10 @@ export function initMonaco() {
     formatProvider,
   );
 }
+
+let currentExtraLib = "";
+export function setExtraLib(code: string) {
+  if (currentExtraLib === code) return;
+  monaco.languages.typescript.javascriptDefaults.addExtraLib(code, "context.d.ts");
+  currentExtraLib = code;
+}
