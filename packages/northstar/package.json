@@ -35,6 +35,7 @@
     "@refina/fluentui-icons": "link:..\\..\\..\\refina\\packages\\fluentui-icons",
     "@refina/griffel": "link:..\\..\\..\\refina\\packages\\griffel",
     "modern-screenshot": "^4.4.33",
+    "prettier": "3.0.0",
     "refina": "link:..\\..\\..\\refina\\packages\\core"
   }
 }

@@ -120,6 +120,9 @@ importers:
       modern-screenshot:
         specifier: ^4.4.33
         version: 4.4.33
+      prettier:
+        specifier: 3.0.0
+        version: 3.0.0
       refina:
         specifier: link:..\..\..\refina\packages\core
         version: link:../../../refina/packages/core
