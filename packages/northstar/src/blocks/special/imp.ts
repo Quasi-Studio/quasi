@@ -61,7 +61,7 @@ export class ImpBlock extends FuncBlockBase {
       this.inputValue.value.match(/\breturn\b/g) === null;
   }
 
-  get slots() {
+  get slotsUsage() {
     const template = this.inputValue.value;
     const matches = template.matchAll(/\$[a-zA-Z0-9]+/g);
     return [...matches].map((match) => match[0].slice(1));

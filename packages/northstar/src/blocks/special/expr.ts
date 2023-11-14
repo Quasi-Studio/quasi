@@ -7,7 +7,7 @@ export class ExprBlock extends FuncBlockBase {
   label = "expression";
   outputLabel = "value";
 
-  get slots() {
+  get slotsUsage() {
     const template = this.inputValue.value;
     const matches = template.matchAll(/\$[a-zA-Z0-9]+/g);
     return [...matches].map((match) => match[0].slice(1));

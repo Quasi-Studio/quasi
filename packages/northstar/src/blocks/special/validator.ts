@@ -14,7 +14,7 @@ export class ValidatorBlock extends FuncBlockBase {
     [Direction.LEFT, "input-plugin"],
   ];
 
-  get slots(): string[] {
+  get slotsUsage(): string[] {
     return [];
   }
   get noOutput() {

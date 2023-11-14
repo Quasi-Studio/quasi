@@ -23,10 +23,10 @@ import { FTextarea, FUnderlineTextInput } from "@refina/fluentui";
 import "@refina/fluentui-icons/expandUpLeft.r.ts";
 import { Context, d, ref } from "refina";
 import { currentGraph } from "../../store";
+import { setExtraLib } from "../../utils";
 import { PropData, PropsData } from "../../utils/props";
 import { multiOutSocketToOutput } from "../../utils/toOutpus";
 import { SpecialBlock } from "./base";
-import { setExtraLib } from "../../utils";
 
 export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
   cloneTo(target: this): this {
@@ -112,7 +112,10 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
     );
   };
 
-  abstract get slots(): string[];
+  abstract get slotsUsage(): string[];
+  get slots() {
+    return [...new Set(this.slotsUsage)];
+  }
   get noOutput() {
     return false;
   }

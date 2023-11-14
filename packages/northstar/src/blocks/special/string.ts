@@ -7,7 +7,7 @@ export class StringBlock extends FuncBlockBase {
 
   label = "string template";
 
-  get slots() {
+  get slotsUsage() {
     const template = this.inputValue.value;
     const matches = template.matchAll(/\{[a-zA-Z0-9_]+\}/g);
     return [...matches].map((match) => match[0].slice(1, -1));
