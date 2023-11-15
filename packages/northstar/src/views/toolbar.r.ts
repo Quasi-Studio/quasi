@@ -1,3 +1,5 @@
+import { Compiler } from "@quasi-dev/compiler";
+import { FieldValidationState, ProgressBarColor, ProgressBarValue } from "@refina/fluentui";
 import "@refina/fluentui-icons/addSquareMultiple.r.ts";
 import "@refina/fluentui-icons/alignLeft.r.ts";
 import "@refina/fluentui-icons/alignTop.r.ts";
@@ -8,10 +10,11 @@ import "@refina/fluentui-icons/documentBulletList.r.ts";
 import "@refina/fluentui-icons/drawerArrowDownload.r.ts";
 import "@refina/fluentui-icons/edit.r.ts";
 import "@refina/fluentui-icons/imageBorder.r.ts";
-import "@refina/fluentui-icons/resizeSmall.r.ts";
 import "@refina/fluentui-icons/resizeLarge.r.ts";
+import "@refina/fluentui-icons/resizeSmall.r.ts";
 import { domToBlob } from "modern-screenshot";
 import { Content, HTMLElementComponent, d, ref, view } from "refina";
+import iconURL from "../../public/favicon.ico";
 import { currentGraph, currentViewId, setCurrentViewId } from "../store";
 import {
   alignBlocksToLeft,
@@ -25,8 +28,6 @@ import {
   saveAs,
 } from "../utils";
 import { toOutput } from "../utils/toOutpus";
-import { Compiler } from "@quasi-dev/compiler";
-import { FieldValidationState, ProgressBarColor, ProgressBarValue } from "@refina/fluentui";
 import { startPreview } from "./preview.r";
 
 export const previewMode = d(false);
@@ -53,7 +54,10 @@ export const graphElRef = ref<HTMLElementComponent<"div">>();
 export default view(_ => {
   _.$cls`flex items-center h-full`;
   _.div(_ => {
-    _.$cls`font-bold text-lg px-2`;
+    _.$cls`w-[2em] h-[2em] invert`;
+    _._img({ src: iconURL });
+
+    _.$cls`font-bold text-lg pr-2`;
     _.span("Quasi Studio");
 
     _.fDialog(
@@ -297,8 +301,8 @@ export default view(_ => {
   _.$cls`absolute flex items-center h-full right-0`;
   _.div(_ => {
     _.span("Preview");
-    if(_.fSwitch("", previewMode)){
-      if(_.$ev){
+    if (_.fSwitch("", previewMode)) {
+      if (_.$ev) {
         startPreview();
       }
     }
