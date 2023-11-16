@@ -1,11 +1,11 @@
-import { $clsFunc, MainElRef, byProp, bySelf, ref, view } from "refina";
-import { getSelectedProps } from "../utils/props";
 import "@refina/fluentui-icons/add.r.ts";
 import "@refina/fluentui-icons/subtract.r.ts";
+import { $clsFunc, MainElRef, ref, view } from "refina";
+import { getSelectedProps } from "../utils/props";
 
 export default view(_ => {
   const props = getSelectedProps();
-  _.for(props, byProp("name"), p => {
+  _.for(props, "name", p => {
     const r = ref() as MainElRef;
     _.$cls`col-span-1 flex justify-center items-center border-b border-gray-500 h-8`;
     _._div(

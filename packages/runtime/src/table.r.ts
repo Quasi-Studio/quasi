@@ -1,4 +1,4 @@
-import { ComponentContext, Content, OutputComponent, byIndex, byProp, bySelf } from "refina";
+import { ComponentContext, Content, OutputComponent, byIndex, bySelf } from "refina";
 import QuasiRuntime from "./plugin";
 
 export const currentTableSymbol = Symbol("currentTable");
@@ -26,7 +26,7 @@ export class QTable extends OutputComponent {
           model.renderingState = "head";
           _.embed(props.inner);
         },
-        props.key === "$index" ? byIndex : props.key === "$self" ? bySelf : byProp(props.key),
+        props.key === "$index" ? byIndex : props.key === "$self" ? bySelf : props.key,
         v => {
           model.renderingState = "body";
           model.current = v;

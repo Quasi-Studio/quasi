@@ -1,4 +1,4 @@
-import { ComponentContext, Content, OutputComponent, byIndex, byProp, bySelf } from "refina";
+import { ComponentContext, Content, OutputComponent, byIndex, bySelf } from "refina";
 import QuasiRuntime from "./plugin";
 
 export interface ListProps {
@@ -16,7 +16,7 @@ export class ListModel {
 export class QList extends OutputComponent {
   main(_: ComponentContext, model: ListModel, props: ListProps): void {
     _.$cls(props.class);
-    _.mdList(props.data, props.key === "$index" ? byIndex : props.key === "$self" ? bySelf : byProp(props.key), v => {
+    _.mdList(props.data, props.key === "$index" ? byIndex : props.key === "$self" ? bySelf : props.key, v => {
       model.current = v;
       _.embed(props.inner);
     });

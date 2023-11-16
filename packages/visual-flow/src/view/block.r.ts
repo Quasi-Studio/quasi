@@ -1,4 +1,4 @@
-import { ComponentContext, OutputComponent, byIndex, byProp } from "refina";
+import { ComponentContext, OutputComponent } from "refina";
 import { Block } from "../model";
 import Vf from "../plugin";
 import styles, { PADDING_FOR_SOCKETS } from "./block.styles";
@@ -32,7 +32,7 @@ export class VfBlock extends OutputComponent {
                     d: model.backgroudPath,
                   });
 
-                _.for(model.allSockets, byProp("id"), socket => {
+                _.for(model.allSockets, "id", socket => {
                   _.vfSocket(socket);
                 });
               },
