@@ -14,7 +14,7 @@ import "@refina/fluentui-icons/resizeLarge.r.ts";
 import "@refina/fluentui-icons/resizeSmall.r.ts";
 import { domToBlob } from "modern-screenshot";
 import { Content, HTMLElementComponent, d, ref, view } from "refina";
-import iconURL from "../../public/favicon.ico";
+import iconURL from "/favicon.ico?url";
 import { currentGraph, currentViewId, setCurrentViewId } from "../store";
 import {
   alignBlocksToLeft,
