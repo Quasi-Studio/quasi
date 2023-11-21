@@ -3,7 +3,7 @@ import { HTMLElementComponent, ref, view } from "refina";
 
 import runtimeURL from "@quasi-dev/runtime/src/index.ts?url";
 import mduiStyleUrl from "@quasi-dev/runtime/styles.css?url"; // Used in development
-import mduiStyleContent from "@quasi-dev/runtime/styles.min.css?raw"; // Used in production
+import mduiStyleContent from "@quasi-dev/runtime/styles.css?inline"; // Used in production
 import iframeURL from "./iframe/index.html?url";
 
 import { compileTailwindCSS } from "@quasi-dev/browser-tailwind";

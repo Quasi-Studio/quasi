@@ -4,11 +4,7 @@ import QuasiRuntime from "./plugin";
 export interface ButtonProps {
   inner: Content;
   class: string;
-  color: "primary" | "accent" | "unset";
-  raised: boolean;
   disabled: boolean;
-  ripple: boolean;
-  icon: boolean;
   onClick: () => void;
 }
 
@@ -16,16 +12,7 @@ export interface ButtonProps {
 export class QButton extends OutputComponent {
   main(_: ComponentContext, props: ButtonProps): void {
     _.$cls(props.class);
-    if (
-      _.mdIntrinsicButton(
-        props.inner,
-        props.color === "unset" ? undefined : props.color,
-        props.raised,
-        props.disabled,
-        props.ripple,
-        props.icon,
-      )
-    ) {
+    if (_.mdButton(props.inner, props.disabled)) {
       props.onClick();
     }
   }

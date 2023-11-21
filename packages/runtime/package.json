@@ -19,12 +19,11 @@
   ],
   "exports": {
     ".": "./src/index.ts",
-    "./styles.css": "./node_modules/@refina/mdui/node_modules/mdui/dist/css/mdui.css",
-    "./styles.min.css": "./node_modules/@refina/mdui/node_modules/mdui/dist/css/mdui.min.css",
+    "./styles.css": "./node_modules/@refina/mdui2/node_modules/mdui/mdui.css",
     "./*": "./*"
   },
   "dependencies": {
-    "@refina/mdui": "link:..\\..\\..\\refina\\packages\\mdui",
+    "@refina/mdui2": "link:..\\..\\..\\refina\\packages\\mdui2",
     "refina": "link:..\\..\\..\\refina\\packages\\core"
   }
 }

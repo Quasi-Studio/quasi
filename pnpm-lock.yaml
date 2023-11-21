@@ -163,9 +163,9 @@ importers:
 
   packages/runtime:
     dependencies:
-      '@refina/mdui':
-        specifier: link:..\..\..\refina\packages\mdui
-        version: link:../../../refina/packages/mdui
+      '@refina/mdui2':
+        specifier: link:..\..\..\refina\packages\mdui2
+        version: link:../../../refina/packages/mdui2
       refina:
         specifier: link:..\..\..\refina\packages\core
         version: link:../../../refina/packages/core

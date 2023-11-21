@@ -27,17 +27,12 @@ export default {
     "Button",
     null,
     content("inner", "as-primary"),
-    [],
+    input("disabled", t.boolean, "as-hidden-socket"),
     [],
     event("onClick", "void"),
     [],
     [],
-    [
-      textProp("class"),
-      dropdownProp("color", ["unset", "primary", "accent"], "unset"),
-      switchProp("raised", true),
-      switchProp("ripple", false),
-    ],
+    [textProp("class")],
   ),
 
   p: contentWrapper("Paragraph"),
@@ -67,10 +62,7 @@ export default {
     [],
     [],
     [],
-    [
-      dropdownProp("type", ["toolbar", "tab", "both", "neither"], "toolbar"),
-      switchProp("colored", true),
-    ],
+    [textProp("class")],
   ),
 
   list: component(
@@ -85,36 +77,36 @@ export default {
     [textProp("class"), textProp("key", "$index")],
   ),
 
-  table: component(
-    "Table",
-    "TableModel",
-    content("inner", "as-socket", Direction.BOTTOM),
-    input("data", "iterable"),
-    [
-      output("current", "unknown", "as-hidable-socket", Direction.RIGHT),
-      output("renderingState", "unknown", "as-hidden-socket", Direction.RIGHT),
-    ],
-    [],
-    [],
-    [],
-    [textProp("class"), textProp("key", "$index")],
-  ),
+  // table: component(
+  //   "Table",
+  //   "TableModel",
+  //   content("inner", "as-socket", Direction.BOTTOM),
+  //   input("data", "iterable"),
+  //   [
+  //     output("current", "unknown", "as-hidable-socket", Direction.RIGHT),
+  //     output("renderingState", "unknown", "as-hidden-socket", Direction.RIGHT),
+  //   ],
+  //   [],
+  //   [],
+  //   [],
+  //   [textProp("class"), textProp("key", "$index")],
+  // ),
 
-  tableCol: component(
-    "Table Col",
-    "TableColModel",
-    content("inner"),
-    input("prop", "string", "as-primary"),
-    output("value", "unknown", "as-hidable-socket", Direction.TOP),
-    [],
-    [],
-    [],
-    [
-      textProp("head class"),
-      textProp("cell class"),
-      textProp("header", "$prop"),
-    ],
-  ),
+  // tableCol: component(
+  //   "Table Col",
+  //   "TableColModel",
+  //   content("inner"),
+  //   input("prop", "string", "as-primary"),
+  //   output("value", "unknown", "as-hidable-socket", Direction.TOP),
+  //   [],
+  //   [],
+  //   [],
+  //   [
+  //     textProp("head class"),
+  //     textProp("cell class"),
+  //     textProp("header", "$prop"),
+  //   ],
+  // ),
 
   forEach: component(
     "For each",
