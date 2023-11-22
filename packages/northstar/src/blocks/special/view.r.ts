@@ -26,7 +26,7 @@ export class ViewBlock extends RectBlock implements SpecialBlock {
   socketUpdater(useSocket: UseSocket): void {
     useSocket("parent", SingleInSocket, {
       hideLabel: true,
-      type: "D",
+      type: "L",
       path: PATH_IN_RECT,
       direction: Direction.LEFT,
     });
