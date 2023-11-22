@@ -11,7 +11,7 @@ import {
 import { Context } from "refina";
 import { PropsData } from "../../utils/props";
 import { SpecialBlock } from "./base";
-import { currentViewId } from "../../store";
+import { currentProject } from "../../project";
 
 export class RootBlock extends RectBlock implements SpecialBlock {
   boardWidth = 200;
@@ -37,7 +37,7 @@ export class RootBlock extends RectBlock implements SpecialBlock {
       _.div(_ => {
         _.$css`font-family:Consolas;transform:translateY(-2px);font-size:20px`;
         _.$cls`mr-1 font-semibold`;
-        _.span(currentViewId);
+        _.span(currentProject.activeView.name);
         _.span("root");
       });
     });

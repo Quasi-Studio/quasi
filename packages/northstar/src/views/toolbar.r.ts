@@ -13,9 +13,8 @@ import "@refina/fluentui-icons/imageBorder.r.ts";
 import "@refina/fluentui-icons/resizeLarge.r.ts";
 import "@refina/fluentui-icons/resizeSmall.r.ts";
 import { domToBlob } from "modern-screenshot";
-import { Content, HTMLElementComponent, d, ref, view } from "refina";
-import iconURL from "/favicon.ico?url";
-import { currentGraph, currentViewId, setCurrentViewId } from "../store";
+import { Content, HTMLElementComponent, d, fromProp, ref, view } from "refina";
+import { Project, currentProject, openFile, saveAs, setCurrentProject } from "../project";
 import {
   alignBlocksToLeft,
   alignBlocksToTop,
@@ -23,12 +22,11 @@ import {
   hasBlocksToAlign,
   hasBlocksToDuplicate,
   hasBlocksToRemove,
-  open,
   removeBlocks,
-  saveAs,
 } from "../utils";
-import { toOutput } from "../utils/toOutpus";
+import { toOutput } from "../utils/toOutput";
 import { startPreview } from "./preview.r";
+import iconURL from "/favicon.ico?url";
 
 export const previewMode = d(false);
 
@@ -74,9 +72,9 @@ export default view(_ => {
       (_, close) => {
         _.$cls`flex flex-col gap-4`;
         _.div(_ => {
-          _.fButton("New");
-          _.fButton("Open") && open().then(close);
-          _.fButton("Save");
+          _.fButton("New") && (setCurrentProject(Project.new()), close());
+          _.fButton("Open") && openFile().then(close);
+          // _.fButton("Save");
           _.fButton("Save as") && saveAs().then(close);
         });
       },
@@ -134,7 +132,13 @@ export default view(_ => {
     if (!previewMode.value) {
       _.fDialog(
         (_, open) =>
-          _.embed(toolItem, "Export to PNG", _ => _.fiImageBorder20Regular(), currentGraph.blocks.length === 0, open),
+          _.embed(
+            toolItem,
+            "Export to PNG",
+            _ => _.fiImageBorder20Regular(),
+            currentProject.activeGraph.blocks.length === 0,
+            open,
+          ),
         "Export to PNG",
         (_, close) => {
           _.$cls`mb-5`;
@@ -145,21 +149,21 @@ export default view(_ => {
 
             const node = graphElRef.current!.node;
 
-            const { boardOffsetX, boardOffsetY, boardScale } = currentGraph;
+            const { boardOffsetX, boardOffsetY, boardScale } = currentProject.activeGraph;
             const restoreBoard = () => {
-              currentGraph.boardOffsetX = boardOffsetX;
-              currentGraph.boardOffsetY = boardOffsetY;
-              currentGraph.boardScale = boardScale;
+              currentProject.activeGraph.boardOffsetX = boardOffsetX;
+              currentProject.activeGraph.boardOffsetY = boardOffsetY;
+              currentProject.activeGraph.boardScale = boardScale;
             };
-            const { width, height } = currentGraph.fullView();
-            currentGraph.updatePosition();
+            const { width, height } = currentProject.activeGraph.fullView();
+            currentProject.activeGraph.updatePosition();
 
             setTimeout(() => {
               const { x, y } = node.getBoundingClientRect();
 
               domToBlob(node, {
                 backgroundColor: "white",
-                scale: 4 / currentGraph.boardScale,
+                scale: 4 / currentProject.activeGraph.boardScale,
                 width: width,
                 height: height,
                 style: {
@@ -239,15 +243,15 @@ export default view(_ => {
         toolItem,
         "Undo",
         _ => _.fiArrowUndo20Filled(),
-        !currentGraph.canUndo,
-        () => currentGraph.undo(),
+        !currentProject.activeGraph.canUndo,
+        () => currentProject.activeGraph.undo(),
       );
       _.embed(
         toolItem,
         "Redo",
         _ => _.fiArrowRedo20Filled(),
-        !currentGraph.canRedo,
-        () => currentGraph.redo(),
+        !currentProject.activeGraph.canRedo,
+        () => currentProject.activeGraph.redo(),
       );
       _.embed(
         toolItem,
@@ -255,8 +259,8 @@ export default view(_ => {
         _ => _.fiResizeLarge20Regular(),
         false,
         () => {
-          currentGraph.resetViewport();
-          currentGraph.pushRecord();
+          currentProject.activeGraph.resetViewport();
+          currentProject.activeGraph.pushRecord();
         },
       );
       _.embed(
@@ -265,8 +269,8 @@ export default view(_ => {
         _ => _.fiResizeSmall20Regular(),
         false,
         () => {
-          currentGraph.fullView();
-          currentGraph.pushRecord();
+          currentProject.activeGraph.fullView();
+          currentProject.activeGraph.pushRecord();
         },
       );
 
@@ -284,7 +288,7 @@ export default view(_ => {
       ? "Preview App"
       : _ => {
           _.span("Graph:");
-          if (currentViewId === "app") {
+          if (currentProject.activeViewId === 0) {
             _.$cls`ml-1`;
             _.span("app");
           } else {
@@ -292,7 +296,7 @@ export default view(_ => {
               {
                 onkeydown: ev => ev.stopPropagation(),
               },
-              _ => _.fUnderlineTextInput(currentViewId) && setCurrentViewId(_.$ev),
+              _ => _.fUnderlineTextInput(fromProp(currentProject.activeView, "name")),
             );
           }
         },

@@ -8,13 +8,14 @@ import type {
 } from "@quasi-dev/visual-flow";
 import { isComponentBlock, toBlockOutput } from "../blocks/component";
 import { SpecialBlock } from "../blocks/special/base";
-import { views } from "../store";
+import { currentProject } from "../project";
 
 export function toOutput() {
   const viewsOutput: ViewOutput[] = [];
-  views.forEach((view, name) => {
+  currentProject.views.forEach((view, id) => {
+    if (view === null) return;
     viewsOutput.push({
-      name,
+      name: view.name,
       componentBlocks: view.graph.blocks
         .filter(isComponentBlock)
         .map(toBlockOutput),

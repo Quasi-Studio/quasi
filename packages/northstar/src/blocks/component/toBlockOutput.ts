@@ -11,7 +11,7 @@ import { Block, SingleOutSocket, Socket } from "@quasi-dev/visual-flow";
 import {
   singleInSocketToOutput,
   singleOutSocketToOutput,
-} from "../../utils/toOutpus";
+} from "../../utils/toOutput";
 import { ValidatorBlock } from "../special/validator";
 import { ComponentBlock } from "./block";
 

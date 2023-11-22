@@ -9,7 +9,7 @@ import iframeURL from "./iframe/index.html?url";
 import { compileTailwindCSS } from "@quasi-dev/browser-tailwind";
 import { Compiler } from "@quasi-dev/compiler";
 import { RefinaTransformer } from "@refina/transformer";
-import { toOutput } from "../utils/toOutpus";
+import { toOutput } from "../utils/toOutput";
 
 const transformer = new RefinaTransformer();
 

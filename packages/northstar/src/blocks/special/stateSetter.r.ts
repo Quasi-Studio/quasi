@@ -8,7 +8,7 @@ import {
   UsedSockets,
   blockCtors,
 } from "@quasi-dev/visual-flow";
-import { multiInSocketToOutput } from "../../utils/toOutpus";
+import { multiInSocketToOutput } from "../../utils/toOutput";
 import { ExprBlock } from "./expr";
 
 export class StateSetterBlock extends ExprBlock {

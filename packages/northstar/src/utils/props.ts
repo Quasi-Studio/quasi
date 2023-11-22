@@ -1,4 +1,4 @@
-import { currentGraph } from "../store";
+import { currentProject } from "../project";
 
 export interface PropDataBase {
   key: string;
@@ -61,6 +61,8 @@ export function mergeProps([props0, ...propsRest]: PropsData[]) {
 
 export function getSelectedProps(): PropsData {
   return mergeProps(
-    [...currentGraph.selectedBlocks].map((b) => (b as any).getProps?.() ?? []),
+    [...currentProject.activeGraph.selectedBlocks].map(
+      (b) => (b as any).getProps?.() ?? [],
+    ),
   );
 }

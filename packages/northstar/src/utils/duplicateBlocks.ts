@@ -1,27 +1,33 @@
 import { GraphStateType } from "@quasi-dev/visual-flow";
-import { currentGraph } from "../store";
+import { currentProject } from "../project";
 
 function isDuplicateable(block: any) {
   return block.duplicateable;
 }
 
 export function hasBlocksToDuplicate() {
-  if (currentGraph.state.type === GraphStateType.DRAGGING_BLOCK) return false;
-  return [...currentGraph.selectedBlocks].filter(isDuplicateable).length > 0;
+  if (currentProject.activeGraph.state.type === GraphStateType.DRAGGING_BLOCK)
+    return false;
+  return (
+    [...currentProject.activeGraph.selectedBlocks].filter(isDuplicateable)
+      .length > 0
+  );
 }
 
 export function duplicateBlocks() {
-  const blocks = [...currentGraph.selectedBlocks].filter(isDuplicateable);
-  currentGraph.clearSelectedBlocks();
+  const blocks = [...currentProject.activeGraph.selectedBlocks].filter(
+    isDuplicateable,
+  );
+  currentProject.activeGraph.clearSelectedBlocks();
   blocks.forEach((block) => {
     const newBlock = block.clone();
     newBlock.boardX = block.boardX + 90;
     newBlock.boardY = block.boardY + 90;
     newBlock.attached = true;
-    currentGraph.addBlock(newBlock);
-    currentGraph.moveBlockToTop(newBlock);
-    currentGraph.updateBlockZIndex();
-    currentGraph.addSelectedBlock(newBlock, true);
+    currentProject.activeGraph.addBlock(newBlock);
+    currentProject.activeGraph.moveBlockToTop(newBlock);
+    currentProject.activeGraph.updateBlockZIndex();
+    currentProject.activeGraph.addSelectedBlock(newBlock, true);
   });
-  currentGraph.pushRecord();
+  currentProject.activeGraph.pushRecord();
 }

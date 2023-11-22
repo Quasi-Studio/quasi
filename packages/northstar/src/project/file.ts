@@ -1,7 +1,6 @@
-import { exportVf, importVf } from "@quasi-dev/visual-flow";
-import { currentViewId, setCurrentView, views } from "../store";
+import { setCurrentProject, Project, currentProject } from "./project";
 
-export async function open() {
+export async function openFile() {
   const [handle] = await window.showOpenFilePicker({
     types: [
       {
@@ -14,13 +13,7 @@ export async function open() {
   });
   const file = await handle.getFile();
   const json = await file.text();
-  const proj = JSON.parse(json);
-  views.clear();
-  for (const { id, graph: graphRecord } of proj.views) {
-    const graph = importVf(graphRecord);
-    views.set(id, { graph });
-  }
-  setCurrentView(proj.currentViewId);
+  setCurrentProject(Project.load(json));
 }
 
 export async function saveAs() {
@@ -36,13 +29,6 @@ export async function saveAs() {
     ],
   });
   const writable = await handle.createWritable();
-  const proj = {
-    views: [...views.entries()].map(([id, view]) => ({
-      id,
-      graph: exportVf(view.graph),
-    })),
-    currentViewId,
-  };
-  await writable.write(JSON.stringify(proj, null, 2));
+  await writable.write(currentProject.dump());
   await writable.close();
 }

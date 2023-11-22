@@ -13,7 +13,7 @@ import {
 } from "@quasi-dev/visual-flow";
 import { Context } from "refina";
 import { PropsData } from "../../utils/props";
-import { multiInSocketToOutput, singleInSocketToOutput, singleOutSocketToOutput } from "../../utils/toOutpus";
+import { multiInSocketToOutput, singleInSocketToOutput, singleOutSocketToOutput } from "../../utils/toOutput";
 import { SpecialBlock } from "./base";
 
 export class IfElseBlock extends RectBlock implements SpecialBlock {

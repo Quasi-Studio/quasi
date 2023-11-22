@@ -17,7 +17,7 @@ import { PropsData } from "../../utils/props";
 import {
   multiInSocketToOutput,
   singleOutSocketToOutput,
-} from "../../utils/toOutpus";
+} from "../../utils/toOutput";
 import { FuncBlockBase } from "./FuncBlockBase.r";
 
 export class ImpBlock extends FuncBlockBase {

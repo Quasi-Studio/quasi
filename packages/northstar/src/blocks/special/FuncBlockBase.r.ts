@@ -22,11 +22,11 @@ import {
 import { FTextarea, FUnderlineTextInput } from "@refina/fluentui";
 import "@refina/fluentui-icons/expandUpLeft.r.ts";
 import { Context, bySelf, d, ref } from "refina";
-import { currentGraph } from "../../store";
 import { setExtraLib } from "../../utils";
 import { PropData, PropsData } from "../../utils/props";
-import { multiOutSocketToOutput } from "../../utils/toOutpus";
+import { multiOutSocketToOutput } from "../../utils/toOutput";
 import { SpecialBlock } from "./base";
+import { currentProject } from "../../project";
 
 export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
   cloneTo(target: this): this {
@@ -72,7 +72,7 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
             : _.$css`min-height:24px;margin-left:-4px` &&
               _.fUnderlineTextInput(this.inputValue, false, this.placeholder));
         inputRef.current!.inputRef.current!.node.onchange = () => {
-          currentGraph.pushRecord();
+          currentProject.activeGraph.pushRecord();
         };
 
         if (this.useTextarea) {

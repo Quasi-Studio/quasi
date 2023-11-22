@@ -3,7 +3,7 @@ import Vf from "@quasi-dev/visual-flow";
 import Basics from "@refina/basic-components";
 import FluentUI from "@refina/fluentui";
 import { app } from "refina";
-import { currentGraph } from "./store";
+import { currentProject, loadAutoSaved, setAutoSaveInterval } from "./project";
 import { duplicateBlocks, hasBlocksToDuplicate, hasBlocksToRemove, initMonaco, removeBlocks } from "./utils";
 import blocksView from "./views/blocks.r";
 import previewView from "./views/preview.r";
@@ -12,6 +12,8 @@ import toolbarView, { graphElRef, previewMode } from "./views/toolbar.r";
 
 document.body.spellcheck = false;
 
+loadAutoSaved();
+setAutoSaveInterval();
 initMonaco();
 
 app.use(FluentUI).use(Vf).use(Basics).use(Monaco)(_ => {
@@ -30,7 +32,7 @@ app.use(FluentUI).use(Vf).use(Basics).use(Monaco)(_ => {
 
   if (!previewMode.value)
     _.div(_ => {
-      const hasSelectedBlock = currentGraph.selectedBlocks.size > 0;
+      const hasSelectedBlock = currentProject.activeGraph.selectedBlocks.size > 0;
 
       _.$cls`absolute left-0 top-8 w-80 bottom-0
    bg-gray-200 select-none z-[1000] border-r border-gray-400 flex flex-col`;
@@ -51,7 +53,7 @@ app.use(FluentUI).use(Vf).use(Basics).use(Monaco)(_ => {
 
             // _.$cls`text-xs pl-3`;
             // _.span(
-            //   [...currentGraph.selectedBlocks]
+            //   [...currentProject.activeGraph.selectedBlocks]
             //     .filter(isComponentBlock)
             //     .map(b => b.info.name)
             //     .join(" "),
@@ -65,15 +67,15 @@ app.use(FluentUI).use(Vf).use(Basics).use(Monaco)(_ => {
       });
 
       _.$cls`absolute left-80 top-8 right-0 bottom-0`;
-      _.$ref(graphElRef) && _._div({}, _ => _.vfGraph(currentGraph));
+      _.$ref(graphElRef) && _._div({}, _ => _.vfGraph(currentProject.activeGraph));
 
       _.$app.registerDocumentEventListener("keydown", ev => {
         if (ev.ctrlKey) {
-          if (ev.key === "z" && currentGraph.canUndo) {
-            currentGraph.undo();
+          if (ev.key === "z" && currentProject.activeGraph.canUndo) {
+            currentProject.activeGraph.undo();
             _.$update();
-          } else if (ev.key === "y" && currentGraph.canRedo) {
-            currentGraph.redo();
+          } else if (ev.key === "y" && currentProject.activeGraph.canRedo) {
+            currentProject.activeGraph.redo();
             _.$update();
           } else if (ev.key === "s") {
             // save
@@ -92,6 +94,6 @@ app.use(FluentUI).use(Vf).use(Basics).use(Monaco)(_ => {
       });
 
       // a workaround to update the position of the graph
-      setTimeout(() => currentGraph.updatePosition());
+      setTimeout(() => currentProject.activeGraph.updatePosition());
     });
 });

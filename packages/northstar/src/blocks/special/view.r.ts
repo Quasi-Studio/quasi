@@ -2,7 +2,7 @@ import type { ViewBlockOutput } from "@quasi-dev/compiler";
 import { Direction, PATH_IN_RECT, RectBlock, SingleInSocket, UseSocket, blockCtors } from "@quasi-dev/visual-flow";
 import { Context } from "refina";
 import { PropsData } from "../../utils/props";
-import { singleInSocketToOutput } from "../../utils/toOutpus";
+import { singleInSocketToOutput } from "../../utils/toOutput";
 import { SpecialBlock } from "./base";
 
 export class ViewBlock extends RectBlock implements SpecialBlock {

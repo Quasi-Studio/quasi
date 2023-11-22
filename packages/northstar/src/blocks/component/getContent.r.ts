@@ -1,6 +1,6 @@
 import { FUnderlineTextInput } from "@refina/fluentui";
 import { Context, ref } from "refina";
-import { currentGraph } from "../../store";
+import { currentProject } from "../../project";
 import { ComponentBlock } from "./block";
 
 export function getContent(block: ComponentBlock) {
@@ -29,10 +29,10 @@ export function getContent(block: ComponentBlock) {
         _.$css`font-family: Consolas; max-width: 108px; padding-left:4px`;
         _.$ref(inputRef) && _.fUnderlineTextInput(block.primaryValue, false, primaryInputInfo.displayName);
         inputRef.current!.inputRef.current!.node.onchange = () => {
-          currentGraph.pushRecord();
+          currentProject.activeGraph.pushRecord();
         };
         inputRef.current!.inputRef.current!.node.onfocus = () => {
-          currentGraph.addSelectedBlock(block, false);
+          currentProject.activeGraph.addSelectedBlock(block, false);
           _.$update();
         };
       },

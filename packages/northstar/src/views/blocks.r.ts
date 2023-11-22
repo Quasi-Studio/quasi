@@ -1,10 +1,10 @@
 import { componentInfoArray } from "@quasi-dev/runtime";
 import "@refina/fluentui-icons/edit.r.ts";
-import { bySelf, view } from "refina";
+import { byIndex, bySelf, view } from "refina";
 import { ComponentBlock } from "../blocks/component/block";
 import special from "../blocks/special";
 import { ViewBlock } from "../blocks/special/view.r";
-import { createNewView, currentGraph, currentViewId, setCurrentView, views } from "../store";
+import { currentProject } from "../project";
 
 export default view(_ => {
   if (_.fAccordionDefaultOpen("Special")) {
@@ -16,7 +16,7 @@ export default view(_ => {
         ([k, v]) => {
           _.$cls`cursor-pointer`;
           _.vfCreator(
-            currentGraph,
+            currentProject.activeGraph,
             _ => {
               _.$cls`my-1`;
               _.div(_ => {
@@ -43,7 +43,7 @@ export default view(_ => {
         ([k, v]) => {
           _.$cls`cursor-pointer`;
           _.vfCreator(
-            currentGraph,
+            currentProject.activeGraph,
             _ => {
               _.$cls`my-1`;
               _.div(_ => {
@@ -65,17 +65,19 @@ export default view(_ => {
   if (_.fAccordionDefaultOpen("Views")) {
     _.$cls`grid grid-cols-3 justify-items-center`;
     _.div(_ => {
-      _.for(views.keys(), bySelf, id => {
-        const editingThis = id === currentViewId;
+      _.for(currentProject.views, byIndex, (view, id) => {
+        if (view === null) return;
+
+        const editingThis = id === currentProject.activeViewId;
 
         _.$cls`my-1 cursor-pointer`;
         _.vfCreator(
-          currentGraph,
+          currentProject.activeGraph,
           _ => {
-            _.img("https://via.placeholder.com/80x80?text=" + id);
+            _.img("https://via.placeholder.com/80x80?text=" + view.name);
             _.$cls`text-center text-sm flex-nowrap`;
             _.div(_ => {
-              _.span(id);
+              _.span(view.name);
               if (editingThis) {
                 _.$cls`float-right mr-1 text-gray-500`;
                 _.div(_ => _.fiEdit20Filled());
@@ -85,7 +87,7 @@ export default view(_ => {
                   {
                     onmousedown: ev => ev.stopPropagation(),
                     onclick: () => {
-                      setCurrentView(id);
+                      currentProject.setActiveView(id);
                       _.$update();
                     },
                   },
@@ -96,18 +98,18 @@ export default view(_ => {
           },
           () => {
             const block = new ViewBlock();
-            block.viewName = id;
+            block.viewName = view.name;
             return block;
           },
-          id === "app" || editingThis,
+          id === 0 || editingThis,
         );
       });
       _.$cls`my-1 hover:border-2 hover:border-gray-400 cursor-pointer`;
       _._div(
         {
           onclick: () => {
-            const id = createNewView();
-            setCurrentView(id);
+            const id = currentProject.addView();
+            currentProject.setActiveView(id);
             _.$update();
           },
         },
