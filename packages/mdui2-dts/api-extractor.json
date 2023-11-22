@@ -1,0 +1,50 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/api-extractor/v7/api-extractor.schema.json",
+  "mainEntryPointFilePath": "./entrypoint.d.ts",
+  "bundledPackages": [
+    "mdui",
+    "@mdui/shared",
+    "@mdui/jq",
+    "@open-wc/dedupe-mixin",
+    "lit",
+    "lit-element",
+    "lit-html",
+    "@lit/reactive-element"
+  ],
+  "compiler": {},
+  "apiReport": {
+    "enabled": true,
+    "reportFileName": "report.api.md",
+    "reportFolder": "./dist",
+    "reportTempFolder": "./dist/temp/"
+  },
+  "docModel": {
+    "enabled": false
+  },
+  "dtsRollup": {
+    "enabled": true
+  },
+  "tsdocMetadata": {
+    "enabled": false
+  },
+  "messages": {
+    "compilerMessageReporting": {
+      "default": {
+        "logLevel": "none",
+        "addToApiReportFile": true
+      }
+    },
+    "extractorMessageReporting": {
+      "default": {
+        "logLevel": "none",
+        "addToApiReportFile": true
+      }
+    },
+    "tsdocMessageReporting": {
+      "default": {
+        "logLevel": "none",
+        "addToApiReportFile": true
+      }
+    }
+  }
+}

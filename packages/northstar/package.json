@@ -26,6 +26,7 @@
   "dependencies": {
     "@quasi-dev/browser-tailwind": "workspace:^",
     "@quasi-dev/compiler": "workspace:^",
+    "@quasi-dev/mdui2-dts": "workspace:^",
     "@quasi-dev/monaco-editor": "workspace:^",
     "@quasi-dev/runtime": "workspace:^",
     "@quasi-dev/visual-flow": "workspace:^",
