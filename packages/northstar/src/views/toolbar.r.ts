@@ -24,7 +24,6 @@ import {
   hasBlocksToRemove,
   removeBlocks,
 } from "../utils";
-import { toOutput } from "../utils/toOutput";
 import { startPreview } from "./preview.r";
 import iconURL from "/favicon.ico?url";
 
@@ -109,7 +108,7 @@ export default view(_ => {
     ) {
       if (_.$ev) {
         try {
-          const compiler = new Compiler(toOutput());
+          const compiler = new Compiler(currentProject.toOutput());
           compiler
             .compile()
             .then(v => {

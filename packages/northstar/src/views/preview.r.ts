@@ -2,14 +2,14 @@
 import { HTMLElementComponent, ref, view } from "refina";
 
 import runtimeURL from "@quasi-dev/runtime/src/index.ts?url";
-import mduiStyleUrl from "@quasi-dev/runtime/styles.css?url"; // Used in development
 import mduiStyleContent from "@quasi-dev/runtime/styles.css?inline"; // Used in production
+import mduiStyleUrl from "@quasi-dev/runtime/styles.css?url"; // Used in development
 import iframeURL from "./iframe/index.html?url";
 
 import { compileTailwindCSS } from "@quasi-dev/browser-tailwind";
 import { Compiler } from "@quasi-dev/compiler";
 import { RefinaTransformer } from "@refina/transformer";
-import { toOutput } from "../utils/toOutput";
+import { currentProject } from "../project";
 
 const transformer = new RefinaTransformer();
 
@@ -23,7 +23,7 @@ const iframe = ref<HTMLElementComponent<"iframe">>();
 let errorMsg = "";
 
 export async function startPreview() {
-  const compiler = new Compiler(toOutput());
+  const compiler = new Compiler(currentProject.toOutput());
   compiler.runtimeModuleURL = runtimeURL;
   code.js = transformer.transform("$", await compiler.compile());
   code.css = (

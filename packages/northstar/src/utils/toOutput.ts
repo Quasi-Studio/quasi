@@ -1,4 +1,4 @@
-import type { ConnectTo, ViewOutput } from "@quasi-dev/compiler";
+import type { ConnectTo } from "@quasi-dev/compiler";
 import type {
   MultiInSocket,
   MultiOutSocket,
@@ -6,28 +6,6 @@ import type {
   SingleOutSocket,
   Socket,
 } from "@quasi-dev/visual-flow";
-import { isComponentBlock, toBlockOutput } from "../blocks/component";
-import { SpecialBlock } from "../blocks/special/base";
-import { currentProject } from "../project";
-
-export function toOutput() {
-  const viewsOutput: ViewOutput[] = [];
-  currentProject.views.forEach((view, id) => {
-    if (view === null) return;
-    viewsOutput.push({
-      name: view.name,
-      componentBlocks: view.graph.blocks
-        .filter(isComponentBlock)
-        .map(toBlockOutput),
-      specialBlocks: view.graph.blocks
-        .filter((b) => !isComponentBlock(b))
-        .map((b) => (b as unknown as SpecialBlock).toOutput()),
-    });
-  });
-  return {
-    views: viewsOutput,
-  };
-}
 
 export function multiInSocketToOutput(
   socket: MultiInSocket | undefined,

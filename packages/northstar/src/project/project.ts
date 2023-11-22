@@ -1,4 +1,7 @@
+import { ViewOutput } from "@quasi-dev/compiler";
 import { Graph, exportVf, importVf } from "@quasi-dev/visual-flow";
+import { isComponentBlock, toBlockOutput } from "../blocks/component";
+import { SpecialBlock } from "../blocks/special/base";
 import { RootBlock } from "../blocks/special/root.r";
 
 export class Project {
@@ -74,6 +77,25 @@ export class Project {
     project.addView();
     project.views[0]!.name = "app";
     return project;
+  }
+
+  toOutput() {
+    const viewsOutput: ViewOutput[] = [];
+    currentProject.views.forEach((view, id) => {
+      if (view === null) return;
+      viewsOutput.push({
+        name: view.name,
+        componentBlocks: view.graph.blocks
+          .filter(isComponentBlock)
+          .map(toBlockOutput),
+        specialBlocks: view.graph.blocks
+          .filter((b) => !isComponentBlock(b))
+          .map((b) => (b as unknown as SpecialBlock).toOutput()),
+      });
+    });
+    return {
+      views: viewsOutput,
+    };
   }
 }
 
