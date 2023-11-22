@@ -43,6 +43,17 @@ export class ViewBlock extends RectBlock implements SpecialBlock {
     return [];
   }
 
+  protected exportData(): any {
+    return {
+      ...super.exportData(),
+      viewName: this.viewName,
+    };
+  }
+  protected importData(data: any, sockets: any): void {
+    super.importData(data, sockets);
+    this.viewName = data.viewName;
+  }
+
   toOutput(): ViewBlockOutput {
     return {
       type: "view",
