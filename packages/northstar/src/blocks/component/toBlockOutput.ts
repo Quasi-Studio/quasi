@@ -16,63 +16,62 @@ import { ValidatorBlock } from "../special/validator";
 import { ComponentBlock } from "./block";
 
 export function toBlockOutput(block: ComponentBlock) {
-  const blockContents = Object.values(block.info.contents);
-  const blockEvents = Object.values(block.info.events);
-  const blockInputs = Object.values(block.info.inputs);
-  const blockProps = Object.values(block.info.props);
-  const blockPlugins = Object.values(block.info.plugins);
+  const blockContents = Object.entries(block.info.contents);
+  const blockEvents = Object.entries(block.info.events);
+  const blockInputs = Object.entries(block.info.inputs);
+  const blockProps = Object.entries(block.info.props);
+  const blockPlugins = Object.entries(block.info.plugins);
 
   const callbacks = {} as ComponentBlockCallbacks;
-  for (const event of blockEvents) {
-    callbacks[event.displayName] = singleOutSocketToOutput(
-      block.getSocketByName(event.displayName) as SingleOutSocket,
+  for (const [k, v] of blockEvents) {
+    callbacks[k] = singleOutSocketToOutput(
+      block.getSocketByName(k) as SingleOutSocket,
     );
   }
 
   const props = {} as ComponentBlockProps;
-  for (const v of blockProps) {
+  for (const [k, v] of blockProps) {
     if (v.type !== "readonly") {
-      props[v.name] = block.props[v.name] ?? v.defaultVal;
+      props[k] = block.props[k] ?? v.defaultVal;
     }
   }
-  for (const input of blockInputs) {
+  for (const [k, v] of blockInputs) {
     if (
-      input.mode === "as-primary" ||
-      (input.mode === "as-primary-and-socket" && block.primaryFilled)
+      v.mode === "as-primary" ||
+      (v.mode === "as-primary-and-socket" && block.primaryFilled)
     )
       continue;
-    const socket = block.getSocketByName(input.displayName)
-      ?.allConnectedLines[0]?.a;
-    props[input.displayName] = {
+    const socket = block.getSocketByName(k)?.allConnectedLines[0]?.a;
+    props[k] = {
       blockId: socket?.block.id ?? NaN,
       socketName: socket?.label ?? "",
     };
   }
 
   let children = {} as ComponentBlockChildren;
-  for (const content of blockContents) {
+  for (const [k, v] of blockContents) {
     if (
-      content.mode === "as-primary" ||
-      (content.mode === "as-primary-and-socket" && block.primaryFilled)
+      v.mode === "as-primary" ||
+      (v.mode === "as-primary-and-socket" && block.primaryFilled)
     )
       continue;
-    children[content.displayName] =
+    children[k] =
       block
-        .getSocketByName(content.displayName)
+        .getSocketByName(k)
         ?.allConnectedLines.map((l) => (l.b as Socket).block)
         .sort((a, b) => a.boardY - b.boardY)
         .map((b) => b.id) ?? [];
   }
 
   let plugins = {} as ComponentBlockPlugins;
-  for (const plugin of blockPlugins) {
-    if (plugin.kind !== "input-plugin") continue;
+  for (const [k, v] of blockPlugins) {
+    if (v.kind !== "input-plugin") continue;
 
     const validators: ValidatorBlock[] = [];
     let currentPluginBlock: Block | undefined = block;
     while (true) {
       currentPluginBlock = currentPluginBlock.dockedByBlocks.find(
-        ([d, b]) => d === plugin.direction,
+        ([d, b]) => d === v.direction,
       )?.[1];
       if (!currentPluginBlock) {
         break;
@@ -84,7 +83,7 @@ export function toBlockOutput(block: ComponentBlock) {
       }
     }
 
-    plugins[plugin.displayName] = `$ => {
+    plugins[k] = `$ => {
       ${validators
         .map((v) => {
           if (v.inputValue.value.length === 0)

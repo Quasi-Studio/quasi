@@ -9,7 +9,8 @@ export function getProps(block: ComponentBlock): PropsData {
   const primaryInputInfo = block.primaryInputInfo;
   if (primaryInputInfo) {
     slotPos.push({
-      name: "slots pos",
+      key: "slots-pos",
+      displayName: "slots pos",
       type: "dropdown",
       options: ["TOP", "BOTTOM"],
       getVal: () => {
@@ -23,22 +24,23 @@ export function getProps(block: ComponentBlock): PropsData {
 
   return [
     ...slotPos,
-    ...Object.values(info.props).map(
-      (v) =>
+    ...Object.entries(info.props).map(
+      ([k, v]) =>
         ({
           ...v,
+          key: k,
           getVal:
             v.type === "readonly"
               ? () => v.value
               : () => {
-                  return block.props[v.name] ?? v.defaultVal;
+                  return block.props[k] ?? v.defaultVal;
                 },
           setVal: (val: any) => {
-            block.props[v.name] = val;
+            block.props[k] = val;
           },
         }) as PropData,
     ),
-    ...Object.values({
+    ...Object.entries({
       ...info.contents,
       ...info.inputs,
       ...info.outputs,
@@ -46,21 +48,20 @@ export function getProps(block: ComponentBlock): PropsData {
       ...info.methods,
     })
       .filter(
-        (v) => v.mode === "as-hidable-socket" || v.mode === "as-hidden-socket",
+        ([k, v]) =>
+          v.mode === "as-hidable-socket" || v.mode === "as-hidden-socket",
       )
       .map(
-        (v) =>
+        ([k, v]) =>
           ({
-            name: `[${v.displayName}]`,
+            key: `[${k}]`,
+            displayName: `[${v.displayName}]`,
             type: "switch",
             getVal: () => {
-              return (
-                block.props[`[${v.displayName}]`] ??
-                v.mode === "as-hidable-socket"
-              );
+              return block.props[`[${k}]`] ?? v.mode === "as-hidable-socket";
             },
             setVal: (val: any) => {
-              block.props[`[${v.displayName}]`] = val;
+              block.props[`[${k}]`] = val;
             },
           }) as PropData,
       ),

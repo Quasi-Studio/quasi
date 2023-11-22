@@ -5,7 +5,7 @@ import { getSelectedProps } from "../utils/props";
 
 export default view(_ => {
   const props = getSelectedProps();
-  _.for(props, "name", p => {
+  _.for(props, "key", p => {
     const r = ref() as MainElRef;
     _.$cls`col-span-1 flex justify-center items-center border-b border-gray-500 h-8`;
     _._div(
@@ -14,7 +14,7 @@ export default view(_ => {
           (r.current?.$mainEl?.firstChild as HTMLElement | null | undefined)?.focus();
         },
       },
-      p.name,
+      p.displayName,
     );
     _.$cls`col-span-2 h-8`;
     if (p.type === "text") {

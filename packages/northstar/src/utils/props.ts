@@ -1,7 +1,8 @@
 import { currentGraph } from "../store";
 
 export interface PropDataBase {
-  name: string;
+  key: string;
+  displayName: string;
 }
 
 export interface TextPropData extends PropDataBase {
@@ -49,7 +50,7 @@ export function mergeProps([props0, ...propsRest]: PropsData[]) {
   for (const v of props0) {
     if (
       propsRest.every((ps) =>
-        ps.some((p) => p.name === v.name && p.type === v.type),
+        ps.some((p) => p.displayName === v.displayName && p.type === v.type),
       )
     ) {
       mergedProps.push(v);

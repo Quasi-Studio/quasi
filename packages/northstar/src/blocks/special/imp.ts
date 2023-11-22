@@ -70,7 +70,8 @@ export class ImpBlock extends FuncBlockBase {
   getProps(): PropsData {
     return [
       {
-        name: "[then]",
+        key: "[then]",
+        displayName: "[then]",
         type: "switch",
         getVal: () => {
           return this.hasThen;

@@ -78,11 +78,11 @@ export class ComponentBlock extends RectBlock {
   }
 
   socketUpdater(useSocket: UseSocket): void {
-    const contents = Object.values(this.info.contents);
-    const events = Object.values(this.info.events);
-    const inputs = Object.values(this.info.inputs);
-    const outputs = Object.values(this.info.outputs);
-    const methods = Object.values(this.info.methods);
+    const contents = Object.entries(this.info.contents);
+    const events = Object.entries(this.info.events);
+    const inputs = Object.entries(this.info.inputs);
+    const outputs = Object.entries(this.info.outputs);
+    const methods = Object.entries(this.info.methods);
 
     useSocket("parent", SingleInSocket, {
       type: "L",
@@ -102,11 +102,14 @@ export class ComponentBlock extends RectBlock {
       }
     }
 
-    const shouldHideSocket = (socketInfo: {
-      mode: string;
-      displayName: string;
-    }) => {
-      const prop = this.props[`[${socketInfo.displayName}]`];
+    const shouldHideSocket = (
+      k: string,
+      socketInfo: {
+        mode: string;
+        displayName: string;
+      },
+    ) => {
+      const prop = this.props[`[${k}]`];
       return (
         (socketInfo.mode === "as-hidden-socket" && prop !== true) ||
         (socketInfo.mode === "as-hidable-socket" && prop === false) ||
@@ -114,61 +117,66 @@ export class ComponentBlock extends RectBlock {
       );
     };
 
-    for (const content of contents) {
-      if (content.mode === "as-primary" || shouldHideSocket(content)) continue;
-      const socket = useSocket(content.displayName, MultiOutSocket, {
+    for (const [k, v] of contents) {
+      if (v.mode === "as-primary" || shouldHideSocket(k, v)) continue;
+      const socket = useSocket(k, MultiOutSocket, {
+        label: v.displayName,
         type: "L",
         path: PATH_OUT_RECT,
         hideLabel: contents.length === 1,
-        direction: content.position ?? Direction.RIGHT,
+        direction: v.position ?? Direction.RIGHT,
       });
 
-      if (content.mode === "as-primary-and-socket") {
+      if (v.mode === "as-primary-and-socket") {
         this.getPrimaryDisabled = () => {
           return socket.allConnectedLines.length > 0;
         };
       }
     }
 
-    for (const event of events) {
-      if (shouldHideSocket(event)) continue;
-      useSocket(event.displayName, SingleOutSocket, {
+    for (const [k, v] of events) {
+      if (shouldHideSocket(k, v)) continue;
+      useSocket(k, SingleOutSocket, {
+        label: v.displayName,
         type: "E",
         path: PATH_OUT_TRIANGLE,
-        direction: event.position ?? Direction.BOTTOM,
+        direction: v.position ?? Direction.BOTTOM,
       });
     }
 
-    for (const input of inputs) {
-      if (input.mode === "as-primary" || shouldHideSocket(input)) continue;
-      const socket = useSocket(input.displayName, SingleInSocket, {
+    for (const [k, v] of inputs) {
+      if (v.mode === "as-primary" || shouldHideSocket(k, v)) continue;
+      const socket = useSocket(k, SingleInSocket, {
+        label: v.displayName,
         type: "D",
         path: PATH_IN_ELIPSE,
-        direction: input.position ?? Direction.UP,
+        direction: v.position ?? Direction.UP,
       });
 
-      if (input.mode === "as-primary-and-socket") {
+      if (v.mode === "as-primary-and-socket") {
         this.getPrimaryDisabled = () => {
           return socket.allConnectedLines.length > 0;
         };
       }
     }
 
-    for (const output of outputs) {
-      if (shouldHideSocket(output)) continue;
-      useSocket(output.displayName, MultiOutSocket, {
+    for (const [k, v] of outputs) {
+      if (shouldHideSocket(k, v)) continue;
+      useSocket(k, MultiOutSocket, {
+        label: v.displayName,
         type: "D",
         path: PATH_OUT_ELIPSE,
-        direction: output.position ?? Direction.BOTTOM,
+        direction: v.position ?? Direction.BOTTOM,
       });
     }
 
-    for (const method of methods) {
-      if (shouldHideSocket(method)) continue;
-      useSocket(method.displayName, MultiInSocket, {
+    for (const [k, v] of methods) {
+      if (shouldHideSocket(k, v)) continue;
+      useSocket(k, MultiInSocket, {
+        label: v.displayName,
         type: "E",
         path: PATH_IN_TRIANGLE,
-        direction: method.position ?? Direction.TOP,
+        direction: v.position ?? Direction.TOP,
       });
     }
   }

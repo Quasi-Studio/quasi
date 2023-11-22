@@ -189,7 +189,8 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
   getProps(): PropsData {
     return [
       {
-        name: "slots pos",
+        key: "slots-pos",
+        displayName: "slots pos",
         type: "dropdown",
         options: ["TOP", "BOTTOM"],
         getVal: () => {
@@ -200,7 +201,8 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
         },
       } satisfies PropData,
       {
-        name: "output pos",
+        key: "output-pos",
+        displayName: "output pos",
         type: "dropdown",
         options: ["BOTTOM", "TOP"],
         getVal: () => {

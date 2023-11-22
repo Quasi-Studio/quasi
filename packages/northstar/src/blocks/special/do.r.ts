@@ -65,7 +65,8 @@ export class DoBlock extends RectBlock {
   getProps(): PropsData {
     return [
       {
-        name: "number",
+        key: "number",
+        displayName: "number",
         type: "number",
         min: 2,
         max: 5,
@@ -77,7 +78,8 @@ export class DoBlock extends RectBlock {
         },
       },
       {
-        name: "rotate",
+        key: "rotate",
+        displayName: "rotate",
         type: "switch",
         getVal: () => {
           return this.rotate;

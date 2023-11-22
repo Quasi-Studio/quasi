@@ -1,14 +1,17 @@
 export interface PropBase {
-  name: string;
+  displayName: string;
 }
 
 export interface TextProp extends PropBase {
   type: "text";
   defaultVal: string;
 }
-export function textProp(name: string, defaultVal: string = ""): TextProp {
+export function textProp(
+  displayName: string,
+  defaultVal: string = "",
+): TextProp {
   return {
-    name,
+    displayName,
     type: "text",
     defaultVal,
   };
@@ -19,11 +22,11 @@ export interface SwitchProp extends PropBase {
   defaultVal: boolean;
 }
 export function switchProp(
-  name: string,
+  displayName: string,
   defaultVal: boolean = false,
 ): SwitchProp {
   return {
-    name,
+    displayName,
     type: "switch",
     defaultVal,
   };
@@ -35,12 +38,12 @@ export interface DropdownProp extends PropBase {
   defaultVal: string;
 }
 export function dropdownProp(
-  name: string,
+  displayName: string,
   options: string[],
   defaultVal: string,
 ): DropdownProp {
   return {
-    name,
+    displayName,
     type: "dropdown",
     options,
     defaultVal,
@@ -51,9 +54,9 @@ export interface ReadonlyProp extends PropBase {
   type: "readonly";
   value: string;
 }
-export function readonlyProp(name: string, value: string): ReadonlyProp {
+export function readonlyProp(displayName: string, value: string): ReadonlyProp {
   return {
-    name,
+    displayName,
     type: "readonly",
     value,
   };
@@ -66,13 +69,13 @@ export interface NumberProp extends PropBase {
   max: number;
 }
 export function numberProp(
-  name: string,
+  displayName: string,
   defaultVal: number,
   min: number = -Infinity,
   max: number = Infinity,
 ): NumberProp {
   return {
-    name,
+    displayName,
     type: "number",
     defaultVal,
     min,
