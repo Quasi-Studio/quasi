@@ -1,5 +1,20 @@
 import { ComponentContext, Content, OutputComponent } from "refina";
-import QuasiRuntime from "./plugin";
+import QuasiRuntime from "../plugin";
+import { component, content, input, output } from "../types";
+
+export default component({
+  displayName: () => "For each",
+  model: "ForEachModel",
+  contents: {
+    inner: content("inner"),
+  },
+  inputs: {
+    iterable: input("iterable"),
+  },
+  outputs: {
+    current: output("current"),
+  },
+});
 
 export interface ForEachProps {
   inner: Content;
@@ -10,7 +25,7 @@ export class ForEachModel {
   current: unknown;
 }
 
-@QuasiRuntime.outputComponent("forEach")
+@QuasiRuntime.outputComponent("qForEach")
 export class QForEach extends OutputComponent {
   main(_: ComponentContext, model: ForEachModel, props: ForEachProps): void {
     let index = 0;
@@ -26,6 +41,6 @@ export class QForEach extends OutputComponent {
 
 declare module "refina" {
   interface OutputComponents {
-    forEach: QForEach;
+    qForEach: QForEach;
   }
 }

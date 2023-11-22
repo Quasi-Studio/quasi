@@ -30,9 +30,9 @@ export interface ComponentBlockOutput {
   name: string;
   /**
    * Model构造器
-   * e.g. `new Dialog()`
+   * e.g. `DialogModel`
    */
-  modelAllocator: string | null;
+  model: string | null;
   /**
    * 事件回调，生成成函数后作为属性传入
    */

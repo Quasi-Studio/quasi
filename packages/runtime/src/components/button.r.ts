@@ -1,5 +1,22 @@
 import { ComponentContext, Content, OutputComponent } from "refina";
-import QuasiRuntime from "./plugin";
+import QuasiRuntime from "../plugin";
+import { component, content, event, input, textProp } from "../types";
+
+export default component({
+  displayName: () => "Button",
+  contents: {
+    inner: content("inner", "as-primary"),
+  },
+  inputs: {
+    disabled: input("disabled", "as-hidden-socket"),
+  },
+  events: {
+    onClick: event("onClick"),
+  },
+  props: {
+    class: textProp("class"),
+  },
+});
 
 export interface ButtonProps {
   inner: Content;
@@ -8,7 +25,7 @@ export interface ButtonProps {
   onClick: () => void;
 }
 
-@QuasiRuntime.outputComponent("button")
+@QuasiRuntime.outputComponent("qButton")
 export class QButton extends OutputComponent {
   main(_: ComponentContext, props: ButtonProps): void {
     _.$cls(props.class);
@@ -20,6 +37,6 @@ export class QButton extends OutputComponent {
 
 declare module "refina" {
   interface OutputComponents {
-    button: QButton;
+    qButton: QButton;
   }
 }

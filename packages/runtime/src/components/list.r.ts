@@ -1,5 +1,23 @@
 import { ComponentContext, Content, OutputComponent, byIndex, bySelf } from "refina";
-import QuasiRuntime from "./plugin";
+import QuasiRuntime from "../plugin";
+import { component, content, input, output, textProp } from "../types";
+
+export default component({
+  displayName: () => "List",
+  contents: {
+    inner: content("inner"),
+  },
+  inputs: {
+    data: input("data"),
+  },
+  outputs: {
+    current: output("current"),
+  },
+  props: {
+    class: textProp("class"),
+    key: textProp("key", "$index"),
+  },
+});
 
 export interface ListProps {
   inner: Content;
@@ -12,7 +30,7 @@ export class ListModel {
   current: any;
 }
 
-@QuasiRuntime.outputComponent("list")
+@QuasiRuntime.outputComponent("qList")
 export class QList extends OutputComponent {
   main(_: ComponentContext, model: ListModel, props: ListProps): void {
     _.$cls(props.class);
@@ -26,6 +44,6 @@ export class QList extends OutputComponent {
 
 declare module "refina" {
   interface OutputComponents {
-    list: QList;
+    qList: QList;
   }
 }

@@ -18,25 +18,6 @@ importers:
         specifier: 3.0.0
         version: 3.0.0
 
-  packages/block-data:
-    dependencies:
-      '@quasi-dev/visual-flow':
-        specifier: workspace:^
-        version: link:../visual-flow
-      '@refina/fluentui':
-        specifier: link:..\..\..\refina\packages\fluentui
-        version: link:../../../refina/packages/fluentui
-      '@refina/tsconfig':
-        specifier: link:..\..\..\refina\packages\tsconfig
-        version: link:../../../refina/packages/tsconfig
-      refina:
-        specifier: link:..\..\..\refina\packages\core
-        version: link:../../../refina/packages/core
-    devDependencies:
-      typescript:
-        specifier: ^5.1.6
-        version: 5.2.2
-
   packages/browser-tailwind:
     dependencies:
       postcss:
@@ -87,9 +68,6 @@ importers:
 
   packages/northstar:
     dependencies:
-      '@quasi-dev/block-data':
-        specifier: workspace:^
-        version: link:../block-data
       '@quasi-dev/browser-tailwind':
         specifier: workspace:^
         version: link:../browser-tailwind

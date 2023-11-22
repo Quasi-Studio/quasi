@@ -23,7 +23,7 @@ export function getProps(block: ComponentBlock): PropsData {
 
   return [
     ...slotPos,
-    ...info.props.map(
+    ...Object.values(info.props).map(
       (v) =>
         ({
           ...v,
@@ -38,28 +38,29 @@ export function getProps(block: ComponentBlock): PropsData {
           },
         }) as PropData,
     ),
-    ...[
+    ...Object.values({
       ...info.contents,
       ...info.inputs,
       ...info.outputs,
       ...info.events,
       ...info.methods,
-    ]
+    })
       .filter(
-        (v) => v.kind === "as-hidable-socket" || v.kind === "as-hidden-socket",
+        (v) => v.mode === "as-hidable-socket" || v.mode === "as-hidden-socket",
       )
       .map(
         (v) =>
           ({
-            name: `[${v.name}]`,
+            name: `[${v.displayName}]`,
             type: "switch",
             getVal: () => {
               return (
-                block.props[`[${v.name}]`] ?? v.kind === "as-hidable-socket"
+                block.props[`[${v.displayName}]`] ??
+                v.mode === "as-hidable-socket"
               );
             },
             setVal: (val: any) => {
-              block.props[`[${v.name}]`] = val;
+              block.props[`[${v.displayName}]`] = val;
             },
           }) as PropData,
       ),

@@ -24,7 +24,6 @@
     "vite-plugin-static-copy": "^0.17.0"
   },
   "dependencies": {
-    "@quasi-dev/block-data": "workspace:^",
     "@quasi-dev/browser-tailwind": "workspace:^",
     "@quasi-dev/compiler": "workspace:^",
     "@quasi-dev/monaco-editor": "workspace:^",

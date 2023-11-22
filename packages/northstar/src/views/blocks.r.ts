@@ -1,4 +1,4 @@
-import blocks from "@quasi-dev/block-data";
+import { componentInfoArray } from "@quasi-dev/runtime";
 import "@refina/fluentui-icons/edit.r.ts";
 import { bySelf, view } from "refina";
 import { ComponentBlock } from "../blocks/component/block";
@@ -38,7 +38,7 @@ export default view(_ => {
     _.$cls`grid grid-cols-3 justify-items-center`;
     _.div(_ => {
       _.for(
-        blocks,
+        componentInfoArray,
         ([k]: any) => k,
         ([k, v]) => {
           _.$cls`cursor-pointer`;
@@ -49,7 +49,7 @@ export default view(_ => {
               _.div(_ => {
                 _.img("https://via.placeholder.com/80x80?text=" + k);
                 _.$cls`text-center text-sm overflow-hidden`;
-                _.div(v.name({}));
+                _.div(v.displayName({}));
               });
             },
             () => {

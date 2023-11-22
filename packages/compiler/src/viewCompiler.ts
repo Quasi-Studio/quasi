@@ -150,13 +150,13 @@ const ${this.view.name}_view = ${
       case "root":
         throw new Error("Not implemented");
       case "component":
-        if (!block.modelAllocator) {
+        if (!block.model) {
           throw new Error("This component block has no data output");
         }
         this.lineDefs.push(
           `const ${lineId} = () => ${this.compileModel(
             blockId,
-            block.modelAllocator,
+            block.model,
           )}["${socketName}"];`,
         );
         break;
@@ -261,13 +261,13 @@ const ${this.view.name}_view = ${
       case "root":
         throw new Error("Root block is not callable");
       case "component":
-        if (!block.modelAllocator)
+        if (!block.model)
           throw new Error("This component block has no event input");
         this.impDefs.set(
           impId,
           `() => ${this.compileModel(
             blockId,
-            block.modelAllocator,
+            block.model,
           )}["${socketName}"]()`,
         );
         break;
@@ -400,8 +400,8 @@ const ${this.view.name}_view = ${
 
     return `_.${block.func}(
   ${
-    block.modelAllocator
-      ? `${this.compileModel(block.id, block.modelAllocator)},\n`
+    block.model
+      ? `${this.compileModel(block.id, block.model)},\n`
       : ""
   }{
     ${Object.entries({
