@@ -25,7 +25,7 @@ let errorMsg = "";
 export async function startPreview() {
   const compiler = new Compiler(currentProject.toOutput());
   compiler.runtimeModuleURL = runtimeURL;
-  code.js = transformer.transform("$", await compiler.compile());
+  code.js = "window.__QUASI_PREVIEW__ = true; \n\n" + transformer.transform("$", await compiler.compile());
   code.css = (
     await compileTailwindCSS(
       `@tailwind base;
