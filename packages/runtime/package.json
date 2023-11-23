@@ -10,7 +10,8 @@
   },
   "devDependencies": {
     "@refina/tsconfig": "link:..\\..\\..\\refina\\packages\\tsconfig",
-    "typescript": "^5.0.2"
+    "typescript": "^5.0.2",
+    "vite": "^4.4.8"
   },
   "main": "./src/index.ts",
   "types": "./src/index.ts",
