@@ -65,6 +65,7 @@ export class QInput extends OutputComponent {
     model.type = props.type;
     model.value ??= props.initial;
     _.$cls(props.class);
+    _.$css`margin-bottom:18px;`
     if (
       props.type === "password"
         ? _.mdPasswordInput(fromProp(model, "_value"), props.label, props.disabled)
