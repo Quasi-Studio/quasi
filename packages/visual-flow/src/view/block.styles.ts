@@ -38,6 +38,7 @@ const rootStyles = makeStyles({
 
 const svgClassName = makeResetStyles({
   position: "absolute",
+  pointerEvents: "none",
   ...shorthands.overflow("visible"),
 });
 
