@@ -1,6 +1,7 @@
 export * from "./base";
 export * from "./component";
 export * from "./content";
+export * from "./env";
 export * from "./event";
 export * from "./input";
 export * from "./method";
