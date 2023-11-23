@@ -1,4 +1,4 @@
-export * from "./appbar.r";
+export * from "./appLayout.r";
 export * from "./button.r";
 export * from "./div.r";
 export * from "./forEach.r";
@@ -11,7 +11,7 @@ export * from "./table.r";
 export * from "./tableItem.r";
 export * from "./textNode.r";
 
-import qAppbar from "./appbar.r";
+import qAppLayout from "./appLayout.r";
 import qButton from "./button.r";
 import qDiv from "./div.r";
 import qForEach from "./forEach.r";
@@ -25,7 +25,7 @@ import qTableItem from "./tableItem.r";
 import qTextNode from "./textNode.r";
 
 export const componentInfoObj = {
-  qAppbar,
+  qAppLayout,
   qButton,
   qDiv,
   qForEach,
