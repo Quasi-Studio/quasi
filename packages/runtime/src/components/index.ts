@@ -1,5 +1,6 @@
 export * from "./appLayout.r";
 export * from "./button.r";
+export * from "./card.r";
 export * from "./div.r";
 export * from "./forEach.r";
 export * from "./ifElse.r";
@@ -13,6 +14,7 @@ export * from "./textNode.r";
 
 import qAppLayout from "./appLayout.r";
 import qButton from "./button.r";
+import qCard from "./card.r";
 import qDiv from "./div.r";
 import qForEach from "./forEach.r";
 import qIfElse from "./ifElse.r";
@@ -27,6 +29,7 @@ import qTextNode from "./textNode.r";
 export const componentInfoObj = {
   qAppLayout,
   qButton,
+  qCard,
   qDiv,
   qForEach,
   qIfElse,
