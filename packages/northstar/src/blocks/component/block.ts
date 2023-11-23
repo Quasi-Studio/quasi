@@ -35,6 +35,8 @@ export class ComponentBlock extends RectBlock {
   setComponentType(componentType: string, info: ComponentInfo) {
     this.componentType = componentType;
     this.info = info;
+    this.boardWidth = info.blockWidth;
+    this.boardHeight = info.blockHeight;
     this.content = getContent(this);
     updatePlugins(this);
   }
@@ -43,9 +45,6 @@ export class ComponentBlock extends RectBlock {
 
   removable = true;
   duplicateable = true;
-
-  boardWidth = 200;
-  boardHeight = 50;
 
   componentType: string;
   info: ComponentInfo;
@@ -196,13 +195,13 @@ export class ComponentBlock extends RectBlock {
   }
   protected importData(data: any, sockets: Record<number, Socket>): void {
     super.importData(data, sockets);
-    this.componentType = data.componentType;
-    this.info =
-      componentInfoObj[data.componentType as keyof typeof componentInfoObj];
+    this.setComponentType(
+      data.componentType,
+      componentInfoObj[data.componentType as keyof typeof componentInfoObj],
+    );
     this.props = data.props;
     this.primaryValue.value = data.primaryValue;
     this.slotsDirection = data.slotsDirection;
-    this.content = getContent(this);
   }
 }
 

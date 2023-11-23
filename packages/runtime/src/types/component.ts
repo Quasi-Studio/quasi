@@ -7,10 +7,10 @@ import { PluginInfo } from "./plugin";
 import { Prop, textProp } from "./prop";
 
 export interface ComponentInfo {
-  /**
-   * Display name
-   */
   displayName: (props: Record<string, any>) => string;
+
+  blockWidth: number;
+  blockHeight: number;
 
   model: string | null;
 
@@ -28,6 +28,8 @@ export function component(
     Pick<ComponentInfo, "displayName">,
 ): ComponentInfo {
   return {
+    blockWidth: 200,
+    blockHeight: 50,
     model: null,
     contents: {},
     inputs: {},
