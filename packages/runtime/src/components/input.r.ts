@@ -1,9 +1,16 @@
 import { ComponentContext, OutputComponent, fromProp } from "refina";
 import QuasiRuntime from "../plugin";
-import { component, event, input, method, output, plugin, textProp } from "../types";
+import { component, dropdownProp, event, input, method, output, plugin, textProp } from "../types";
 
 export default component({
-  displayName: () => "Text input",
+  displayName: props =>
+    (
+      ({
+        text: "Text input",
+        password: "Pwd input",
+        number: "Num input",
+      }) as any
+    )[props.type] ?? "Input",
   model: "InputModel",
   inputs: {
     label: input("label", "as-primary"),
@@ -22,12 +29,14 @@ export default component({
     validator: plugin("validator", "input-plugin"),
   },
   props: {
+    type: dropdownProp("type", ["text", "password", "number"], "text"),
     class: textProp("class"),
     initial: textProp("initial"),
   },
 });
 
 export interface InputProps {
+  type: string;
   class: string;
   label: string;
   initial: string;
@@ -37,19 +46,31 @@ export interface InputProps {
 }
 
 export class InputModel {
-  value: string;
+  type: string;
+  _value: string;
   clear() {
-    this.value = "";
+    this._value = "";
+  }
+  set value(value: string | number) {
+    this._value = String(value);
+  }
+  get value() {
+    return this.type === "number" ? +this._value : this._value;
   }
 }
 
 @QuasiRuntime.outputComponent("qInput")
 export class QInput extends OutputComponent {
   main(_: ComponentContext, model: InputModel, props: InputProps): void {
+    model.type = props.type;
     model.value ??= props.initial;
     _.$cls(props.class);
-    if (_.mdTextField(fromProp(model, "value"), props.label, props.disabled)) {
-      props.onInput?.(_.$ev);
+    if (
+      props.type === "password"
+        ? _.mdPasswordInput(fromProp(model, "_value"), props.label, props.disabled)
+        : _.mdTextField(fromProp(model, "_value"), props.label, props.disabled)
+    ) {
+      props.onInput?.(props.type === "number" ? +_.$ev : _.$ev);
     }
   }
 }
