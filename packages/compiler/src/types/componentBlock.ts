@@ -2,7 +2,10 @@ import { ConnectTo } from "./base";
 
 export type ComponentBlockCallbacks = Record<string, ConnectTo>;
 
-export type ComponentBlockProps = Record<string, string | boolean | ConnectTo>;
+export type ComponentBlockProps = Record<
+  string,
+  string | number | boolean | ConnectTo
+>;
 
 export type ComponentBlockPlugins = Record<string, string>;
 

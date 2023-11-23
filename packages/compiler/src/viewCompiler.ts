@@ -265,10 +265,7 @@ const ${this.view.name}_view = ${
           throw new Error("This component block has no event input");
         this.impDefs.set(
           impId,
-          `() => ${this.compileModel(
-            blockId,
-            block.model,
-          )}["${socketName}"]()`,
+          `() => ${this.compileModel(blockId, block.model)}["${socketName}"]()`,
         );
         break;
       case "expr":
@@ -346,6 +343,8 @@ const ${this.view.name}_view = ${
       Object.entries(props).map(([k, v]) => {
         if (typeof v === "string") {
           return [k, `"${v}"`];
+        } else if (typeof v === "number") {
+          return [k, `${v}`];
         } else if (typeof v === "boolean") {
           return [k, v ? "true" : "false"];
         } else {
@@ -399,11 +398,7 @@ const ${this.view.name}_view = ${
     if (block.type === "view") return `_.embed(${block.viewName}_view);`;
 
     return `_.${block.func}(
-  ${
-    block.model
-      ? `${this.compileModel(block.id, block.model)},\n`
-      : ""
-  }{
+  ${block.model ? `${this.compileModel(block.id, block.model)},\n` : ""}{
     ${Object.entries({
       ...this.compileComponentPrimaryInput(block.primaryInput),
       ...this.compileComponentProps(block.props),

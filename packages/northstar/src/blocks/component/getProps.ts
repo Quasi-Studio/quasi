@@ -24,22 +24,24 @@ export function getProps(block: ComponentBlock): PropsData {
 
   return [
     ...slotPos,
-    ...Object.entries(info.props).map(
-      ([k, v]) =>
-        ({
-          ...v,
-          key: k,
-          getVal:
-            v.type === "readonly"
-              ? () => v.value
-              : () => {
-                  return block.props[k] ?? v.defaultVal;
-                },
-          setVal: (val: any) => {
-            block.props[k] = val;
-          },
-        }) as PropData,
-    ),
+    ...Object.entries(info.props).map(([k, v]) => {
+      if (v.type !== "readonly") {
+        block.props[k] ??= v.defaultVal;
+      }
+      return {
+        ...v,
+        key: k,
+        getVal:
+          v.type === "readonly"
+            ? () => v.value
+            : () => {
+                return block.props[k];
+              },
+        setVal: (val: any) => {
+          block.props[k] = val;
+        },
+      } as PropData;
+    }),
     ...Object.entries({
       ...info.contents,
       ...info.inputs,
@@ -51,19 +53,19 @@ export function getProps(block: ComponentBlock): PropsData {
         ([k, v]) =>
           v.mode === "as-hidable-socket" || v.mode === "as-hidden-socket",
       )
-      .map(
-        ([k, v]) =>
-          ({
-            key: `[${k}]`,
-            displayName: `[${v.displayName}]`,
-            type: "switch",
-            getVal: () => {
-              return block.props[`[${k}]`] ?? v.mode === "as-hidable-socket";
-            },
-            setVal: (val: any) => {
-              block.props[`[${k}]`] = val;
-            },
-          }) as PropData,
-      ),
+      .map(([k, v]) => {
+        block.props[`[${k}]`] ??= v.mode === "as-hidable-socket";
+        return {
+          key: `[${k}]`,
+          displayName: `[${v.displayName}]`,
+          type: "switch",
+          getVal: () => {
+            return block.props[`[${k}]`];
+          },
+          setVal: (val: any) => {
+            block.props[`[${k}]`] = val;
+          },
+        } as PropData;
+      }),
   ];
 }

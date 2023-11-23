@@ -32,7 +32,7 @@ export function toBlockOutput(block: ComponentBlock) {
   const props = {} as ComponentBlockProps;
   for (const [k, v] of blockProps) {
     if (v.type !== "readonly") {
-      props[k] = block.props[k] ?? v.defaultVal;
+      props[k] = block.props[k];
     }
   }
   for (const [k, v] of blockInputs) {

@@ -48,7 +48,7 @@ export class ComponentBlock extends RectBlock {
 
   componentType: string;
   info: ComponentInfo;
-  props: Record<string, string | boolean> = {};
+  props: Record<string, string | number | boolean> = {};
 
   get primaryInputInfo() {
     return [
