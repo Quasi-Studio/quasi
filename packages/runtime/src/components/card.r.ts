@@ -22,7 +22,7 @@ export interface CardProps {
 @QuasiRuntime.outputComponent("qCard")
 export class QCard extends OutputComponent {
   main(_: ComponentContext, props: CardProps): void {
-    _.$css`width:80%;left:10%;padding:18px;padding-top:0`;
+    _.$css`width:100%;padding:18px;padding-top:0`;
     _.$cls(props.class);
     _._mdui_card(
       {
