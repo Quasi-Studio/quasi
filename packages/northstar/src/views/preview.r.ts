@@ -89,6 +89,7 @@ error: ${error}`;
       //@ts-ignore
       iframeNode.contentWindow!.console.error = (...args: any[]) => {
         errorMsg += "\nCONSOLE ERROR: \n" + args.join(" ");
+        console.error(...args);
         _.$update();
       };
 
