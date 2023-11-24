@@ -8,6 +8,7 @@ export * from "./input.r";
 export * from "./list.r";
 export * from "./paragraph.r";
 export * from "./span.r";
+export * from "./subPage.r";
 export * from "./table.r";
 export * from "./tableItem.r";
 export * from "./textNode.r";
@@ -22,12 +23,14 @@ import qInput from "./input.r";
 import qList from "./list.r";
 import qParagraph from "./paragraph.r";
 import qSpan from "./span.r";
+import qSubPage from "./subPage.r";
 import qTable from "./table.r";
 import qTableItem from "./tableItem.r";
 import qTextNode from "./textNode.r";
 
 export const componentInfoObj = {
   qAppLayout,
+  qSubPage,
   qButton,
   qCard,
   qDiv,
