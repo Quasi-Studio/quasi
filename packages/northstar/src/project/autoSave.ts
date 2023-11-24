@@ -1,6 +1,6 @@
 import { Project, currentProject, setCurrentProject } from "./project";
 
-export const STORAGE = sessionStorage;
+export const STORAGE = localStorage;
 export const STORAGE_KEY = "northstar";
 export const AUTOSAVE_INTERVAL = 1000;
 
