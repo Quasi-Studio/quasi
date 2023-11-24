@@ -3,7 +3,7 @@ import Vf from "@quasi-dev/visual-flow";
 import Basics from "@refina/basic-components";
 import FluentUI from "@refina/fluentui";
 import { app } from "refina";
-import { currentProject, loadAutoSaved, setAutoSaveInterval } from "./project";
+import { currentProject, loadAutoSaved, saveAs, setAutoSaveInterval } from "./project";
 import { duplicateBlocks, hasBlocksToDuplicate, hasBlocksToRemove, initMonaco, removeBlocks } from "./utils";
 import blocksView from "./views/blocks.r";
 import previewView from "./views/preview.r";
@@ -78,7 +78,7 @@ app.use(FluentUI).use(Vf).use(Basics).use(Monaco)(_ => {
             currentProject.activeGraph.redo();
             _.$update();
           } else if (ev.key === "s") {
-            // save
+            saveAs();
           } else if (ev.key === "d" && hasBlocksToDuplicate()) {
             duplicateBlocks();
             _.$update();
