@@ -1,5 +1,11 @@
 /// <reference types="vite/client" />
-import { ComponentContext, Content, HTMLElementComponent, OutputComponent, ref } from "refina";
+import {
+  ComponentContext,
+  Content,
+  HTMLElementComponent,
+  OutputComponent,
+  ref,
+} from "refina";
 import QuasiRuntime from "../plugin";
 import { Direction, component, content, textProp } from "../types";
 
@@ -34,7 +40,11 @@ export class AppLayoutModel {
 @QuasiRuntime.outputComponent("qAppLayout")
 export class QAppLayout extends OutputComponent {
   navRailRef = ref<HTMLElementComponent<"mdui-navigation-rail">>();
-  main(_: ComponentContext, model: AppLayoutModel, props: AppLayoutProps): void {
+  main(
+    _: ComponentContext,
+    model: AppLayoutModel,
+    props: AppLayoutProps,
+  ): void {
     _.$cls(props.class);
     _.$css`position:fixed;width:100%;height:100%`;
     _.mdLayout(_ => {
@@ -42,7 +52,12 @@ export class QAppLayout extends OutputComponent {
         _.mdTopAppBarTitle(
           _ =>
             _.$css`user-select:none;text-decoration:none;color:inherit` &&
-            _._a({ href: window.__QUASI_PREVIEW__ ? "" : import.meta.env.BASE_URL }, props.title),
+            _._a(
+              {
+                href: window.__QUASI_PREVIEW__ ? "" : import.meta.env.BASE_URL,
+              },
+              props.title,
+            ),
         );
         _.embed(props.topBar);
       });

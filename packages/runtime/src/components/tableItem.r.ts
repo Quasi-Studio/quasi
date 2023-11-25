@@ -1,6 +1,13 @@
 import { ComponentContext, Content, OutputComponent } from "refina";
 import QuasiRuntime from "../plugin";
-import { Direction, component, content, input, output, textProp } from "../types";
+import {
+  Direction,
+  component,
+  content,
+  input,
+  output,
+  textProp,
+} from "../types";
 import { TableModel, currentTableSymbol } from "./table.r";
 
 export default component({

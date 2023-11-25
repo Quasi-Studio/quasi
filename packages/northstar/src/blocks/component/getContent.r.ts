@@ -27,7 +27,12 @@ export function getContent(block: ComponentBlock) {
       _ => {
         const inputRef = ref<FUnderlineTextInput>();
         _.$css`font-family: Consolas; max-width: 108px; padding-left:4px`;
-        _.$ref(inputRef) && _.fUnderlineTextInput(block.primaryValue, false, primaryInputInfo.displayName);
+        _.$ref(inputRef) &&
+          _.fUnderlineTextInput(
+            block.primaryValue,
+            false,
+            primaryInputInfo.displayName,
+          );
         inputRef.current!.inputRef.current!.node.onchange = () => {
           currentProject.activeGraph.pushRecord();
         };

@@ -3,8 +3,19 @@ import Vf from "@quasi-dev/visual-flow";
 import Basics from "@refina/basic-components";
 import FluentUI from "@refina/fluentui";
 import { app } from "refina";
-import { currentProject, loadAutoSaved, saveAs, setAutoSaveInterval } from "./project";
-import { duplicateBlocks, hasBlocksToDuplicate, hasBlocksToRemove, initMonaco, removeBlocks } from "./utils";
+import {
+  currentProject,
+  loadAutoSaved,
+  saveAs,
+  setAutoSaveInterval,
+} from "./project";
+import {
+  duplicateBlocks,
+  hasBlocksToDuplicate,
+  hasBlocksToRemove,
+  initMonaco,
+  removeBlocks,
+} from "./utils";
 import blocksView from "./views/blocks.r";
 import previewView from "./views/preview.r";
 import propertiesView from "./views/properties.r";
@@ -26,13 +37,16 @@ app.use(FluentUI).use(Vf).use(Basics).use(Monaco)(_ => {
   _.div(toolbarView);
 
   if (previewMode.value) {
-    _.$cls`absolute left-0 bottom-0 right-0 top-8 ${previewMode.value ? "" : "hidden"}`;
+    _.$cls`absolute left-0 bottom-0 right-0 top-8 ${
+      previewMode.value ? "" : "hidden"
+    }`;
     _.div(previewView);
   }
 
   if (!previewMode.value)
     _.div(_ => {
-      const hasSelectedBlock = currentProject.activeGraph.selectedBlocks.size > 0;
+      const hasSelectedBlock =
+        currentProject.activeGraph.selectedBlocks.size > 0;
 
       _.$cls`absolute left-0 top-8 w-80 bottom-0
    bg-gray-200 select-none z-[1000] border-r border-gray-400 flex flex-col`;
@@ -67,7 +81,8 @@ app.use(FluentUI).use(Vf).use(Basics).use(Monaco)(_ => {
       });
 
       _.$cls`absolute left-80 top-8 right-0 bottom-0`;
-      _.$ref(graphElRef) && _._div({}, _ => _.vfGraph(currentProject.activeGraph));
+      _.$ref(graphElRef) &&
+        _._div({}, _ => _.vfGraph(currentProject.activeGraph));
 
       _.$app.registerDocumentEventListener("keydown", ev => {
         if (ev.ctrlKey) {

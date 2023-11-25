@@ -10,15 +10,21 @@ export class VfBlock extends OutputComponent {
     const padding = PADDING_FOR_SOCKETS * model.graph.boardScale;
 
     styles.root(model.selected, model.attached, model.predicting)(_);
-    _.$css`left:${x}px;top:${y}px;z-index:${model.attached ? model.zIndex : 10000}`;
+    _.$css`left:${x}px;top:${y}px;z-index:${
+      model.attached ? model.zIndex : 10000
+    }`;
     _.$ref(model.ref) &&
       _._div({}, _ => {
         styles.svg(_);
         _.$css`left:${-padding}px; top:${-padding}px`;
         _._svgSvg(
           {
-            width: model.boundingRectBoardWidth * model.graph.boardScale + 2 * padding,
-            height: model.boundingRectBoardHeight * model.graph.boardScale + 2 * padding,
+            width:
+              model.boundingRectBoardWidth * model.graph.boardScale +
+              2 * padding,
+            height:
+              model.boundingRectBoardHeight * model.graph.boardScale +
+              2 * padding,
           },
           _ => {
             _._svgG(

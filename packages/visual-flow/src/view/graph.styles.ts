@@ -25,7 +25,7 @@ const canvasClassName = makeResetStyles({
   right: "10px",
   bottom: "10px",
   zIndex: 1000,
-  backgroundColor:"#eeeeee"
+  backgroundColor: "#eeeeee",
 });
 
 export default {

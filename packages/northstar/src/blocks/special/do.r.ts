@@ -13,7 +13,10 @@ import {
 } from "@quasi-dev/visual-flow";
 import { Context } from "refina";
 import { PropsData } from "../../utils/props";
-import { multiInSocketToOutput, singleOutSocketToOutput } from "../../utils/toOutput";
+import {
+  multiInSocketToOutput,
+  singleOutSocketToOutput,
+} from "../../utils/toOutput";
 
 const WIDTH = 70;
 const HEIGHT = 30;

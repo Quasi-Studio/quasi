@@ -1,5 +1,9 @@
 import { Compiler } from "@quasi-dev/compiler";
-import { FieldValidationState, ProgressBarColor, ProgressBarValue } from "@refina/fluentui";
+import {
+  FieldValidationState,
+  ProgressBarColor,
+  ProgressBarValue,
+} from "@refina/fluentui";
 import "@refina/fluentui-icons/addSquareMultiple.r.ts";
 import "@refina/fluentui-icons/alignLeft.r.ts";
 import "@refina/fluentui-icons/alignTop.r.ts";
@@ -14,7 +18,13 @@ import "@refina/fluentui-icons/resizeLarge.r.ts";
 import "@refina/fluentui-icons/resizeSmall.r.ts";
 import { domToBlob } from "modern-screenshot";
 import { Content, HTMLElementComponent, d, fromProp, ref, view } from "refina";
-import { Project, currentProject, openFile, saveAs, setCurrentProject } from "../project";
+import {
+  Project,
+  currentProject,
+  openFile,
+  saveAs,
+  setCurrentProject,
+} from "../project";
 import {
   alignBlocksToLeft,
   alignBlocksToTop,
@@ -29,15 +39,23 @@ import iconURL from "/favicon.ico?url";
 
 export const previewMode = d(false);
 
-const toolItem = view((_, tip: string, buttonContent: Content, disabled: boolean, callback: () => void) => {
-  _.fTooltip(
-    _ =>
-      _.$cls`disabled:opacity-30 h-full flex items-center enabled:hover:bg-gray-300 px-2` &&
-      _.button(buttonContent, disabled) &&
-      callback(),
-    tip,
-  );
-});
+const toolItem = view(
+  (
+    _,
+    tip: string,
+    buttonContent: Content,
+    disabled: boolean,
+    callback: () => void,
+  ) => {
+    _.fTooltip(
+      _ =>
+        _.$cls`disabled:opacity-30 h-full flex items-center enabled:hover:bg-gray-300 px-2` &&
+        _.button(buttonContent, disabled) &&
+        callback(),
+      tip,
+    );
+  },
+);
 
 let buildOutput = "";
 
@@ -148,7 +166,8 @@ export default view(_ => {
 
             const node = graphElRef.current!.node;
 
-            const { boardOffsetX, boardOffsetY, boardScale } = currentProject.activeGraph;
+            const { boardOffsetX, boardOffsetY, boardScale } =
+              currentProject.activeGraph;
             const restoreBoard = () => {
               currentProject.activeGraph.boardOffsetX = boardOffsetX;
               currentProject.activeGraph.boardOffsetY = boardOffsetY;
@@ -273,11 +292,35 @@ export default view(_ => {
         },
       );
 
-      _.embed(toolItem, "Duplicate", _ => _.fiAddSquareMultiple20Regular(), !hasBlocksToDuplicate(), duplicateBlocks);
-      _.embed(toolItem, "Remove", _ => _.fiDelete20Regular(), !hasBlocksToRemove(), removeBlocks);
+      _.embed(
+        toolItem,
+        "Duplicate",
+        _ => _.fiAddSquareMultiple20Regular(),
+        !hasBlocksToDuplicate(),
+        duplicateBlocks,
+      );
+      _.embed(
+        toolItem,
+        "Remove",
+        _ => _.fiDelete20Regular(),
+        !hasBlocksToRemove(),
+        removeBlocks,
+      );
 
-      _.embed(toolItem, "Align left", _ => _.fiAlignLeft20Regular(), !hasBlocksToAlign(), alignBlocksToLeft);
-      _.embed(toolItem, "Align top", _ => _.fiAlignTop20Regular(), !hasBlocksToAlign(), alignBlocksToTop);
+      _.embed(
+        toolItem,
+        "Align left",
+        _ => _.fiAlignLeft20Regular(),
+        !hasBlocksToAlign(),
+        alignBlocksToLeft,
+      );
+      _.embed(
+        toolItem,
+        "Align top",
+        _ => _.fiAlignTop20Regular(),
+        !hasBlocksToAlign(),
+        alignBlocksToTop,
+      );
     }
   });
 
@@ -295,7 +338,10 @@ export default view(_ => {
               {
                 onkeydown: ev => ev.stopPropagation(),
               },
-              _ => _.fUnderlineTextInput(fromProp(currentProject.activeView, "name")),
+              _ =>
+                _.fUnderlineTextInput(
+                  fromProp(currentProject.activeView, "name"),
+                ),
             );
           }
         },

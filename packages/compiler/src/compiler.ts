@@ -26,7 +26,6 @@ ${this.input.views
     return await prettier.format(code, {
       parser: "babel",
       plugins: [BabelPlugin, EsTreePlugin],
-      printWidth: 120,
       arrowParens: "avoid",
     });
   }

@@ -5,10 +5,10 @@ export default {
   generateTasks: (patterns) => [
     {
       dynamic: false,
-      base: '.',
+      base: ".",
       negative: [],
       positive: [].concat(patterns),
       patterns: [].concat(patterns),
     },
   ],
-}
+};

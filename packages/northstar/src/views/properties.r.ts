@@ -11,7 +11,9 @@ export default view(_ => {
     _._div(
       {
         onclick: () => {
-          (r.current?.$mainEl?.firstChild as HTMLElement | null | undefined)?.focus();
+          (
+            r.current?.$mainEl?.firstChild as HTMLElement | null | undefined
+          )?.focus();
         },
       },
       p.displayName,
@@ -21,7 +23,7 @@ export default view(_ => {
       _.$ref(r);
       _.fUnderlineTextInput(p.getVal(), false, "unset") && p.setVal(_.$ev);
     } else if (p.type === "switch") {
-      _.$cls`ml-4`
+      _.$cls`ml-4`;
       _.fSwitch("", p.getVal()) && p.setVal(_.$ev);
     } else if (p.type === "dropdown") {
       _.$ref(r);
@@ -39,14 +41,16 @@ export default view(_ => {
 
         btnStyle(_);
         _.$cls`justify-self-end`;
-        _.button(_ => _.fiSubtract20Filled(), value === p.min) && p.setVal(value - 1);
+        _.button(_ => _.fiSubtract20Filled(), value === p.min) &&
+          p.setVal(value - 1);
 
         _.$cls`col-span-2 justify-self-center`;
         _.span(value.toString());
 
         btnStyle(_);
         _.$cls`justify-self-start`;
-        _.button(_ => _.fiAdd20Filled(), value === p.max) && p.setVal(value + 1);
+        _.button(_ => _.fiAdd20Filled(), value === p.max) &&
+          p.setVal(value + 1);
       });
     }
   });

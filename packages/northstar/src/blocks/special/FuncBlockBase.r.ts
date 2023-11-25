@@ -68,7 +68,8 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
         _.$css`--fontFamilyBase: Consolas,'Segoe UI', 'Segoe UI Web (West European)', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif`;
         _.$ref(inputRef) &&
           (this.useTextarea
-            ? _.$css`margin-top:4px;max-width:180px` && _.fTextarea(this.inputValue, false, this.placeholder, "none")
+            ? _.$css`margin-top:4px;max-width:180px` &&
+              _.fTextarea(this.inputValue, false, this.placeholder, "none")
             : _.$css`min-height:24px;margin-left:-4px` &&
               _.fUnderlineTextInput(this.inputValue, false, this.placeholder));
         inputRef.current!.inputRef.current!.node.onchange = () => {
@@ -126,7 +127,13 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
                     })
                   ) {
                     this.inputValue.value = _.$ev;
-                    setExtraLib(this.slots.map(slot => `/** param */ declare const $${slot}: any;`).join("\n"));
+                    setExtraLib(
+                      this.slots
+                        .map(
+                          slot => `/** param */ declare const $${slot}: any;`,
+                        )
+                        .join("\n"),
+                    );
                   }
                 },
               );
@@ -215,7 +222,12 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
     ].slice(0, this.noOutput ? 1 : 2);
   }
 
-  toOutput(): FuncBlockOutput | ValidatorBlockOutput | ImpBlockOutput | StateBlockOutput | StateSetterBlockOutput {
+  toOutput():
+    | FuncBlockOutput
+    | ValidatorBlockOutput
+    | ImpBlockOutput
+    | StateBlockOutput
+    | StateSetterBlockOutput {
     const slots: Record<string, ConnectTo> = {};
     for (const socket of this.inputSockets) {
       slots[socket.label] = {

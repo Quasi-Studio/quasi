@@ -1,6 +1,19 @@
-import { ComponentContext, Content, OutputComponent, byIndex, bySelf } from "refina";
+import {
+  ComponentContext,
+  Content,
+  OutputComponent,
+  byIndex,
+  bySelf,
+} from "refina";
 import QuasiRuntime from "../plugin";
-import { Direction, component, content, input, output, textProp } from "../types";
+import {
+  Direction,
+  component,
+  content,
+  input,
+  output,
+  textProp,
+} from "../types";
 
 export default component({
   displayName: () => "Table",
@@ -10,7 +23,11 @@ export default component({
   },
   outputs: {
     current: output("current", "as-hidable-socket", Direction.RIGHT),
-    renderingState: output("renderingState", "as-hidden-socket", Direction.RIGHT),
+    renderingState: output(
+      "renderingState",
+      "as-hidden-socket",
+      Direction.RIGHT,
+    ),
   },
   props: {
     class: textProp("class"),
@@ -43,7 +60,11 @@ export class QTable extends OutputComponent {
           model.renderingState = "head";
           _.embed(props.inner);
         },
-        props.key === "$index" ? byIndex : props.key === "$self" ? bySelf : props.key,
+        props.key === "$index"
+          ? byIndex
+          : props.key === "$self"
+          ? bySelf
+          : props.key,
         v => {
           model.renderingState = "body";
           model.current = v;

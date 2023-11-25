@@ -1,4 +1,10 @@
-import { ComponentContext, Content, OutputComponent, byIndex, bySelf } from "refina";
+import {
+  ComponentContext,
+  Content,
+  OutputComponent,
+  byIndex,
+  bySelf,
+} from "refina";
 import QuasiRuntime from "../plugin";
 import { component, content, input, output, textProp } from "../types";
 
@@ -34,10 +40,18 @@ export class ListModel {
 export class QList extends OutputComponent {
   main(_: ComponentContext, model: ListModel, props: ListProps): void {
     _.$cls(props.class);
-    _.mdList(props.data, props.key === "$index" ? byIndex : props.key === "$self" ? bySelf : props.key, v => {
-      model.current = v;
-      _.embed(props.inner);
-    });
+    _.mdList(
+      props.data,
+      props.key === "$index"
+        ? byIndex
+        : props.key === "$self"
+        ? bySelf
+        : props.key,
+      v => {
+        model.current = v;
+        _.embed(props.inner);
+      },
+    );
     model.current = null;
   }
 }

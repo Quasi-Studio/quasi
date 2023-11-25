@@ -1,6 +1,15 @@
 import { ComponentContext, OutputComponent, fromProp } from "refina";
 import QuasiRuntime from "../plugin";
-import { component, dropdownProp, event, input, method, output, plugin, textProp } from "../types";
+import {
+  component,
+  dropdownProp,
+  event,
+  input,
+  method,
+  output,
+  plugin,
+  textProp,
+} from "../types";
 
 export default component({
   displayName: props =>
@@ -65,10 +74,14 @@ export class QInput extends OutputComponent {
     model.type = props.type;
     model.value ??= props.initial;
     _.$cls(props.class);
-    _.$css`margin-bottom:18px;`
+    _.$css`margin-bottom:18px;`;
     if (
       props.type === "password"
-        ? _.mdPasswordInput(fromProp(model, "_value"), props.label, props.disabled)
+        ? _.mdPasswordInput(
+            fromProp(model, "_value"),
+            props.label,
+            props.disabled,
+          )
         : _.mdTextField(fromProp(model, "_value"), props.label, props.disabled)
     ) {
       props.onInput?.(props.type === "number" ? +_.$ev : _.$ev);

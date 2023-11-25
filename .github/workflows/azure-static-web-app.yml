@@ -48,7 +48,7 @@ jobs:
           ###### Repository/Build Configurations - These values can be configured to match your app requirements. ######
           # For more information regarding Static Web App workflow configurations, please visit: https://aka.ms/swaworkflowconfig
           app_location: "packages/northstar" # App source code path
-          output_location: "dist" # Built app content directory - optional 
+          output_location: "dist" # Built app content directory - optional
           skip_api_build: true
         env:
           PRE_BUILD_COMMAND: echo "do nothing"

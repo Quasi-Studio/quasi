@@ -1,4 +1,8 @@
-import { FuncBlockTypes, StateBlockOutput, StateSetterBlockOutput } from "@quasi-dev/compiler";
+import {
+  FuncBlockTypes,
+  StateBlockOutput,
+  StateSetterBlockOutput,
+} from "@quasi-dev/compiler";
 import {
   Block,
   Direction,
@@ -20,7 +24,9 @@ export class StateSetterBlock extends ExprBlock {
   duplicateable = true;
 
   dockingDirections: [Direction, string][] = [[Direction.LEFT, "state-plugin"]];
-  dockableDirections: [Direction, string][] = [[Direction.LEFT, "state-plugin"]];
+  dockableDirections: [Direction, string][] = [
+    [Direction.LEFT, "state-plugin"],
+  ];
 
   get onsetSocket() {
     return this.getSocketByName("set") as MultiInSocket;

@@ -25,7 +25,9 @@ let errorMsg = "";
 export async function startPreview() {
   const compiler = new Compiler(currentProject.toOutput());
   compiler.runtimeModuleURL = runtimeURL;
-  code.js = "window.__QUASI_PREVIEW__ = true; \n\n" + transformer.transform("$", await compiler.compile());
+  code.js =
+    "window.__QUASI_PREVIEW__ = true; \n\n" +
+    transformer.transform("$", await compiler.compile());
   code.css = (
     await compileTailwindCSS(
       `@tailwind base;
@@ -93,17 +95,25 @@ error: ${error}`;
         _.$update();
       };
 
-      const scriptNode = iframeNode.contentDocument!.getElementById("app-script") as HTMLScriptElement;
+      const scriptNode = iframeNode.contentDocument!.getElementById(
+        "app-script",
+      ) as HTMLScriptElement;
       scriptNode.innerHTML = code.js;
 
-      const styleNode = iframeNode.contentDocument!.getElementById("app-style") as HTMLStyleElement;
+      const styleNode = iframeNode.contentDocument!.getElementById(
+        "app-style",
+      ) as HTMLStyleElement;
       styleNode.innerHTML = code.css;
 
       if (import.meta.env.DEV) {
-        const styleNode = iframeNode.contentDocument!.getElementById("mdui-style-dev") as HTMLLinkElement;
+        const styleNode = iframeNode.contentDocument!.getElementById(
+          "mdui-style-dev",
+        ) as HTMLLinkElement;
         styleNode.href = mduiStyleUrl;
       } else {
-        const styleNode = iframeNode.contentDocument!.getElementById("mdui-style") as HTMLStyleElement;
+        const styleNode = iframeNode.contentDocument!.getElementById(
+          "mdui-style",
+        ) as HTMLStyleElement;
         styleNode.innerHTML = mduiStyleContent;
       }
     };

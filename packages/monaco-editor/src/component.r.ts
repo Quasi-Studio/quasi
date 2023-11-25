@@ -1,5 +1,12 @@
 import * as monaco from "monaco-editor";
-import { ComponentContext, D, HTMLElementComponent, TriggerComponent, getD, ref } from "refina";
+import {
+  ComponentContext,
+  D,
+  HTMLElementComponent,
+  TriggerComponent,
+  getD,
+  ref,
+} from "refina";
 import Monaco from "./plugin";
 
 @Monaco.triggerComponent("monacoEditor")

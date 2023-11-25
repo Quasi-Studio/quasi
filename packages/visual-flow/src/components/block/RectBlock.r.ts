@@ -59,42 +59,79 @@ export abstract class RectBlock extends Block {
   }
 
   updateSocketPosition() {
-    const leftSockets = this.allSockets.filter(s => s.direction === Direction.LEFT);
-    const rightSockets = this.allSockets.filter(s => s.direction === Direction.RIGHT);
-    const topSockets = this.allSockets.filter(s => s.direction === Direction.TOP);
-    const bottomSockets = this.allSockets.filter(s => s.direction === Direction.BOTTOM);
+    const leftSockets = this.allSockets.filter(
+      s => s.direction === Direction.LEFT,
+    );
+    const rightSockets = this.allSockets.filter(
+      s => s.direction === Direction.RIGHT,
+    );
+    const topSockets = this.allSockets.filter(
+      s => s.direction === Direction.TOP,
+    );
+    const bottomSockets = this.allSockets.filter(
+      s => s.direction === Direction.BOTTOM,
+    );
 
-    spreadItems(this.boardHeight, leftSockets.length, SOCKET_PADDING_SCALE).forEach((offset, i) => {
+    spreadItems(
+      this.boardHeight,
+      leftSockets.length,
+      SOCKET_PADDING_SCALE,
+    ).forEach((offset, i) => {
       leftSockets[i].blockX = 0;
       leftSockets[i].blockY = offset;
     });
-    spreadItems(this.boardHeight, rightSockets.length, SOCKET_PADDING_SCALE).forEach((offset, i) => {
+    spreadItems(
+      this.boardHeight,
+      rightSockets.length,
+      SOCKET_PADDING_SCALE,
+    ).forEach((offset, i) => {
       rightSockets[i].blockX = this.boardWidth;
       rightSockets[i].blockY = offset;
     });
-    spreadItems(this.boardWidth, topSockets.length, SOCKET_PADDING_SCALE).forEach((offset, i) => {
+    spreadItems(
+      this.boardWidth,
+      topSockets.length,
+      SOCKET_PADDING_SCALE,
+    ).forEach((offset, i) => {
       topSockets[i].blockX = offset;
       topSockets[i].blockY = 0;
     });
-    spreadItems(this.boardWidth, bottomSockets.length, SOCKET_PADDING_SCALE).forEach((offset, i) => {
+    spreadItems(
+      this.boardWidth,
+      bottomSockets.length,
+      SOCKET_PADDING_SCALE,
+    ).forEach((offset, i) => {
       bottomSockets[i].blockX = offset;
       bottomSockets[i].blockY = this.boardHeight;
     });
   }
 
   isBlockPosInside(blockPos: Point): boolean {
-    return blockPos.x >= 0 && blockPos.x <= this.boardWidth && blockPos.y >= 0 && blockPos.y <= this.boardHeight;
+    return (
+      blockPos.x >= 0 &&
+      blockPos.x <= this.boardWidth &&
+      blockPos.y >= 0 &&
+      blockPos.y <= this.boardHeight
+    );
   }
 
   get backgroudPath(): string {
-    const { pageHeight: height, pageWidth: width, pageBorderRadius: radius } = this;
+    const {
+      pageHeight: height,
+      pageWidth: width,
+      pageBorderRadius: radius,
+    } = this;
     const t1 = radius / 4;
     const t2 = (radius * 3) / 4;
 
-    return `m 0 ${radius} v ${height - radius * 2} c 0 ${t2} ${t1} ${radius} ${radius} ${radius} h ${
+    return `m 0 ${radius} v ${
+      height - radius * 2
+    } c 0 ${t2} ${t1} ${radius} ${radius} ${radius} h ${
       width - radius * 2
     } c ${t2} 0 ${radius} -${t1} ${radius} -${radius} 
-            v -${height - radius * 2} c 0 -${t2} -${t1} -${radius} -${radius} -${radius} h -${
+            v -${
+              height - radius * 2
+            } c 0 -${t2} -${t1} -${radius} -${radius} -${radius} h -${
               width - radius * 2
             } c -${t2} 0 -${radius} ${t1} -${radius} ${radius}`;
   }
@@ -128,7 +165,10 @@ export abstract class RectBlock extends Block {
       boardBorderRadius: this.boardBorderRadius,
     } satisfies RectBlockRecordData;
   }
-  protected importData(data: RectBlockRecordData, sockets: Record<number, Socket>): void {
+  protected importData(
+    data: RectBlockRecordData,
+    sockets: Record<number, Socket>,
+  ): void {
     this.boardHeight = data.boardHeight;
     this.boardWidth = data.boardWidth;
     this.boardBorderRadius = data.boardBorderRadius;
