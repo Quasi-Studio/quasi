@@ -1,4 +1,4 @@
-import { ComponentContext, OutputComponent } from "refina";
+import { Context, OutputComponent } from "refina";
 import QuasiRuntime from "../plugin";
 import { component, content } from "../types";
 
@@ -15,7 +15,7 @@ export interface TextNodeProps {
 
 @QuasiRuntime.outputComponent("qTextNode")
 export class QTextNode extends OutputComponent {
-  main(_: ComponentContext, props: TextNodeProps): void {
+  main(_: Context, props: TextNodeProps): void {
     _.t(props.text ?? "");
   }
 }

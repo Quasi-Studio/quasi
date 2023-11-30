@@ -1,88 +1,89 @@
-import { ComponentContext, OutputComponent } from "refina";
+import { Context, OutputComponent } from "refina";
 import { Graph } from "../model";
 import Vf from "../plugin";
 import styles from "./graph.styles";
 
 @Vf.outputComponent("vfGraph")
 export class VfGraph extends OutputComponent {
-  main(_: ComponentContext, model: Graph): void {
+  main(_: Context, model: Graph): void {
     model.app = _.$app;
-    _.$app.registerWindowEventListener(
-      "resize",
-      () => {
-        model.onResize();
-        // not update here, because it will cause performance issue
-      },
-      {
-        passive: true,
-      },
-    );
-    _.$app.registerDocumentEventListener(
-      "mousemove",
-      ev => {
+
+    if (_.$updateState) {
+      _.$window.addEventListener(
+        "resize",
+        () => {
+          model.onResize();
+          // not update here, because it will cause performance issue
+        },
+        {
+          passive: true,
+        },
+      );
+      _.$window.addEventListener(
+        "mousemove",
+        ev => {
+          model.setMousePos(ev);
+          if (model.onMouseMove((ev.buttons & 1) !== 0, ev.shiftKey)) {
+            window.getSelection()?.removeAllRanges();
+            _.$update();
+          }
+        },
+        {
+          passive: true,
+        },
+      );
+      _.$window.addEventListener("mousedown", ev => {
         model.setMousePos(ev);
-        if (model.onMouseMove((ev.buttons & 1) !== 0, ev.shiftKey)) {
+        if (model.onMouseDown(ev.shiftKey)) {
           window.getSelection()?.removeAllRanges();
+          if (document.activeElement instanceof HTMLElement) {
+            document.activeElement?.blur();
+          }
+          ev.preventDefault();
           _.$update();
-        }
-      },
-      {
-        passive: true,
-      },
-    );
-    _.$app.registerDocumentEventListener("mousedown", ev => {
-      model.setMousePos(ev);
-      if (model.onMouseDown(ev.shiftKey)) {
-        window.getSelection()?.removeAllRanges();
-        if (document.activeElement instanceof HTMLElement) {
-          document.activeElement?.blur();
-        }
-        ev.preventDefault();
-        _.$update();
-        return false;
-      }
-      return true;
-    });
-    _.$app.registerDocumentEventListener("mouseup", ev => {
-      model.setMousePos(ev);
-      if (model.onMouseUp(ev.shiftKey)) {
-        ev.preventDefault();
-        _.$update();
-        return false;
-      }
-      return true;
-    });
-    _.$app.registerRootEventListener(
-      "wheel",
-      ev => {
-        model.setMousePos(ev);
-        if (!model.isMouseInsideGraph) {
-          return;
-        }
-        if (ev.ctrlKey) {
-          if (model.onScaling(-ev.deltaY / 1500)) {
-            ev.preventDefault();
-            _.$update();
-          }
-        } else if (ev.shiftKey) {
-          if (model.onHorizontalScroll(ev.deltaY / 2)) {
-            ev.preventDefault();
-            _.$update();
-          }
-        } else {
-          if (model.onVerticalScroll(ev.deltaY / 2)) {
-            ev.preventDefault();
-            _.$update();
-          }
+          return false;
         }
         return true;
-      },
-      {
-        passive: false,
-      },
-    );
+      });
+      _.$window.addEventListener("mouseup", ev => {
+        model.setMousePos(ev);
+        if (model.onMouseUp(ev.shiftKey)) {
+          ev.preventDefault();
+          _.$update();
+          return false;
+        }
+        return true;
+      });
+      _.$root.addEventListener(
+        "wheel",
+        ev => {
+          model.setMousePos(ev);
+          if (!model.isMouseInsideGraph) {
+            return;
+          }
+          if (ev.ctrlKey) {
+            if (model.onScaling(-ev.deltaY / 1500)) {
+              ev.preventDefault();
+              _.$update();
+            }
+          } else if (ev.shiftKey) {
+            if (model.onHorizontalScroll(ev.deltaY / 2)) {
+              ev.preventDefault();
+              _.$update();
+            }
+          } else {
+            if (model.onVerticalScroll(ev.deltaY / 2)) {
+              ev.preventDefault();
+              _.$update();
+            }
+          }
+          return true;
+        },
+        {
+          passive: false,
+        },
+      );
 
-    if (_.$updating) {
       model.blocks.forEach(block => block.updateSockets());
     }
 

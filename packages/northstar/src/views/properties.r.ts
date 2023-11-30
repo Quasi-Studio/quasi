@@ -12,7 +12,10 @@ export default view(_ => {
       {
         onclick: () => {
           (
-            r.current?.$mainEl?.firstChild as HTMLElement | null | undefined
+            r.current?.$mainEl?.node.firstChild as
+              | HTMLElement
+              | null
+              | undefined
           )?.focus();
         },
       },

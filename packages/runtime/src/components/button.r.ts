@@ -1,4 +1,4 @@
-import { ComponentContext, Content, OutputComponent } from "refina";
+import { Content, Context, OutputComponent } from "refina";
 import QuasiRuntime from "../plugin";
 import { component, content, event, input, textProp } from "../types";
 
@@ -27,7 +27,7 @@ export interface ButtonProps {
 
 @QuasiRuntime.outputComponent("qButton")
 export class QButton extends OutputComponent {
-  main(_: ComponentContext, props: ButtonProps): void {
+  main(_: Context, props: ButtonProps): void {
     _.$cls(props.class);
     if (_.mdButton(props.inner, props.disabled)) {
       props.onClick();

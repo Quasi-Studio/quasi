@@ -1,10 +1,4 @@
-import {
-  ComponentContext,
-  Content,
-  OutputComponent,
-  byIndex,
-  bySelf,
-} from "refina";
+import { Content, Context, OutputComponent, byIndex, bySelf } from "refina";
 import QuasiRuntime from "../plugin";
 import { component, content, input, output, textProp } from "../types";
 
@@ -38,7 +32,7 @@ export class ListModel {
 
 @QuasiRuntime.outputComponent("qList")
 export class QList extends OutputComponent {
-  main(_: ComponentContext, model: ListModel, props: ListProps): void {
+  main(_: Context, model: ListModel, props: ListProps): void {
     _.$cls(props.class);
     _.mdList(
       props.data,

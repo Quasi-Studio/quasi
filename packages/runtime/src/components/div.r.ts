@@ -1,4 +1,4 @@
-import { ComponentContext, Content, OutputComponent } from "refina";
+import { Content, Context, OutputComponent } from "refina";
 import QuasiRuntime from "../plugin";
 import { component, content, textProp } from "../types";
 
@@ -19,7 +19,7 @@ export interface DivProps {
 
 @QuasiRuntime.outputComponent("qDiv")
 export class QDiv extends OutputComponent {
-  main(_: ComponentContext, props: DivProps): void {
+  main(_: Context, props: DivProps): void {
     _.$cls(props.class);
     _._div({}, props.inner);
   }

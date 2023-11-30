@@ -28,7 +28,9 @@ setAutoSaveInterval();
 initMonaco();
 
 app.use(FluentUI).use(Vf).use(Basics).use(Monaco)(_ => {
-  _.$rootCls`fixed top-0 left-0 right-0 bottom-0`;
+  if (_.$updateState) {
+    _.$root.addCls(`fixed top-0 left-0 right-0 bottom-0`);
+  }
 
   _.documentTitle("Quasi Studio");
 
@@ -84,29 +86,30 @@ app.use(FluentUI).use(Vf).use(Basics).use(Monaco)(_ => {
       _.$ref(graphElRef) &&
         _._div({}, _ => _.vfGraph(currentProject.activeGraph));
 
-      _.$app.registerDocumentEventListener("keydown", ev => {
-        if (ev.ctrlKey) {
-          if (ev.key === "z" && currentProject.activeGraph.canUndo) {
-            currentProject.activeGraph.undo();
-            _.$update();
-          } else if (ev.key === "y" && currentProject.activeGraph.canRedo) {
-            currentProject.activeGraph.redo();
-            _.$update();
-          } else if (ev.key === "s") {
-            saveAs();
-          } else if (ev.key === "d" && hasBlocksToDuplicate()) {
-            duplicateBlocks();
-            _.$update();
+      if (_.$updateState)
+        _.$window.addEventListener("keydown", ev => {
+          if (ev.ctrlKey) {
+            if (ev.key === "z" && currentProject.activeGraph.canUndo) {
+              currentProject.activeGraph.undo();
+              _.$update();
+            } else if (ev.key === "y" && currentProject.activeGraph.canRedo) {
+              currentProject.activeGraph.redo();
+              _.$update();
+            } else if (ev.key === "s") {
+              saveAs();
+            } else if (ev.key === "d" && hasBlocksToDuplicate()) {
+              duplicateBlocks();
+              _.$update();
+            }
+            ev.preventDefault();
+          } else if (ev.key === "Delete") {
+            if (hasBlocksToRemove()) {
+              removeBlocks();
+              _.$update();
+            }
+            ev.preventDefault();
           }
-          ev.preventDefault();
-        } else if (ev.key === "Delete") {
-          if (hasBlocksToRemove()) {
-            removeBlocks();
-            _.$update();
-          }
-          ev.preventDefault();
-        }
-      });
+        });
 
       // a workaround to update the position of the graph
       setTimeout(() => currentProject.activeGraph.updatePosition());

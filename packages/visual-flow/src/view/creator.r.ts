@@ -1,4 +1,4 @@
-import { ComponentContext, Content, D, TriggerComponent } from "refina";
+import { Content, Context, D, TriggerComponent } from "refina";
 import { Block, Graph } from "../model";
 import Vf from "../plugin";
 import styles from "./creator.styles";
@@ -8,7 +8,7 @@ const DRAGGING_START_PADDING = 20;
 @Vf.triggerComponent("vfCreator")
 export class VfCreator extends TriggerComponent<void> {
   main(
-    _: ComponentContext,
+    _: Context,
     graph: Graph,
     inner: D<Content>,
     factory: () => Block,

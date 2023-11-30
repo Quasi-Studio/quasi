@@ -1,11 +1,11 @@
-import { ComponentContext, OutputComponent } from "refina";
+import { Context, OutputComponent } from "refina";
 import { Block } from "../model";
 import Vf from "../plugin";
 import styles, { PADDING_FOR_SOCKETS } from "./block.styles";
 
 @Vf.outputComponent("vfBlock")
 export class VfBlock extends OutputComponent {
-  main(_: ComponentContext, model: Block): void {
+  main(_: Context, model: Block): void {
     const { x, y } = model.attached ? model.graphPos : model.pagePos;
     const padding = PADDING_FOR_SOCKETS * model.graph.boardScale;
 

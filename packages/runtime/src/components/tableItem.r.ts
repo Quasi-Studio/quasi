@@ -1,4 +1,4 @@
-import { ComponentContext, Content, OutputComponent } from "refina";
+import { Content, Context, OutputComponent } from "refina";
 import QuasiRuntime from "../plugin";
 import {
   Direction,
@@ -43,7 +43,7 @@ export class TableColModel {
 
 @QuasiRuntime.outputComponent("qTableCol")
 export class QTableCol extends OutputComponent {
-  main(_: ComponentContext, model: TableColModel, props: TableColProps): void {
+  main(_: Context, model: TableColModel, props: TableColProps): void {
     const currentTable = _.$runtimeData[currentTableSymbol] as TableModel;
     if (currentTable.renderingState === "head") {
       _.$cls(props.headClass);

@@ -1,4 +1,4 @@
-import { ComponentContext, Content, OutputComponent } from "refina";
+import { Content, Context, OutputComponent } from "refina";
 import QuasiRuntime from "../plugin";
 import { component, content, textProp } from "../types";
 
@@ -19,7 +19,7 @@ export interface ParagraphProps {
 
 @QuasiRuntime.outputComponent("qParagraph")
 export class QParagraph extends OutputComponent {
-  main(_: ComponentContext, props: ParagraphProps): void {
+  main(_: Context, props: ParagraphProps): void {
     _.$cls(props.class);
     _._p({}, props.inner);
   }

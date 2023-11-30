@@ -72,9 +72,11 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
               _.fTextarea(this.inputValue, false, this.placeholder, "none")
             : _.$css`min-height:24px;margin-left:-4px` &&
               _.fUnderlineTextInput(this.inputValue, false, this.placeholder));
-        inputRef.current!.inputRef.current!.node.onchange = () => {
-          currentProject.activeGraph.pushRecord();
-        };
+        if (_.$updateState) {
+          inputRef.current!.inputRef.current!.node.onchange = () => {
+            currentProject.activeGraph.pushRecord();
+          };
+        }
 
         if (this.useTextarea) {
           const slots = this.slots;

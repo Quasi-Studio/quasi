@@ -1,12 +1,5 @@
 import * as monaco from "monaco-editor";
-import {
-  ComponentContext,
-  D,
-  HTMLElementComponent,
-  TriggerComponent,
-  getD,
-  ref,
-} from "refina";
+import { Context, HTMLElementComponent, TriggerComponent, ref } from "refina";
 import Monaco from "./plugin";
 
 @Monaco.triggerComponent("monacoEditor")
@@ -14,7 +7,7 @@ export class MonacoEditor extends TriggerComponent<string> {
   containerRef = ref<HTMLElementComponent<"div">>();
   editor: monaco.editor.IStandaloneCodeEditor | null = null;
   main(
-    _: ComponentContext,
+    _: Context,
     initialValue: string,
     language: string,
     options: Omit<
@@ -25,8 +18,8 @@ export class MonacoEditor extends TriggerComponent<string> {
     _.$css`height:100%`;
     _.$ref(this.containerRef) && _._div();
 
-    if (_.$updating) {
-      _.$app.pushHook("afterModifyDOM", () => {
+    if (_.$updateState) {
+      _.$app.pushOnetimeHook("afterModifyDOM", () => {
         setTimeout(() => {
           if (!this.editor) {
             const node = this.containerRef.current!.node;
@@ -44,17 +37,21 @@ export class MonacoEditor extends TriggerComponent<string> {
 
             const parent = node.parentElement!;
 
-            window.addEventListener("resize", () => {
-              // make editor as small as possible
-              this.editor!.layout({ width: 0, height: 0 });
+            if (_.$updateState)
+              window.addEventListener("resize", () => {
+                // make editor as small as possible
+                this.editor!.layout({ width: 0, height: 0 });
 
-              // wait for next frame to ensure last layout finished
-              window.requestAnimationFrame(() => {
-                // get the parent dimensions and re-layout the editor
-                const rect = parent.getBoundingClientRect();
-                this.editor!.layout({ width: rect.width, height: rect.height });
+                // wait for next frame to ensure last layout finished
+                window.requestAnimationFrame(() => {
+                  // get the parent dimensions and re-layout the editor
+                  const rect = parent.getBoundingClientRect();
+                  this.editor!.layout({
+                    width: rect.width,
+                    height: rect.height,
+                  });
+                });
               });
-            });
           }
         });
       });

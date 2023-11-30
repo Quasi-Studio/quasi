@@ -33,13 +33,15 @@ export function getContent(block: ComponentBlock) {
             false,
             primaryInputInfo.displayName,
           );
-        inputRef.current!.inputRef.current!.node.onchange = () => {
-          currentProject.activeGraph.pushRecord();
-        };
-        inputRef.current!.inputRef.current!.node.onfocus = () => {
-          currentProject.activeGraph.addSelectedBlock(block, false);
-          _.$update();
-        };
+        if (_.$updateState) {
+          inputRef.current!.inputRef.current!.node.onchange = () => {
+            currentProject.activeGraph.pushRecord();
+          };
+          inputRef.current!.inputRef.current!.node.onfocus = () => {
+            currentProject.activeGraph.addSelectedBlock(block, false);
+            _.$update();
+          };
+        }
       },
     );
   };

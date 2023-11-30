@@ -48,7 +48,6 @@ export default view(_ => {
     _._pre({}, errorMsg);
   }
 
-  _.$noPreserve();
   _.$ref(iframe) &&
     _._iframe({
       // src: iframeURL,
@@ -57,65 +56,66 @@ export default view(_ => {
       height: "100%",
     });
 
-  _.$app.pushHook("afterModifyDOM", () => {
-    if (!_.$updating || !codeModified) return;
-    codeModified = false;
-    const iframeNode = iframe.current!.node;
+  _.$updateState &&
+    _.$app.pushOnetimeHook("afterModifyDOM", () => {
+      if (!_.$updateState || !codeModified) return;
+      codeModified = false;
+      const iframeNode = iframe.current!.node;
 
-    iframeNode.src = iframeURL;
-    iframeNode.onload = () => {
-      if (errorMsg !== "") {
-        errorMsg = "";
-        _.$update();
-      }
+      iframeNode.src = iframeURL;
+      iframeNode.onload = () => {
+        if (errorMsg !== "") {
+          errorMsg = "";
+          _.$update();
+        }
 
-      iframeNode.contentWindow!.onerror = (
-        event: Event | string,
-        source?: string,
-        lineno?: number,
-        colno?: number,
-        error?: Error,
-      ) => {
-        if (errorReported) return;
+        iframeNode.contentWindow!.onerror = (
+          event: Event | string,
+          source?: string,
+          lineno?: number,
+          colno?: number,
+          error?: Error,
+        ) => {
+          if (errorReported) return;
 
-        errorMsg = `ERROR: ${event}
+          errorMsg = `ERROR: ${event}
 
 source: ${source}
 lineno: ${lineno}
 colno: ${colno}
 error: ${error}`;
 
-        _.$update();
-        errorReported = true;
-      };
-      //@ts-ignore
-      iframeNode.contentWindow!.console.error = (...args: any[]) => {
-        errorMsg += "\nCONSOLE ERROR: \n" + args.join(" ");
-        console.error(...args);
-        _.$update();
-      };
+          _.$update();
+          errorReported = true;
+        };
+        //@ts-ignore
+        iframeNode.contentWindow!.console.error = (...args: any[]) => {
+          errorMsg += "\nCONSOLE ERROR: \n" + args.join(" ");
+          console.error(...args);
+          _.$update();
+        };
 
-      const scriptNode = iframeNode.contentDocument!.getElementById(
-        "app-script",
-      ) as HTMLScriptElement;
-      scriptNode.innerHTML = code.js;
+        const scriptNode = iframeNode.contentDocument!.getElementById(
+          "app-script",
+        ) as HTMLScriptElement;
+        scriptNode.innerHTML = code.js;
 
-      const styleNode = iframeNode.contentDocument!.getElementById(
-        "app-style",
-      ) as HTMLStyleElement;
-      styleNode.innerHTML = code.css;
-
-      if (import.meta.env.DEV) {
         const styleNode = iframeNode.contentDocument!.getElementById(
-          "mdui-style-dev",
-        ) as HTMLLinkElement;
-        styleNode.href = mduiStyleUrl;
-      } else {
-        const styleNode = iframeNode.contentDocument!.getElementById(
-          "mdui-style",
+          "app-style",
         ) as HTMLStyleElement;
-        styleNode.innerHTML = mduiStyleContent;
-      }
-    };
-  });
+        styleNode.innerHTML = code.css;
+
+        if (import.meta.env.DEV) {
+          const styleNode = iframeNode.contentDocument!.getElementById(
+            "mdui-style-dev",
+          ) as HTMLLinkElement;
+          styleNode.href = mduiStyleUrl;
+        } else {
+          const styleNode = iframeNode.contentDocument!.getElementById(
+            "mdui-style",
+          ) as HTMLStyleElement;
+          styleNode.innerHTML = mduiStyleContent;
+        }
+      };
+    });
 });

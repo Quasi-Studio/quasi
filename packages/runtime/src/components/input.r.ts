@@ -1,4 +1,4 @@
-import { ComponentContext, OutputComponent, fromProp } from "refina";
+import { Context, OutputComponent, fromProp } from "refina";
 import QuasiRuntime from "../plugin";
 import {
   component,
@@ -50,7 +50,7 @@ export interface InputProps {
   label: string;
   initial: string;
   disabled: boolean;
-  onInput: (newVal: string) => void;
+  onInput: (newVal: string | number) => void;
   validator: (value: string) => string | true;
 }
 
@@ -70,7 +70,7 @@ export class InputModel {
 
 @QuasiRuntime.outputComponent("qInput")
 export class QInput extends OutputComponent {
-  main(_: ComponentContext, model: InputModel, props: InputProps): void {
+  main(_: Context, model: InputModel, props: InputProps): void {
     model.type = props.type;
     model.value ??= props.initial;
     _.$cls(props.class);
@@ -84,7 +84,9 @@ export class QInput extends OutputComponent {
           )
         : _.mdTextField(fromProp(model, "_value"), props.label, props.disabled)
     ) {
-      props.onInput?.(props.type === "number" ? +_.$ev : _.$ev);
+      //@ts-ignore
+      const newVal = _.$ev as string;
+      props.onInput?.(props.type === "number" ? +newVal : newVal);
     }
   }
 }

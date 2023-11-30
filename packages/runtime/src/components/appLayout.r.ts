@@ -1,7 +1,7 @@
 /// <reference types="vite/client" />
 import {
-  ComponentContext,
   Content,
+  Context,
   HTMLElementComponent,
   OutputComponent,
   ref,
@@ -40,11 +40,7 @@ export class AppLayoutModel {
 @QuasiRuntime.outputComponent("qAppLayout")
 export class QAppLayout extends OutputComponent {
   navRailRef = ref<HTMLElementComponent<"mdui-navigation-rail">>();
-  main(
-    _: ComponentContext,
-    model: AppLayoutModel,
-    props: AppLayoutProps,
-  ): void {
+  main(_: Context, model: AppLayoutModel, props: AppLayoutProps): void {
     _.$cls(props.class);
     _.$css`position:fixed;width:100%;height:100%`;
     _.mdLayout(_ => {
