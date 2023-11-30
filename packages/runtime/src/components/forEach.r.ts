@@ -1,18 +1,18 @@
 import { Content, Context, OutputComponent } from "refina";
 import QuasiRuntime from "../plugin";
-import { component, content, input, output } from "../types";
+import { Direction, component, content, input, output } from "../types";
 
 export default component({
   displayName: () => "For each",
   model: "ForEachModel",
   contents: {
-    inner: content("inner"),
+    inner: content("inner", "as-socket", Direction.BOTTOM),
   },
   inputs: {
     iterable: input("iterable"),
   },
   outputs: {
-    current: output("current"),
+    current: output("current", "as-socket", Direction.RIGHT),
   },
 });
 
