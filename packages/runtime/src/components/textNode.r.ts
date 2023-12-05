@@ -1,11 +1,11 @@
 import { Context, OutputComponent } from "refina";
 import QuasiRuntime from "../plugin";
-import { component, content } from "../types";
+import { component, content, input } from "../types";
 
 export default component({
   displayName: () => "Text",
-  contents: {
-    text: content("text"),
+  inputs: {
+    text: input("text", "as-primary-and-socket"),
   },
 });
 

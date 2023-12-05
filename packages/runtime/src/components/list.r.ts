@@ -1,17 +1,25 @@
 import { Content, Context, OutputComponent, byIndex, bySelf } from "refina";
 import QuasiRuntime from "../plugin";
-import { component, content, input, output, textProp } from "../types";
+import {
+  Direction,
+  component,
+  content,
+  input,
+  output,
+  textProp,
+} from "../types";
 
 export default component({
   displayName: () => "List",
+  model: "ListModel",
   contents: {
-    inner: content("inner"),
+    inner: content("inner", undefined, Direction.BOTTOM),
   },
   inputs: {
     data: input("data"),
   },
   outputs: {
-    current: output("current"),
+    current: output("current", undefined, Direction.RIGHT),
   },
   props: {
     class: textProp("class"),

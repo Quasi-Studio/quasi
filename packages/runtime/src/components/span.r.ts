@@ -5,7 +5,7 @@ import { component, content, textProp } from "../types";
 export default component({
   displayName: () => "Span",
   contents: {
-    inner: content("inner"),
+    inner: content("inner", "as-primary-and-socket"),
   },
   props: {
     class: textProp("class"),
