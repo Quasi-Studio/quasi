@@ -24,7 +24,7 @@
     "./*": "./*"
   },
   "dependencies": {
-    "@refina/mdui2": "link:..\\..\\..\\refina\\packages\\mdui2",
+    "@refina/mdui": "link:..\\..\\..\\refina\\packages\\mdui",
     "refina": "link:..\\..\\..\\refina\\packages\\core"
   }
 }
