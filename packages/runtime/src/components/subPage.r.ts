@@ -1,4 +1,4 @@
-import { Content, Context, OutputComponent } from "refina";
+import { Content } from "refina";
 import QuasiRuntime from "../plugin";
 import { component, content, input, textProp } from "../types";
 import { AppLayoutModel, currentNavSymbol } from "./appLayout.r";
@@ -22,9 +22,8 @@ export interface SubPageProps {
   inner: Content;
 }
 
-@QuasiRuntime.outputComponent("qSubPage")
-export class QSubPage extends OutputComponent {
-  main(_: Context, props: SubPageProps): void {
+QuasiRuntime.outputComponents.qSubPage = function (_) {
+  return props => {
     const model = _.$runtimeData[currentNavSymbol] as AppLayoutModel;
 
     if (model.renderingState === "nav") {
@@ -34,11 +33,11 @@ export class QSubPage extends OutputComponent {
         _.embed(props.inner);
       }
     }
-  }
-}
+  };
+};
 
 declare module "refina" {
-  interface OutputComponents {
-    qSubPage: QSubPage;
+  interface Components {
+    qSubPage(props: SubPageProps): void;
   }
 }

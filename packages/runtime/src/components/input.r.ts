@@ -1,4 +1,4 @@
-import { Context, OutputComponent, fromProp } from "refina";
+import { fromProp } from "refina";
 import QuasiRuntime from "../plugin";
 import {
   component,
@@ -68,9 +68,8 @@ export class InputModel {
   }
 }
 
-@QuasiRuntime.outputComponent("qInput")
-export class QInput extends OutputComponent {
-  main(_: Context, model: InputModel, props: InputProps): void {
+QuasiRuntime.outputComponents.qInput = function (_) {
+  return (model, props) => {
     model.type = props.type;
     model.value ??= props.initial;
     _.$cls(props.class);
@@ -88,11 +87,11 @@ export class QInput extends OutputComponent {
       const newVal = _.$ev as string;
       props.onInput?.(props.type === "number" ? +newVal : newVal);
     }
-  }
-}
+  };
+};
 
 declare module "refina" {
-  interface OutputComponents {
-    qInput: QInput;
+  interface Components {
+    qInput(model: InputModel, props: InputProps): void;
   }
 }

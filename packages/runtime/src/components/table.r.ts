@@ -1,4 +1,4 @@
-import { Content, Context, OutputComponent, byIndex, bySelf } from "refina";
+import { Content, byIndex, bySelf } from "refina";
 import QuasiRuntime from "../plugin";
 import {
   Direction,
@@ -43,9 +43,8 @@ export class TableModel {
   current: any;
 }
 
-@QuasiRuntime.outputComponent("qTable")
-export class QTable extends OutputComponent {
-  main(_: Context, model: TableModel, props: TableProps): void {
+QuasiRuntime.outputComponents.qTable = function (_) {
+  return (model, props) => {
     _.provide(currentTableSymbol, model, _ => {
       _.$cls(props.class);
       _.mdTable(
@@ -67,11 +66,11 @@ export class QTable extends OutputComponent {
       );
       model.current = null;
     });
-  }
-}
+  };
+};
 
 declare module "refina" {
-  interface OutputComponents {
-    qTable: QTable;
+  interface Components {
+    qTable(model: TableModel, props: TableProps): void;
   }
 }

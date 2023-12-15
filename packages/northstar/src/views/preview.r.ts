@@ -1,5 +1,5 @@
 /// <reference types="vite/client" />
-import { HTMLElementComponent, ref, view } from "refina";
+import { HTMLElementComponent, defineView, ref } from "refina";
 
 import runtimeURL from "@quasi-dev/runtime/src/index.ts?url";
 import mduiStyleContent from "@quasi-dev/runtime/styles.css?inline"; // Used in production
@@ -42,7 +42,7 @@ export async function startPreview() {
   errorMsg = "";
 }
 
-export default view(_ => {
+export default defineView(_ => {
   if (errorMsg.length > 0) {
     _.$cls`text-red-900 border border-red-500`;
     _._pre({}, errorMsg);
@@ -56,9 +56,9 @@ export default view(_ => {
       height: "100%",
     });
 
-  _.$updateState &&
+  _.$updateContext &&
     _.$app.pushOnetimeHook("afterModifyDOM", () => {
-      if (!_.$updateState || !codeModified) return;
+      if (!_.$updateContext || !codeModified) return;
       codeModified = false;
       const iframeNode = iframe.current!.node;
 

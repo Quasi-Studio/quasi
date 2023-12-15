@@ -1,4 +1,4 @@
-import { Content, Context, OutputComponent } from "refina";
+import { Content, RefTreeNode } from "refina";
 import QuasiRuntime from "../plugin";
 import { Direction, component, content, input, output } from "../types";
 
@@ -25,22 +25,31 @@ export class ForEachModel {
   current: unknown;
 }
 
-@QuasiRuntime.outputComponent("qForEach")
-export class QForEach extends OutputComponent {
-  main(_: Context, model: ForEachModel, props: ForEachProps): void {
+QuasiRuntime.outputComponents.qForEach = function (_) {
+  const refTreeNodes: Record<string, RefTreeNode> = {};
+  return (model, props) => {
+    const parentRefTreeNode = _.$intrinsic.$$currentRefTreeNode;
+
     let index = 0;
     for (const v of props.iterable) {
       model.current = v;
-      this.$app.pushKey(index.toString());
+
+      const key = index.toString();
+
+      refTreeNodes[key] ??= {};
+      _.$intrinsic.$$currentRefTreeNode = refTreeNodes[key];
+
       _.embed(props.inner);
-      this.$app.popKey(index.toString());
+
       index++;
     }
-  }
-}
+
+    _.$intrinsic.$$currentRefTreeNode = parentRefTreeNode;
+  };
+};
 
 declare module "refina" {
-  interface OutputComponents {
-    qForEach: QForEach;
+  interface Components {
+    qForEach(model: ForEachModel, props: ForEachProps): void;
   }
 }

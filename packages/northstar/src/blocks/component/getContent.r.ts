@@ -1,5 +1,4 @@
-import { FUnderlineTextInput } from "@refina/fluentui";
-import { Context, ref } from "refina";
+import { Context, MainElRef, ref } from "refina";
 import { currentProject } from "../../project";
 import { ComponentBlock } from "./block";
 
@@ -25,22 +24,28 @@ export function getContent(block: ComponentBlock) {
         onkeydown: propagationStopper,
       },
       _ => {
-        const inputRef = ref<FUnderlineTextInput>();
+        const inputRef: MainElRef = ref();
         _.$css`font-family: Consolas; max-width: 108px; padding-left:4px`;
         _.$ref(inputRef) &&
-          _.fUnderlineTextInput(
+          _.fUnderlineInput(
             block.primaryValue,
             false,
             primaryInputInfo.displayName,
           );
-        if (_.$updateState) {
-          inputRef.current!.inputRef.current!.node.onchange = () => {
-            currentProject.activeGraph.pushRecord();
-          };
-          inputRef.current!.inputRef.current!.node.onfocus = () => {
-            currentProject.activeGraph.addSelectedBlock(block, false);
-            _.$update();
-          };
+        if (_.$updateContext) {
+          setTimeout(() => {
+            const inputEl = inputRef.current!.$mainEl!.node.firstChild as
+              | HTMLInputElement
+              | undefined;
+            if (!inputEl) return;
+            inputEl.onchange = () => {
+              currentProject.activeGraph.pushRecord();
+            };
+            inputEl.onfocus = () => {
+              currentProject.activeGraph.addSelectedBlock(block, false);
+              _.$update();
+            };
+          }, 5);
         }
       },
     );

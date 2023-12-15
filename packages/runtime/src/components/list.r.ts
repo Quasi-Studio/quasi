@@ -1,4 +1,4 @@
-import { Content, Context, OutputComponent, byIndex, bySelf } from "refina";
+import { Content, byIndex, bySelf } from "refina";
 import QuasiRuntime from "../plugin";
 import {
   Direction,
@@ -38,9 +38,8 @@ export class ListModel {
   current: any;
 }
 
-@QuasiRuntime.outputComponent("qList")
-export class QList extends OutputComponent {
-  main(_: Context, model: ListModel, props: ListProps): void {
+QuasiRuntime.outputComponents.qList = function (_) {
+  return (model, props) => {
     _.$cls(props.class);
     _.mdList(
       props.data,
@@ -55,11 +54,11 @@ export class QList extends OutputComponent {
       },
     );
     model.current = null;
-  }
-}
+  };
+};
 
 declare module "refina" {
-  interface OutputComponents {
-    qList: QList;
+  interface Components {
+    qList(model: ListModel, props: ListProps): void;
   }
 }

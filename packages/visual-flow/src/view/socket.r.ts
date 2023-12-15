@@ -1,12 +1,15 @@
-import { Context, OutputComponent } from "refina";
 import { Socket } from "../model";
 import Vf from "../plugin";
 import { Direction } from "../types";
 import styles from "./socket.styles";
 
-@Vf.outputComponent("vfSocket")
-export class VfSocket extends OutputComponent {
-  main(_: Context, model: Socket): void {
+declare module "refina" {
+  interface Components {
+    vfSocket(model: Socket): void;
+  }
+}
+Vf.outputComponents.vfSocket = function (_) {
+  return model => {
     styles.root(model.disabled)(_);
     _.$css`transform: translate(${model.blockDisplayX}px, ${model.blockDisplayY}px) scale(${model.graph.boardScale})`;
     _.$ref(model.ref) &&
@@ -28,11 +31,5 @@ export class VfSocket extends OutputComponent {
           _._svgText(model.labelBoardPos, model.label);
         }
       });
-  }
-}
-
-declare module "refina" {
-  interface OutputComponents {
-    vfSocket: VfSocket;
-  }
-}
+  };
+};

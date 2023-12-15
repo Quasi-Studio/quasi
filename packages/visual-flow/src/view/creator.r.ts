@@ -1,19 +1,24 @@
-import { Content, Context, D, TriggerComponent } from "refina";
+import { Content, D, } from "refina";
 import { Block, Graph } from "../model";
 import Vf from "../plugin";
 import styles from "./creator.styles";
 
 const DRAGGING_START_PADDING = 20;
 
-@Vf.triggerComponent("vfCreator")
-export class VfCreator extends TriggerComponent<void> {
-  main(
-    _: Context,
-    graph: Graph,
-    inner: D<Content>,
-    factory: () => Block,
-    disabled: D<boolean> = false,
-  ): void {
+declare module "refina" {
+  interface Components {
+    vfCreator(
+      graph: Graph,
+      inner: D<Content>,
+      factory: () => Block,
+      disabled?: D<boolean>,
+    ): this is {
+      $ev: void;
+    };
+  }
+}
+Vf.triggerComponents.vfCreator = function (_) {
+  return (graph, inner, factory, disabled = false) => {
     styles.root(_);
     _._div(
       {
@@ -38,11 +43,5 @@ export class VfCreator extends TriggerComponent<void> {
       },
       inner,
     );
-  }
-}
-
-declare module "refina" {
-  interface TriggerComponents {
-    vfCreator: VfCreator;
-  }
-}
+  };
+};

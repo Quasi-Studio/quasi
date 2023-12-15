@@ -19,9 +19,8 @@ import {
   directionMap,
   directionNameMap,
 } from "@quasi-dev/visual-flow";
-import { FTextarea, FUnderlineTextInput } from "@refina/fluentui";
 import "@refina/fluentui-icons/expandUpLeft.r.ts";
-import { Context, bySelf, d, ref } from "refina";
+import { Context, MainElRef, bySelf, d, ref } from "refina";
 import { setExtraLib } from "../../utils";
 import { PropData, PropsData } from "../../utils/props";
 import { multiOutSocketToOutput } from "../../utils/toOutput";
@@ -64,18 +63,24 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
         onkeydown: ev => ev.stopPropagation(),
       },
       _ => {
-        const inputRef = ref<FTextarea | FUnderlineTextInput>();
+        const inputRef: MainElRef = ref();
         _.$css`--fontFamilyBase: Consolas,'Segoe UI', 'Segoe UI Web (West European)', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif`;
         _.$ref(inputRef) &&
           (this.useTextarea
             ? _.$css`margin-top:4px;max-width:180px` &&
               _.fTextarea(this.inputValue, false, this.placeholder, "none")
             : _.$css`min-height:24px;margin-left:-4px` &&
-              _.fUnderlineTextInput(this.inputValue, false, this.placeholder));
-        if (_.$updateState) {
-          inputRef.current!.inputRef.current!.node.onchange = () => {
-            currentProject.activeGraph.pushRecord();
-          };
+              _.fUnderlineInput(this.inputValue, false, this.placeholder));
+        if (_.$updateContext) {
+          setTimeout(() => {
+            const inputEl = inputRef.current!.$mainEl!.node.firstChild as
+              | HTMLElement
+              | undefined;
+            if (!inputEl) return;
+            inputEl.onchange = () => {
+              currentProject.activeGraph.pushRecord();
+            };
+          }, 5);
         }
 
         if (this.useTextarea) {

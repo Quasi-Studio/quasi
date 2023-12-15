@@ -1,13 +1,13 @@
 import { componentInfoArray } from "@quasi-dev/runtime";
 import "@refina/fluentui-icons/edit.r.ts";
-import { byIndex, bySelf, view } from "refina";
+import { byIndex, defineView } from "refina";
 import { ComponentBlock } from "../blocks/component/block";
 import special from "../blocks/special";
 import { ViewBlock } from "../blocks/special/view.r";
 import { currentProject } from "../project";
 
-export default view(_ => {
-  if (_.fAccordionDefaultOpen("Special")) {
+export default defineView(_ => {
+  if (_.fAccordion("Special", false, true)) {
     _.$cls`grid grid-cols-3 justify-items-center`;
     _.div(_ => {
       _.for(
@@ -34,7 +34,7 @@ export default view(_ => {
       );
     });
   }
-  if (_.fAccordionDefaultOpen("Components")) {
+  if (_.fAccordion("Components", false, true)) {
     _.$cls`grid grid-cols-3 justify-items-center`;
     _.div(_ => {
       _.for(
@@ -62,7 +62,7 @@ export default view(_ => {
       );
     });
   }
-  if (_.fAccordionDefaultOpen("Views")) {
+  if (_.fAccordion("Views", false, true)) {
     _.$cls`grid grid-cols-3 justify-items-center`;
     _.div(_ => {
       _.for(currentProject.views, byIndex, (view, id) => {

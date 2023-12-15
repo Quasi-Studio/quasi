@@ -20,7 +20,6 @@
   ],
   "exports": {
     ".": "./src/index.ts",
-    "./styles.css": "./node_modules/@refina/mdui2/node_modules/mdui/mdui.css",
     "./*": "./*"
   },
   "dependencies": {

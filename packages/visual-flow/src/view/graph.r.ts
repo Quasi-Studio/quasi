@@ -1,14 +1,17 @@
-import { Context, OutputComponent } from "refina";
 import { Graph } from "../model";
 import Vf from "../plugin";
 import styles from "./graph.styles";
 
-@Vf.outputComponent("vfGraph")
-export class VfGraph extends OutputComponent {
-  main(_: Context, model: Graph): void {
+declare module "refina" {
+  interface Components {
+    vfGraph(model: Graph): void;
+  }
+}
+Vf.outputComponents.vfGraph = function (_) {
+  return model => {
     model.app = _.$app;
 
-    if (_.$updateState) {
+    if (_.$updateContext) {
       _.$window.addEventListener(
         "resize",
         () => {
@@ -116,11 +119,5 @@ export class VfGraph extends OutputComponent {
       _._canvas({
         id: "vf-thumbnail",
       });
-  }
-}
-
-declare module "refina" {
-  interface OutputComponents {
-    vfGraph: VfGraph;
-  }
-}
+  };
+};

@@ -1,4 +1,4 @@
-import { Content, Context, OutputComponent } from "refina";
+import { Content } from "refina";
 import QuasiRuntime from "../plugin";
 import { Direction, component, content, input } from "../types";
 
@@ -19,19 +19,18 @@ export interface IfElseProps {
   else: Content;
 }
 
-@QuasiRuntime.outputComponent("qIfElse")
-export class QIfElse extends OutputComponent {
-  main(_: Context, props: IfElseProps): void {
+QuasiRuntime.outputComponents.qIfElse = function (_) {
+  return props => {
     if (props.condition) {
       _.embed(props.then);
     } else {
       _.embed(props.else);
     }
-  }
-}
+  };
+};
 
 declare module "refina" {
-  interface OutputComponents {
-    qIfElse: QIfElse;
+  interface Components {
+    qIfElse(props: IfElseProps): void;
   }
 }

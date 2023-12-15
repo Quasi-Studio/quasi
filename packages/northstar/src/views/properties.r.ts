@@ -1,9 +1,9 @@
 import "@refina/fluentui-icons/add.r.ts";
 import "@refina/fluentui-icons/subtract.r.ts";
-import { $clsFunc, MainElRef, ref, view } from "refina";
+import { $clsFunc, MainElRef, defineView, ref } from "refina";
 import { getSelectedProps } from "../utils/props";
 
-export default view(_ => {
+export default defineView(_ => {
   const props = getSelectedProps();
   _.for(props, "key", p => {
     const r = ref() as MainElRef;
@@ -24,7 +24,7 @@ export default view(_ => {
     _.$cls`col-span-2 h-8`;
     if (p.type === "text") {
       _.$ref(r);
-      _.fUnderlineTextInput(p.getVal(), false, "unset") && p.setVal(_.$ev);
+      _.fUnderlineInput(p.getVal(), false, "unset") && p.setVal(_.$ev);
     } else if (p.type === "switch") {
       _.$cls`ml-4`;
       _.fSwitch("", p.getVal()) && p.setVal(_.$ev);

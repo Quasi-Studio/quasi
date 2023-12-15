@@ -17,7 +17,14 @@ import "@refina/fluentui-icons/imageBorder.r.ts";
 import "@refina/fluentui-icons/resizeLarge.r.ts";
 import "@refina/fluentui-icons/resizeSmall.r.ts";
 import { domToBlob } from "modern-screenshot";
-import { Content, HTMLElementComponent, d, fromProp, ref, view } from "refina";
+import {
+  Content,
+  HTMLElementComponent,
+  d,
+  defineView,
+  fromProp,
+  ref,
+} from "refina";
 import {
   Project,
   currentProject,
@@ -39,7 +46,7 @@ import iconURL from "/favicon.ico?url";
 
 export const previewMode = d(false);
 
-const toolItem = view(
+const toolItem = defineView(
   (
     _,
     tip: string,
@@ -66,7 +73,7 @@ let exportToPNGMessage = `Click the "Export" button above to start`;
 
 export const graphElRef = ref<HTMLElementComponent<"div">>();
 
-export default view(_ => {
+export default defineView(_ => {
   _.$cls`flex items-center h-full`;
   _.div(_ => {
     _.$cls`w-[2em] h-[2em] invert`;
@@ -339,7 +346,7 @@ export default view(_ => {
                 onkeydown: ev => ev.stopPropagation(),
               },
               _ =>
-                _.fUnderlineTextInput(
+                _.fUnderlineInput(
                   fromProp(currentProject.activeView, "name"),
                 ),
             );
