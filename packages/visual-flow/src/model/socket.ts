@@ -6,6 +6,8 @@ import { Graph } from "./graph";
 import { Line } from "./line";
 
 export abstract class Socket extends ModelBase {
+  abstract ctorName: string;
+
   get graph(): Graph {
     return this.block.graph;
   }
@@ -86,7 +88,7 @@ export abstract class Socket extends ModelBase {
   protected abstract exportData(): any;
   exportRecord(): SocketRecord {
     return {
-      ctor: this.constructor.name,
+      ctor: this.ctorName,
       id: this.id,
       type: this.type,
       direction: this.direction,

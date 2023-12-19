@@ -3,6 +3,8 @@ import { blockCtors } from "@quasi-dev/visual-flow";
 import { FuncBlockBase } from "./FuncBlockBase.r";
 
 export class StringBlock extends FuncBlockBase {
+  ctorName: string = "StringBlock";
+
   type: FuncBlockTypes = "string";
 
   label = "string template";

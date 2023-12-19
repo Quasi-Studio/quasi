@@ -7,6 +7,8 @@ import styles from "./RectBlock.styles";
 const SOCKET_PADDING_SCALE = -0.1;
 
 export abstract class RectBlock extends Block {
+  ctorName: string = "RectBlock";
+
   cloneTo(target: this): this {
     target.boardWidth = this.boardWidth;
     target.boardHeight = this.boardHeight;

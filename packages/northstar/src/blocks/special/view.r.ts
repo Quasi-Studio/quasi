@@ -13,6 +13,8 @@ import { singleInSocketToOutput } from "../../utils/toOutput";
 import { SpecialBlock } from "./base";
 
 export class ViewBlock extends RectBlock implements SpecialBlock {
+  ctorName: string = "ViewBlock";
+
   cloneTo(target: this): this {
     super.cloneTo(target);
     target.viewName = this.viewName;

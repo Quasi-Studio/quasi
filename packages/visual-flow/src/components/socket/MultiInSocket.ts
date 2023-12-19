@@ -1,8 +1,11 @@
-import { Direction, LINE_END_OFFSET, Point } from "../..";
 import { Line, Socket } from "../../model";
 import { socketCtors } from "../../recorder";
+import { Direction, Point } from "../../types";
+import { LINE_END_OFFSET } from "../line";
 
 export class MultiInSocket extends Socket {
+  ctorName: string = "MultiInSocket";
+
   connectedLines: Line[] = [];
 
   get allConnectedLines(): Line[] {

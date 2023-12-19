@@ -14,6 +14,8 @@ import { SpecialBlock } from "./base";
 import { currentProject } from "../../project";
 
 export class RootBlock extends RectBlock implements SpecialBlock {
+  ctorName: string = "RootBlock";
+
   boardWidth = 200;
   boardHeight = 50;
 

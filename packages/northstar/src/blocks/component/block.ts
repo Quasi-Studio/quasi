@@ -24,6 +24,8 @@ import { getProps } from "./getProps";
 import { updatePlugins } from "./updatePlugins";
 
 export class ComponentBlock extends RectBlock {
+  ctorName: string = "ComponentBlock";
+
   cloneTo(target: this): this {
     super.cloneTo(target);
     target.setComponentType(this.componentType, this.info);

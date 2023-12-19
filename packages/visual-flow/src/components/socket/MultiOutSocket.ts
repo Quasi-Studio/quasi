@@ -3,6 +3,8 @@ import { socketCtors } from "../../recorder";
 import { BasicLine } from "../line";
 
 export class MultiOutSocket extends Socket {
+  ctorName: string = "MultiOutSocket";
+
   connectedLines: Line[] = [];
 
   connectTo(line: Line): void {

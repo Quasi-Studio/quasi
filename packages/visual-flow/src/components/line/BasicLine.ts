@@ -17,6 +17,8 @@ function getCtrlPointOffset(delta: number) {
 }
 
 export class BasicLine extends Line {
+  ctorName: string = "BasicLine";
+
   clone(): Line {
     const line = new BasicLine();
     line.type = this.type;

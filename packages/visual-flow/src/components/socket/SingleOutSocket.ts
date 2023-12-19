@@ -4,6 +4,8 @@ import { BasicLine } from "../line";
 import { PATH_OUT_ELIPSE, PATH_OUT_RECT } from "./constants";
 
 export class SingleOutSocket extends Socket {
+  ctorName: string = "SingleOutSocket";
+
   connectedLine: Line | null = null;
 
   get allConnectedLines(): Line[] {

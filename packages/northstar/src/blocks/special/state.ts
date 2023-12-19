@@ -4,6 +4,8 @@ import { ExprBlock } from "./expr";
 import { StateSetterBlock } from "./stateSetter.r";
 
 export class StateBlock extends ExprBlock {
+  ctorName: string = "StateBlock";
+
   label = "state";
   type: FuncBlockTypes = "state";
   placeholder = "initial value";

@@ -21,6 +21,8 @@ import {
 import { FuncBlockBase } from "./FuncBlockBase.r";
 
 export class ImpBlock extends FuncBlockBase {
+  ctorName: string = "ImpBlock";
+
   cloneTo(target: this): this {
     super.cloneTo(target);
     target.hasThen = this.hasThen;

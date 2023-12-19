@@ -3,6 +3,8 @@ import { blockCtors } from "@quasi-dev/visual-flow";
 import { FuncBlockBase } from "./FuncBlockBase.r";
 
 export class ExprBlock extends FuncBlockBase {
+  ctorName: string = "ExprBlock";
+
   type: FuncBlockTypes = "expr";
   label = "expression";
   outputLabel = "value";

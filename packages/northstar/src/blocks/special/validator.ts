@@ -1,8 +1,10 @@
-import { Direction, Socket, blockCtors } from "@quasi-dev/visual-flow";
-import { FuncBlockBase } from "./FuncBlockBase.r";
 import { FuncBlockTypes, ValidatorBlockOutput } from "@quasi-dev/compiler";
+import { Direction, blockCtors } from "@quasi-dev/visual-flow";
+import { FuncBlockBase } from "./FuncBlockBase.r";
 
 export class ValidatorBlock extends FuncBlockBase {
+  ctorName: string = "ValidatorBlock";
+
   label = "validator";
   type: FuncBlockTypes = "validator";
   placeholder = "expression";

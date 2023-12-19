@@ -23,6 +23,8 @@ export type UseSocket = <T extends Socket>(
 export type UsedSockets = [string, Socket][];
 
 export abstract class Block extends ModelBase {
+  abstract ctorName: string;
+
   abstract cloneTo(target: this): this;
   clone() {
     return this.cloneTo(new (this.constructor as any)());
@@ -402,7 +404,7 @@ export abstract class Block extends ModelBase {
   protected abstract exportData(): any;
   exportRecord(): BlockRecord {
     return {
-      ctor: this.constructor.name,
+      ctor: this.ctorName,
       id: this.id,
       boardX: this.boardX,
       boardY: this.boardY,

@@ -16,6 +16,8 @@ import { multiInSocketToOutput } from "../../utils/toOutput";
 import { ExprBlock } from "./expr";
 
 export class StateSetterBlock extends ExprBlock {
+  ctorName: string = "StateSetterBlock";
+
   type: FuncBlockTypes = "state-setter";
   label = "state setter";
   placeholder = "expr";

@@ -22,6 +22,8 @@ const WIDTH = 70;
 const HEIGHT = 30;
 
 export class DoBlock extends RectBlock {
+  ctorName: string = "DoBlock";
+
   cloneTo(target: this): this {
     super.cloneTo(target);
     target.thenNum = this.thenNum;

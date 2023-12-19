@@ -41,6 +41,8 @@ const defaultColors: Record<string, LineColors> = {
 };
 
 export abstract class Line extends ModelBase {
+  abstract ctorName: string;
+
   abstract clone(): Line;
 
   graph: Graph;
@@ -186,7 +188,7 @@ export abstract class Line extends ModelBase {
   protected abstract exportData(): any;
   exportRecord(): LineRecord {
     return {
-      ctor: this.constructor.name,
+      ctor: this.ctorName,
       id: this.id,
       type: this.type,
       socketAId: this.a.id,

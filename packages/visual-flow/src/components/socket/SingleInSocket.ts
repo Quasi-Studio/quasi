@@ -2,6 +2,8 @@ import { Line, Socket } from "../../model";
 import { socketCtors } from "../../recorder";
 
 export class SingleInSocket extends Socket {
+  ctorName: string = "SingleInSocket";
+
   connectedLine: Line | null = null;
 
   get allConnectedLines(): Line[] {

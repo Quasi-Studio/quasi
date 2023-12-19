@@ -21,6 +21,8 @@ import {
 import { SpecialBlock } from "./base";
 
 export class IfElseBlock extends RectBlock implements SpecialBlock {
+  ctorName: string = "IfElseBlock";
+
   cloneTo(target: this): this {
     super.cloneTo(target);
     target.hasElse = this.hasElse;

@@ -31,6 +31,8 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
   cloneTo(target: this): this {
     super.cloneTo(target);
     target.inputValue.value = this.inputValue.value;
+    target.outputDirection = this.outputDirection;
+    target.slotsDirection = this.slotsDirection;
     return target;
   }
 
