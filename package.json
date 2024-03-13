@@ -1,22 +1,28 @@
 {
   "name": "@quasi-dev/monorepo",
-  "version": "0.0.0",
   "type": "module",
+  "version": "0.0.0",
   "private": true,
   "scripts": {
     "build": "pnpm -r run build",
     "dev": "pnpm dev:northstar",
     "dev:northstar": "pnpm -r --parallel --filter \"@quasi-dev/northstar...\" run dev",
     "check": "pnpm -r --parallel run check",
-    "prettier": "prettier --write .",
-    "prepare": "husky install"
+    "prepare": "husky install",
+    "lint": "eslint .",
+    "lint:fix": "eslint . --fix"
   },
   "devDependencies": {
+    "@antfu/eslint-config": "^2.8.1",
+    "eslint": "^8.57.0",
     "husky": "^8.0.3",
     "lint-staged": "^14.0.1",
-    "prettier": "3.0.0"
+    "simple-git-hooks": "^2.10.0"
+  },
+  "simple-git-hooks": {
+    "pre-commit": "pnpm lint-staged"
   },
   "lint-staged": {
-    "**/*": "prettier --write --ignore-unknown"
+    "*": "eslint --fix"
   }
 }

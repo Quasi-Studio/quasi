@@ -3,13 +3,13 @@ import type {
   GraphRecord,
   LineRecord,
   SocketRecord,
-} from "../model";
+} from '../model'
 
-export type CtorMap<T> = Record<string, new () => T>;
+export type CtorMap<T> = Record<string, new () => T>
 
 export interface VfRecord {
-  graph: GraphRecord;
-  blocks: BlockRecord[];
-  sockets: SocketRecord[];
-  lines: LineRecord[];
+  graph: GraphRecord
+  blocks: BlockRecord[]
+  sockets: SocketRecord[]
+  lines: LineRecord[]
 }

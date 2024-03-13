@@ -1,2 +1,2 @@
-export * from "./direction";
-export * from "./point";
+export * from './direction'
+export * from './point'

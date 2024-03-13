@@ -1,25 +1,26 @@
-import { Component, Content, _ } from "refina";
+import type { Content } from 'refina'
+import { Component, _ } from 'refina'
 
-import { component, content, textProp } from "../types";
+import { component, content, textProp } from '../types'
 
 export default component({
-  displayName: () => "Span",
+  displayName: () => 'Span',
   contents: {
-    inner: content("inner", "as-primary-and-socket"),
+    inner: content('inner', 'as-primary-and-socket'),
   },
   props: {
-    class: textProp("class"),
+    class: textProp('class'),
   },
-});
+})
 
 export interface SpanProps {
-  inner: Content;
-  class: string;
+  inner: Content
+  class: string
 }
 
 export class QSpan extends Component {
   $main(props: SpanProps) {
-    _.$cls(props.class);
-    _._span({}, props.inner);
+    _.$cls(props.class)
+    _._span({}, props.inner)
   }
 }

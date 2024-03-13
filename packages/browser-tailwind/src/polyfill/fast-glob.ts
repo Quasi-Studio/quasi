@@ -1,14 +1,14 @@
-//@ts-nocheck
+// @ts-nocheck
 export default {
-  sync: (patterns) => [].concat(patterns),
-  escapePath: (path) => path,
-  generateTasks: (patterns) => [
+  sync: patterns => [].concat(patterns),
+  escapePath: path => path,
+  generateTasks: patterns => [
     {
       dynamic: false,
-      base: ".",
+      base: '.',
       negative: [],
       positive: [].concat(patterns),
       patterns: [].concat(patterns),
     },
   ],
-};
+}

@@ -1,36 +1,37 @@
-import { Component, Content, _ } from "refina";
+import type { Content } from 'refina'
+import { Component, _ } from 'refina'
 
-import { Direction, component, content, textProp } from "../types";
+import { Direction, component, content, textProp } from '../types'
 
 export default component({
-  displayName: () => "Card",
+  displayName: () => 'Card',
   contents: {
-    title: content("title", "as-primary"),
-    inner: content("inner", "as-socket", Direction.BOTTOM),
+    title: content('title', 'as-primary'),
+    inner: content('inner', 'as-socket', Direction.BOTTOM),
   },
   props: {
-    class: textProp("class"),
+    class: textProp('class'),
   },
-});
+})
 
 export interface CardProps {
-  title: Content;
-  inner: Content;
-  class: string;
+  title: Content
+  inner: Content
+  class: string
 }
 
 export class QCard extends Component {
   $main(props: CardProps) {
-    _.$css`width:100%;padding:18px;padding-top:0`;
-    _.$cls(props.class);
+    _.$css`width:100%;padding:18px;padding-top:0`
+    _.$cls(props.class)
     _._mdui_card(
       {
-        variant: "filled",
+        variant: 'filled',
       },
       _ => {
-        _._h2({}, props.title);
-        _.embed(props.inner);
+        _._h2({}, props.title)
+        _.embed(props.inner)
       },
-    );
+    )
   }
 }

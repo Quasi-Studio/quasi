@@ -1,1 +1,1 @@
-export * from "./RectBlock.r";
+export * from './RectBlock.r'

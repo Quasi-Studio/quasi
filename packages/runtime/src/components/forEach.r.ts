@@ -1,49 +1,50 @@
-import { Component, Content, RefTreeNode, _ } from "refina";
+import type { Content, RefTreeNode } from 'refina'
+import { Component, _ } from 'refina'
 
-import { Direction, component, content, input, output } from "../types";
+import { Direction, component, content, input, output } from '../types'
 
 export default component({
-  displayName: () => "For each",
-  model: "ForEachModel",
+  displayName: () => 'For each',
+  model: 'ForEachModel',
   contents: {
-    inner: content("inner", "as-socket", Direction.BOTTOM),
+    inner: content('inner', 'as-socket', Direction.BOTTOM),
   },
   inputs: {
-    iterable: input("iterable"),
+    iterable: input('iterable'),
   },
   outputs: {
-    current: output("current", "as-socket", Direction.RIGHT),
+    current: output('current', 'as-socket', Direction.RIGHT),
   },
-});
+})
 
 export interface ForEachProps {
-  inner: Content;
-  iterable: Iterable<unknown>;
+  inner: Content
+  iterable: Iterable<unknown>
 }
 
 export class ForEachModel {
-  current: unknown;
+  current: unknown
 }
 
 export class QForEach extends Component {
-  refNodes: Record<string, RefTreeNode> = {};
+  refNodes: Record<string, RefTreeNode> = {}
   $main(model: ForEachModel, props: ForEachProps) {
-    const parentRefTreeNode = _.$lowlevel.$$currentRefNode;
+    const parentRefTreeNode = _.$lowlevel.$$currentRefNode
 
-    let index = 0;
+    let index = 0
     for (const v of props.iterable) {
-      model.current = v;
+      model.current = v
 
-      const key = index.toString();
+      const key = index.toString()
 
-      this.refNodes[key] ??= {};
-      _.$lowlevel.$$currentRefNode = this.refNodes[key];
+      this.refNodes[key] ??= {}
+      _.$lowlevel.$$currentRefNode = this.refNodes[key]
 
-      _.embed(props.inner);
+      _.embed(props.inner)
 
-      index++;
+      index++
     }
 
-    _.$lowlevel.$$currentRefNode = parentRefTreeNode;
+    _.$lowlevel.$$currentRefNode = parentRefTreeNode
   }
 }

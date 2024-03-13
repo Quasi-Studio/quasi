@@ -1,6 +1,6 @@
 declare global {
   interface Window {
-    __QUASI_PREVIEW__: boolean;
+    __QUASI_PREVIEW__: boolean
   }
 }
-export {};
+export {}

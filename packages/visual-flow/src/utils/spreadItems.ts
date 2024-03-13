@@ -7,12 +7,12 @@ export function spreadItems(
   itemNum: number,
   paddingScale: number,
 ) {
-  const positions: number[] = [];
-  const offset = ((1 - 2 * paddingScale) * length) / (itemNum + 1);
-  let x = paddingScale * length;
+  const positions: number[] = []
+  const offset = ((1 - 2 * paddingScale) * length) / (itemNum + 1)
+  let x = paddingScale * length
   for (let i = 0; i < itemNum; i++) {
-    x += offset;
-    positions.push(x);
+    x += offset
+    positions.push(x)
   }
-  return positions;
+  return positions
 }

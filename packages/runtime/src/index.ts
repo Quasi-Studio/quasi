@@ -1,11 +1,11 @@
-import { Plugin } from "refina";
-import * as c from "./components";
-import MdUI from "@refina/mdui";
+import type { Plugin } from 'refina'
+import MdUI from '@refina/mdui'
+import * as c from './components'
 
 export default [
   MdUI as Plugin,
   {
-    name: "quasi-runtime",
+    name: 'quasi-runtime',
     components: {
       qAppLayout: c.QAppLayout,
       qButton: c.QButton,
@@ -23,8 +23,8 @@ export default [
       qTextNode: c.QTextNode,
     },
   } satisfies Plugin,
-];
+]
 
-export * as refina from "refina";
-export * from "./components";
-export * from "./types";
+export * as refina from 'refina'
+export * from './components'
+export * from './types'

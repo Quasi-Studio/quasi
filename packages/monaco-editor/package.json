@@ -1,27 +1,27 @@
 {
   "name": "@quasi-dev/monaco-editor",
-  "version": "0.0.1",
   "type": "module",
-  "license": "MIT",
+  "version": "0.0.1",
   "description": "Monaco Editor for Quasi",
+  "license": "MIT",
   "repository": "https://github.com/Quasi-Studio/quasi",
-  "scripts": {
-    "check": "tsc --noEmit"
-  },
-  "devDependencies": {
-    "@refina/tsconfig": "^0.6.0",
-    "typescript": "^5.4.2"
+  "exports": {
+    ".": "./src/index.ts"
   },
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "files": [
     "src"
   ],
-  "exports": {
-    ".": "./src/index.ts"
+  "scripts": {
+    "check": "tsc --noEmit"
   },
   "dependencies": {
     "monaco-editor": "^0.44.0",
     "refina": "^0.6.1"
+  },
+  "devDependencies": {
+    "@refina/tsconfig": "^0.6.0",
+    "typescript": "^5.4.2"
   }
 }

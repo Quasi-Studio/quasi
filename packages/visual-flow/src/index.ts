@@ -1,8 +1,8 @@
-import { Plugin } from "refina";
-import * as c from "./view";
+import type { Plugin } from 'refina'
+import * as c from './view'
 
 export default {
-  name: "visual-flow",
+  name: 'visual-flow',
   components: {
     vfBlock: c.VfBlock,
     vfCreator: c.VfCreator,
@@ -10,10 +10,10 @@ export default {
     vfLine: c.VfLine,
     vfSocket: c.VfSocket,
   },
-} satisfies Plugin;
+} satisfies Plugin
 
-export * from "./components";
-export * from "./model";
-export * from "./recorder";
-export * from "./types";
-export * from "./view";
+export * from './components'
+export * from './model'
+export * from './recorder'
+export * from './types'
+export * from './view'

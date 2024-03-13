@@ -1,9 +1,9 @@
-import { Direction } from "./base";
+import { Direction } from './base'
 
 export interface PluginInfo {
-  displayName: string;
-  kind: string;
-  direction: Direction;
+  displayName: string
+  kind: string
+  direction: Direction
 }
 
 export function plugin(
@@ -15,5 +15,5 @@ export function plugin(
     displayName,
     kind,
     direction,
-  };
+  }
 }

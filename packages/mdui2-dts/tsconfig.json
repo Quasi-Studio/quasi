@@ -1,13 +1,13 @@
 {
-  "include": ["entrypoint.d.ts", "index.ts"],
   "compilerOptions": {
     "target": "ESNext",
+    "lib": ["ESNext", "DOM"],
     "module": "ESNext",
-    "declaration": true,
     "moduleResolution": "Bundler",
     "types": [],
-    "lib": ["ESNext", "DOM"],
-    "outDir": "dist",
-    "allowJs": true
-  }
+    "allowJs": true,
+    "declaration": true,
+    "outDir": "dist"
+  },
+  "include": ["entrypoint.d.ts", "index.ts"]
 }

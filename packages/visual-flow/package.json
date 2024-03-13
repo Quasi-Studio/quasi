@@ -1,21 +1,21 @@
 {
   "name": "@quasi-dev/visual-flow",
-  "version": "0.0.1",
   "type": "module",
-  "license": "MIT",
+  "version": "0.0.1",
   "description": "A visualized functional programming framework.",
+  "license": "MIT",
   "repository": "https://github.com/Quasi-Studio/quasi",
-  "scripts": {
-    "check": "tsc --noEmit"
+  "exports": {
+    ".": "./src/index.ts"
   },
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "files": [
-    "src",
-    "README.md"
+    "README.md",
+    "src"
   ],
-  "exports": {
-    ".": "./src/index.ts"
+  "scripts": {
+    "check": "tsc --noEmit"
   },
   "dependencies": {
     "@fluentui/tokens": "^1.0.0-alpha.11",

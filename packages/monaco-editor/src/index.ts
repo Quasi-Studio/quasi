@@ -1,13 +1,13 @@
-import * as monaco from "monaco-editor";
-import { Plugin } from "refina";
-import { MonacoEditor } from "./component.r";
+import * as monaco from 'monaco-editor'
+import type { Plugin } from 'refina'
+import { MonacoEditor } from './component.r'
 
 export default {
-  name: "monaco-editor",
+  name: 'monaco-editor',
   components: {
     monacoEditor: MonacoEditor,
   },
-} satisfies Plugin;
+} satisfies Plugin
 
-export * from "./component.r";
-export { monaco };
+export * from './component.r'
+export { monaco }

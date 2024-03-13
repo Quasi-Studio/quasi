@@ -1,32 +1,32 @@
-import { defineStyles, makeResetStyles, makeStyles } from "@refina/griffel";
+import { defineStyles, makeResetStyles, makeStyles } from '@refina/griffel'
 
 const rootClassName = makeResetStyles({
-  width: "100%",
-  height: "100%",
-});
+  width: '100%',
+  height: '100%',
+})
 
 const svgClassName = makeResetStyles({
-  position: "absolute",
+  position: 'absolute',
   top: 0,
   left: 0,
-  width: "100%",
-  height: "100%",
-});
+  width: '100%',
+  height: '100%',
+})
 
 const svgStyles = makeStyles({
   fg: {
     zIndex: 1000,
-    pointerEvents: "none",
+    pointerEvents: 'none',
   },
-});
+})
 
 const canvasClassName = makeResetStyles({
-  position: "absolute",
-  right: "10px",
-  bottom: "10px",
+  position: 'absolute',
+  right: '10px',
+  bottom: '10px',
   zIndex: 1000,
-  backgroundColor: "#eeeeee",
-});
+  backgroundColor: '#eeeeee',
+})
 
 export default () =>
   defineStyles({
@@ -34,4 +34,4 @@ export default () =>
     bgSvg: [svgClassName],
     fgSvg: [svgClassName, svgStyles.fg],
     canvas: [canvasClassName],
-  });
+  })

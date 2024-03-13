@@ -1,2 +1,2 @@
-//@ts-nocheck
-export default () => "";
+// @ts-nocheck
+export default () => ''

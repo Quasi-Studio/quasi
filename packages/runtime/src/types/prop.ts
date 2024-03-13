@@ -1,25 +1,25 @@
 export interface PropBase {
-  displayName: string;
+  displayName: string
 }
 
 export interface TextProp extends PropBase {
-  type: "text";
-  defaultVal: string;
+  type: 'text'
+  defaultVal: string
 }
 export function textProp(
   displayName: string,
-  defaultVal: string = "",
+  defaultVal: string = '',
 ): TextProp {
   return {
     displayName,
-    type: "text",
+    type: 'text',
     defaultVal,
-  };
+  }
 }
 
 export interface SwitchProp extends PropBase {
-  type: "switch";
-  defaultVal: boolean;
+  type: 'switch'
+  defaultVal: boolean
 }
 export function switchProp(
   displayName: string,
@@ -27,15 +27,15 @@ export function switchProp(
 ): SwitchProp {
   return {
     displayName,
-    type: "switch",
+    type: 'switch',
     defaultVal,
-  };
+  }
 }
 
 export interface DropdownProp extends PropBase {
-  type: "dropdown";
-  options: string[];
-  defaultVal: string;
+  type: 'dropdown'
+  options: string[]
+  defaultVal: string
 }
 export function dropdownProp(
   displayName: string,
@@ -44,43 +44,43 @@ export function dropdownProp(
 ): DropdownProp {
   return {
     displayName,
-    type: "dropdown",
+    type: 'dropdown',
     options,
     defaultVal,
-  };
+  }
 }
 
 export interface ReadonlyProp extends PropBase {
-  type: "readonly";
-  value: string;
+  type: 'readonly'
+  value: string
 }
 export function readonlyProp(displayName: string, value: string): ReadonlyProp {
   return {
     displayName,
-    type: "readonly",
+    type: 'readonly',
     value,
-  };
+  }
 }
 
 export interface NumberProp extends PropBase {
-  type: "number";
-  defaultVal: number;
-  min: number;
-  max: number;
+  type: 'number'
+  defaultVal: number
+  min: number
+  max: number
 }
 export function numberProp(
   displayName: string,
   defaultVal: number,
-  min: number = -Infinity,
-  max: number = Infinity,
+  min: number = Number.NEGATIVE_INFINITY,
+  max: number = Number.POSITIVE_INFINITY,
 ): NumberProp {
   return {
     displayName,
-    type: "number",
+    type: 'number',
     defaultVal,
     min,
     max,
-  };
+  }
 }
 
 export type Prop =
@@ -88,4 +88,4 @@ export type Prop =
   | SwitchProp
   | DropdownProp
   | ReadonlyProp
-  | NumberProp;
+  | NumberProp

@@ -1,10 +1,10 @@
 {
-  "include": ["src"],
   "compilerOptions": {
     "target": "ESNext",
+    "lib": ["ESNext"],
     "module": "ESNext",
     "moduleResolution": "Bundler",
-    "lib": ["ESNext"],
     "strict": true
-  }
+  },
+  "include": ["src"]
 }

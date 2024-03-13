@@ -1,5 +1,5 @@
-import { allocateId } from "../utils";
+import { allocateId } from '../utils'
 
 export abstract class ModelBase {
-  id: number = allocateId();
+  id: number = allocateId()
 }

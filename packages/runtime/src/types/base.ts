@@ -1,3 +1,4 @@
+/* eslint-disable ts/prefer-literal-enum-member */
 /**
  * Copied from `@quasi-dev/visual-flow`
  */
@@ -10,4 +11,4 @@ export enum Direction {
   BOTTOM = Direction.DOWN, // alias
 }
 
-export type PositionInfo = Direction | null;
+export type PositionInfo = Direction | null

@@ -1,46 +1,46 @@
-import { directionNameMap, directionMap } from "@quasi-dev/visual-flow";
-import { PropData, PropsData } from "../../utils/props";
-import { ComponentBlock } from "./block";
+import { directionMap, directionNameMap } from '@quasi-dev/visual-flow'
+import type { PropData, PropsData } from '../../utils/props'
+import type { ComponentBlock } from './block'
 
 export function getProps(block: ComponentBlock): PropsData {
-  const { info } = block;
+  const { info } = block
 
-  const slotPos: PropData[] = [];
-  const primaryInputInfo = block.primaryInputInfo;
+  const slotPos: PropData[] = []
+  const primaryInputInfo = block.primaryInputInfo
   if (primaryInputInfo) {
     slotPos.push({
-      key: "slots-pos",
-      displayName: "slots pos",
-      type: "dropdown",
-      options: ["TOP", "BOTTOM"],
+      key: 'slots-pos',
+      displayName: 'slots pos',
+      type: 'dropdown',
+      options: ['TOP', 'BOTTOM'],
       getVal: () => {
-        return directionNameMap[block.slotsDirection];
+        return directionNameMap[block.slotsDirection]
       },
-      setVal: (val) => {
-        block.slotsDirection = directionMap[val];
+      setVal: val => {
+        block.slotsDirection = directionMap[val]
       },
-    });
+    })
   }
 
   return [
     ...slotPos,
     ...Object.entries(info.props).map(([k, v]) => {
-      if (v.type !== "readonly") {
-        block.props[k] ??= v.defaultVal;
-      }
+      if (v.type !== 'readonly')
+        block.props[k] ??= v.defaultVal
+
       return {
         ...v,
         key: k,
         getVal:
-          v.type === "readonly"
+          v.type === 'readonly'
             ? () => v.value
             : () => {
-                return block.props[k];
+                return block.props[k]
               },
         setVal: (val: any) => {
-          block.props[k] = val;
+          block.props[k] = val
         },
-      } as PropData;
+      } as PropData
     }),
     ...Object.entries({
       ...info.contents,
@@ -50,22 +50,22 @@ export function getProps(block: ComponentBlock): PropsData {
       ...info.methods,
     })
       .filter(
-        ([k, v]) =>
-          v.mode === "as-hidable-socket" || v.mode === "as-hidden-socket",
+        ([_k, v]) =>
+          v.mode === 'as-hidable-socket' || v.mode === 'as-hidden-socket',
       )
       .map(([k, v]) => {
-        block.props[`[${k}]`] ??= v.mode === "as-hidable-socket";
+        block.props[`[${k}]`] ??= v.mode === 'as-hidable-socket'
         return {
           key: `[${k}]`,
           displayName: `[${v.displayName}]`,
-          type: "switch",
+          type: 'switch',
           getVal: () => {
-            return block.props[`[${k}]`];
+            return block.props[`[${k}]`]
           },
           setVal: (val: any) => {
-            block.props[`[${k}]`] = val;
+            block.props[`[${k}]`] = val
           },
-        } as PropData;
+        } as PropData
       }),
-  ];
+  ]
 }

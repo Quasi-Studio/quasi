@@ -1,6 +1,6 @@
-import { PropsData } from "../../utils/props";
+import type { PropsData } from '../../utils/props'
 
 export interface SpecialBlock {
-  getProps(): PropsData;
-  toOutput(): any;
+  getProps: () => PropsData
+  toOutput: () => any
 }

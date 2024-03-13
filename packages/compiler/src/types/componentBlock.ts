@@ -1,59 +1,59 @@
-import { ConnectTo } from "./base";
+import type { ConnectTo } from './base'
 
-export type ComponentBlockCallbacks = Record<string, ConnectTo>;
+export type ComponentBlockCallbacks = Record<string, ConnectTo>
 
 export type ComponentBlockProps = Record<
   string,
   string | number | boolean | ConnectTo
->;
+>
 
-export type ComponentBlockPlugins = Record<string, string>;
+export type ComponentBlockPlugins = Record<string, string>
 
 /**
  * Content text or child block id
  */
-export type ComponentBlockChildren = Record<string, string | number[]>;
+export type ComponentBlockChildren = Record<string, string | number[]>
 
 export type ComponentBlockPrimaryInput = {
-  name: string;
-  value: string;
-  slots: Record<string, ConnectTo>;
-} | null;
+  name: string
+  value: string
+  slots: Record<string, ConnectTo>
+} | null
 
 export interface ComponentBlockOutput {
-  type: "component";
-  id: number;
+  type: 'component'
+  id: number
   /**
    * `_.` + componentType，组件被调用的时候的名字
    */
-  func: string;
+  func: string
   /**
    * 显示的名称，感觉编译的时候用不到
    */
-  name: string;
+  name: string
   /**
    * Model构造器
    * e.g. `DialogModel`
    */
-  model: string | null;
+  model: string | null
   /**
    * 事件回调，生成成函数后作为属性传入
    */
-  callbacks: ComponentBlockCallbacks;
+  callbacks: ComponentBlockCallbacks
   /**
    * 属性，直接作为属性传入
    */
-  props: ComponentBlockProps;
+  props: ComponentBlockProps
   /**
    * 插件，键为插件名，值直接作为代码输出
    */
-  plugins: ComponentBlockPlugins;
+  plugins: ComponentBlockPlugins
   /**
    * 子元素的block的id
    */
-  children: ComponentBlockChildren;
+  children: ComponentBlockChildren
   /**
    * Primary input的信息
    */
-  primaryInput: ComponentBlockPrimaryInput;
+  primaryInput: ComponentBlockPrimaryInput
 }

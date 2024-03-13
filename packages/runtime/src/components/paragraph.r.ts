@@ -1,25 +1,26 @@
-import { Component, Content, _ } from "refina";
+import type { Content } from 'refina'
+import { Component, _ } from 'refina'
 
-import { component, content, textProp } from "../types";
+import { component, content, textProp } from '../types'
 
 export default component({
-  displayName: () => "Paragraph",
+  displayName: () => 'Paragraph',
   contents: {
-    inner: content("inner"),
+    inner: content('inner'),
   },
   props: {
-    class: textProp("class"),
+    class: textProp('class'),
   },
-});
+})
 
 export interface ParagraphProps {
-  inner: Content;
-  class: string;
+  inner: Content
+  class: string
 }
 
 export class QParagraph extends Component {
   $main(props: ParagraphProps) {
-    _.$cls(props.class);
-    _._p({}, props.inner);
+    _.$cls(props.class)
+    _._p({}, props.inner)
   }
 }

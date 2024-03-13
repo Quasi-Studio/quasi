@@ -1,57 +1,61 @@
-import { Line, Socket } from "../../model";
-import { socketCtors } from "../../recorder";
-import { BasicLine } from "../line";
-import { PATH_OUT_ELIPSE, PATH_OUT_RECT } from "./constants";
+import type { Line } from '../../model'
+import { Socket } from '../../model'
+import { socketCtors } from '../../recorder'
+import { BasicLine } from '../line'
 
 export class SingleOutSocket extends Socket {
-  ctorName: string = "SingleOutSocket";
+  ctorName: string = 'SingleOutSocket'
 
-  connectedLine: Line | null = null;
+  connectedLine: Line | null = null
 
   get allConnectedLines(): Line[] {
-    return this.connectedLine ? [this.connectedLine] : [];
+    return this.connectedLine ? [this.connectedLine] : []
   }
 
   connectTo(line: Line): void {
-    this.connectedLine = line;
+    this.connectedLine = line
   }
+
   disconnectTo(line: Line): void {
-    if (this.connectedLine === line) {
-      this.connectedLine = null;
-    } else {
-      throw new Error("line not found");
-    }
+    if (this.connectedLine === line)
+      this.connectedLine = null
+    else
+      throw new Error('line not found')
   }
 
   canDragFrom(): boolean {
-    return !this.connectedLine && !this.disabled;
+    return !this.connectedLine && !this.disabled
   }
+
   canDragRemove(): boolean {
-    return false;
+    return false
   }
+
   checkConnectable(_line: Line): boolean {
-    return false;
+    return false
   }
 
   getHoveredLine(): Line | null {
-    return this.connectedLine;
+    return this.connectedLine
   }
 
   onMouseDown(): void {
     if (this.connectedLine) {
       // do nothing
-    } else {
-      const line = this.connectToNewLine(new BasicLine());
-      this.graph.startDraggingLine(line);
+    }
+    else {
+      const line = this.connectToNewLine(new BasicLine())
+      this.graph.startDraggingLine(line)
     }
   }
 
   protected exportData(): any {
-    return {};
+    return {}
   }
+
   protected importData(_data: any): void {
     // do nothing
   }
 }
 
-socketCtors["SingleOutSocket"] = SingleOutSocket;
+socketCtors.SingleOutSocket = SingleOutSocket

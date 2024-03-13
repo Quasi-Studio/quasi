@@ -1,19 +1,19 @@
-import type { FuncBlockTypes } from "@quasi-dev/compiler";
-import { blockCtors } from "@quasi-dev/visual-flow";
-import { FuncBlockBase } from "./FuncBlockBase.r";
+import type { FuncBlockTypes } from '@quasi-dev/compiler'
+import { blockCtors } from '@quasi-dev/visual-flow'
+import { FuncBlockBase } from './FuncBlockBase.r'
 
 export class ExprBlock extends FuncBlockBase {
-  ctorName: string = "ExprBlock";
+  ctorName: string = 'ExprBlock'
 
-  type: FuncBlockTypes = "expr";
-  label = "expression";
-  outputLabel = "value";
+  type: FuncBlockTypes = 'expr'
+  label = 'expression'
+  outputLabel = 'value'
 
   get slotsUsage() {
-    const template = this.inputValue.value;
-    const matches = template.matchAll(/\$[a-zA-Z0-9]+/g);
-    return [...matches].map((match) => match[0].slice(1));
+    const template = this.inputValue.value
+    const matches = template.matchAll(/\$[a-zA-Z0-9]+/g)
+    return [...matches].map(match => match[0].slice(1))
   }
 }
 
-blockCtors["ExprBlock"] = ExprBlock;
+blockCtors.ExprBlock = ExprBlock

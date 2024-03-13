@@ -1,19 +1,19 @@
 {
   "name": "@quasi-dev/mdui2-dts",
-  "version": "0.0.1",
   "type": "module",
-  "license": "MIT",
+  "version": "0.0.1",
   "description": "Bundle MdUI2 to a single d.ts file",
+  "license": "MIT",
   "repository": "https://github.com/Quasi-Studio/quasi",
-  "scripts": {
-    "build": "api-extractor run --local --verbose"
-  },
-  "files": [
-    "index.d.ts",
-    "dist"
-  ],
   "exports": {
     ".": "./index.ts"
+  },
+  "files": [
+    "dist",
+    "index.d.ts"
+  ],
+  "scripts": {
+    "build": "api-extractor run --local --verbose"
   },
   "devDependencies": {
     "@microsoft/api-extractor": "^7.38.3",

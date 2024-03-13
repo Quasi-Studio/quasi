@@ -1,15 +1,15 @@
-//@ts-nocheck
-import { VIRTUAL_CONTENT_EXTNAME } from "./constants";
+// @ts-nocheck
+import { VIRTUAL_CONTENT_EXTNAME } from './constants'
 
-self.__dirname = "";
+self.__dirname = ''
 export default {
   join: () => {
-    return "";
+    return ''
   },
-  resolve: (id) => id,
-  extname: (id) => self[VIRTUAL_CONTENT_EXTNAME],
-};
+  resolve: id => id,
+  extname: _id => self[VIRTUAL_CONTENT_EXTNAME],
+}
 
-export const join = () => {
-  return "";
-};
+export function join() {
+  return ''
+}

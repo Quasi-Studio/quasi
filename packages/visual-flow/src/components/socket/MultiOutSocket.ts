@@ -1,52 +1,57 @@
-import { Line, Socket } from "../../model";
-import { socketCtors } from "../../recorder";
-import { BasicLine } from "../line";
+import type { Line } from '../../model'
+import { Socket } from '../../model'
+import { socketCtors } from '../../recorder'
+import { BasicLine } from '../line'
 
 export class MultiOutSocket extends Socket {
-  ctorName: string = "MultiOutSocket";
+  ctorName: string = 'MultiOutSocket'
 
-  connectedLines: Line[] = [];
+  connectedLines: Line[] = []
 
   connectTo(line: Line): void {
-    this.connectedLines.push(line);
+    this.connectedLines.push(line)
   }
+
   disconnectTo(line: Line) {
-    const index = this.connectedLines.indexOf(line);
-    if (index === -1) {
-      throw new Error("line not found");
-    }
-    this.connectedLines.splice(index, 1);
+    const index = this.connectedLines.indexOf(line)
+    if (index === -1)
+      throw new Error('line not found')
+
+    this.connectedLines.splice(index, 1)
   }
 
   canDragFrom(): boolean {
-    return !this.disabled;
+    return !this.disabled
   }
+
   canDragRemove(): boolean {
-    return false;
+    return false
   }
+
   checkConnectable(_line: Line): boolean {
-    return false;
+    return false
   }
 
   get allConnectedLines(): Line[] {
-    return this.connectedLines;
+    return this.connectedLines
   }
 
   getHoveredLine(): Line | null {
-    return null;
+    return null
   }
 
   onMouseDown(): void {
-    const line = this.connectToNewLine(new BasicLine());
-    this.graph.startDraggingLine(line);
+    const line = this.connectToNewLine(new BasicLine())
+    this.graph.startDraggingLine(line)
   }
 
   protected exportData(): any {
-    return {};
+    return {}
   }
+
   protected importData(_data: any): void {
     // do nothing
   }
 }
 
-socketCtors["MultiOutSocket"] = MultiOutSocket;
+socketCtors.MultiOutSocket = MultiOutSocket
