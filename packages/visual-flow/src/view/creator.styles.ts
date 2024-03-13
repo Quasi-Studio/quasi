@@ -1,10 +1,11 @@
-import { makeResetStyles, mergeClasses } from "@refina/griffel";
+import { defineStyles, makeResetStyles } from "@refina/griffel";
 
 const rootClassName = makeResetStyles({
   width: "max-content",
   height: "max-content",
 });
 
-export default {
-  root: mergeClasses(rootClassName),
-};
+export default () =>
+  defineStyles({
+    root: [rootClassName],
+  });

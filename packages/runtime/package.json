@@ -8,11 +8,6 @@
   "scripts": {
     "check": "tsc --noEmit"
   },
-  "devDependencies": {
-    "@refina/tsconfig": "link:..\\..\\..\\refina\\packages\\tsconfig",
-    "typescript": "^5.0.2",
-    "vite": "^4.4.8"
-  },
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "files": [
@@ -23,7 +18,12 @@
     "./*": "./*"
   },
   "dependencies": {
-    "@refina/mdui": "link:..\\..\\..\\refina\\packages\\mdui",
-    "refina": "link:..\\..\\..\\refina\\packages\\core"
+    "@refina/mdui": "^0.6.1",
+    "refina": "^0.6.1"
+  },
+  "devDependencies": {
+    "@refina/tsconfig": "^0.6.0",
+    "typescript": "^5.4.2",
+    "vite": "^4.4.8"
   }
 }

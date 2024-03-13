@@ -1,6 +1,7 @@
-import { Context, MainElRef, ref } from "refina";
+import { Context, PrimaryElRef, ref } from "refina";
 import { currentProject } from "../../project";
 import { ComponentBlock } from "./block";
+import { app } from "../../app.r";
 
 export function getContent(block: ComponentBlock) {
   const title = (_: Context) => {
@@ -24,7 +25,7 @@ export function getContent(block: ComponentBlock) {
         onkeydown: propagationStopper,
       },
       _ => {
-        const inputRef: MainElRef = ref();
+        const inputRef: PrimaryElRef = ref();
         _.$css`font-family: Consolas; max-width: 108px; padding-left:4px`;
         _.$ref(inputRef) &&
           _.fUnderlineInput(
@@ -34,7 +35,7 @@ export function getContent(block: ComponentBlock) {
           );
         if (_.$updateContext) {
           setTimeout(() => {
-            const inputEl = inputRef.current!.$mainEl!.node.firstChild as
+            const inputEl = inputRef.current!.$primaryEl!.node.firstChild as
               | HTMLInputElement
               | undefined;
             if (!inputEl) return;
@@ -43,7 +44,7 @@ export function getContent(block: ComponentBlock) {
             };
             inputEl.onfocus = () => {
               currentProject.activeGraph.addSelectedBlock(block, false);
-              _.$update();
+              app.update();
             };
           }, 5);
         }

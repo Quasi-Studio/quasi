@@ -1,5 +1,5 @@
-import { Content, byIndex, bySelf } from "refina";
-import QuasiRuntime from "../plugin";
+import { MdList } from "@refina/mdui";
+import { Component, Content, _, byIndex, bySelf } from "refina";
 import {
   Direction,
   component,
@@ -38,10 +38,10 @@ export class ListModel {
   current: any;
 }
 
-QuasiRuntime.outputComponents.qList = function (_) {
-  return (model, props) => {
+export class QList extends Component {
+  $main(model: ListModel, props: ListProps) {
     _.$cls(props.class);
-    _.mdList(
+    _(MdList)(
       props.data,
       props.key === "$index"
         ? byIndex
@@ -54,11 +54,5 @@ QuasiRuntime.outputComponents.qList = function (_) {
       },
     );
     model.current = null;
-  };
-};
-
-declare module "refina" {
-  interface Components {
-    qList(model: ListModel, props: ListProps): void;
   }
 }

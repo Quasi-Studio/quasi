@@ -1,5 +1,5 @@
-import { Content, byIndex, bySelf } from "refina";
-import QuasiRuntime from "../plugin";
+import { MdTable } from "@refina/mdui";
+import { Component, Content, _, byIndex, bySelf } from "refina";
 import {
   Direction,
   component,
@@ -43,11 +43,11 @@ export class TableModel {
   current: any;
 }
 
-QuasiRuntime.outputComponents.qTable = function (_) {
-  return (model, props) => {
+export class QTable extends Component {
+  $main(model: TableModel, props: TableProps) {
+    _.$cls(props.class);
     _.provide(currentTableSymbol, model, _ => {
-      _.$cls(props.class);
-      _.mdTable(
+      _(MdTable)(
         props.data,
         _ => {
           model.renderingState = "head";
@@ -66,11 +66,5 @@ QuasiRuntime.outputComponents.qTable = function (_) {
       );
       model.current = null;
     });
-  };
-};
-
-declare module "refina" {
-  interface Components {
-    qTable(model: TableModel, props: TableProps): void;
   }
 }

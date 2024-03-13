@@ -1,24 +1,22 @@
+import { Component, _ } from "refina";
 import { Block } from "../model";
-import Vf from "../plugin";
-import styles, { PADDING_FOR_SOCKETS } from "./block.styles";
+import useStyles, { PADDING_FOR_SOCKETS } from "./block.styles";
+import { VfSocket } from "./socket.r";
 
-declare module "refina" {
-  interface Components {
-    vfBlock(model: Block): void;
-  }
-}
-Vf.outputComponents.vfBlock = function (_) {
-  return model => {
+export class VfBlock extends Component {
+  $main(model: Block) {
     const { x, y } = model.attached ? model.graphPos : model.pagePos;
     const padding = PADDING_FOR_SOCKETS * model.graph.boardScale;
 
-    styles.root(model.selected, model.attached, model.predicting)(_);
+    const styles = useStyles(model.selected, model.attached, model.predicting);
+
+    styles.root();
     _.$css`left:${x}px;top:${y}px;z-index:${
       model.attached ? model.zIndex : 10000
     }`;
     _.$ref(model.ref) &&
       _._div({}, _ => {
-        styles.svg(_);
+        styles.svg();
         _.$css`left:${-padding}px; top:${-padding}px`;
         _._svgSvg(
           {
@@ -35,14 +33,14 @@ Vf.outputComponents.vfBlock = function (_) {
                 transform: `translate(${padding}, ${padding})`,
               },
               _ => {
-                styles.bg(model.selected)(_);
+                styles.bg();
                 _.$ref(model.bgRef) &&
                   _._svgPath({
                     d: model.backgroudPath,
                   });
 
                 _.for(model.allSockets, "id", socket => {
-                  _.vfSocket(socket);
+                  _(VfSocket)(socket);
                 });
               },
             );
@@ -64,5 +62,5 @@ Vf.outputComponents.vfBlock = function (_) {
           model.contentMain,
         );
       });
-  };
-};
+  }
+}

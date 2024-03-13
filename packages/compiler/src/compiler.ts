@@ -14,7 +14,7 @@ export class Compiler {
     const code = `
 import QuasiRuntime, * as $quasi from "${this.runtimeModuleURL}";
 
-const { app, defineView } = $quasi.refina;
+const { $app, $view } = $quasi.refina;
 
 ${this.input.views
   .map((v) => {

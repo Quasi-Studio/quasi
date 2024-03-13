@@ -8,6 +8,8 @@ import {
 import Refina from "vite-plugin-refina";
 import { viteStaticCopy } from "vite-plugin-static-copy";
 import MonacoEditorPluginObj from "vite-plugin-monaco-editor";
+import Inspect from "vite-plugin-inspect";
+
 const MonacoEditorPlugin = (MonacoEditorPluginObj as any)
   .default as typeof MonacoEditorPluginObj;
 
@@ -72,7 +74,8 @@ function TsBundleUrlPlugin(): PluginOption {
 
 export default defineConfig({
   plugins: [
-    Refina(),
+    Inspect(),
+    Refina() as any,
     MonacoEditorPlugin({}),
     TsBundleUrlPlugin(),
     viteStaticCopy({

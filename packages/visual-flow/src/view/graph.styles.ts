@@ -1,4 +1,4 @@
-import { makeResetStyles, makeStyles, mergeClasses } from "@refina/griffel";
+import { defineStyles, makeResetStyles, makeStyles } from "@refina/griffel";
 
 const rootClassName = makeResetStyles({
   width: "100%",
@@ -28,9 +28,10 @@ const canvasClassName = makeResetStyles({
   backgroundColor: "#eeeeee",
 });
 
-export default {
-  root: mergeClasses(rootClassName),
-  bgSvg: mergeClasses(svgClassName),
-  fgSvg: mergeClasses(svgClassName, svgStyles.fg),
-  canvas: mergeClasses(canvasClassName),
-};
+export default () =>
+  defineStyles({
+    root: [rootClassName],
+    bgSvg: [svgClassName],
+    fgSvg: [svgClassName, svgStyles.fg],
+    canvas: [canvasClassName],
+  });

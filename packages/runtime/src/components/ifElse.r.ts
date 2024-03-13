@@ -1,5 +1,5 @@
-import { Content } from "refina";
-import QuasiRuntime from "../plugin";
+import { Component, Content, _ } from "refina";
+
 import { Direction, component, content, input } from "../types";
 
 export default component({
@@ -19,18 +19,12 @@ export interface IfElseProps {
   else: Content;
 }
 
-QuasiRuntime.outputComponents.qIfElse = function (_) {
-  return props => {
+export class QIfElse extends Component {
+  $main(props: IfElseProps) {
     if (props.condition) {
       _.embed(props.then);
     } else {
       _.embed(props.else);
     }
-  };
-};
-
-declare module "refina" {
-  interface Components {
-    qIfElse(props: IfElseProps): void;
   }
 }

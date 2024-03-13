@@ -8,11 +8,6 @@
   "scripts": {
     "check": "tsc --noEmit"
   },
-  "devDependencies": {
-    "@refina/tsconfig": "link:..\\..\\..\\refina\\packages\\tsconfig",
-    "@types/deep-equal": "^1.0.3",
-    "typescript": "^5.0.2"
-  },
   "main": "./src/index.ts",
   "types": "./src/index.ts",
   "files": [
@@ -23,10 +18,15 @@
     ".": "./src/index.ts"
   },
   "dependencies": {
-    "@fluentui/tokens": "1.0.0-alpha.11",
-    "@refina/fluentui": "link:..\\..\\..\\refina\\packages\\fluentui",
-    "@refina/griffel": "link:..\\..\\..\\refina\\packages\\griffel",
+    "@fluentui/tokens": "^1.0.0-alpha.11",
+    "@refina/fluentui": "^0.6.1",
+    "@refina/griffel": "^0.6.0",
     "deep-equal": "^2.2.2",
-    "refina": "link:..\\..\\..\\refina\\packages\\core"
+    "refina": "^0.6.1"
+  },
+  "devDependencies": {
+    "@refina/tsconfig": "^0.6.0",
+    "@types/deep-equal": "^1.0.3",
+    "typescript": "^5.4.2"
   }
 }

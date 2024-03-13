@@ -1,5 +1,6 @@
 import { tokens, typographyStyles } from "@fluentui/tokens";
 import {
+  defineStyles,
   makeResetStyles,
   makeStyles,
   mergeClasses,
@@ -66,19 +67,15 @@ const textStyles = makeResetStyles({
   ...typographyStyles.caption1,
 });
 
-export default {
-  root: (selected: boolean, attached: boolean, predicting: boolean) =>
-    mergeClasses(
+export default (selected: boolean, attached: boolean, predicting: boolean) =>
+  defineStyles({
+    root: [
       rootClassName,
       selected && rootStyles.selected,
       !attached && rootStyles.unattached,
       predicting && rootStyles.predicting,
-    ),
-  svg: mergeClasses(svgClassName),
-  bg: (selected: boolean) =>
-    mergeClasses(
-      bgClassName,
-      selected ? bgStyles.selected : bgStyles.notSelected,
-    ),
-  text: mergeClasses(textStyles),
-};
+    ],
+    svg: [svgClassName],
+    bg: [bgClassName, selected ? bgStyles.selected : bgStyles.notSelected],
+    text: [textStyles],
+  });

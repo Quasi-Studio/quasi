@@ -1,16 +1,13 @@
+import { Component, _ } from "refina";
 import { Socket } from "../model";
-import Vf from "../plugin";
 import { Direction } from "../types";
-import styles from "./socket.styles";
+import useStyles from "./socket.styles";
 
-declare module "refina" {
-  interface Components {
-    vfSocket(model: Socket): void;
-  }
-}
-Vf.outputComponents.vfSocket = function (_) {
-  return model => {
-    styles.root(model.disabled)(_);
+export class VfSocket extends Component {
+  $main(model: Socket) {
+    const styles = useStyles(model.disabled);
+
+    styles.root();
     _.$css`transform: translate(${model.blockDisplayX}px, ${model.blockDisplayY}px) scale(${model.graph.boardScale})`;
     _.$ref(model.ref) &&
       _._svgG({}, _ => {
@@ -27,9 +24,9 @@ Vf.outputComponents.vfSocket = function (_) {
         });
 
         if (!model.hideLabel) {
-          styles.label(model.disabled)(_);
+          styles.label();
           _._svgText(model.labelBoardPos, model.label);
         }
       });
-  };
-};
+  }
+}

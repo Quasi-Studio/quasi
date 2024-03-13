@@ -1,6 +1,6 @@
-import { Content } from "refina";
-import QuasiRuntime from "../plugin";
+import { Component, Content, _ } from "refina";
 import { component, content, event, input, textProp } from "../types";
+import { MdButton } from "@refina/mdui";
 
 export default component({
   displayName: () => "Button",
@@ -25,17 +25,11 @@ export interface ButtonProps {
   onClick: () => void;
 }
 
-QuasiRuntime.outputComponents.qButton = function (_) {
-  return props => {
+export class QButton extends Component {
+  $main(props: ButtonProps) {
     _.$cls(props.class);
-    if (_.mdButton(props.inner, props.disabled)) {
+    if (_(MdButton)(props.inner, props.disabled)) {
       props.onClick();
     }
-  };
-};
-
-declare module "refina" {
-  interface Components {
-    qButton(props: ButtonProps): void;
   }
 }

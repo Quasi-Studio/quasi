@@ -1,18 +1,18 @@
-import "@refina/fluentui-icons/add.r.ts";
-import "@refina/fluentui-icons/subtract.r.ts";
-import { $clsFunc, MainElRef, defineView, ref } from "refina";
+import { FiAdd20Filled } from "@refina/fluentui-icons/add";
+import { FiSubtract20Filled } from "@refina/fluentui-icons/subtract";
+import { $view, PrimaryElRef, ref } from "refina";
 import { getSelectedProps } from "../utils/props";
 
-export default defineView(_ => {
+export default $view(_ => {
   const props = getSelectedProps();
   _.for(props, "key", p => {
-    const r = ref() as MainElRef;
+    const r = ref() as PrimaryElRef;
     _.$cls`col-span-1 flex justify-center items-center border-b border-gray-500 h-8`;
     _._div(
       {
         onclick: () => {
           (
-            r.current?.$mainEl?.node.firstChild as
+            r.current?.$primaryEl?.node.firstChild as
               | HTMLElement
               | null
               | undefined
@@ -30,7 +30,7 @@ export default defineView(_ => {
       _.fSwitch("", p.getVal()) && p.setVal(_.$ev);
     } else if (p.type === "dropdown") {
       _.$ref(r);
-      if (_.fUnderlineDropdown(p.getVal(), p.options)) {
+      if (_.fDropdown(p.getVal(), p.options)) {
         p.setVal(_.$ev);
       }
     } else if (p.type === "readonly") {
@@ -40,19 +40,20 @@ export default defineView(_ => {
       const value = p.getVal();
       _.$cls`w-full grid grid-cols-4 items-center px-2`;
       _.div(() => {
-        const btnStyle = $clsFunc`w-5 h-5 p-[2px] box-content font-bold border-2 border-gray-500 rounded hover:border-gray-800 disabled:opacity-50`;
+        const btnStyle = () =>
+          _.$cls`w-5 h-5 p-[2px] box-content font-bold border-2 border-gray-500 rounded hover:border-gray-800 disabled:opacity-50`;
 
-        btnStyle(_);
+        btnStyle();
         _.$cls`justify-self-end`;
-        _.button(_ => _.fiSubtract20Filled(), value === p.min) &&
+        _.button(_ => _(FiSubtract20Filled)(), value === p.min) &&
           p.setVal(value - 1);
 
         _.$cls`col-span-2 justify-self-center`;
         _.span(value.toString());
 
-        btnStyle(_);
+        btnStyle();
         _.$cls`justify-self-start`;
-        _.button(_ => _.fiAdd20Filled(), value === p.max) &&
+        _.button(_ => _(FiAdd20Filled)(), value === p.max) &&
           p.setVal(value + 1);
       });
     }

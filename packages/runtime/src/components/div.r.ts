@@ -1,5 +1,5 @@
-import { Content } from "refina";
-import QuasiRuntime from "../plugin";
+import { Component, Content, _ } from "refina";
+
 import { component, content, textProp } from "../types";
 
 export default component({
@@ -17,15 +17,9 @@ export interface DivProps {
   class: string;
 }
 
-QuasiRuntime.outputComponents.qDiv = function (_) {
-  return props => {
+export class QDiv extends Component {
+  $main(props: DivProps) {
     _.$cls(props.class);
     _._div({}, props.inner);
-  };
-};
-
-declare module "refina" {
-  interface Components {
-    qDiv(props: DivProps): void;
   }
 }

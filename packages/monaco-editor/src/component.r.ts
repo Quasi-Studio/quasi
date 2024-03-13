@@ -1,49 +1,36 @@
 import * as monaco from "monaco-editor";
-import { HTMLElementComponent, ref } from "refina";
-import Monaco from "./plugin";
+import { HTMLElementComponent, TriggerComponent, _, ref } from "refina";
 
-declare module "refina" {
-  interface Components {
-    monacoEditor(
-      initialValue: string,
-      language: string,
-      options?: Omit<
-        monaco.editor.IStandaloneEditorConstructionOptions,
-        "value" | "language"
-      >,
-    ): this is {
-      $ev: string;
-    };
-  }
-}
-Monaco.triggerComponents.monacoEditor = function (_) {
-  const containerRef = ref<HTMLElementComponent<"div">>();
-  let editor: monaco.editor.IStandaloneCodeEditor | null = null;
-  return (
+export class MonacoEditor extends TriggerComponent {
+  containerRef = ref<HTMLElementComponent<"div">>();
+  editor: monaco.editor.IStandaloneCodeEditor | null = null;
+  $main(
     initialValue: string,
     language: string,
-    options: Omit<
+    options?: Omit<
       monaco.editor.IStandaloneEditorConstructionOptions,
       "value" | "language"
-    > = {},
-  ) => {
+    >,
+  ): this is {
+    $ev: string;
+  } {
     _.$css`height:100%`;
-    _.$ref(containerRef) && _._div();
+    _.$ref(this.containerRef) && _._div();
 
     if (_.$updateContext) {
       _.$app.pushOnetimeHook("afterModifyDOM", () => {
         setTimeout(() => {
-          if (!editor) {
-            const node = containerRef.current!.node;
+          if (!this.editor) {
+            const node = this.containerRef.current!.node;
 
-            editor = monaco.editor.create(node, {
+            this.editor = monaco.editor.create(node, {
               ...options,
               value: initialValue,
               language,
             });
 
-            editor.getModel()?.onDidChangeContent(ev => {
-              const newValue = editor!.getValue();
+            this.editor.getModel()?.onDidChangeContent(ev => {
+              const newValue = this.editor!.getValue();
               this.$fire(newValue);
             });
 
@@ -52,13 +39,13 @@ Monaco.triggerComponents.monacoEditor = function (_) {
             if (_.$updateContext)
               window.addEventListener("resize", () => {
                 // make editor as small as possible
-                editor!.layout({ width: 0, height: 0 });
+                this.editor!.layout({ width: 0, height: 0 });
 
                 // wait for next frame to ensure last layout finished
                 window.requestAnimationFrame(() => {
                   // get the parent dimensions and re-layout the editor
                   const rect = parent.getBoundingClientRect();
-                  editor!.layout({
+                  this.editor!.layout({
                     width: rect.width,
                     height: rect.height,
                   });
@@ -68,5 +55,6 @@ Monaco.triggerComponents.monacoEditor = function (_) {
         });
       });
     }
-  };
-};
+    return this.$fired;
+  }
+}

@@ -1,30 +1,32 @@
 import { Compiler } from "@quasi-dev/compiler";
 import {
-  FieldValidationState,
-  ProgressBarColor,
-  ProgressBarValue,
+  FFieldValidationState,
+  FProgressBarColor,
+  FProgressBarValue,
 } from "@refina/fluentui";
-import "@refina/fluentui-icons/addSquareMultiple.r.ts";
-import "@refina/fluentui-icons/alignLeft.r.ts";
-import "@refina/fluentui-icons/alignTop.r.ts";
-import "@refina/fluentui-icons/arrowRedo.r.ts";
-import "@refina/fluentui-icons/arrowUndo.r.ts";
-import "@refina/fluentui-icons/delete.r.ts";
-import "@refina/fluentui-icons/documentBulletList.r.ts";
-import "@refina/fluentui-icons/drawerArrowDownload.r.ts";
-import "@refina/fluentui-icons/edit.r.ts";
-import "@refina/fluentui-icons/imageBorder.r.ts";
-import "@refina/fluentui-icons/resizeLarge.r.ts";
-import "@refina/fluentui-icons/resizeSmall.r.ts";
+import { FiAddSquareMultiple20Regular } from "@refina/fluentui-icons/addSquareMultiple";
+import { FiAlignLeft20Regular } from "@refina/fluentui-icons/alignLeft";
+import { FiAlignTop20Regular } from "@refina/fluentui-icons/alignTop";
+import { FiArrowRedo20Filled } from "@refina/fluentui-icons/arrowRedo";
+import { FiArrowUndo20Filled } from "@refina/fluentui-icons/arrowUndo";
+import { FiDelete20Regular } from "@refina/fluentui-icons/delete";
+import { FiDocumentBulletList20Regular } from "@refina/fluentui-icons/documentBulletList";
+import { FiDrawerArrowDownload20Regular } from "@refina/fluentui-icons/drawerArrowDownload";
+import { FiImageBorder20Regular } from "@refina/fluentui-icons/imageBorder";
+import { FiResizeLarge20Regular } from "@refina/fluentui-icons/resizeLarge";
+import { FiResizeSmall20Regular } from "@refina/fluentui-icons/resizeSmall";
 import { domToBlob } from "modern-screenshot";
 import {
+  $view,
+  Component,
   Content,
   HTMLElementComponent,
-  d,
-  defineView,
-  fromProp,
+  _,
+  model,
+  propModel,
   ref,
 } from "refina";
+import { app } from "../app.r";
 import {
   Project,
   currentProject,
@@ -44,16 +46,15 @@ import {
 import { startPreview } from "./preview.r";
 import iconURL from "/favicon.ico?url";
 
-export const previewMode = d(false);
+export const previewMode = model(false);
 
-const toolItem = defineView(
-  (
-    _,
+class ToolItem extends Component {
+  $main(
     tip: string,
     buttonContent: Content,
     disabled: boolean,
     callback: () => void,
-  ) => {
+  ) {
     _.fTooltip(
       _ =>
         _.$cls`disabled:opacity-30 h-full flex items-center enabled:hover:bg-gray-300 px-2` &&
@@ -61,19 +62,19 @@ const toolItem = defineView(
         callback(),
       tip,
     );
-  },
-);
+  }
+}
 
 let buildOutput = "";
 
-let exportToPNGProgess: ProgressBarValue = 0;
-let exportToPNGColor: ProgressBarColor = "brand";
-let exportToPNGValidationState: FieldValidationState = "none";
+let exportToPNGProgess: FProgressBarValue = 0;
+let exportToPNGColor: FProgressBarColor = "brand";
+let exportToPNGValidationState: FFieldValidationState = "none";
 let exportToPNGMessage = `Click the "Export" button above to start`;
 
 export const graphElRef = ref<HTMLElementComponent<"div">>();
 
-export default defineView(_ => {
+export default $view(_ => {
   _.$cls`flex items-center h-full`;
   _.div(_ => {
     _.$cls`w-[2em] h-[2em] invert`;
@@ -83,17 +84,17 @@ export default defineView(_ => {
     _.span("Quasi Studio");
 
     _.fDialog(
-      (_, open) => {
+      open => {
         _.fTooltip(
           _ =>
             _.$cls`h-full flex items-center hover:bg-gray-300 px-2` &&
-            _.button(_ => _.fiDocumentBulletList20Regular()) &&
+            _.button(_ => _(FiDocumentBulletList20Regular)()) &&
             open(),
           "File",
         );
       },
       "File",
-      (_, close) => {
+      close => {
         _.$cls`flex flex-col gap-4`;
         _.div(_ => {
           _.fButton("New") && (setCurrentProject(Project.new()), close());
@@ -106,17 +107,17 @@ export default defineView(_ => {
 
     if (
       _.fDialog(
-        (_, open) => {
+        open => {
           _.fTooltip(
             _ =>
               _.$cls`h-full flex items-center hover:bg-gray-300 px-2` &&
-              _.button(_ => _.fiDrawerArrowDownload20Regular()) &&
+              _.button(_ => _(FiDrawerArrowDownload20Regular)()) &&
               open(),
             "Build",
           );
         },
         "Build",
-        (_, close) => {
+        close => {
           _.$cls`block h-56 w-full border-2 overflow-y-scroll rounded shadow-inner border-gray-400 p-3 font-[Consolas]`;
           _._textarea(
             {
@@ -138,11 +139,11 @@ export default defineView(_ => {
             .compile()
             .then(v => {
               buildOutput = v;
-              _.$update();
+              app.update();
             })
             .catch(err => {
               buildOutput = `Compile ${err}`;
-              _.$update();
+              app.update();
             });
         } catch (e) {
           buildOutput = `${e}`;
@@ -155,16 +156,15 @@ export default defineView(_ => {
 
     if (!previewMode.value) {
       _.fDialog(
-        (_, open) =>
-          _.embed(
-            toolItem,
+        open =>
+          _(ToolItem)(
             "Export to PNG",
-            _ => _.fiImageBorder20Regular(),
+            _ => _(FiImageBorder20Regular)(),
             currentProject.activeGraph.blocks.length === 0,
             open,
           ),
         "Export to PNG",
-        (_, close) => {
+        close => {
           _.$cls`mb-5`;
           _._div();
 
@@ -200,7 +200,7 @@ export default defineView(_ => {
                 .then(async blob => {
                   exportToPNGProgess = 0.7;
                   exportToPNGMessage = "Saving...";
-                  _.$update();
+                  app.update();
 
                   const handle = await window.showSaveFilePicker({
                     suggestedName: "quasi-graph.png",
@@ -216,18 +216,18 @@ export default defineView(_ => {
 
                   const writable = await handle.createWritable();
                   exportToPNGProgess = 0.8;
-                  _.$update();
+                  app.update();
 
                   await writable.write(await blob.arrayBuffer());
                   exportToPNGProgess = 0.9;
-                  _.$update();
+                  app.update();
 
                   await writable.close();
                   exportToPNGProgess = 1;
                   exportToPNGMessage = "Done";
                   exportToPNGValidationState = "success";
 
-                  _.$update();
+                  app.update();
 
                   await new Promise(resolve => setTimeout(resolve, 500));
                   close();
@@ -242,7 +242,7 @@ export default defineView(_ => {
                   exportToPNGColor = "error";
                   exportToPNGMessage = `${err}`;
                   exportToPNGValidationState = "error";
-                  _.$update();
+                  app.update();
                 })
                 .finally(() => {
                   restoreBoard();
@@ -264,34 +264,30 @@ export default defineView(_ => {
         },
       );
 
-      _.embed(
-        toolItem,
+      _(ToolItem)(
         "Undo",
-        _ => _.fiArrowUndo20Filled(),
+        _ => _(FiArrowUndo20Filled)(),
         !currentProject.activeGraph.canUndo,
         () => currentProject.activeGraph.undo(),
       );
-      _.embed(
-        toolItem,
+      _(ToolItem)(
         "Redo",
-        _ => _.fiArrowRedo20Filled(),
+        _ => _(FiArrowRedo20Filled)(),
         !currentProject.activeGraph.canRedo,
         () => currentProject.activeGraph.redo(),
       );
-      _.embed(
-        toolItem,
+      _(ToolItem)(
         "Reset viewport",
-        _ => _.fiResizeLarge20Regular(),
+        _ => _(FiResizeLarge20Regular)(),
         false,
         () => {
           currentProject.activeGraph.resetViewport();
           currentProject.activeGraph.pushRecord();
         },
       );
-      _.embed(
-        toolItem,
+      _(ToolItem)(
         "Full view",
-        _ => _.fiResizeSmall20Regular(),
+        _ => _(FiResizeSmall20Regular)(),
         false,
         () => {
           currentProject.activeGraph.fullView();
@@ -299,32 +295,28 @@ export default defineView(_ => {
         },
       );
 
-      _.embed(
-        toolItem,
+      _(ToolItem)(
         "Duplicate",
-        _ => _.fiAddSquareMultiple20Regular(),
+        _ => _(FiAddSquareMultiple20Regular)(),
         !hasBlocksToDuplicate(),
         duplicateBlocks,
       );
-      _.embed(
-        toolItem,
+      _(ToolItem)(
         "Remove",
-        _ => _.fiDelete20Regular(),
+        _ => _(FiDelete20Regular)(),
         !hasBlocksToRemove(),
         removeBlocks,
       );
 
-      _.embed(
-        toolItem,
+      _(ToolItem)(
         "Align left",
-        _ => _.fiAlignLeft20Regular(),
+        _ => _(FiAlignLeft20Regular)(),
         !hasBlocksToAlign(),
         alignBlocksToLeft,
       );
-      _.embed(
-        toolItem,
+      _(ToolItem)(
         "Align top",
-        _ => _.fiAlignTop20Regular(),
+        _ => _(FiAlignTop20Regular)(),
         !hasBlocksToAlign(),
         alignBlocksToTop,
       );
@@ -346,9 +338,7 @@ export default defineView(_ => {
                 onkeydown: ev => ev.stopPropagation(),
               },
               _ =>
-                _.fUnderlineInput(
-                  fromProp(currentProject.activeView, "name"),
-                ),
+                _.fUnderlineInput(propModel(currentProject.activeView, "name")),
             );
           }
         },

@@ -1,31 +1,28 @@
+import { Component, _ } from "refina";
 import { Line } from "../model";
-import Vf from "../plugin";
-import styles from "./line.styles";
+import useStyles from "./line.styles";
 
-declare module "refina" {
-  interface Components {
-    vfLine(model: Line): void;
-  }
-}
-Vf.outputComponents.vfLine = function (_) {
-  return model => {
+export class VfLine extends Component {
+  $main(model: Line) {
     const color =
       model.colors[
         model.dragging ? "dragging" : model.hovered ? "hovered" : "default"
       ];
 
-    styles.curve(model.dragging, model.predicting)(_);
+    const styles = useStyles(model.dragging, model.predicting);
+
+    styles.curve();
     _.$css`stroke-width:${model.graph.boardScale * 3}px;stroke:${color}`;
     _.$ref(model.lineRef) &&
       _._svgPath({
         d: model.linePath,
       });
 
-    styles.arrow(model.dragging, model.predicting)(_);
+    styles.arrow();
     _.$css`fill:${color}`;
     _.$ref(model.arrowRef) &&
       _._svgPath({
         d: model.arrowPath,
       });
-  };
-};
+  }
+}

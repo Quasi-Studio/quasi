@@ -11,17 +11,18 @@
   },
   "packageManager": "pnpm@8.10.2",
   "devDependencies": {
-    "@refina/transformer": "link:..\\..\\..\\refina\\packages\\transformer",
-    "@refina/tsconfig": "link:..\\..\\..\\refina\\packages\\tsconfig",
-    "@types/wicg-file-system-access": "^2023.10.2",
-    "autoprefixer": "^10.4.15",
-    "postcss": "^8.4.27",
-    "tailwindcss": "^3.3.3",
-    "typescript": "^5.1.6",
-    "vite": "^4.4.8",
+    "@refina/transformer": "^0.6.0",
+    "@refina/tsconfig": "^0.6.0",
+    "@types/wicg-file-system-access": "^2023.10.5",
+    "autoprefixer": "^10.4.18",
+    "postcss": "^8.4.35",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5.4.2",
+    "vite": "^4.5.2",
+    "vite-plugin-inspect": "^0.8.3",
     "vite-plugin-monaco-editor": "^1.1.0",
-    "vite-plugin-refina": "link:..\\..\\..\\refina\\packages\\vite-plugin",
-    "vite-plugin-static-copy": "^0.17.0"
+    "vite-plugin-refina": "^0.6.0",
+    "vite-plugin-static-copy": "^0.17.1"
   },
   "dependencies": {
     "@quasi-dev/browser-tailwind": "workspace:^",
@@ -30,12 +31,12 @@
     "@quasi-dev/monaco-editor": "workspace:^",
     "@quasi-dev/runtime": "workspace:^",
     "@quasi-dev/visual-flow": "workspace:^",
-    "@refina/basic-components": "link:..\\..\\..\\refina\\packages\\basic-components",
-    "@refina/fluentui": "link:..\\..\\..\\refina\\packages\\fluentui",
-    "@refina/fluentui-icons": "link:..\\..\\..\\refina\\packages\\fluentui-icons",
-    "@refina/griffel": "link:..\\..\\..\\refina\\packages\\griffel",
-    "modern-screenshot": "^4.4.33",
+    "@refina/basic-components": "^0.6.0",
+    "@refina/fluentui": "^0.6.1",
+    "@refina/fluentui-icons": "^0.6.1",
+    "@refina/griffel": "^0.6.0",
+    "modern-screenshot": "^4.4.38",
     "prettier": "3.0.0",
-    "refina": "link:..\\..\\..\\refina\\packages\\core"
+    "refina": "^0.6.1"
   }
 }

@@ -1,7 +1,30 @@
-export * from "./components";
-export * from "./types";
+import { Plugin } from "refina";
+import * as c from "./components";
+import MdUI from "@refina/mdui";
 
-import QuasiRuntime from "./plugin";
-export default QuasiRuntime;
+export default [
+  MdUI as Plugin,
+  {
+    name: "quasi-runtime",
+    components: {
+      qAppLayout: c.QAppLayout,
+      qButton: c.QButton,
+      qCard: c.QCard,
+      qDiv: c.QDiv,
+      qForEach: c.QForEach,
+      qIfElse: c.QIfElse,
+      qInput: c.QInput,
+      qList: c.QList,
+      qParagraph: c.QParagraph,
+      qSpan: c.QSpan,
+      qSubPage: c.QSubPage,
+      qTable: c.QTable,
+      qTableCol: c.QTableCol,
+      qTextNode: c.QTextNode,
+    },
+  } satisfies Plugin,
+];
 
 export * as refina from "refina";
+export * from "./components";
+export * from "./types";

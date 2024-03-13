@@ -1,4 +1,4 @@
-import { makeResetStyles, mergeClasses } from "@refina/griffel";
+import { defineStyles, makeResetStyles, mergeClasses } from "@refina/griffel";
 
 const contentOuterWrapperClassName = makeResetStyles({
   position: "absolute",
@@ -17,7 +17,8 @@ const contentInnerWrapperClassName = makeResetStyles({
   transformOrigin: "center left",
 });
 
-export default {
-  contentOuterWrapper: mergeClasses(contentOuterWrapperClassName),
-  contentInnerWrapper: mergeClasses(contentInnerWrapperClassName),
-};
+export default () =>
+  defineStyles({
+    contentOuterWrapper: [contentOuterWrapperClassName],
+    contentInnerWrapper: [contentInnerWrapperClassName],
+  });

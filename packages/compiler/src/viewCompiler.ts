@@ -97,8 +97,8 @@ ${linesDef}
 ${impsDef}
 
 const ${this.view.name}_view = ${
-      this.view.name === "app" ? "app.use(QuasiRuntime)" : "defineView"
-    }(_ => {
+      this.view.name === "app" ? "$app({plugins:[QuasiRuntime]}," : "$view("
+    }_ => {
   ${mainFunc}
 });
 `;

@@ -19,8 +19,8 @@ import {
   directionMap,
   directionNameMap,
 } from "@quasi-dev/visual-flow";
-import "@refina/fluentui-icons/expandUpLeft.r.ts";
-import { Context, MainElRef, bySelf, d, ref } from "refina";
+import { FiExpandUpLeft20Regular } from "@refina/fluentui-icons/expandUpLeft";
+import { Context, PrimaryElRef, bySelf, model, ref } from "refina";
 import { setExtraLib } from "../../utils";
 import { PropData, PropsData } from "../../utils/props";
 import { multiOutSocketToOutput } from "../../utils/toOutput";
@@ -49,7 +49,7 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
   abstract label: string;
   placeholder = "";
 
-  inputValue = d("");
+  inputValue = model("");
   slotsDirection = Direction.TOP;
   outputDirection = Direction.BOTTOM;
 
@@ -65,7 +65,7 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
         onkeydown: ev => ev.stopPropagation(),
       },
       _ => {
-        const inputRef: MainElRef = ref();
+        const inputRef: PrimaryElRef = ref();
         _.$css`--fontFamilyBase: Consolas,'Segoe UI', 'Segoe UI Web (West European)', -apple-system, BlinkMacSystemFont, Roboto, 'Helvetica Neue', sans-serif`;
         _.$ref(inputRef) &&
           (this.useTextarea
@@ -75,7 +75,7 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
               _.fUnderlineInput(this.inputValue, false, this.placeholder));
         if (_.$updateContext) {
           setTimeout(() => {
-            const inputEl = inputRef.current!.$mainEl!.node.firstChild as
+            const inputEl = inputRef.current!.$primaryEl!.node.firstChild as
               | HTMLElement
               | undefined;
             if (!inputEl) return;
@@ -90,9 +90,9 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
 
           _.$cls`monaco-dialog`;
           _.fDialog(
-            (_, open) => {
+            open => {
               _.$cls`absolute right-0 top-0 text-gray-600`;
-              _.button(_ => _.fiExpandUpLeft20Regular()) && open();
+              _.button(_ => _(FiExpandUpLeft20Regular)()) && open();
             },
             _ => {
               _.span(this.label);
@@ -118,7 +118,7 @@ export abstract class FuncBlockBase extends RectBlock implements SpecialBlock {
                 );
               });
             },
-            _ => {
+            () => {
               const propagationStopper = (ev: Event) => ev.stopPropagation();
               _.$cls`h-[80vh] overflow-visible`;
               _._div(

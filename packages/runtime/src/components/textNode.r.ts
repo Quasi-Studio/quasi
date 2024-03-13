@@ -1,4 +1,4 @@
-import QuasiRuntime from "../plugin";
+import { Component, _ } from "refina";
 import { component, input } from "../types";
 
 export default component({
@@ -12,14 +12,8 @@ export interface TextNodeProps {
   text: string | null;
 }
 
-declare module "refina" {
-  interface Components {
-    qTextNode(props: TextNodeProps): void;
+export class QTextNode extends Component {
+  $main(props: TextNodeProps) {
+    _.t(props.text ?? "");
   }
 }
-
-QuasiRuntime.outputComponents.qTextNode = function (_) {
-  return props => {
-    _.t(props.text ?? "");
-  };
-};

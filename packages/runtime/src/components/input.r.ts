@@ -1,5 +1,5 @@
-import { fromProp } from "refina";
-import QuasiRuntime from "../plugin";
+import { Component, _, propModel } from "refina";
+import { MdPasswordInput, MdTextField } from "@refina/mdui";
 import {
   component,
   dropdownProp,
@@ -68,30 +68,28 @@ export class InputModel {
   }
 }
 
-QuasiRuntime.outputComponents.qInput = function (_) {
-  return (model, props) => {
+export class QInput extends Component {
+  $main(model: InputModel, props: InputProps) {
     model.type = props.type;
     model.value ??= props.initial;
     _.$cls(props.class);
     _.$css`margin-bottom:18px;`;
     if (
       props.type === "password"
-        ? _.mdPasswordInput(
-            fromProp(model, "_value"),
+        ? _(MdPasswordInput)(
+            propModel(model, "_value"),
             props.label,
             props.disabled,
           )
-        : _.mdTextField(fromProp(model, "_value"), props.label, props.disabled)
+        : _(MdTextField)(
+            propModel(model, "_value"),
+            props.label,
+            props.disabled,
+          )
     ) {
       //@ts-ignore
       const newVal = _.$ev as string;
       props.onInput?.(props.type === "number" ? +newVal : newVal);
     }
-  };
-};
-
-declare module "refina" {
-  interface Components {
-    qInput(model: InputModel, props: InputProps): void;
   }
 }

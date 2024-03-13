@@ -1,5 +1,5 @@
-import { Content } from "refina";
-import QuasiRuntime from "../plugin";
+import { Component, Content, _ } from "refina";
+
 import { Direction, component, content, textProp } from "../types";
 
 export default component({
@@ -19,8 +19,8 @@ export interface CardProps {
   class: string;
 }
 
-QuasiRuntime.outputComponents.qCard = function (_) {
-  return props => {
+export class QCard extends Component {
+  $main(props: CardProps) {
     _.$css`width:100%;padding:18px;padding-top:0`;
     _.$cls(props.class);
     _._mdui_card(
@@ -32,11 +32,5 @@ QuasiRuntime.outputComponents.qCard = function (_) {
         _.embed(props.inner);
       },
     );
-  };
-};
-
-declare module "refina" {
-  interface Components {
-    qCard(props: CardProps): void;
   }
 }

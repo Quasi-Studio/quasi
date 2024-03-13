@@ -1,7 +1,13 @@
 import * as monaco from "monaco-editor";
-export { monaco };
+import { Plugin } from "refina";
+import { MonacoEditor } from "./component.r";
 
-import Monaco from "./plugin";
-export default Monaco;
+export default {
+  name: "monaco-editor",
+  components: {
+    monacoEditor: MonacoEditor,
+  },
+} satisfies Plugin;
 
 export * from "./component.r";
+export { monaco };

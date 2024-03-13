@@ -1,5 +1,5 @@
 import { tokens } from "@fluentui/tokens";
-import { makeResetStyles, makeStyles, mergeClasses } from "@refina/griffel";
+import { defineStyles, makeResetStyles, makeStyles } from "@refina/griffel";
 
 const rootClassName = makeResetStyles({
   fill: tokens.colorBrandForegroundInverted,
@@ -24,12 +24,11 @@ const labelStyles = makeStyles({
   disabled: { fill: tokens.colorNeutralForegroundDisabled },
 });
 
-export default {
-  root: (disabled: boolean) =>
-    mergeClasses(
+export default (disabled: boolean) =>
+  defineStyles({
+    root: [
       rootClassName,
       disabled ? rootStyles.disabled : rootStyles.notDisabled,
-    ),
-  label: (disabled: boolean) =>
-    mergeClasses(labelClassName, disabled && labelStyles.disabled),
-};
+    ],
+    label: [labelClassName, disabled && labelStyles.disabled],
+  });

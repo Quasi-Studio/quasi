@@ -1,5 +1,5 @@
-import { Content } from "refina";
-import QuasiRuntime from "../plugin";
+import { MdTableCell, MdTableHeader } from "@refina/mdui";
+import { Component, Content, _ } from "refina";
 import {
   Direction,
   component,
@@ -41,22 +41,16 @@ export class TableColModel {
   value: any;
 }
 
-declare module "refina" {
-  interface Components {
-    qTableCol(model: TableColModel, props: TableColProps): void;
-  }
-}
-
-QuasiRuntime.outputComponents.qTableCol = function (_) {
-  return (model, props) => {
+export class QTableCol extends Component {
+  $main(model: TableColModel, props: TableColProps) {
     const currentTable = _.$runtimeData[currentTableSymbol] as TableModel;
     if (currentTable.renderingState === "head") {
       _.$cls(props.headClass);
-      _.mdTableHeader(props.header === "$prop" ? props.prop : props.header);
+      _(MdTableHeader)(props.header === "$prop" ? props.prop : props.header);
     } else {
       model.value = currentTable.current[props.prop];
       _.$cls(props.cellClass);
-      _.mdTableCell(props.inner);
+      _(MdTableCell)(props.inner);
     }
-  };
-};
+  }
+}

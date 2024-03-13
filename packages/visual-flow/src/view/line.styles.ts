@@ -1,5 +1,10 @@
 import { tokens } from "@fluentui/tokens";
-import { makeResetStyles, makeStyles, mergeClasses } from "@refina/griffel";
+import {
+  defineStyles,
+  makeResetStyles,
+  makeStyles,
+  mergeClasses,
+} from "@refina/griffel";
 
 const curveClassName = makeResetStyles({
   fill: "none",
@@ -23,17 +28,16 @@ const arrowStyles = makeStyles({
   },
 });
 
-export default {
-  curve: (dragging: boolean, predicting: boolean) =>
-    mergeClasses(
+export default (dragging: boolean, predicting: boolean) =>
+  defineStyles({
+    curve: [
       curveClassName,
       dragging && curveStyles.dragging,
       predicting && curveStyles.predicting,
-    ),
-  arrow: (dragging: boolean, predicting: boolean) =>
-    mergeClasses(
+    ],
+    arrow: [
       arrowClassName,
       dragging && arrowStyles.dragging,
       predicting && arrowStyles.predicting,
-    ),
-};
+    ],
+  });

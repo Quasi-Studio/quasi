@@ -1,6 +1,12 @@
 /// <reference types="vite/client" />
-import { Content, HTMLElementComponent, ref } from "refina";
-import QuasiRuntime from "../plugin";
+import {
+  MdLayout,
+  MdLayoutMain,
+  MdNavRail,
+  MdTopAppBar,
+  MdTopAppBarTitle,
+} from "@refina/mdui";
+import { Component, Content, HTMLElementComponent, _, ref } from "refina";
 import { Direction, component, content, textProp } from "../types";
 
 export default component({
@@ -31,20 +37,14 @@ export class AppLayoutModel {
   current: string;
 }
 
-declare module "refina" {
-  interface Components {
-    qAppLayout(model: AppLayoutModel, props: AppLayoutProps): void;
-  }
-}
-
-QuasiRuntime.outputComponents.qAppLayout = function (_) {
-  const navRailRef = ref<HTMLElementComponent<"mdui-navigation-rail">>();
-  return (model, props) => {
+export class QAppLayout extends Component {
+  navRailRef = ref<HTMLElementComponent<"mdui-navigation-rail">>();
+  $main(model: AppLayoutModel, props: AppLayoutProps) {
     _.$cls(props.class);
     _.$css`position:fixed;width:100%;height:100%`;
-    _.mdLayout(_ => {
-      _.mdTopAppBar(_ => {
-        _.mdTopAppBarTitle(
+    _(MdLayout)(_ => {
+      _(MdTopAppBar)(_ => {
+        _(MdTopAppBarTitle)(
           _ =>
             _.$css`user-select:none;text-decoration:none;color:inherit` &&
             _._a(
@@ -64,9 +64,9 @@ QuasiRuntime.outputComponents.qAppLayout = function (_) {
       });
 
       _.$css`height:100%`;
-      model.current = _.mdNavRail(model.items);
+      model.current = _(MdNavRail)(model.items);
 
-      _.mdLayoutMain(_ => {
+      _(MdLayoutMain)(_ => {
         _.$css`padding:18px;padding-right:64px`;
         _._div({}, _ =>
           _.provide(currentNavSymbol, model, _ => {
@@ -76,5 +76,5 @@ QuasiRuntime.outputComponents.qAppLayout = function (_) {
         );
       });
     });
-  };
-};
+  }
+}

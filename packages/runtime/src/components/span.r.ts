@@ -1,5 +1,5 @@
-import { Content } from "refina";
-import QuasiRuntime from "../plugin";
+import { Component, Content, _ } from "refina";
+
 import { component, content, textProp } from "../types";
 
 export default component({
@@ -17,15 +17,9 @@ export interface SpanProps {
   class: string;
 }
 
-QuasiRuntime.outputComponents.qSpan = function (_) {
-  return props => {
+export class QSpan extends Component {
+  $main(props: SpanProps) {
     _.$cls(props.class);
     _._span({}, props.inner);
-  };
-};
-
-declare module "refina" {
-  interface Components {
-    qSpan(props: SpanProps): void;
   }
 }

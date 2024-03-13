@@ -1,18 +1,18 @@
+import { Component, _ } from "refina";
 import { Graph } from "../model";
-import Vf from "../plugin";
-import styles from "./graph.styles";
+import { VfBlock } from "./block.r";
+import useStyles from "./graph.styles";
+import { VfLine } from "./line.r";
 
-declare module "refina" {
-  interface Components {
-    vfGraph(model: Graph): void;
-  }
-}
-Vf.outputComponents.vfGraph = function (_) {
-  return model => {
+export class VfGraph extends Component {
+  $main(model: Graph) {
     model.app = _.$app;
 
+    const styles = useStyles();
+
     if (_.$updateContext) {
-      _.$window.addEventListener(
+      const windowElement = _.$window as any;
+      windowElement.addEventListener(
         "resize",
         () => {
           model.onResize();
@@ -22,20 +22,20 @@ Vf.outputComponents.vfGraph = function (_) {
           passive: true,
         },
       );
-      _.$window.addEventListener(
+      windowElement.addEventListener(
         "mousemove",
-        ev => {
+        (ev: MouseEvent) => {
           model.setMousePos(ev);
           if (model.onMouseMove((ev.buttons & 1) !== 0, ev.shiftKey)) {
             window.getSelection()?.removeAllRanges();
-            _.$update();
+            this.$update();
           }
         },
         {
           passive: true,
         },
       );
-      _.$window.addEventListener("mousedown", ev => {
+      windowElement.addEventListener("mousedown", (ev: MouseEvent) => {
         model.setMousePos(ev);
         if (model.onMouseDown(ev.shiftKey)) {
           window.getSelection()?.removeAllRanges();
@@ -43,16 +43,16 @@ Vf.outputComponents.vfGraph = function (_) {
             document.activeElement?.blur();
           }
           ev.preventDefault();
-          _.$update();
+          this.$update();
           return false;
         }
         return true;
       });
-      _.$window.addEventListener("mouseup", ev => {
+      windowElement.addEventListener("mouseup", (ev: MouseEvent) => {
         model.setMousePos(ev);
         if (model.onMouseUp(ev.shiftKey)) {
           ev.preventDefault();
-          _.$update();
+          this.$update();
           return false;
         }
         return true;
@@ -67,17 +67,17 @@ Vf.outputComponents.vfGraph = function (_) {
           if (ev.ctrlKey) {
             if (model.onScaling(-ev.deltaY / 1500)) {
               ev.preventDefault();
-              _.$update();
+              this.$update();
             }
           } else if (ev.shiftKey) {
             if (model.onHorizontalScroll(ev.deltaY / 2)) {
               ev.preventDefault();
-              _.$update();
+              this.$update();
             }
           } else {
             if (model.onVerticalScroll(ev.deltaY / 2)) {
               ev.preventDefault();
-              _.$update();
+              this.$update();
             }
           }
           return true;
@@ -90,34 +90,34 @@ Vf.outputComponents.vfGraph = function (_) {
       model.blocks.forEach(block => block.updateSockets());
     }
 
-    styles.root(_);
+    styles.root();
     _.$ref(model.ref) &&
       _._div({}, _ => {
         const { bg, fg } = model.displayLines;
 
-        styles.bgSvg(_);
+        styles.bgSvg();
         _._svgSvg({}, _ => {
           _.for(bg, "id", line => {
-            _.vfLine(line);
+            _(VfLine)(line);
           });
         });
 
-        styles.fgSvg(_);
+        styles.fgSvg();
         _._svgSvg({}, _ => {
           _.for(fg, "id", line => {
-            _.vfLine(line);
+            _(VfLine)(line);
           });
         });
       });
 
     _.for(model.blocks, "id", block => {
-      _.vfBlock(block);
+      _(VfBlock)(block);
     });
 
-    styles.canvas(_);
+    styles.canvas();
     _.$ref(model.canvasRef) &&
       _._canvas({
         id: "vf-thumbnail",
       });
-  };
-};
+  }
+}

@@ -1,17 +1,16 @@
 /// <reference types="vite/client" />
-import { HTMLElementComponent, defineView, ref } from "refina";
+
+import { compileTailwindCSS } from "@quasi-dev/browser-tailwind";
+import { Compiler } from "@quasi-dev/compiler";
+import { transformFragment } from "@refina/transformer";
+import { $view, HTMLElementComponent, ref } from "refina";
+import { app } from "../app.r";
+import { currentProject } from "../project";
 
 import runtimeURL from "@quasi-dev/runtime/src/index.ts?url";
 import mduiStyleContent from "@quasi-dev/runtime/styles.css?inline"; // Used in production
 import mduiStyleUrl from "@quasi-dev/runtime/styles.css?url"; // Used in development
 import iframeURL from "./iframe/index.html?url";
-
-import { compileTailwindCSS } from "@quasi-dev/browser-tailwind";
-import { Compiler } from "@quasi-dev/compiler";
-import { RefinaTransformer } from "@refina/transformer";
-import { currentProject } from "../project";
-
-const transformer = new RefinaTransformer();
 
 let code = {
   js: "",
@@ -27,7 +26,7 @@ export async function startPreview() {
   compiler.runtimeModuleURL = runtimeURL;
   code.js =
     "window.__QUASI_PREVIEW__ = true; \n\n" +
-    transformer.transform("$", await compiler.compile());
+    transformFragment(await compiler.compile(), idx => idx.toString(36));
   code.css = (
     await compileTailwindCSS(
       `@tailwind base;
@@ -42,7 +41,7 @@ export async function startPreview() {
   errorMsg = "";
 }
 
-export default defineView(_ => {
+export default $view(_ => {
   if (errorMsg.length > 0) {
     _.$cls`text-red-900 border border-red-500`;
     _._pre({}, errorMsg);
@@ -66,7 +65,7 @@ export default defineView(_ => {
       iframeNode.onload = () => {
         if (errorMsg !== "") {
           errorMsg = "";
-          _.$update();
+          app.update();
         }
 
         iframeNode.contentWindow!.onerror = (
@@ -85,14 +84,14 @@ lineno: ${lineno}
 colno: ${colno}
 error: ${error}`;
 
-          _.$update();
+          app.update();
           errorReported = true;
         };
         //@ts-ignore
         iframeNode.contentWindow!.console.error = (...args: any[]) => {
           errorMsg += "\nCONSOLE ERROR: \n" + args.join(" ");
           console.error(...args);
-          _.$update();
+          app.update();
         };
 
         const scriptNode = iframeNode.contentDocument!.getElementById(

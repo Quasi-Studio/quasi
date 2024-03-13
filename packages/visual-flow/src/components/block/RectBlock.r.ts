@@ -2,7 +2,7 @@ import { Context } from "refina";
 import { Block, Socket } from "../../model";
 import { Direction, Point } from "../../types";
 import { spreadItems } from "../../utils";
-import styles from "./RectBlock.styles";
+import useStyles from "./RectBlock.styles";
 
 const SOCKET_PADDING_SCALE = -0.1;
 
@@ -141,11 +141,13 @@ export abstract class RectBlock extends Block {
   content: (_: Context) => void;
 
   contentMain = (_: Context) => {
-    styles.contentOuterWrapper(_);
+    const styles = useStyles();
+
+    styles.contentOuterWrapper();
     _.$css`width:${this.pageWidth}px;height:${this.pageHeight}px;`;
     _.$css`padding:${8 * this.graph.boardScale}px;`;
     _._div({}, _ => {
-      styles.contentInnerWrapper(_);
+      styles.contentInnerWrapper();
       _.$css`transform:scale(${this.graph.boardScale})`;
       _._div({}, this.content);
     });

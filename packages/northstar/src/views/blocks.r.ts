@@ -1,12 +1,13 @@
 import { componentInfoArray } from "@quasi-dev/runtime";
-import "@refina/fluentui-icons/edit.r.ts";
-import { byIndex, defineView } from "refina";
+import { FiEdit20Filled, FiEdit20Regular } from "@refina/fluentui-icons/edit";
+import { byIndex, $view } from "refina";
 import { ComponentBlock } from "../blocks/component/block";
 import special from "../blocks/special";
 import { ViewBlock } from "../blocks/special/view.r";
 import { currentProject } from "../project";
+import { app } from "../app.r";
 
-export default defineView(_ => {
+export default $view(_ => {
   if (_.fAccordion("Special", false, true)) {
     _.$cls`grid grid-cols-3 justify-items-center`;
     _.div(_ => {
@@ -80,7 +81,7 @@ export default defineView(_ => {
               _.span(view.name);
               if (editingThis) {
                 _.$cls`float-right mr-1 text-gray-500`;
-                _.div(_ => _.fiEdit20Filled());
+                _.div(_ => _(FiEdit20Filled)());
               } else {
                 _.$cls`float-right mr-1 hover:bg-gray-300`;
                 _._div(
@@ -88,10 +89,10 @@ export default defineView(_ => {
                     onmousedown: ev => ev.stopPropagation(),
                     onclick: () => {
                       currentProject.setActiveView(id);
-                      _.$update();
+                      app.update();
                     },
                   },
-                  _ => _.fiEdit20Regular(),
+                  _ => _(FiEdit20Regular)(),
                 );
               }
             });
@@ -110,7 +111,7 @@ export default defineView(_ => {
           onclick: () => {
             const id = currentProject.addView();
             currentProject.setActiveView(id);
-            _.$update();
+            app.update();
           },
         },
         _ => {

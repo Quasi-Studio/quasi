@@ -16,8 +16,7 @@ import {
   UseSocket,
   blockCtors,
 } from "@quasi-dev/visual-flow";
-import "@refina/fluentui";
-import { d } from "refina";
+import { model } from "refina";
 import { PropsData } from "../../utils/props";
 import { getContent } from "./getContent.r";
 import { getProps } from "./getProps";
@@ -61,7 +60,7 @@ export class ComponentBlock extends RectBlock {
     );
   }
 
-  primaryValue = d("");
+  primaryValue = model("");
   get primaryFilled() {
     return this.primaryValue.value !== "";
   }
