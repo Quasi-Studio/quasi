@@ -10,8 +10,9 @@ A [structure-oriented](https://github.com/Structure-oriented-Framework/SOF) and 
 
 ## Preview
 
-| Quasi Graph    | ![example-graph](./docs/media/example-graph.png)   |
+| Designer UI    | ![example-ui](./docs/media/example-ui.png)         |
 | -------------- | -------------------------------------------------- |
+| Quasi Graph    | ![example-graph](./docs/media/example-graph.png)   |
 | Output Preview | ![example-output](./docs/media/example-output.png) |
 
 ## Features
