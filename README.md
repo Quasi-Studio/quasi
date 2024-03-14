@@ -1,12 +1,16 @@
 # Quasi Studio
 
+![Social Preview](./docs/media/social-preview.png)
+
 A [structure-oriented](https://github.com/Structure-oriented-Framework/SOF) and unprecedented LCDP (Low-Code Development Platform).
 
-**Licensed under GNU GPL v3**
+**Try it now at [quasi-studio.vercel.app](https://quasi-studio.vercel.app)**
 
 - Designed for professional developers
 - Intuitive and easy to use
 - Build with [Refina.js](https://refina.vercel.app)
+
+> _Licensed under **GNU GPL v3**_
 
 ## Preview
 
