@@ -1,0 +1,1761 @@
+{
+  "name": "Untitled",
+  "views": [
+    {
+      "name": "app",
+      "graph": {
+        "graph": {
+          "boardOffsetX": -326.88528138528125,
+          "boardOffsetY": 85.96886446886461,
+          "boardScale": 1,
+          "blockZIndex": [
+            643,
+            968,
+            1049,
+            861,
+            651,
+            959,
+            670,
+            660,
+            343,
+            1063,
+            1123,
+            1139,
+            995,
+            755,
+            690
+          ]
+        },
+        "blocks": [
+          {
+            "ctor": "RootBlock",
+            "id": 343,
+            "boardX": -690,
+            "boardY": 120,
+            "dockableDirections": [],
+            "dockingDirection": [],
+            "dockedToBlock": null,
+            "dockedByBlocks": [],
+            "sockets": [
+              [
+                "out",
+                344
+              ]
+            ],
+            "data": {
+              "boardHeight": 50,
+              "boardWidth": 200,
+              "boardBorderRadius": 8
+            }
+          },
+          {
+            "ctor": "StateBlock",
+            "id": 643,
+            "boardX": 330,
+            "boardY": 420,
+            "dockableDirections": [
+              [
+                0,
+                "state-plugin"
+              ]
+            ],
+            "dockingDirection": [],
+            "dockedToBlock": null,
+            "dockedByBlocks": [
+              [
+                0,
+                660
+              ]
+            ],
+            "sockets": [
+              [
+                "output",
+                645
+              ]
+            ],
+            "data": {
+              "boardHeight": 50,
+              "boardWidth": 200,
+              "boardBorderRadius": 8,
+              "inputValue": "[]",
+              "outputDirection": 3,
+              "slotsDirection": 1
+            }
+          },
+          {
+            "ctor": "ComponentBlock",
+            "id": 651,
+            "boardX": 1050,
+            "boardY": 690,
+            "dockableDirections": [],
+            "dockingDirection": [],
+            "dockedToBlock": null,
+            "dockedByBlocks": [],
+            "sockets": [
+              [
+                "parent",
+                653
+              ],
+              [
+                "onClick",
+                654
+              ]
+            ],
+            "data": {
+              "boardHeight": 50,
+              "boardWidth": 200,
+              "boardBorderRadius": 8,
+              "componentType": "qButton",
+              "props": {
+                "class": "float-right",
+                "[disabled]": false
+              },
+              "primaryValue": "Remove",
+              "slotsDirection": 1
+            }
+          },
+          {
+            "ctor": "StateSetterBlock",
+            "id": 660,
+            "boardX": 530,
+            "boardY": 420,
+            "dockableDirections": [
+              [
+                0,
+                "state-plugin"
+              ]
+            ],
+            "dockingDirection": [
+              [
+                0,
+                "state-plugin"
+              ]
+            ],
+            "dockedToBlock": 643,
+            "dockedByBlocks": [
+              [
+                0,
+                670
+              ]
+            ],
+            "sockets": [
+              [
+                "input-new",
+                976
+              ],
+              [
+                "set",
+                662
+              ]
+            ],
+            "data": {
+              "boardHeight": 50,
+              "boardWidth": 200,
+              "boardBorderRadius": 8,
+              "inputValue": "[...$,$new]",
+              "outputDirection": 3,
+              "slotsDirection": 1
+            }
+          },
+          {
+            "ctor": "StateSetterBlock",
+            "id": 670,
+            "boardX": 730,
+            "boardY": 420,
+            "dockableDirections": [
+              [
+                0,
+                "state-plugin"
+              ]
+            ],
+            "dockingDirection": [
+              [
+                0,
+                "state-plugin"
+              ]
+            ],
+            "dockedToBlock": 660,
+            "dockedByBlocks": [],
+            "sockets": [
+              [
+                "input-del",
+                677
+              ],
+              [
+                "set",
+                672
+              ]
+            ],
+            "data": {
+              "boardHeight": 50,
+              "boardWidth": 200,
+              "boardBorderRadius": 8,
+              "inputValue": "$.filter(v=>v!==$del)",
+              "outputDirection": 3,
+              "slotsDirection": 3
+            }
+          },
+          {
+            "ctor": "ComponentBlock",
+            "id": 690,
+            "boardX": 60,
+            "boardY": 540,
+            "dockableDirections": [],
+            "dockingDirection": [],
+            "dockedToBlock": null,
+            "dockedByBlocks": [],
+            "sockets": [
+              [
+                "parent",
+                692
+              ],
+              [
+                "inner",
+                693
+              ]
+            ],
+            "data": {
+              "boardHeight": 50,
+              "boardWidth": 200,
+              "boardBorderRadius": 8,
+              "componentType": "qDiv",
+              "props": {
+                "class": ""
+              },
+              "primaryValue": "",
+              "slotsDirection": 1
+            }
+          },
+          {
+            "ctor": "ComponentBlock",
+            "id": 755,
+            "boardX": 330,
+            "boardY": 540,
+            "dockableDirections": [],
+            "dockingDirection": [],
+            "dockedToBlock": null,
+            "dockedByBlocks": [],
+            "sockets": [
+              [
+                "parent",
+                757
+              ],
+              [
+                "inner",
+                758
+              ],
+              [
+                "data",
+                759
+              ],
+              [
+                "current",
+                760
+              ]
+            ],
+            "data": {
+              "boardHeight": 50,
+              "boardWidth": 200,
+              "boardBorderRadius": 8,
+              "componentType": "qList",
+              "props": {
+                "class": "",
+                "key": "$index"
+              },
+              "primaryValue": "",
+              "slotsDirection": 1
+            }
+          },
+          {
+            "ctor": "ComponentBlock",
+            "id": 861,
+            "boardX": 780,
+            "boardY": 630,
+            "dockableDirections": [],
+            "dockingDirection": [],
+            "dockedToBlock": null,
+            "dockedByBlocks": [],
+            "sockets": [
+              [
+                "parent",
+                863
+              ],
+              [
+                "text",
+                864
+              ]
+            ],
+            "data": {
+              "boardHeight": 50,
+              "boardWidth": 200,
+              "boardBorderRadius": 8,
+              "componentType": "qTextNode",
+              "props": {},
+              "primaryValue": "",
+              "slotsDirection": 1
+            }
+          },
+          {
+            "ctor": "ComponentBlock",
+            "id": 959,
+            "boardX": 210,
+            "boardY": 120,
+            "dockableDirections": [
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ],
+              [
+                0,
+                "input-plugin"
+              ]
+            ],
+            "dockingDirection": [],
+            "dockedToBlock": null,
+            "dockedByBlocks": [],
+            "sockets": [
+              [
+                "parent",
+                961
+              ],
+              [
+                "value",
+                962
+              ],
+              [
+                "clear",
+                1009
+              ]
+            ],
+            "data": {
+              "boardHeight": 50,
+              "boardWidth": 200,
+              "boardBorderRadius": 8,
+              "componentType": "qInput",
+              "props": {
+                "type": "text",
+                "class": "",
+                "initial": "",
+                "[disabled]": false,
+                "[onInput]": false,
+                "[clear]": true
+              },
+              "primaryValue": "New Item",
+              "slotsDirection": 1
+            }
+          },
+          {
+            "ctor": "ComponentBlock",
+            "id": 968,
+            "boardX": 90,
+            "boardY": 240,
+            "dockableDirections": [],
+            "dockingDirection": [],
+            "dockedToBlock": null,
+            "dockedByBlocks": [],
+            "sockets": [
+              [
+                "parent",
+                970
+              ],
+              [
+                "onClick",
+                971
+              ]
+            ],
+            "data": {
+              "boardHeight": 50,
+              "boardWidth": 200,
+              "boardBorderRadius": 8,
+              "componentType": "qButton",
+              "props": {
+                "class": "",
+                "[disabled]": false
+              },
+              "primaryValue": "Add",
+              "slotsDirection": 1
+            }
+          },
+          {
+            "ctor": "DoBlock",
+            "id": 995,
+            "boardX": 390,
+            "boardY": 300,
+            "dockableDirections": [],
+            "dockingDirection": [],
+            "dockedToBlock": null,
+            "dockedByBlocks": [],
+            "sockets": [
+              [
+                "when",
+                997
+              ],
+              [
+                "then-0",
+                998
+              ],
+              [
+                "then-1",
+                999
+              ]
+            ],
+            "data": {
+              "boardHeight": 70,
+              "boardWidth": 30,
+              "boardBorderRadius": 8,
+              "thenNum": 2,
+              "rotate": true
+            }
+          },
+          {
+            "ctor": "ComponentBlock",
+            "id": 1049,
+            "boardX": -420,
+            "boardY": 120,
+            "dockableDirections": [],
+            "dockingDirection": [],
+            "dockedToBlock": null,
+            "dockedByBlocks": [],
+            "sockets": [
+              [
+                "parent",
+                1051
+              ],
+              [
+                "topBar",
+                1052
+              ],
+              [
+                "content",
+                1053
+              ]
+            ],
+            "data": {
+              "boardHeight": 50,
+              "boardWidth": 200,
+              "boardBorderRadius": 8,
+              "componentType": "qAppLayout",
+              "props": {
+                "class": ""
+              },
+              "primaryValue": "Todo Manager",
+              "slotsDirection": 1
+            }
+          },
+          {
+            "ctor": "ComponentBlock",
+            "id": 1063,
+            "boardX": -240,
+            "boardY": 240,
+            "dockableDirections": [],
+            "dockingDirection": [],
+            "dockedToBlock": null,
+            "dockedByBlocks": [],
+            "sockets": [
+              [
+                "parent",
+                1065
+              ],
+              [
+                "inner",
+                1066
+              ]
+            ],
+            "data": {
+              "boardHeight": 50,
+              "boardWidth": 200,
+              "boardBorderRadius": 8,
+              "componentType": "qSubPage",
+              "props": {
+                "icon": "alarm"
+              },
+              "primaryValue": "Todo",
+              "slotsDirection": 1
+            }
+          },
+          {
+            "ctor": "ComponentBlock",
+            "id": 1123,
+            "boardX": -240,
+            "boardY": 720,
+            "dockableDirections": [],
+            "dockingDirection": [],
+            "dockedToBlock": null,
+            "dockedByBlocks": [],
+            "sockets": [
+              [
+                "parent",
+                1125
+              ],
+              [
+                "inner",
+                1126
+              ]
+            ],
+            "data": {
+              "boardHeight": 50,
+              "boardWidth": 200,
+              "boardBorderRadius": 8,
+              "componentType": "qSubPage",
+              "props": {
+                "icon": "info"
+              },
+              "primaryValue": "About",
+              "slotsDirection": 1
+            }
+          },
+          {
+            "ctor": "ViewBlock",
+            "id": 1139,
+            "boardX": 60,
+            "boardY": 720,
+            "dockableDirections": [],
+            "dockingDirection": [],
+            "dockedToBlock": null,
+            "dockedByBlocks": [],
+            "sockets": [
+              [
+                "parent",
+                1141
+              ]
+            ],
+            "data": {
+              "boardHeight": 50,
+              "boardWidth": 200,
+              "boardBorderRadius": 8,
+              "viewName": "about"
+            }
+          }
+        ],
+        "sockets": [
+          {
+            "ctor": "MultiOutSocket",
+            "id": 344,
+            "type": "L",
+            "direction": 2,
+            "label": "out",
+            "hideLabel": true,
+            "disabled": false,
+            "blockId": 343,
+            "path": "M 0 0 L 0 5 L 6 5 L 6 -5 L 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "MultiOutSocket",
+            "id": 645,
+            "type": "D",
+            "direction": 3,
+            "label": "current",
+            "hideLabel": false,
+            "disabled": false,
+            "blockId": 643,
+            "path": "M 0 0 L 0 5 A 5 5 0 0 0 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "SingleInSocket",
+            "id": 653,
+            "type": "L",
+            "direction": 0,
+            "label": "parent",
+            "hideLabel": true,
+            "disabled": false,
+            "blockId": 651,
+            "path": "M 0 0 L 0 5 L -6 5 L -6 -5 L 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "SingleOutSocket",
+            "id": 654,
+            "type": "E",
+            "direction": 3,
+            "label": "onClick",
+            "hideLabel": false,
+            "disabled": false,
+            "blockId": 651,
+            "path": "M 0 0 L 0 5 L 6 0 L 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "SingleInSocket",
+            "id": 976,
+            "type": "D",
+            "direction": 1,
+            "label": "new",
+            "hideLabel": false,
+            "disabled": false,
+            "blockId": 660,
+            "path": "M 0 0 L 0 5 A 5 5 0 0 1 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "MultiInSocket",
+            "id": 662,
+            "type": "E",
+            "direction": 1,
+            "label": "set",
+            "hideLabel": true,
+            "disabled": false,
+            "blockId": 660,
+            "path": "M 0 0 L 0 5 L -6 0 L 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "SingleInSocket",
+            "id": 677,
+            "type": "D",
+            "direction": 3,
+            "label": "del",
+            "hideLabel": false,
+            "disabled": false,
+            "blockId": 670,
+            "path": "M 0 0 L 0 5 A 5 5 0 0 1 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "MultiInSocket",
+            "id": 672,
+            "type": "E",
+            "direction": 1,
+            "label": "set",
+            "hideLabel": true,
+            "disabled": false,
+            "blockId": 670,
+            "path": "M 0 0 L 0 5 L -6 0 L 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "SingleInSocket",
+            "id": 692,
+            "type": "L",
+            "direction": 0,
+            "label": "parent",
+            "hideLabel": true,
+            "disabled": false,
+            "blockId": 690,
+            "path": "M 0 0 L 0 5 L -6 5 L -6 -5 L 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "MultiOutSocket",
+            "id": 693,
+            "type": "L",
+            "direction": 2,
+            "label": "inner",
+            "hideLabel": true,
+            "disabled": false,
+            "blockId": 690,
+            "path": "M 0 0 L 0 5 L 6 5 L 6 -5 L 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "SingleInSocket",
+            "id": 757,
+            "type": "L",
+            "direction": 0,
+            "label": "parent",
+            "hideLabel": true,
+            "disabled": false,
+            "blockId": 755,
+            "path": "M 0 0 L 0 5 L -6 5 L -6 -5 L 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "MultiOutSocket",
+            "id": 758,
+            "type": "L",
+            "direction": 3,
+            "label": "inner",
+            "hideLabel": true,
+            "disabled": false,
+            "blockId": 755,
+            "path": "M 0 0 L 0 5 L 6 5 L 6 -5 L 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "SingleInSocket",
+            "id": 759,
+            "type": "D",
+            "direction": 1,
+            "label": "data",
+            "hideLabel": false,
+            "disabled": false,
+            "blockId": 755,
+            "path": "M 0 0 L 0 5 A 5 5 0 0 1 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "MultiOutSocket",
+            "id": 760,
+            "type": "D",
+            "direction": 2,
+            "label": "current",
+            "hideLabel": false,
+            "disabled": false,
+            "blockId": 755,
+            "path": "M 0 0 L 0 5 A 5 5 0 0 0 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "SingleInSocket",
+            "id": 863,
+            "type": "L",
+            "direction": 0,
+            "label": "parent",
+            "hideLabel": true,
+            "disabled": false,
+            "blockId": 861,
+            "path": "M 0 0 L 0 5 L -6 5 L -6 -5 L 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "SingleInSocket",
+            "id": 864,
+            "type": "D",
+            "direction": 1,
+            "label": "text",
+            "hideLabel": false,
+            "disabled": false,
+            "blockId": 861,
+            "path": "M 0 0 L 0 5 A 5 5 0 0 1 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "SingleInSocket",
+            "id": 961,
+            "type": "L",
+            "direction": 0,
+            "label": "parent",
+            "hideLabel": true,
+            "disabled": false,
+            "blockId": 959,
+            "path": "M 0 0 L 0 5 L -6 5 L -6 -5 L 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "MultiOutSocket",
+            "id": 962,
+            "type": "D",
+            "direction": 3,
+            "label": "value",
+            "hideLabel": false,
+            "disabled": false,
+            "blockId": 959,
+            "path": "M 0 0 L 0 5 A 5 5 0 0 0 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "MultiInSocket",
+            "id": 1009,
+            "type": "E",
+            "direction": 1,
+            "label": "clear",
+            "hideLabel": false,
+            "disabled": false,
+            "blockId": 959,
+            "path": "M 0 0 L 0 5 L -6 0 L 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "SingleInSocket",
+            "id": 970,
+            "type": "L",
+            "direction": 0,
+            "label": "parent",
+            "hideLabel": true,
+            "disabled": false,
+            "blockId": 968,
+            "path": "M 0 0 L 0 5 L -6 5 L -6 -5 L 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "SingleOutSocket",
+            "id": 971,
+            "type": "E",
+            "direction": 3,
+            "label": "onClick",
+            "hideLabel": false,
+            "disabled": false,
+            "blockId": 968,
+            "path": "M 0 0 L 0 5 L 6 0 L 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "MultiInSocket",
+            "id": 997,
+            "type": "E",
+            "direction": 0,
+            "label": "when",
+            "hideLabel": true,
+            "disabled": false,
+            "blockId": 995,
+            "path": "M 0 0 L 0 5 L -6 0 L 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "SingleOutSocket",
+            "id": 998,
+            "type": "E",
+            "direction": 2,
+            "label": "1",
+            "hideLabel": false,
+            "disabled": false,
+            "blockId": 995,
+            "path": "M 0 0 L 0 5 L 6 0 L 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "SingleOutSocket",
+            "id": 999,
+            "type": "E",
+            "direction": 2,
+            "label": "2",
+            "hideLabel": false,
+            "disabled": false,
+            "blockId": 995,
+            "path": "M 0 0 L 0 5 L 6 0 L 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "SingleInSocket",
+            "id": 1051,
+            "type": "L",
+            "direction": 0,
+            "label": "parent",
+            "hideLabel": true,
+            "disabled": false,
+            "blockId": 1049,
+            "path": "M 0 0 L 0 5 L -6 5 L -6 -5 L 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "MultiOutSocket",
+            "id": 1052,
+            "type": "L",
+            "direction": 2,
+            "label": "top bar",
+            "hideLabel": false,
+            "disabled": false,
+            "blockId": 1049,
+            "path": "M 0 0 L 0 5 L 6 5 L 6 -5 L 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "MultiOutSocket",
+            "id": 1053,
+            "type": "L",
+            "direction": 3,
+            "label": "content",
+            "hideLabel": false,
+            "disabled": false,
+            "blockId": 1049,
+            "path": "M 0 0 L 0 5 L 6 5 L 6 -5 L 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "SingleInSocket",
+            "id": 1065,
+            "type": "L",
+            "direction": 0,
+            "label": "parent",
+            "hideLabel": true,
+            "disabled": false,
+            "blockId": 1063,
+            "path": "M 0 0 L 0 5 L -6 5 L -6 -5 L 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "MultiOutSocket",
+            "id": 1066,
+            "type": "L",
+            "direction": 2,
+            "label": "inner",
+            "hideLabel": true,
+            "disabled": false,
+            "blockId": 1063,
+            "path": "M 0 0 L 0 5 L 6 5 L 6 -5 L 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "SingleInSocket",
+            "id": 1125,
+            "type": "L",
+            "direction": 0,
+            "label": "parent",
+            "hideLabel": true,
+            "disabled": false,
+            "blockId": 1123,
+            "path": "M 0 0 L 0 5 L -6 5 L -6 -5 L 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "MultiOutSocket",
+            "id": 1126,
+            "type": "L",
+            "direction": 2,
+            "label": "inner",
+            "hideLabel": true,
+            "disabled": false,
+            "blockId": 1123,
+            "path": "M 0 0 L 0 5 L 6 5 L 6 -5 L 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "SingleInSocket",
+            "id": 1141,
+            "type": "L",
+            "direction": 0,
+            "label": "parent",
+            "hideLabel": true,
+            "disabled": false,
+            "blockId": 1139,
+            "path": "M 0 0 L 0 5 L -6 5 L -6 -5 L 0 -5 Z",
+            "data": {}
+          }
+        ],
+        "lines": [
+          {
+            "ctor": "BasicLine",
+            "id": 711,
+            "type": "E",
+            "socketAId": 654,
+            "socketBId": 672,
+            "hasArrow": true,
+            "data": {}
+          },
+          {
+            "ctor": "BasicLine",
+            "id": 775,
+            "type": "D",
+            "socketAId": 645,
+            "socketBId": 759,
+            "hasArrow": true,
+            "data": {}
+          },
+          {
+            "ctor": "BasicLine",
+            "id": 872,
+            "type": "D",
+            "socketAId": 760,
+            "socketBId": 864,
+            "hasArrow": true,
+            "data": {}
+          },
+          {
+            "ctor": "BasicLine",
+            "id": 977,
+            "type": "D",
+            "socketAId": 962,
+            "socketBId": 976,
+            "hasArrow": true,
+            "data": {}
+          },
+          {
+            "ctor": "BasicLine",
+            "id": 1012,
+            "type": "E",
+            "socketAId": 999,
+            "socketBId": 1009,
+            "hasArrow": true,
+            "data": {}
+          },
+          {
+            "ctor": "BasicLine",
+            "id": 1014,
+            "type": "E",
+            "socketAId": 998,
+            "socketBId": 662,
+            "hasArrow": true,
+            "data": {}
+          },
+          {
+            "ctor": "BasicLine",
+            "id": 1021,
+            "type": "E",
+            "socketAId": 971,
+            "socketBId": 997,
+            "hasArrow": true,
+            "data": {}
+          },
+          {
+            "ctor": "BasicLine",
+            "id": 1057,
+            "type": "L",
+            "socketAId": 344,
+            "socketBId": 1051,
+            "hasArrow": true,
+            "data": {}
+          },
+          {
+            "ctor": "BasicLine",
+            "id": 1069,
+            "type": "L",
+            "socketAId": 1053,
+            "socketBId": 1065,
+            "hasArrow": true,
+            "data": {}
+          },
+          {
+            "ctor": "BasicLine",
+            "id": 1072,
+            "type": "L",
+            "socketAId": 1066,
+            "socketBId": 970,
+            "hasArrow": true,
+            "data": {}
+          },
+          {
+            "ctor": "BasicLine",
+            "id": 1074,
+            "type": "L",
+            "socketAId": 1066,
+            "socketBId": 692,
+            "hasArrow": true,
+            "data": {}
+          },
+          {
+            "ctor": "BasicLine",
+            "id": 1101,
+            "type": "L",
+            "socketAId": 1066,
+            "socketBId": 961,
+            "hasArrow": true,
+            "data": {}
+          },
+          {
+            "ctor": "BasicLine",
+            "id": 1107,
+            "type": "D",
+            "socketAId": 760,
+            "socketBId": 677,
+            "hasArrow": true,
+            "data": {}
+          },
+          {
+            "ctor": "BasicLine",
+            "id": 1118,
+            "type": "L",
+            "socketAId": 758,
+            "socketBId": 863,
+            "hasArrow": true,
+            "data": {}
+          },
+          {
+            "ctor": "BasicLine",
+            "id": 1121,
+            "type": "L",
+            "socketAId": 758,
+            "socketBId": 653,
+            "hasArrow": true,
+            "data": {}
+          },
+          {
+            "ctor": "BasicLine",
+            "id": 1129,
+            "type": "L",
+            "socketAId": 1053,
+            "socketBId": 1125,
+            "hasArrow": true,
+            "data": {}
+          },
+          {
+            "ctor": "BasicLine",
+            "id": 1143,
+            "type": "L",
+            "socketAId": 1126,
+            "socketBId": 1141,
+            "hasArrow": true,
+            "data": {}
+          },
+          {
+            "ctor": "BasicLine",
+            "id": 1262,
+            "type": "L",
+            "socketAId": 693,
+            "socketBId": 757,
+            "hasArrow": true,
+            "data": {}
+          }
+        ]
+      }
+    },
+    {
+      "name": "about",
+      "graph": {
+        "graph": {
+          "boardOffsetX": -48,
+          "boardOffsetY": 89,
+          "boardScale": 1,
+          "blockZIndex": [
+            1244,
+            1186,
+            1232,
+            1137,
+            1145,
+            1158
+          ]
+        },
+        "blocks": [
+          {
+            "ctor": "RootBlock",
+            "id": 1137,
+            "boardX": 150,
+            "boardY": 300,
+            "dockableDirections": [],
+            "dockingDirection": [],
+            "dockedToBlock": null,
+            "dockedByBlocks": [],
+            "sockets": [
+              [
+                "out",
+                1138
+              ]
+            ],
+            "data": {
+              "boardHeight": 50,
+              "boardWidth": 200,
+              "boardBorderRadius": 8
+            }
+          },
+          {
+            "ctor": "ComponentBlock",
+            "id": 1145,
+            "boardX": 450,
+            "boardY": 300,
+            "dockableDirections": [],
+            "dockingDirection": [],
+            "dockedToBlock": null,
+            "dockedByBlocks": [],
+            "sockets": [
+              [
+                "parent",
+                1147
+              ],
+              [
+                "inner",
+                1148
+              ]
+            ],
+            "data": {
+              "boardHeight": 50,
+              "boardWidth": 200,
+              "boardBorderRadius": 8,
+              "componentType": "qCard",
+              "props": {
+                "class": ""
+              },
+              "primaryValue": "About the App",
+              "slotsDirection": 1
+            }
+          },
+          {
+            "ctor": "ComponentBlock",
+            "id": 1158,
+            "boardX": 660,
+            "boardY": 420,
+            "dockableDirections": [],
+            "dockingDirection": [],
+            "dockedToBlock": null,
+            "dockedByBlocks": [],
+            "sockets": [
+              [
+                "parent",
+                1160
+              ],
+              [
+                "inner",
+                1161
+              ]
+            ],
+            "data": {
+              "boardHeight": 50,
+              "boardWidth": 200,
+              "boardBorderRadius": 8,
+              "componentType": "qParagraph",
+              "props": {
+                "class": ""
+              },
+              "primaryValue": "",
+              "slotsDirection": 1
+            }
+          },
+          {
+            "ctor": "ComponentBlock",
+            "id": 1186,
+            "boardX": 960,
+            "boardY": 420,
+            "dockableDirections": [],
+            "dockingDirection": [],
+            "dockedToBlock": null,
+            "dockedByBlocks": [],
+            "sockets": [
+              [
+                "parent",
+                1188
+              ]
+            ],
+            "data": {
+              "boardHeight": 50,
+              "boardWidth": 200,
+              "boardBorderRadius": 8,
+              "componentType": "qTextNode",
+              "props": {},
+              "primaryValue": "Created by Quasi Studio",
+              "slotsDirection": 1
+            }
+          },
+          {
+            "ctor": "ComponentBlock",
+            "id": 1232,
+            "boardX": 960,
+            "boardY": 540,
+            "dockableDirections": [],
+            "dockingDirection": [],
+            "dockedToBlock": null,
+            "dockedByBlocks": [],
+            "sockets": [
+              [
+                "parent",
+                1233
+              ]
+            ],
+            "data": {
+              "boardHeight": 50,
+              "boardWidth": 200,
+              "boardBorderRadius": 8,
+              "componentType": "qTextNode",
+              "props": {},
+              "primaryValue": "UI library: MdUI v2",
+              "slotsDirection": 1
+            }
+          },
+          {
+            "ctor": "ComponentBlock",
+            "id": 1244,
+            "boardX": 660,
+            "boardY": 540,
+            "dockableDirections": [],
+            "dockingDirection": [],
+            "dockedToBlock": null,
+            "dockedByBlocks": [],
+            "sockets": [
+              [
+                "parent",
+                1246
+              ],
+              [
+                "inner",
+                1247
+              ]
+            ],
+            "data": {
+              "boardHeight": 50,
+              "boardWidth": 200,
+              "boardBorderRadius": 8,
+              "componentType": "qParagraph",
+              "props": {
+                "class": ""
+              },
+              "primaryValue": "",
+              "slotsDirection": 1
+            }
+          }
+        ],
+        "sockets": [
+          {
+            "ctor": "MultiOutSocket",
+            "id": 1138,
+            "type": "L",
+            "direction": 2,
+            "label": "out",
+            "hideLabel": true,
+            "disabled": false,
+            "blockId": 1137,
+            "path": "M 0 0 L 0 5 L 6 5 L 6 -5 L 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "SingleInSocket",
+            "id": 1147,
+            "type": "L",
+            "direction": 0,
+            "label": "parent",
+            "hideLabel": true,
+            "disabled": false,
+            "blockId": 1145,
+            "path": "M 0 0 L 0 5 L -6 5 L -6 -5 L 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "MultiOutSocket",
+            "id": 1148,
+            "type": "L",
+            "direction": 3,
+            "label": "inner",
+            "hideLabel": false,
+            "disabled": false,
+            "blockId": 1145,
+            "path": "M 0 0 L 0 5 L 6 5 L 6 -5 L 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "SingleInSocket",
+            "id": 1160,
+            "type": "L",
+            "direction": 0,
+            "label": "parent",
+            "hideLabel": true,
+            "disabled": false,
+            "blockId": 1158,
+            "path": "M 0 0 L 0 5 L -6 5 L -6 -5 L 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "MultiOutSocket",
+            "id": 1161,
+            "type": "L",
+            "direction": 2,
+            "label": "inner",
+            "hideLabel": true,
+            "disabled": false,
+            "blockId": 1158,
+            "path": "M 0 0 L 0 5 L 6 5 L 6 -5 L 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "SingleInSocket",
+            "id": 1188,
+            "type": "L",
+            "direction": 0,
+            "label": "parent",
+            "hideLabel": true,
+            "disabled": false,
+            "blockId": 1186,
+            "path": "M 0 0 L 0 5 L -6 5 L -6 -5 L 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "SingleInSocket",
+            "id": 1233,
+            "type": "L",
+            "direction": 0,
+            "label": "parent",
+            "hideLabel": true,
+            "disabled": false,
+            "blockId": 1232,
+            "path": "M 0 0 L 0 5 L -6 5 L -6 -5 L 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "SingleInSocket",
+            "id": 1246,
+            "type": "L",
+            "direction": 0,
+            "label": "parent",
+            "hideLabel": true,
+            "disabled": false,
+            "blockId": 1244,
+            "path": "M 0 0 L 0 5 L -6 5 L -6 -5 L 0 -5 Z",
+            "data": {}
+          },
+          {
+            "ctor": "MultiOutSocket",
+            "id": 1247,
+            "type": "L",
+            "direction": 2,
+            "label": "inner",
+            "hideLabel": true,
+            "disabled": false,
+            "blockId": 1244,
+            "path": "M 0 0 L 0 5 L 6 5 L 6 -5 L 0 -5 Z",
+            "data": {}
+          }
+        ],
+        "lines": [
+          {
+            "ctor": "BasicLine",
+            "id": 1151,
+            "type": "L",
+            "socketAId": 1138,
+            "socketBId": 1147,
+            "hasArrow": true,
+            "data": {}
+          },
+          {
+            "ctor": "BasicLine",
+            "id": 1164,
+            "type": "L",
+            "socketAId": 1148,
+            "socketBId": 1160,
+            "hasArrow": true,
+            "data": {}
+          },
+          {
+            "ctor": "BasicLine",
+            "id": 1192,
+            "type": "L",
+            "socketAId": 1161,
+            "socketBId": 1188,
+            "hasArrow": true,
+            "data": {}
+          },
+          {
+            "ctor": "BasicLine",
+            "id": 1250,
+            "type": "L",
+            "socketAId": 1247,
+            "socketBId": 1233,
+            "hasArrow": true,
+            "data": {}
+          },
+          {
+            "ctor": "BasicLine",
+            "id": 1252,
+            "type": "L",
+            "socketAId": 1148,
+            "socketBId": 1246,
+            "hasArrow": true,
+            "data": {}
+          }
+        ]
+      }
+    }
+  ],
+  "activeViewId": 0
+}
