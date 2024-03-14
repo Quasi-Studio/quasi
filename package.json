@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "build": "​pnpm -r --filter ​\"​@quasi-dev/northstar...​\"​ run build​",
+    "build": "pnpm -r --filter \"@quasi-dev/northstar...\" run build",
     "dev": "pnpm dev:northstar",
     "dev:northstar": "pnpm -r --parallel --filter \"@quasi-dev/northstar...\" run dev",
     "check": "pnpm -r --parallel run check",
