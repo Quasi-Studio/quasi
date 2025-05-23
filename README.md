@@ -4,7 +4,7 @@
 
 A [structure-oriented](https://github.com/Structure-oriented-Framework/SOF) and unique LCDP (Low-Code Development Platform).
 
-**Try it now at [quasi-studio.vercel.app](https://quasi-studio.vercel.app)**. An example project is [here](./docs/examples/todo-app.q.json).
+**Try it now at [https://quasi-studio.github.io/quasi/](https://quasi-studio.github.io/quasi/)**. An example project is [here](./docs/examples/todo-app.q.json).
 
 - Designed for professional developers
 - Intuitive and easy to use
