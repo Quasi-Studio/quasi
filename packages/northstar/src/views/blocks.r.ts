@@ -21,7 +21,7 @@ export default $view(_ => {
             _ => {
               _.$cls`my-1`
               _.div(_ => {
-                _.img(`https://via.placeholder.com/80x80?text=${k}`)
+                _.img(`https://placehold.co/80x80?text=${k}`)
                 _.$cls`text-center text-sm overflow-hidden`
                 _.div(k)
               })
@@ -48,7 +48,7 @@ export default $view(_ => {
             _ => {
               _.$cls`my-1`
               _.div(_ => {
-                _.img(`https://via.placeholder.com/80x80?text=${k}`)
+                _.img(`https://placehold.co/80x80?text=${k}`)
                 _.$cls`text-center text-sm overflow-hidden`
                 _.div(v.displayName({}))
               })
@@ -76,7 +76,7 @@ export default $view(_ => {
         _.vfCreator(
           currentProject.activeGraph,
           _ => {
-            _.img(`https://via.placeholder.com/80x80?text=${view.name}`)
+            _.img(`https://placehold.co/80x80?text=${view.name}`)
             _.$cls`text-center text-sm flex-nowrap`
             _.div(_ => {
               _.span(view.name)
@@ -117,7 +117,7 @@ export default $view(_ => {
           },
         },
         _ => {
-          _.img('https://via.placeholder.com/80x80?text=%2B')
+          _.img('https://placehold.co/80x80?text=%2B')
           _.$cls`w-full text-center text-sm flex-nowrap`
           _.div('New View')
         },

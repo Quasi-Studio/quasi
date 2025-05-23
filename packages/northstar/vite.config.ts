@@ -99,4 +99,5 @@ export default defineConfig({
       allow: ['../../..'],
     },
   },
+  base: '/quasi/',
 })
